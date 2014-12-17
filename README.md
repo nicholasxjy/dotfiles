@@ -1,3 +1,8 @@
+# Mathias’s dotfiles are super cool
+**remove osx some settings that i want to keep it!**
+
+**tips: should type y when use bootstrap.sh install it**
+
 # Mathias’s dotfiles
 
 ![Screenshot of my shell prompt](http://i.imgur.com/EkEtphC.png)
