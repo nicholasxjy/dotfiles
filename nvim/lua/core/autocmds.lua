@@ -125,3 +125,17 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 --     end
 --   end,
 -- })
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = augroup("visual_whitespace_start"),
+  callback = function()
+    require("visual-whitespace").toggle()
+  end,
+  desc = "Toggle Visual Whitespace",
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = augroup("showkeys_start"),
+  command = "Showkeys",
+  desc = "Toggle showkeys",
+})

@@ -53,12 +53,23 @@ return {
     },
   },
   {
-    "nicholasxjy/snipe-lsp.nvim",
-    event = "VeryLazy",
+    "nicholasxjy/snipe-marks.nvim",
     dependencies = { "leath-dub/snipe.nvim" },
-    opts = {
-      keymap = {
-        open_symbols_menu = "<leader>n",
+    branch = "fix-keymap",
+    keys = {
+      {
+        "<leader>n",
+        function()
+          require("snipe-marks").open_marks_menu()
+        end,
+        desc = "Find local marks",
+      },
+      {
+        "<leader>m",
+        function()
+          require("snipe-marks").open_marks_menu("all")
+        end,
+        desc = "Find all marks",
       },
     },
   },
