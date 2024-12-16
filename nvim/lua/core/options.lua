@@ -2,6 +2,12 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.g.autoformat = true
+vim.g.exclude_autoformat = {
+  "java",
+  "bash",
+}
+
+vim.g.trouble_lualine = true
 
 local opt = vim.opt
 
