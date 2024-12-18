@@ -55,17 +55,16 @@ return {
   {
     "nicholasxjy/snipe-marks.nvim",
     dependencies = { "leath-dub/snipe.nvim" },
-    branch = "fix-keymap",
     keys = {
       {
-        "<leader>n",
+        "<leader>jj",
         function()
           require("snipe-marks").open_marks_menu()
         end,
         desc = "Find local marks",
       },
       {
-        "<leader>m",
+        "<leader>jk",
         function()
           require("snipe-marks").open_marks_menu("all")
         end,

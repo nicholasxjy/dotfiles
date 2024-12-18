@@ -13,8 +13,6 @@ return {
         borderless_telescope = { border = false, style = "flat" },
         theme = { variant = "auto" },
       })
-
-      -- vim.cmd("colorscheme cyberdream")
     end,
   },
 }

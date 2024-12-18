@@ -37,28 +37,4 @@ M.kind_icons = {
   Variable = "",
 }
 
-M.misc = {
-  dots = "󰇘",
-}
-M.ft = {
-  octo = "",
-}
-M.dap = {
-  Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
-  Breakpoint = " ",
-  BreakpointCondition = " ",
-  BreakpointRejected = { " ", "DiagnosticError" },
-  LogPoint = ".>",
-}
-M.diagnostics = {
-  Error = " ",
-  Warn = " ",
-  Hint = " ",
-  Info = " ",
-}
-M.git = {
-  added = " ",
-  modified = " ",
-  removed = " ",
-}
 return M

@@ -1,16 +1,14 @@
 return {
-  {
-    "stevearc/oil.nvim",
-    lazy = false,
-    opts = {
-      default_file_explorer = true,
+  "stevearc/oil.nvim",
+  opts = {
+    default_file_explorer = true,
+    view_options = {
+      show_hidden = true,
     },
-    keys = {
-      { "<leader>e", "<cmd>Oil<cr>", desc = "Open oil" },
-    },
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
-    confiog = function(_, opts)
-      require("oil").setup(opts)
-    end,
   },
+  lazy = false,
+  keys = {
+    { "<leader>o", "<CMD>Oil<CR>", desc = "Open oil" },
+  },
+  dependencies = { { "echasnovski/mini.icons" } },
 }

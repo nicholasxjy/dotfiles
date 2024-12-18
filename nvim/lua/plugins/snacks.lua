@@ -1,16 +1,5 @@
 return {
   "folke/snacks.nvim",
-  lazy = false,
-  priority = 1000,
-  keys = {
-    {
-      "<leader>z",
-      function()
-        Snacks.zen()
-      end,
-      desc = "Toggle Zen Mode",
-    },
-  },
   opts = {
     dashboard = {
       sections = {

@@ -146,8 +146,5 @@ return {
         blink_cmp = true,
       },
     },
-    -- init = function()
-    --   vim.cmd("colorscheme catppuccin")
-    -- end,
   },
 }
