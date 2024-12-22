@@ -1,5 +1,6 @@
 return {
   "kevinhwang91/nvim-ufo",
+  event = { "InsertEnter", "LazyFile" },
   dependencies = { "kevinhwang91/promise-async" },
   keys = {
     {

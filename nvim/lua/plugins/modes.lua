@@ -3,11 +3,11 @@ return {
   config = function()
     require("modes").setup({
       colors = {
-        bg = "", -- Optional bg param, defaults to Normal hl group
-        copy = "#f9e2af",
-        delete = "#f38ba8",
-        insert = "#a6e3a1",
-        visual = "#f5c2e7",
+        bg = "#24283b", -- Optional bg param, defaults to Normal hl group
+        copy = "#e0af68",
+        delete = "#db4b4b",
+        insert = "#9ece6a",
+        visual = "#ff007c",
       },
       -- Enable cursor highlights
       set_cursor = true,

@@ -78,7 +78,7 @@ return {
         highlights["@lsp.type.enum"] = { fg = "#808836" }
         highlights["@lsp.type.enumMember"] = { fg = "#C08B5C" }
         highlights["@lsp.type.interface"] = { fg = "#9D5C0D" }
-        highlights["@lsp.type.property"] = { fg = "#D5B4B4" }
+        highlights["@lsp.type.property"] = { fg = "#BEADFA" }
       end,
     },
   },

@@ -7,35 +7,12 @@ return {
     },
   },
   {
-    "ibhagwan/fzf-lua",
-    keys = {
-      {
-        "<leader><space>",
-        function()
-          require("fzf-lua").files({
-            cwd_prompt = true,
-            cwd_prompt_shorten_len = 32,
-            cwd_prompt_shorten_val = 2,
-          })
-        end,
-        desc = "Find Files",
-      },
-    },
-    opts = {
-      winopts = {
-        title = true,
-        title_pos = "center",
-        border = "single",
-        row = 1,
-        width = 1.0,
-        height = 0.45,
-      },
-    },
-  },
-  {
     "folke/which-key.nvim",
     opts = {
-      preset = "classic",
+      preset = "modern",
+      win = {
+        border = "none",
+      },
     },
   },
   {
