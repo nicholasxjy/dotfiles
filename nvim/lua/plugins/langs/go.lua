@@ -5,7 +5,7 @@ return {
   },
   {
     "williamboman/mason.nvim",
-    opts = { ensure_installed = { "goimports", "golines", "golangci-lint" } },
+    opts = { ensure_installed = { "gopls", "goimports", "golines", "golangci-lint-langserver" } },
   },
   -- Filetype icons
   {
@@ -23,7 +23,7 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
-        go = { "goimports", "golines" },
+        go = { "goimports" },
       },
     },
   },
@@ -31,7 +31,7 @@ return {
     "mfussenegger/nvim-lint",
     opts = {
       linters_by_ft = {
-        go = { "golangci-lint" },
+        go = { "golangcilint" },
       },
     },
   },

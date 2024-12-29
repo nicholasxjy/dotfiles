@@ -23,7 +23,7 @@ return {
       },
       color_overrides = {},
       custom_highlights = function(C)
-        local prompt = C.surface0
+        local prompt = C.mantle
         return {
           TelescopeNormal = {
             bg = prompt,
@@ -53,28 +53,25 @@ return {
             fg = C.bg,
           },
 
-          -- Comment = { italic = true, fg = C.surface2 },
-          -- ["@type"] = { bold = true, fg = "#F0AA0B" },
+          SnacksIndent = { link = "LineNr" },
+          SnacksIndentBlank = { link = "LineNr" },
           ["lessClass"] = { fg = "#56b7c3" },
-          -- ["@keyword.function"] = { fg = "#A78CFA" },
-          -- ["@keyword.return"] = { fg = "#FF6ABC" },
-          -- ["@variable.builtin"] = { italic = true, fg = "#F02b77" },
           ["@tag"] = { bold = true },
-          -- ["@constructor"] = { fg = "#E06c75" },
-          -- ["@keyword.import"] = { italic = true, fg = "#c838c6" },
-          -- ["@keyword.repeat"] = { italic = true, bold = true, fg = "#FF8E00" },
-          -- ["@keyword.coroutine"] = { italic = true, bold = true, fg = "#B51B75" },
-          -- ["@keyword.exception"] = { italic = true, bold = true, fg = "#F94C10" },
-          -- ["@module"] = { fg = "#E06c75" },
-          --
-          ["@lsp.type.enum"] = { fg = "#0D7C66" },
+          ["@type"] = { bold = true, fg = C.peach },
+          ["@keyword"] = { fg = "#F14A00", italic = true },
+          ["@tag.attribute"] = { italic = true, fg = "#789DBC" },
+          ["@tag.attribute.tsx"] = { italic = true, fg = "#789DBC" },
+          ["@keyword.import"] = { italic = true, fg = C.red },
+          ["@keyword.export"] = { italic = true, fg = C.red },
+          ["@lsp.type.enum"] = { fg = "#677D6A" },
           ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
           ["@lsp.type.interface"] = { fg = "#9D5C0D" },
+          ["@lsp.type.function"] = { fg = C.sapphire },
         }
       end,
       default_integration = true,
       integrations = {
-        semantic_tokens = true,
+        semantic_tokens = false,
         telescope = {
           enabled = true,
         },

@@ -49,7 +49,7 @@ return {
         layout_config = {
           horizontal = { prompt_position = "top", preview_width = 0.55 },
           vertical = { mirror = false },
-          height = 0.55,
+          height = 0.45,
           preview_cutoff = 120,
         },
       }

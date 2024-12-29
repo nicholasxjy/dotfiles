@@ -30,10 +30,11 @@ set(
 )
 
 set("n", "<leader>k", "<CMD>w<CR><ESC>", { desc = "Save File", noremap = true, silent = true, nowait = true })
-set("n", "<leader>wq", "<CMD>wq<CR>", { desc = "Save File And Quit", silent = true, noremap = true, nowait = true })
-set("n", "<leader>dd", function()
+set("n", "<leader>j", function()
   Snacks.bufdelete()
 end, { desc = "Delete Buffer", silent = true, noremap = true, nowait = true })
+
+set("n", "<leader>wq", "<CMD>wq<CR>", { desc = "Save File And Quit", silent = true, noremap = true, nowait = true })
 
 set("n", "i", function()
   return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i"

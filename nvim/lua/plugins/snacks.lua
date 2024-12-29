@@ -2,6 +2,7 @@ return {
   "folke/snacks.nvim",
   opts = {
     dashboard = {
+      enabled = true,
       sections = {
         { section = "header" },
         { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
@@ -14,8 +15,12 @@ return {
       enabled = true,
       indent = {
         char = "¦",
-        blank = " ",
+        hl = "SnacksIndent",
       },
+      -- blank = {
+      --   char = "─",
+      --   hl = "SnacksIndentBlank",
+      -- },
       scope = {
         enabled = true,
         char = "⁚",
@@ -24,7 +29,6 @@ return {
       chunk = {
         enabled = true,
       },
-      priority = 200,
     },
     bigfile = { enabled = true },
     dim = { enabled = true },

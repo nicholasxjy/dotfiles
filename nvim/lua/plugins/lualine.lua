@@ -5,7 +5,7 @@ return {
       "echasnovski/mini.icons",
     },
     opts = function(_, opts)
-      table.insert(opts.sections.lualine_y, {
+      table.insert(opts.sections.lualine_x, {
         function()
           local buf_clients = nil
           if vim.lsp.get_clients ~= nil then
@@ -36,9 +36,9 @@ return {
               table.insert(buf_client_names, source.name)
             end
           end
-          return table.concat(buf_client_names, ",")
+          return "[" .. table.concat(buf_client_names, ",") .. "]"
         end,
-        color = "Keyword",
+        color = { fg = "#72BAA9", gui = "bold" },
         icon = "󰌘",
       })
     end,
