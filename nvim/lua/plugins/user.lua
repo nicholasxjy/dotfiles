@@ -14,6 +14,7 @@ return {
         -- { "<leader>j", group = "personal1", icon = { icon = "󰕈", color = "yellow" } },
         -- { "<leader>k", group = "personal2", icon = { icon = "󰌽", color = "red" } },
         { "<leader>m", group = "Customize", icon = { icon = "󰣨", color = "cyan" } },
+        { "<leader>md", group = "Diffview", icon = { icon = "󰦓", color = "red" } },
       },
       -- win = {
       --   border = "single",
