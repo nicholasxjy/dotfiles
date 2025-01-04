@@ -1,25 +1,6 @@
 local util = require("utils.util")
 
 return {
-  -- LSP for Cargo.toml
-  {
-    "Saecki/crates.nvim",
-    event = { "BufRead Cargo.toml" },
-    opts = {
-      completion = {
-        crates = {
-          enabled = true,
-        },
-      },
-      lsp = {
-        enabled = true,
-        actions = true,
-        completion = true,
-        hover = true,
-      },
-    },
-  },
-
   -- Add Rust & related to treesitter
   {
     "nvim-treesitter/nvim-treesitter",
@@ -34,7 +15,6 @@ return {
       vim.list_extend(opts.ensure_installed, { "codelldb" })
     end,
   },
-
   {
     "mrcjkb/rustaceanvim",
     ft = { "rust" },
@@ -56,6 +36,12 @@ return {
               loadOutDirsFromCheck = true,
               buildScripts = {
                 enable = true,
+              },
+            },
+            check = {
+              command = "clippy",
+              extraArgs = {
+                "--no-deps",
               },
             },
             -- Add clippy lints for Rust if using rust-analyzer
@@ -104,32 +90,35 @@ return {
       end
       vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, opts or {})
       if vim.fn.executable("rust-analyzer") == 0 then
-        vim.notify(
+        util.error(
           "**rust-analyzer** not found in PATH, please install it.\nhttps://rust-analyzer.github.io/",
-          vim.log.levels.ERROR,
-          {
-            title = "rustaceanvim",
-          }
+          { title = "rustaceanvim" }
         )
       end
     end,
   },
-
-  -- Correctly setup lspconfig for Rust 🚀
-  {
-    "neovim/nvim-lspconfig",
-    opts = {
-      servers = {
-        rust_analyzer = { enabled = false },
-      },
-    },
-  },
-
   {
     "nvim-neotest/neotest",
     opts = {
       adapters = {
         ["rustaceanvim.neotest"] = {},
+      },
+    },
+  },
+  {
+    "Saecki/crates.nvim",
+    event = { "BufRead Cargo.toml" },
+    opts = {
+      completion = {
+        crates = {
+          enabled = true,
+        },
+      },
+      lsp = {
+        enabled = true,
+        actions = true,
+        completion = true,
+        hover = true,
       },
     },
   },

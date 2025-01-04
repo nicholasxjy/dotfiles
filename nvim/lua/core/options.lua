@@ -2,12 +2,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.g.autoformat = true
-vim.g.exclude_autoformat = {
-  "java",
-  "bash",
-}
-
-vim.g.trouble_lualine = true
 
 local opt = vim.opt
 
@@ -37,9 +31,8 @@ opt.expandtab = true
 opt.pumblend = 0
 opt.updatetime = 200
 opt.laststatus = 3
--- -- Make cursor blink
--- opt.guicursor = {
---     "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50",
---     "a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor",
---     "sm:block-blinkwait175-blinkoff150-blinkon175",
--- }
+
+opt.foldcolumn = "1" -- '0' is not bad
+opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+opt.foldlevelstart = 99
+opt.foldenable = true

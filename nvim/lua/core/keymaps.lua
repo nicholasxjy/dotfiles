@@ -1,9 +1,5 @@
 local snacks = require("snacks")
---- Map a key combination to a command
----@param modes string|string[]: The mode(s) to map the key combination to
----@param lhs string: The key combination to map
----@param rhs string|function: The command to run when the key combination is pressed
----@param opts table: Options to pass to the keymap
+
 local map = function(modes, lhs, rhs, opts)
   local options = { silent = true }
   if opts then
@@ -37,9 +33,9 @@ map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
 map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
-map({ "n" }, "<leader>w", "<cmd>w<cr>", { desc = "Save buffer", nowait = true })
+map({ "n" }, "<leader>k", "<cmd>w<cr>", { desc = "Save buffer", nowait = true })
 -- Buffers
-map("n", "<leader>dd", function()
+map("n", "<leader>j", function()
   snacks.bufdelete({ wipe = true })
 end, { desc = "Delete buffer", nowait = true })
 

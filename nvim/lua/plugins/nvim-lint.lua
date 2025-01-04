@@ -5,9 +5,9 @@ return {
     config = function(_, opts)
       local lint = require("lint")
 
-      lint.linters_by_ft = opts.linters_by_ft or {}
-      table.insert(lint.linters_by_ft, {})
+      local default_linters_by_ft = {}
 
+      lint.linters_by_ft = vim.tbl_deep_extend("force", default_linters_by_ft, opts.linters_by_ft or {})
       -- Create autocommand which carries out the actual linting
       -- on the specified events.
       local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })

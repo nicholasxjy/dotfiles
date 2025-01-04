@@ -1,6 +1,6 @@
 return {
   {
-    "leath-dub/snipe.nvim",
+    "nicholasxjy/snipe.nvim",
     keys = {
       {
         "<leader>h",
@@ -15,18 +15,18 @@ return {
         max_height = -1, -- -1 means dynamic width
         -- Where to place the ui window
         -- Can be any of "topleft", "bottomleft", "topright", "bottomright", "center", "cursor" (sets under the current cursor pos)
-        position = "cursor",
+        position = "center",
         open_win_override = {
           title = "Snipe Buffers",
           border = "single",
-          -- width = math.floor(vim.o.columns / 2),
+          width = math.floor(vim.o.columns / 2),
         },
         preselect_current = false,
         preselect = nil,
         text_align = "file-first",
       },
       hints = {
-        dictionary = "sadflewcmpghio",
+        dictionary = "1234567890",
       },
       navigate = {
         -- When the list is too long it is split into pages
@@ -50,27 +50,6 @@ return {
         close_buffer = "D",
       },
       sort = "last",
-    },
-  },
-  {
-    "nicholasxjy/snipe-marks.nvim",
-    dependencies = { "leath-dub/snipe.nvim" },
-    branch = "fix-keymap",
-    keys = {
-      {
-        "<leader>n",
-        function()
-          require("snipe-marks").open_marks_menu()
-        end,
-        desc = "Find local marks",
-      },
-      {
-        "<leader>m",
-        function()
-          require("snipe-marks").open_marks_menu("all")
-        end,
-        desc = "Find all marks",
-      },
     },
   },
 }

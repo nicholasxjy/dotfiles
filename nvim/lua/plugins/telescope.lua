@@ -25,6 +25,7 @@ return {
         "danielfalk/smart-open.nvim",
         branch = "0.2.x",
       },
+      "andrew-george/telescope-themes",
     },
     keys = {
       {
@@ -114,6 +115,7 @@ return {
         end,
         desc = "Goto Symbol (Workspace)",
       },
+      { "<leader>ft", "<cmd>Telescope themes<cr>", desc = "Toggle themes" },
     },
     config = function()
       local telescope = require("telescope")
@@ -141,7 +143,7 @@ return {
         layout_config = {
           horizontal = { prompt_position = "top", preview_width = 0.55 },
           vertical = { mirror = false },
-          height = 0.55,
+          height = 0.45,
           preview_cutoff = 120,
         },
         mappings = {
@@ -172,8 +174,9 @@ return {
         defaults = ivy_defaults,
       })
 
-      require("telescope").load_extension("fzf")
-      require("telescope").load_extension("smart_open")
+      telescope.load_extension("fzf")
+      telescope.load_extension("smart_open")
+      telescope.load_extension("themes")
     end,
   },
 }

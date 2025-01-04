@@ -1,18 +1,17 @@
 local lspUtil = require("utils.lsp")
 local util = require("utils.util")
+
 return {
+  {
+    "williamboman/mason.nvim",
+    opts = { ensure_installed = { "html-lsp", "css-lsp", "prettier", "eslint-lsp" } },
+  },
+  -- correctly setup lspconfig
   {
     "neovim/nvim-lspconfig",
     opts = {
+      -- make sure mason installs the server
       servers = {
-        --- @deprecated -- tsserver renamed to ts_ls but not yet released, so keep this for now
-        --- the proper approach is to check the nvim-lspconfig release version when it's released to determine the server name dynamically
-        tsserver = {
-          enabled = false,
-        },
-        ts_ls = {
-          enabled = false,
-        },
         vtsls = {
           -- explicitly add default filetypes, so that we can extend
           -- them in related extras
@@ -106,16 +105,6 @@ return {
         },
       },
       setup = {
-        --- @deprecated -- tsserver renamed to ts_ls but not yet released, so keep this for now
-        --- the proper approach is to check the nvim-lspconfig release version when it's released to determine the server name dynamically
-        tsserver = function()
-          -- disable tsserver
-          return true
-        end,
-        ts_ls = function()
-          -- disable tsserver
-          return true
-        end,
         vtsls = function(_, opts)
           lspUtil.on_attach(function(client, buffer)
             client.commands["_typescript.moveToFileRefactoring"] = function(command, ctx)
@@ -176,65 +165,76 @@ return {
   },
 
   {
-    "mfussenegger/nvim-lint",
-    opts = {
-      linters_by_ft = {
-        javascript = { "eslint" },
-        typescript = { "eslint" },
-        javascriptreact = { "eslint" },
-        typescriptreact = { "eslint" },
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      {
+        "williamboman/mason.nvim",
+        opts = function(_, opts)
+          opts.ensure_installed = opts.ensure_installed or {}
+          table.insert(opts.ensure_installed, "js-debug-adapter")
+        end,
       },
     },
-  },
-
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = { ensure_installed = { "vue", "css" } },
-  },
-  {
-    "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "eslint-lsp",
-        "prettier",
-        "html-lsp",
-        "css-lsp",
-      },
-    },
-  },
-  -- Add LSP servers
-  {
-    "neovim/nvim-lspconfig",
-    opts = {
-      servers = {
-        volar = {
-          init_options = {
-            vue = {
-              hybridMode = true,
+    opts = function()
+      local dap = require("dap")
+      if not dap.adapters["pwa-node"] then
+        require("dap").adapters["pwa-node"] = {
+          type = "server",
+          host = "localhost",
+          port = "${port}",
+          executable = {
+            command = "node",
+            -- 💀 Make sure to update this path to point to your installation
+            args = {
+              util.get_pkg_path("js-debug-adapter", "/js-debug/src/dapDebugServer.js"),
+              "${port}",
             },
           },
-        },
-        vtsls = {},
-      },
-    },
-  },
+        }
+      end
+      if not dap.adapters["node"] then
+        dap.adapters["node"] = function(cb, config)
+          if config.type == "node" then
+            config.type = "pwa-node"
+          end
+          local nativeAdapter = dap.adapters["pwa-node"]
+          if type(nativeAdapter) == "function" then
+            nativeAdapter(cb, config)
+          else
+            cb(nativeAdapter)
+          end
+        end
+      end
 
-  -- Configure tsserver plugin
-  {
-    "neovim/nvim-lspconfig",
-    opts = function(_, opts)
-      table.insert(opts.servers.vtsls.filetypes, "vue")
-      util.extend(opts.servers.vtsls, "settings.vtsls.tsserver.globalPlugins", {
-        {
-          name = "@vue/typescript-plugin",
-          location = util.get_pkg_path("vue-language-server", "/node_modules/@vue/language-server"),
-          languages = { "vue" },
-          configNamespace = "typescript",
-          enableForWorkspaceTypeScriptVersions = true,
-        },
-      })
+      local js_filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" }
+
+      local vscode = require("dap.ext.vscode")
+      vscode.type_to_filetypes["node"] = js_filetypes
+      vscode.type_to_filetypes["pwa-node"] = js_filetypes
+
+      for _, language in ipairs(js_filetypes) do
+        if not dap.configurations[language] then
+          dap.configurations[language] = {
+            {
+              type = "pwa-node",
+              request = "launch",
+              name = "Launch file",
+              program = "${file}",
+              cwd = "${workspaceFolder}",
+            },
+            {
+              type = "pwa-node",
+              request = "attach",
+              name = "Attach",
+              processId = require("dap.utils").pick_process,
+              cwd = "${workspaceFolder}",
+            },
+          }
+        end
+      end
     end,
   },
+
   -- Filetype icons
   {
     "echasnovski/mini.icons",

@@ -103,7 +103,6 @@ return {
           }
         end,
       })
-      vim.cmd("colorscheme fluoromachine")
     end,
   },
 }

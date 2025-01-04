@@ -45,8 +45,10 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
     end
   end,
 })
+
+-- not autoformat for some filetypes
 vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = { "shell", "bash", "sh", "java" },
+  pattern = { "shell", "bash", "sh" },
   callback = function()
     vim.b.autoformat = false
   end,
@@ -126,16 +128,16 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 --   end,
 -- })
 
-vim.api.nvim_create_autocmd("VimEnter", {
-  group = augroup("visual_whitespace_start"),
-  callback = function()
-    require("visual-whitespace").toggle()
-  end,
-  desc = "Toggle Visual Whitespace",
-})
+-- vim.api.nvim_create_autocmd("VimEnter", {
+--   group = augroup("visual_whitespace_start"),
+--   callback = function()
+--     require("visual-whitespace").toggle()
+--   end,
+--   desc = "Toggle Visual Whitespace",
+-- })
 
-vim.api.nvim_create_autocmd("VimEnter", {
-  group = augroup("showkeys_start"),
-  command = "Showkeys",
-  desc = "Toggle showkeys",
-})
+-- vim.api.nvim_create_autocmd("VimEnter", {
+--   group = augroup("showkeys_start"),
+--   command = "Showkeys",
+--   desc = "Toggle showkeys",
+-- })

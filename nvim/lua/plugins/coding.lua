@@ -21,19 +21,10 @@ return {
     opts = {},
     event = "VeryLazy",
   },
-  -- Automatically add closing tags for HTML and JSX
   {
     "windwp/nvim-ts-autotag",
     event = "BufRead",
     opts = {},
-  },
-  {
-    "ellisonleao/dotenv.nvim",
-    config = function()
-      require("dotenv").setup({
-        enable_on_load = true,
-      })
-    end,
   },
   {
     "vuki656/package-info.nvim",

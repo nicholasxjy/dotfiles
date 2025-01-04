@@ -13,6 +13,7 @@ return {
   },
   opts = {
     dashboard = {
+      enabled = true,
       sections = {
         { section = "header" },
         { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
@@ -25,7 +26,7 @@ return {
       enabled = true,
       indent = {
         char = "¦",
-        blank = " ",
+        hl = "SnacksIndent",
       },
       scope = {
         enabled = true,
@@ -35,7 +36,6 @@ return {
       chunk = {
         enabled = true,
       },
-      priority = 200,
     },
     bigfile = { enabled = true },
     dim = { enabled = true },
@@ -43,6 +43,15 @@ return {
     scroll = { enabled = true },
     input = { enabled = true },
 
+    statuscolumn = {
+      enabled = true,
+      left = { "mark", "sign" }, -- priority of signs on the left (high to low)
+      right = { "fold", "git" }, -- priority of signs on the right (high to low)
+      folds = {
+        open = true, -- show open fold icons
+        git_hl = true, -- use Git Signs hl for fold icons
+      },
+    },
     notifier = { enabled = true },
 
     lazygit = {
@@ -56,8 +65,8 @@ return {
     terminal = {
       win = {
         position = "float",
-        width = 0.6,
-        height = 0.5,
+        width = 0.7,
+        height = 0.6,
         wo = {
           winbar = "", -- hide terminal title
         },

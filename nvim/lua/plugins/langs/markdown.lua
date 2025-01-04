@@ -1,11 +1,11 @@
 return {
   {
-    "OXY2DEV/markview.nvim",
-    lazy = false, -- Recommended
-
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-tree/nvim-web-devicons",
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        ["markdown"] = { "prettier" },
+        ["markdown.mdx"] = { "prettier" },
+      },
     },
   },
   {
@@ -16,15 +16,7 @@ return {
       },
     },
   },
-  {
-    "stevearc/conform.nvim",
-    opts = {
-      formatters_by_ft = {
-        markdown = { "prettier" },
-        ["markdown.mdx"] = { "prettier" },
-      },
-    },
-  },
+
   -- Markdown preview
   {
     "iamcco/markdown-preview.nvim",
@@ -44,5 +36,14 @@ return {
     config = function()
       vim.cmd([[do FileType]])
     end,
+  },
+
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
   },
 }

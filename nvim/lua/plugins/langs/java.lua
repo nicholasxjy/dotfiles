@@ -1,5 +1,3 @@
-local util = require("utils.util")
-local lspUtil = require("utils.lsp")
 -- This is the same as in lspconfig.configs.jdtls, but avoids
 -- needing to require that when this module loads.
 local java_filetypes = { "java" }
@@ -18,7 +16,6 @@ local function extend_or_override(config, custom, ...)
 end
 
 return {
-
   -- Add java to treesitter.
   {
     "nvim-treesitter/nvim-treesitter",
@@ -74,7 +71,7 @@ return {
     ft = java_filetypes,
     opts = function()
       local cmd = { vim.fn.exepath("jdtls") }
-      if util.has("mason.nvim") then
+      if LazyVim.has("mason.nvim") then
         local mason_registry = require("mason-registry")
         local lombok_jar = mason_registry.get_package("jdtls"):get_install_path() .. "/lombok.jar"
         table.insert(cmd, string.format("--jvm-arg=-javaagent:%s", lombok_jar))
@@ -82,7 +79,7 @@ return {
       return {
         -- How to find the root dir for a given filename. The default comes from
         -- lspconfig which provides a function specifically for java projects.
-        root_dir = lspUtil.get_raw_config("jdtls").default_config.root_dir,
+        root_dir = LazyVim.lsp.get_raw_config("jdtls").default_config.root_dir,
 
         -- How to find the project name for a given root dir.
         project_name = function(root_dir)
@@ -104,16 +101,16 @@ return {
           local fname = vim.api.nvim_buf_get_name(0)
           local root_dir = opts.root_dir(fname)
           local project_name = opts.project_name(root_dir)
-          local lcmd = vim.deepcopy(opts.cmd)
+          local cmd = vim.deepcopy(opts.cmd)
           if project_name then
-            vim.list_extend(lcmd, {
+            vim.list_extend(cmd, {
               "-configuration",
               opts.jdtls_config_dir(project_name),
               "-data",
               opts.jdtls_workspace_dir(project_name),
             })
           end
-          return lcmd
+          return cmd
         end,
 
         -- These depend on nvim-dap, but can additionally be disabled by setting false here.
@@ -135,9 +132,9 @@ return {
       -- Find the extra bundles that should be passed on the jdtls command-line
       -- if nvim-dap is enabled with java debug/test.
       local bundles = {} ---@type string[]
-      if util.has("mason.nvim") then
+      if LazyVim.has("mason.nvim") then
         local mason_registry = require("mason-registry")
-        if opts.dap and util.has("nvim-dap") and mason_registry.is_installed("java-debug-adapter") then
+        if opts.dap and LazyVim.has("nvim-dap") and mason_registry.is_installed("java-debug-adapter") then
           local java_dbg_pkg = mason_registry.get_package("java-debug-adapter")
           local java_dbg_path = java_dbg_pkg:get_install_path()
           local jar_patterns = {
@@ -170,7 +167,7 @@ return {
           },
           settings = opts.settings,
           -- enable CMP capabilities
-          capabilities = util.has("cmp-nvim-lsp") and require("cmp_nvim_lsp").default_capabilities() or nil,
+          capabilities = LazyVim.has("cmp-nvim-lsp") and require("cmp_nvim_lsp").default_capabilities() or nil,
         }, opts.jdtls)
 
         -- Existing server will be reused if the root_dir matches.
@@ -229,9 +226,9 @@ return {
               },
             })
 
-            if util.has("mason.nvim") then
+            if LazyVim.has("mason.nvim") then
               local mason_registry = require("mason-registry")
-              if opts.dap and util.has("nvim-dap") and mason_registry.is_installed("java-debug-adapter") then
+              if opts.dap and LazyVim.has("nvim-dap") and mason_registry.is_installed("java-debug-adapter") then
                 -- custom init for Java debugger
                 require("jdtls").setup_dap(opts.dap)
                 require("jdtls.dap").setup_dap_main_class_configs(opts.dap_main)

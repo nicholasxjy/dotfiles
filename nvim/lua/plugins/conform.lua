@@ -1,16 +1,7 @@
-local contains = function(list, val)
-  for _, v in ipairs(list) do
-    if v == val then
-      return true
-    end
-  end
-  return false
-end
-
 return {
   {
     "stevearc/conform.nvim",
-    event = "BufReadPre",
+    event = { "BufReadPre", "BufNewFile" },
     keys = {
       {
         "<leader>cf",
@@ -23,41 +14,39 @@ return {
         mode = { "n", "v" },
       },
     },
-    config = function()
-      vim.g.autoformat = true
-      require("conform").setup({
-        formatters_by_ft = {
-          css = { "prettier" },
-          go = { "goimports", "gofmt", "golines" },
-          html = { "prettier" },
-          javascript = { "prettier" },
-          typescript = { "pretter" },
-          javascriptreact = { "prettier" },
-          typescriptreact = { "prettier" },
-          json = { "prettier" },
-          lua = { "stylua" },
-          markdown = { "prettier" },
-          nix = { "nixfmt" },
-          rust = { "rustfmt" },
-          scss = { "prettier" },
-          sh = { "shfmt" },
-          templ = { "templ" },
-          toml = { "taplo" },
-          yaml = { "prettier" },
-        },
+    config = function(_, opts)
+      local default_formatters_by_ft = {
+        css = { "prettier" },
+        go = { "goimports", "gofmt", "golines" },
+        html = { "prettier" },
+        javascript = { "prettier" },
+        typescript = { "pretter" },
+        javascriptreact = { "prettier" },
+        typescriptreact = { "prettier" },
+        json = { "prettier" },
+        lua = { "stylua" },
+        markdown = { "prettier" },
+        nix = { "nixfmt" },
+        rust = { "rustfmt" },
+        scss = { "prettier" },
+        sh = { "shfmt" },
+        templ = { "templ" },
+        toml = { "taplo" },
+        yaml = { "prettier" },
+      }
 
-        format_after_save = function()
-          if not vim.g.autoformat then
+      opts.formatters_by_ft = vim.tbl_deep_extend("force", default_formatters_by_ft, opts.formatters_by_ft or {})
+      opts.formatters =
+        vim.tbl_deep_extend("force", { injected = { options = { ignore_errors = true } } }, opts.formatters or {})
+      require("conform").setup(opts)
+
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        pattern = "*",
+        callback = function(args)
+          if not vim.g.autoformat or vim.b.autoformat == false then
             return
           end
-          if contains(vim.g.exclude_autoformat, vim.bo.filetype) then
-            return
-          end
-          if vim.bo.filetype == "ps1" then
-            vim.lsp.buf.format()
-            return
-          end
-          return { lsp_format = "fallback" }
+          require("conform").format({ bufnr = args.buf, lsp_format = "fallback" })
         end,
       })
     end,

@@ -6,7 +6,7 @@ return {
     opts = {
       style = "moon",
       transparent = false,
-      terminal_colors = false,
+      terminal_colors = true,
       styles = {
         comments = { italic = true },
         sidebars = "dark",
@@ -38,7 +38,11 @@ return {
         colors.green2 = "#1F4529"
       end,
       on_highlights = function(highlights, colors)
-        local prompt = colors.bg_highlight
+        local prompt = colors.bg_dark
+
+        highlights.FzfLuaBorder = { fg = colors.bg_highlight }
+        highlights.FzfLuaTitle = { fg = colors.bg_dark, bg = colors.red }
+        highlights.FzfLuaPreviewTitle = { fg = colors.bg_dark, bg = colors.green }
 
         highlights.TelescopeNormal = {
           bg = prompt,
@@ -67,29 +71,18 @@ return {
           bg = colors.green,
           fg = colors.bg_dark,
         }
-        -- highlights["@type"] = { fg = "#FF7EE2", bold = true }
+        highlights["@type"] = { fg = "#FFA62F", bold = true }
         highlights["@tag"] = { bold = true }
         highlights["lessClass"] = { italic = true, fg = colors.cyan }
-        -- highlights["@tag.attribute"] = { italic = true, fg = colors.blue5 }
-        -- highlights["@keyword.return"] = { fg = "#FF6ABC" }
-        -- highlights["@variable.builtin"] = { italic = true, fg = "#F02b77" }
-        -- highlights["@constructor"] = { fg = "#E06c75" }
-        highlights["@keyword.import"] = { italic = true, fg = colors.red }
-        highlights["@keyword.export"] = { italic = true, fg = colors.red }
-        --
-        -- highlights["@keyword.repeat"] = { italic = true, bold = true, fg = "#FF8E00" }
-        -- highlights["@keyword.coroutine"] = { italic = true, bold = true, fg = "#B51B75" }
-        -- highlights["@keyword.exception"] = { italic = true, bold = true, fg = "#F94C10" }
-        -- highlights["@module"] = { fg = "#E06c75" }
+        highlights["@tag.attribute"] = { italic = true, fg = colors.blue5 }
+        highlights["@constructor"] = { fg = colors.red1 }
+        highlights["@keyword.import"] = { italic = true, fg = colors.red1 }
+        highlights["@keyword.export"] = { italic = true, fg = colors.red1 }
 
         highlights["@lsp.type.enum"] = { fg = "#0D7C66" }
         highlights["@lsp.type.enumMember"] = { fg = "#C08B5C" }
         highlights["@lsp.type.interface"] = { fg = "#9D5C0D" }
-        highlights["@lsp.type.property"] = { fg = colors.blue }
       end,
     },
-    -- init = function()
-    --   vim.cmd("colorscheme tokyonight")
-    -- end,
   },
 }

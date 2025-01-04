@@ -5,7 +5,7 @@ return {
     priority = 1000,
     config = function()
       require("kanagawa").setup({
-        compile = false, -- enable compiling the colorscheme
+        compile = true, -- enable compiling the colorscheme
         undercurl = true, -- enable undercurls
         commentStyle = { italic = true },
         functionStyle = {},
@@ -38,12 +38,7 @@ return {
           return {
             ["@keyword.import"] = { italic = true, fg = palette.peachRed },
             ["@keyword.export"] = { italic = true, fg = palette.peachRed },
-
-            -- ["@keyword.repeat"] = { italic = true, bold = true, fg = "#FF8E00" },
-            -- ["@keyword.coroutine"] = { italic = true, bold = true, fg = "#B51B75" },
-            -- ["@keyword.exception"] = { italic = true, bold = true, fg = "#F94C10" },
-
-            ["@lsp.type.enum"] = { fg = "#0D7C66" },
+            ["@lsp.type.enum"] = { fg = "#808836" },
             ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
             ["@lsp.type.interface"] = { fg = "#9D5C0D" },
 
