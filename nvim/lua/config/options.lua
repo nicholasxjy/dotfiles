@@ -3,7 +3,7 @@
 -- Add any additional options here
 
 vim.g.lazyvim_blink_main = true
--- vim.g.ai_cmp = true
+vim.g.ai_cmp = true
 vim.g.trouble_lualine = true
 
 vim.opt.pumblend = 0

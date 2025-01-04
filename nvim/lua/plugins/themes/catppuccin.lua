@@ -25,6 +25,11 @@ return {
       custom_highlights = function(C)
         local prompt = C.mantle
         return {
+          FzfLuaNormal = { bg = C.mantle, fg = C.fg },
+          FzfLuaBorder = { fg = C.mantle },
+          FzfLuaTitle = { fg = C.base, bg = C.red },
+          FzfLuaPreviewTitle = { fg = C.base, bg = C.green },
+
           TelescopeNormal = {
             bg = prompt,
             fg = C.text,
@@ -57,16 +62,16 @@ return {
           SnacksIndentBlank = { link = "LineNr" },
           ["lessClass"] = { fg = "#56b7c3" },
           ["@tag"] = { bold = true },
-          ["@type"] = { bold = true, fg = C.peach },
-          ["@keyword"] = { fg = "#F14A00", italic = true },
-          ["@tag.attribute"] = { italic = true, fg = "#789DBC" },
-          ["@tag.attribute.tsx"] = { italic = true, fg = "#789DBC" },
-          ["@keyword.import"] = { italic = true, fg = C.red },
-          ["@keyword.export"] = { italic = true, fg = C.red },
-          ["@lsp.type.enum"] = { fg = "#677D6A" },
-          ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
-          ["@lsp.type.interface"] = { fg = "#9D5C0D" },
-          ["@lsp.type.function"] = { fg = C.sapphire },
+          -- ["@type"] = { bold = true, fg = "#FCC737" },
+          -- ["@keyword"] = { fg = "#E178C5", italic = true },
+          -- ["@tag.attribute"] = { italic = true, fg = "#789DBC" },
+          -- ["@tag.attribute.tsx"] = { italic = true, fg = "#789DBC" },
+          -- ["@keyword.import"] = { italic = true, fg = C.sky },
+          -- ["@keyword.export"] = { italic = true, fg = C.sky },
+          -- ["@lsp.type.enum"] = { fg = "#677D6A" },
+          -- ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
+          -- ["@lsp.type.interface"] = { fg = "#9D5C0D" },
+          -- ["@lsp.type.function"] = { fg = "#8B93FF" },
         }
       end,
       default_integration = true,

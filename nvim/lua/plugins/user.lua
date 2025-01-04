@@ -3,13 +3,13 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "cyberdream",
+      colorscheme = "tokyonight",
     },
   },
   {
     "folke/which-key.nvim",
     opts = {
-      preset = "modern",
+      preset = "classic",
       spec = {
         -- { "<leader>j", group = "personal1", icon = { icon = "󰕈", color = "yellow" } },
         -- { "<leader>k", group = "personal2", icon = { icon = "󰌽", color = "red" } },
@@ -25,7 +25,7 @@ return {
     "folke/noice.nvim",
     opts = {
       presets = {
-        lsp_doc_border = true,
+        lsp_doc_border = false,
         bottom_search = false,
         command_palette = {
           views = {

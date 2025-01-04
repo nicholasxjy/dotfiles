@@ -22,7 +22,6 @@ return {
               TabLine = { fg = colors.fg, bg = colors.bgHighlight },
               TabLineFill = { fg = colors.grey, bg = colors.bg },
               TabLineSel = { fg = colors.bgAlt, bg = colors.green },
-              BlinkCmpLabel = { fg = colors.fg },
 
               TelescopePromptTitle = {
                 bg = colors.red,
@@ -39,10 +38,10 @@ return {
               ["lessClass"] = { fg = "#56b7c3" },
               ["@tag"] = { bold = true },
               ["@type"] = { bold = true, fg = "#FFC700" },
-              ["@keyword"] = { fg = "#C30E59", italic = true },
+              ["@keyword"] = { fg = "#f38ba8", italic = true },
               ["@tag.attribute"] = { italic = true, fg = "#789DBC" },
-              ["@keyword.import"] = { italic = true, fg = "#00FFF6" },
-              ["@keyword.export"] = { italic = true, fg = "#00FFF6" },
+              ["@keyword.import"] = { italic = true, fg = "#94e2d5" },
+              ["@keyword.export"] = { italic = true, fg = "#94e2d5" },
               ["@lsp.type.enum"] = { fg = "#677D6A" },
               ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
               ["@lsp.type.interface"] = { fg = "#9D5C0D" },

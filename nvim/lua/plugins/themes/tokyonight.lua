@@ -4,7 +4,7 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-      style = "storm",
+      style = "moon",
       transparent = false,
       terminal_colors = true,
       styles = {
@@ -38,7 +38,11 @@ return {
         colors.green2 = "#1F4529"
       end,
       on_highlights = function(highlights, colors)
-        local prompt = colors.bg_highlight
+        local prompt = colors.bg_dark
+
+        highlights.FzfLuaBorder = { fg = colors.bg_highlight }
+        highlights.FzfLuaTitle = { fg = colors.bg_dark, bg = colors.red }
+        highlights.FzfLuaPreviewTitle = { fg = colors.bg_dark, bg = colors.green }
 
         highlights.TelescopeNormal = {
           bg = prompt,
@@ -75,10 +79,9 @@ return {
         highlights["@keyword.import"] = { italic = true, fg = colors.red1 }
         highlights["@keyword.export"] = { italic = true, fg = colors.red1 }
 
-        highlights["@lsp.type.enum"] = { fg = "#808836" }
+        highlights["@lsp.type.enum"] = { fg = "#0D7C66" }
         highlights["@lsp.type.enumMember"] = { fg = "#C08B5C" }
         highlights["@lsp.type.interface"] = { fg = "#9D5C0D" }
-        highlights["@lsp.type.property"] = { fg = "#BEADFA" }
       end,
     },
   },
