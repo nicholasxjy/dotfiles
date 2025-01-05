@@ -9,7 +9,7 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "Saghen/blink.cmp",
+      vim.g.cmp_engine == "blink" and "Saghen/blink.cmp" or "hrsh7th/nvim-cmp",
     },
     opts = {
       diagnostics = {

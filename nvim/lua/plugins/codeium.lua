@@ -5,9 +5,9 @@ return {
     event = "InsertEnter",
     build = ":Codeium Auth",
     opts = {
-      enable_cmp_source = false,
+      enable_cmp_source = true,
       virtual_text = {
-        enabled = true,
+        enabled = false,
       },
     },
   },
