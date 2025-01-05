@@ -1,10 +1,5 @@
 return {
   {
-    "windwp/nvim-autopairs",
-    event = "InsertEnter",
-    opts = {},
-  },
-  {
     "folke/lazydev.nvim",
     ft = "lua",
     opts = {

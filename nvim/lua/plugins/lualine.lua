@@ -4,6 +4,7 @@ return {
     event = "VeryLazy",
     dependencies = {
       "nvim-tree/nvim-web-devicons",
+      "cbochs/grapple.nvim",
       "nicholasxjy/lualine-so-fancy.nvim",
     },
     opts = {
@@ -26,6 +27,7 @@ return {
         },
         lualine_c = {
           { "fancy_cwd", substitute_home = true },
+          { "grapple" },
         },
         lualine_x = {
           { "fancy_macro" },
@@ -41,20 +43,5 @@ return {
         },
       },
     },
-  },
-  {
-    "nvim-lualine/lualine.nvim",
-    dependencies = {
-      "nicholasxjy/snipe-lualine-files.nvim",
-      dependencies = { "nicholasxjy/snipe.nvim" },
-    },
-    opts = function(_, opts)
-      opts.sections = opts.sections or {}
-      opts.sections.lualine_c = opts.sections.lualine_c or {}
-      local snipe_lualine_files = require("snipe-lualine-files")
-      table.insert(opts.sections.lualine_c, {
-        snipe_lualine_files.lualine_component,
-      })
-    end,
   },
 }
