@@ -20,7 +20,7 @@ return {
         go = { "goimports", "gofmt", "golines" },
         html = { "prettier" },
         javascript = { "prettier" },
-        typescript = { "pretter" },
+        typescript = { "prettier" },
         javascriptreact = { "prettier" },
         typescriptreact = { "prettier" },
         json = { "prettier" },

@@ -4,7 +4,6 @@ return {
     event = "VeryLazy",
     dependencies = {
       "nvim-tree/nvim-web-devicons",
-      "cbochs/grapple.nvim",
       "nicholasxjy/lualine-so-fancy.nvim",
     },
     opts = {

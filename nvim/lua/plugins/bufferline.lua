@@ -1,6 +1,5 @@
 local custom_icons = require("core.icons")
 return {
-  -- tabs, which include filetype icons and close buttons.
   {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",

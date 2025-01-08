@@ -18,6 +18,9 @@ return {
       hide_inactive_statusline = false, -- Enabling this option, will hide inactive statuslines and replace them with a thin border instead. Should work with the standard **StatusLine** and **LuaLine**.
       dim_inactive = false, -- dims inactive windows, transparent must be false for this to work
       lualine_bold = true, -- When `true`, section headers in the lualine theme will be bold
+      on_colors = function(colors)
+        colors.green = "#C5FF95"
+      end,
       on_highlights = function(highlights, colors)
         highlights.WhichKeyBorder = { fg = colors.border_highlight, bg = colors.bg_float }
         highlights.WhichKeyDesc = { fg = colors.fg_dark, bold = false, italic = false }
@@ -61,8 +64,7 @@ return {
         -- highlights["@keyword.coroutine"] = { italic = true, bold = true, fg = "#B51B75" }
         -- highlights["@keyword.exception"] = { italic = true, bold = true, fg = "#F94C10" }
         highlights["@module"] = { fg = colors.bright_red }
-        -- highlights["@lsp.type.parameter"] = { fg = colors.purple }
-        highlights["@lsp.type.enum"] = { fg = "#0D7C66" }
+        highlights["@lsp.type.enum"] = { fg = "#677D6A" }
         highlights["@lsp.type.enumMember"] = { fg = "#C08B5C" }
         highlights["@lsp.type.interface"] = { fg = "#9D5C0D" }
 

@@ -15,13 +15,10 @@ return {
           variant = "auto",
           saturation = 0.8,
           colors = {
-            fg = "#D7D3BF",
+            fg = "#cdd6f4",
           },
           overrides = function(colors)
             return {
-              TabLine = { fg = colors.fg, bg = colors.bgHighlight },
-              TabLineFill = { fg = colors.grey, bg = colors.bg },
-              TabLineSel = { fg = colors.bgAlt, bg = colors.green },
 
               TelescopePromptTitle = {
                 bg = colors.red,
@@ -37,7 +34,7 @@ return {
               },
               ["lessClass"] = { fg = "#56b7c3" },
               ["@tag"] = { bold = true },
-              ["@type"] = { bold = true, fg = "#FFC700" },
+              ["@type"] = { bold = true, fg = "#FFA62F" },
               ["@keyword"] = { fg = "#f38ba8", italic = true },
               ["@tag.attribute"] = { italic = true, fg = "#789DBC" },
               ["@keyword.import"] = { italic = true, fg = "#94e2d5" },

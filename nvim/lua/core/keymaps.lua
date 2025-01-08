@@ -39,6 +39,10 @@ map("n", "<leader>j", function()
   snacks.bufdelete({ wipe = true })
 end, { desc = "Delete buffer", nowait = true })
 
+map("n", "<leader>bo", function()
+  snacks.bufdelete.other()
+end, { desc = "Delete other buffers" })
+
 map("n", "<leader>q", ":q<cr>", { desc = "Quit", nowait = true })
 -- Clear search with <esc>
 map("n", "<esc>", ":noh<cr><esc>", { desc = "Escape and clear hlsearch" })
@@ -79,27 +83,27 @@ map("n", "i", function()
   return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i"
 end, { expr = true, noremap = true })
 
-map(
-  { "n", "t" },
-  "<C-h>",
-  "<CMD>NavigatorLeft<CR>",
-  { desc = "Navigate Left", silent = true, noremap = true, nowait = true }
-)
-map(
-  { "n", "t" },
-  "<C-l>",
-  "<CMD>NavigatorRight<CR>",
-  { desc = "Navigate Right", silent = true, noremap = true, nowait = true }
-)
-map(
-  { "n", "t" },
-  "<C-k>",
-  "<CMD>NavigatorUp<CR>",
-  { desc = "Navigate Up", silent = true, noremap = true, nowait = true }
-)
-map(
-  { "n", "t" },
-  "<C-j>",
-  "<CMD>NavigatorDown<CR>",
-  { desc = "Navigate Down", silent = true, noremap = true, nowait = true }
-)
+-- map(
+--   { "n", "t" },
+--   "<C-h>",
+--   "<CMD>NavigatorLeft<CR>",
+--   { desc = "Navigate Left", silent = true, noremap = true, nowait = true }
+-- )
+-- map(
+--   { "n", "t" },
+--   "<C-l>",
+--   "<CMD>NavigatorRight<CR>",
+--   { desc = "Navigate Right", silent = true, noremap = true, nowait = true }
+-- )
+-- map(
+--   { "n", "t" },
+--   "<C-k>",
+--   "<CMD>NavigatorUp<CR>",
+--   { desc = "Navigate Up", silent = true, noremap = true, nowait = true }
+-- )
+-- map(
+--   { "n", "t" },
+--   "<C-j>",
+--   "<CMD>NavigatorDown<CR>",
+--   { desc = "Navigate Down", silent = true, noremap = true, nowait = true }
+-- )

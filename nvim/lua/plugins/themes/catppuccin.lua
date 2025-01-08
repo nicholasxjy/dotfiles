@@ -5,7 +5,7 @@ return {
     priority = 1000,
     name = "catppuccin",
     opts = {
-      flavour = "mocha",
+      flavour = "frappe",
       transparent_background = false,
       term_colors = true,
       no_italic = false, -- Force no italic
@@ -68,9 +68,9 @@ return {
           -- ["@tag.attribute.tsx"] = { italic = true, fg = "#789DBC" },
           -- ["@keyword.import"] = { italic = true, fg = C.sky },
           -- ["@keyword.export"] = { italic = true, fg = C.sky },
-          -- ["@lsp.type.enum"] = { fg = "#677D6A" },
-          -- ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
-          -- ["@lsp.type.interface"] = { fg = "#9D5C0D" },
+          ["@lsp.type.enum"] = { fg = "#677D6A" },
+          ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
+          ["@lsp.type.interface"] = { fg = "#9D5C0D" },
           -- ["@lsp.type.function"] = { fg = "#8B93FF" },
         }
       end,

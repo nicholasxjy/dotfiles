@@ -23,6 +23,14 @@ return {
     "nvim-treesitter/nvim-treesitter",
     opts = { ensure_installed = { "java" } },
   },
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        java = { "google-java-format" },
+      },
+    },
+  },
 
   -- Ensure java debugger and test packages are installed.
   {

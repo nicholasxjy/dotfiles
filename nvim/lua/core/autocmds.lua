@@ -2,6 +2,13 @@ local function augroup(name)
   return vim.api.nvim_create_augroup("sjvim_" .. name, { clear = true })
 end
 
+-- not autoformat for some filetypes
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = { "shell", "bash", "sh", "java" },
+  callback = function()
+    vim.b.autoformat = false
+  end,
+})
 -- close some filetypes with <q>
 vim.api.nvim_create_autocmd("FileType", {
   group = augroup("close_with_q"),
@@ -21,6 +28,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "spectre_panel",
     "startuptime",
     "tsplayground",
+    "DiffviewFiles",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -43,14 +51,6 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
     if vim.o.buftype ~= "nofile" then
       vim.cmd("checktime")
     end
-  end,
-})
-
--- not autoformat for some filetypes
-vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = { "shell", "bash", "sh" },
-  callback = function()
-    vim.b.autoformat = false
   end,
 })
 

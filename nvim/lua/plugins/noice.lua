@@ -9,10 +9,10 @@ return {
         ["cmp.entry.get_documentation"] = true,
       },
       signature = {
-        enabled = false,
+        enabled = vim.g.cmp_engine == "cmp",
       },
       hover = {
-        enabled = false,
+        enabled = true,
       },
     },
     routes = {

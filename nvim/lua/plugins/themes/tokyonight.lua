@@ -4,7 +4,7 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-      style = "moon",
+      style = "storm",
       transparent = false,
       terminal_colors = true,
       styles = {
@@ -12,16 +12,19 @@ return {
         sidebars = "dark",
         floats = "dark",
       },
+      dim_inactive = true,
+      lualine_bold = true,
+      cache = true,
       plugins = {
         all = true,
         auto = true,
       },
       on_colors = function(colors)
-        colors.bg_dark = "#171928"
-        colors.bg = "#212337"
-        colors.bg_highlight = "#292e42"
-        colors.terminal_black = "#414868"
-        colors.fg = "#ebfafa"
+        -- colors.bg_dark = "#171928"
+        -- colors.bg = "#212337"
+        -- colors.bg_highlight = "#292e42"
+        -- colors.terminal_black = "#414868"
+        colors.fg = "#cdd6f4"
         colors.fg_dark = "#ABB4DA"
         colors.fg_gutter = "#3b4261"
         colors.cyan = "#04d1f9"
@@ -29,12 +32,12 @@ return {
         colors.magenta2 = "#722f55"
         colors.pink = "#f265b5"
         colors.purple = "#a48cf2"
-        colors.orange = "#f7c67f"
-        colors.yellow = "#f1fc79"
+        colors.orange = "#EF9C66"
+        colors.yellow = "#e0af68"
         colors.red = "#f16c75"
         colors.red1 = "#f0313e"
         colors.green = "#37f499"
-        colors.green1 = "#0A97B0"
+        colors.green1 = "#51ADCF"
         colors.green2 = "#1F4529"
       end,
       on_highlights = function(highlights, colors)
@@ -59,6 +62,10 @@ return {
           bg = prompt,
           fg = prompt,
         }
+        highlights.TelescopePreviewBorder = {
+          bg = prompt,
+          fg = prompt,
+        }
         highlights.TelescopePromptTitle = {
           bg = colors.red,
           fg = colors.bg_dark,
@@ -71,7 +78,7 @@ return {
           bg = colors.green,
           fg = colors.bg_dark,
         }
-        highlights["@type"] = { fg = "#FFA62F", bold = true }
+        highlights["@type"] = { fg = "#FF9D23", bold = true }
         highlights["@tag"] = { bold = true }
         highlights["lessClass"] = { italic = true, fg = colors.cyan }
         highlights["@tag.attribute"] = { italic = true, fg = colors.blue5 }
@@ -79,7 +86,7 @@ return {
         highlights["@keyword.import"] = { italic = true, fg = colors.red1 }
         highlights["@keyword.export"] = { italic = true, fg = colors.red1 }
 
-        highlights["@lsp.type.enum"] = { fg = "#0D7C66" }
+        highlights["@lsp.type.enum"] = { fg = "#227B94" }
         highlights["@lsp.type.enumMember"] = { fg = "#C08B5C" }
         highlights["@lsp.type.interface"] = { fg = "#9D5C0D" }
       end,
