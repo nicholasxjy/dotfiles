@@ -13,6 +13,9 @@ return {
           local darken = color.darken
           local lighten = color.lighten
           local shade = color.shade
+
+          local use_italic = false
+
           return {
             TelescopeResultsBorder = { fg = c.bgdark, bg = c.bgdark },
             TelescopeResultsNormal = { bg = c.bgdark },
@@ -27,13 +30,12 @@ return {
             WhichKeyBorder = { fg = darken(c.cyan, 30), bg = c.bgdark },
             WhichKeyDesc = { fg = c.fg, bold = false, italic = false },
 
-            FzfLuaBorder = { fg = c.editor.separator, bg = c.bgdark },
+            FzfLuaBorder = { fg = darken(c.editor.separator, 60), bg = c.bgdark },
             FzfLuaFzfNormal = { fg = c.fg },
             FzfLuaFzfPointer = { fg = c.yellow },
             FzfLuaNormal = { fg = c.fg, bg = c.bgdark },
             FzfLuaPreviewTitle = { fg = c.green, bg = shade(c.green, 5) },
             FzfLuaTitle = { fg = c.red, bg = shade(c.red, 5) },
-
             FzfLuaCursor = { fg = c.orange, bg = shade(c.orange, 5) },
             FzfLuaDirPart = { fg = darken(c.fg, 30) },
             FzfLuaFilePart = { fg = c.fg },
@@ -44,22 +46,22 @@ return {
 
             ["@tag"] = { bold = true },
             ["@type"] = { bold = true },
-            ["@function"] = { italic = true },
-            ["@function.call"] = { italic = true },
+            -- ["@function"] = { italic = true },
+            -- ["@function.call"] = { italic = true },
             ["@comment"] = { italic = true },
             hl("@tag.attribute", { italic = true, bold = false }, { glow = false }),
-            hl("@keyword.return", { fg = darken(c.pink, 30), italic = true, bold = true }, { glow = true }),
-            hl("@variable.builtin", { italic = true, fg = lighten(c.red, 50) }, { glow = true }),
-            hl("@keyword.import", { italic = true, bold = true, fg = "#13C3F7" }, { glow = true }),
-            hl("@keyword.export", { italic = true, bold = true, fg = "#13C3F7" }, { glow = true }),
-            hl("@keyword.conditional", { fg = "#F637EC", italic = true, bold = false }, { glow = false }),
-            hl("@lsp.mod.controlFlow", { fg = "#F637EC", italic = true, bold = false }, { glow = false }),
-            hl("@keyword.repeat", { italic = true, bold = false, fg = "#FF8E00" }, { glow = false }),
-            hl("@keyword.coroutine", { italic = true, bold = false, fg = "#B51B75" }, { glow = false }),
-            hl("@lsp.typemod.keyword.async", { italic = true, bold = false, fg = "#B51B75" }, { glow = false }),
-            hl("@keyword.exception", { italic = true, bold = false, fg = "#F94C10" }, { glow = false }),
-            hl("@module", { fg = darken(c.red, 20), italic = true, bold = false }, { glow = true }),
-            hl("@lsp.type.namespace", { fg = darken(c.red, 20), italic = true, bold = false }, { glow = true }),
+            -- hl("@keyword.return", { fg = darken(c.pink, 30), italic = true, bold = true }, { glow = true }),
+            hl("@variable.builtin", { italic = use_italic, fg = lighten(c.red, 50) }, { glow = true }),
+            hl("@keyword.import", { italic = use_italic, bold = true, fg = "#13C3F7" }, { glow = true }),
+            hl("@keyword.export", { italic = use_italic, bold = true, fg = "#13C3F7" }, { glow = true }),
+            -- hl("@keyword.conditional", { fg = "#F637EC", italic = true, bold = false }, { glow = false }),
+            -- hl("@lsp.mod.controlFlow", { fg = "#F637EC", italic = true, bold = false }, { glow = false }),
+            -- hl("@keyword.repeat", { italic = true, bold = false, fg = "#FF8E00" }, { glow = false }),
+            -- hl("@keyword.coroutine", { italic = true, bold = false, fg = "#B51B75" }, { glow = false }),
+            -- hl("@lsp.typemod.keyword.async", { italic = true, bold = false, fg = "#B51B75" }, { glow = false }),
+            -- hl("@keyword.exception", { italic = true, bold = false, fg = "#F94C10" }, { glow = false }),
+            hl("@module", { fg = darken(c.red, 20), italic = use_italic, bold = false }, { glow = true }),
+            hl("@lsp.type.namespace", { fg = darken(c.red, 20), italic = use_italic, bold = false }, { glow = true }),
             hl("@lsp.typemod.function", { fg = c.yellow, bold = true }, { glow = true }),
 
             hl("@lsp.type.enum", { fg = "#257180" }, { glow = false }),

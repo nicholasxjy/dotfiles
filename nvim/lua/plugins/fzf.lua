@@ -5,9 +5,10 @@ return {
     dependencies = { "echasnovski/mini.icons" },
     opts = {
       "default-title",
+      fzf_colors = true,
       winopts = {
         width = 1,
-        height = 0.45,
+        height = 0.4,
         row = 1,
         border = "single",
         treesitter = {
@@ -32,6 +33,13 @@ return {
           require("fzf-lua").command_history()
         end,
         desc = "Command History",
+      },
+      {
+        "<leader>/",
+        function()
+          require("fzf-lua").grep_curbuf()
+        end,
+        desc = "Grep on current buffer",
       },
       {
         "<leader><space>",
@@ -169,13 +177,6 @@ return {
           require("fzf-lua").live_grep_native()
         end,
         desc = "Live grep",
-      },
-      {
-        "<leader>sb",
-        function()
-          require("fzf-lua").grep_curbuf()
-        end,
-        desc = "Grep on current buffer",
       },
     },
     config = function(_, opts)

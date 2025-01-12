@@ -4,16 +4,18 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
+      local use_italic = false
+
       require("kanagawa").setup({
         compile = true, -- enable compiling the colorscheme
         undercurl = true, -- enable undercurls
         commentStyle = { italic = true },
         functionStyle = {},
-        keywordStyle = { italic = true, bold = true },
+        keywordStyle = { italic = use_italic, bold = true },
         statementStyle = { bold = true },
         typeStyle = { bold = true },
-        transparent = false, -- do not set background color
-        dimInactive = true, -- dim inactive window `:h hl-NormalNC`
+        transparent = true, -- do not set background color
+        dimInactive = false, -- dim inactive window `:h hl-NormalNC`
         terminalColors = true, -- define vim.g.terminal_color_{0,17}
         colors = { -- add/modify theme and palette colors
           palette = {},
@@ -34,9 +36,9 @@ return {
 
           return {
             ["@tag"] = { bold = true },
-            ["@tag.attribute.tsx"] = { italic = true, fg = palette.lightBlue },
-            ["@keyword.import"] = { italic = true, fg = palette.peachRed },
-            ["@keyword.export"] = { italic = true, fg = palette.peachRed },
+            ["@tag.attribute.tsx"] = { italic = use_italic },
+            ["@keyword.import"] = { italic = use_italic, fg = palette.peachRed },
+            ["@keyword.export"] = { italic = use_italic, fg = palette.peachRed },
             ["@lsp.type.enum"] = { fg = "#808836" },
             ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
             ["@lsp.type.interface"] = { fg = "#9D5C0D" },
@@ -44,8 +46,9 @@ return {
             FzfLuaBorder = { fg = theme.ui.bg_dim },
             FzfLuaTitle = { fg = theme.ui.bg_p1, bg = palette.peachRed },
             FzfLuaPreviewTitle = { fg = theme.ui.bg_p1, bg = palette.springGreen },
+            FzfLuaNormal = { bg = "NONE", blend = vim.o.pumblend },
 
-            Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 }, -- add `blend = vim.o.pumblend` to enable transparency
+            Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1, blend = vim.o.pumblend }, -- add `blend = vim.o.pumblend` to enable transparency
             PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
             PmenuSbar = { bg = theme.ui.bg_m1 },
             PmenuThumb = { bg = theme.ui.bg_p2 },

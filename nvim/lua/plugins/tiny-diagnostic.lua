@@ -5,7 +5,7 @@ return {
   config = function()
     vim.diagnostic.config({ virtual_text = false })
     require("tiny-inline-diagnostic").setup({
-      preset = "modern",
+      preset = "ghost",
       options = {
         show_source = true,
         use_icons_from_diagnostic = true,
