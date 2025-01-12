@@ -12,4 +12,8 @@ return {
     end,
     lazy = false,
   },
+  {
+    "OXY2DEV/foldtext.nvim",
+    lazy = false,
+  },
 }

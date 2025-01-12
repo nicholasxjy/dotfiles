@@ -20,10 +20,6 @@ return {
         auto = true,
       },
       on_colors = function(colors)
-        -- colors.bg_dark = "#171928"
-        -- colors.bg = "#212337"
-        -- colors.bg_highlight = "#292e42"
-        -- colors.terminal_black = "#414868"
         colors.fg = "#cdd6f4"
         colors.fg_dark = "#ABB4DA"
         colors.fg_gutter = "#3b4261"
@@ -37,11 +33,19 @@ return {
         colors.red = "#f16c75"
         colors.red1 = "#f0313e"
         colors.green = "#37f499"
-        colors.green1 = "#51ADCF"
+        colors.green1 = "#80C4E9"
         colors.green2 = "#1F4529"
       end,
       on_highlights = function(highlights, colors)
         local prompt = colors.bg_dark
+
+        highlights.SnacksIndentChunk1 = { link = "RainbowDelimiterRed" }
+        highlights.SnacksIndentChunk2 = { link = "RainbowDelimiterYellow" }
+        highlights.SnacksIndentChunk3 = { link = "RainbowDelimiterBlue" }
+        highlights.SnacksIndentChunk4 = { link = "RainbowDelimiterOrange" }
+        highlights.SnacksIndentChunk5 = { link = "RainbowDelimiterGreen" }
+        highlights.SnacksIndentChunk6 = { link = "RainbowDelimiterViolet" }
+        highlights.SnacksIndentChunk7 = { link = "RainbowDelimiterCyan" }
 
         highlights.FzfLuaBorder = { fg = colors.bg_highlight }
         highlights.FzfLuaTitle = { fg = colors.bg_dark, bg = colors.red }

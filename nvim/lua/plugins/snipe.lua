@@ -19,8 +19,8 @@ return {
         open_win_override = {
           title = "Snipe",
           border = "single",
-          width = math.floor(vim.o.columns * 0.6),
-          height = math.floor(vim.o.lines * 0.4),
+          width = math.floor(vim.o.columns * 0.62),
+          height = math.floor(vim.o.lines * 0.3),
         },
         preselect_current = false,
         preselect = nil,

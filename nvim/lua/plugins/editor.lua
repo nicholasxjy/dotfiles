@@ -49,7 +49,7 @@ return {
   {
     "tris203/precognition.nvim",
     opts = {
-      startVisible = false,
+      startVisible = true,
       disabled_fts = {
         "startify",
         "lazy",

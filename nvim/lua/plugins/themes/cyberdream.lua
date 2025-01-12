@@ -1,8 +1,6 @@
 return {
   {
     "scottmckendry/cyberdream.nvim",
-    lazy = false,
-    priority = 1000,
     config = function()
       require("cyberdream").setup({
         transparent = true,
@@ -13,12 +11,22 @@ return {
         borderless_telescope = { border = false, style = "flat" },
         theme = {
           variant = "auto",
-          saturation = 0.8,
+          -- saturation = 0.8,
           colors = {
             fg = "#cdd6f4",
           },
           overrides = function(colors)
             return {
+              SnacksIndentChunk1 = { link = "RainbowDelimiterRed" },
+              SnacksIndentChunk2 = { link = "RainbowDelimiterYellow" },
+              SnacksIndentChunk3 = { link = "RainbowDelimiterBlue" },
+              SnacksIndentChunk4 = { link = "RainbowDelimiterOrange" },
+              SnacksIndentChunk5 = { link = "RainbowDelimiterGreen" },
+              SnacksIndentChunk6 = { link = "RainbowDelimiterViolet" },
+              SnacksIndentChunk7 = { link = "RainbowDelimiterCyan" },
+
+              FzfLuaTitle = { fg = colors.bgHighlight, bg = colors.red },
+              FzfLuaPreviewTitle = { fg = colors.bgHighlight, bg = colors.green },
 
               TelescopePromptTitle = {
                 bg = colors.red,

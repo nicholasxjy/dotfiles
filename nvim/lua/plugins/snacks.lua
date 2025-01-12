@@ -27,22 +27,42 @@ return {
       indent = {
         char = "¦",
         hl = "SnacksIndent",
+        -- hl = {
+        --   "SnacksIndent1",
+        --   "SnacksIndent2",
+        --   "SnacksIndent3",
+        --   "SnacksIndent4",
+        --   "SnacksIndent5",
+        --   "SnacksIndent6",
+        --   "SnacksIndent7",
+        --   "SnacksIndent8",
+        -- },
       },
       scope = {
         enabled = true,
-        char = "⁚",
+        -- char = "⁚",
         underline = true,
       },
       chunk = {
         enabled = true,
+        hl = {
+          "SnacksIndentChunk1",
+          "SnacksIndentChunk2",
+          "SnacksIndentChunk3",
+          "SnacksIndentChunk4",
+          "SnacksIndentChunk5",
+          "SnacksIndentChunk6",
+          "SnacksIndentChunk7",
+          "SnacksIndentChunk8",
+        },
       },
     },
     bigfile = { enabled = true },
     dim = { enabled = true },
     zen = { enabled = true },
-    scroll = { enabled = true },
+    scroll = { enabled = false },
     input = { enabled = true },
-
+    words = { enabled = true },
     statuscolumn = {
       enabled = true,
       left = { "mark", "sign" }, -- priority of signs on the left (high to low)

@@ -16,4 +16,10 @@ return {
       require("oil").setup(opts)
     end,
   },
+  {
+    "JezerM/oil-lsp-diagnostics.nvim",
+    dependencies = { "stevearc/oil.nvim" },
+    event = "VeryLazy",
+    opts = {},
+  },
 }

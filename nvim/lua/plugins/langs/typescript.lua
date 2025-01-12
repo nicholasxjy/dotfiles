@@ -3,6 +3,17 @@ local util = require("utils.util")
 
 return {
   {
+    "vuki656/package-info.nvim",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+    },
+    event = "BufRead package.json",
+    config = function()
+      require("package-info").setup()
+    end,
+  },
+
+  {
     "williamboman/mason.nvim",
     opts = { ensure_installed = { "html-lsp", "css-lsp", "prettier", "eslint-lsp" } },
   },
@@ -12,6 +23,11 @@ return {
     opts = {
       -- make sure mason installs the server
       servers = {
+        eslint = {
+          settings = {
+            workingDirectories = { mode = "auto" },
+          },
+        },
         vtsls = {
           -- explicitly add default filetypes, so that we can extend
           -- them in related extras
@@ -105,6 +121,20 @@ return {
         },
       },
       setup = {
+        eslint = function(_, opts)
+          lspUtil.on_attach(function(client, buffer)
+            if client.name == "eslint" then
+              client.server_capabilities.documentFormattingProvider = true
+              vim.api.nvim_create_autocmd("BufWritePre", {
+                group = vim.api.nvim_create_augroup("EslintFixAllCmdGroup", { clear = true }),
+                callback = function()
+                  print("EslintFixAll")
+                  vim.cmd("EslintFixAll")
+                end,
+              })
+            end
+          end)
+        end,
         vtsls = function(_, opts)
           lspUtil.on_attach(function(client, buffer)
             client.commands["_typescript.moveToFileRefactoring"] = function(command, ctx)

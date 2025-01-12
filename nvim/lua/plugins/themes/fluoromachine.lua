@@ -1,8 +1,6 @@
 return {
   {
     "maxmx03/fluoromachine.nvim",
-    lazy = false,
-    priority = 1000,
     config = function()
       local hl = require("fluoromachine.utils").set_hl
       require("fluoromachine").setup({

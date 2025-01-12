@@ -9,17 +9,18 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      vim.g.cmp_engine == "blink" and "Saghen/blink.cmp" or "hrsh7th/nvim-cmp",
+      vim.g.cmp_engine == "blink" and "saghen/blink.cmp" or "hrsh7th/nvim-cmp",
     },
     opts = {
       diagnostics = {
         underline = true,
         update_in_insert = false,
-        virtual_text = {
-          spacing = 4,
-          source = "if_many",
-          prefix = "●",
-        },
+        virtual_text = false,
+        -- virtual_text = {
+        --   spacing = 4,
+        --   source = "if_many",
+        --   prefix = "●",
+        -- },
         severity_sort = true,
         signs = {
           text = {
