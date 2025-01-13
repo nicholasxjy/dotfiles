@@ -72,4 +72,11 @@ return {
       highlight = { link = "LineNr" },
     },
   },
+  {
+    "rachartier/tiny-glimmer.nvim",
+    event = "TextYankPost",
+    opts = {
+      -- your configuration
+    },
+  },
 }

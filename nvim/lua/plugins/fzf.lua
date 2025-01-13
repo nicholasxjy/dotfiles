@@ -7,15 +7,15 @@ return {
       "default-title",
       fzf_colors = true,
       winopts = {
-        width = 1,
-        height = 0.4,
-        row = 1,
+        width = 0.8,
+        height = 0.5,
+        row = 0.7,
         border = "single",
         treesitter = {
           enabled = true,
         },
         preview = {
-          horizontal = "right:45%",
+          horizontal = "right:40%",
         },
       },
       files = {
@@ -68,6 +68,13 @@ return {
           require("fzf-lua").buffers()
         end,
         desc = "Find buffers",
+      },
+      {
+        "<leader>h",
+        function()
+          require("fzf-lua").buffers({ sort_lastused = true })
+        end,
+        desc = "Open lastused buffers",
       },
       {
         "<leader>fg",

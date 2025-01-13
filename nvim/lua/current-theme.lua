@@ -1,1 +1,1 @@
-vim.cmd("colorscheme fluoromachine")
+vim.cmd("colorscheme catppuccin")

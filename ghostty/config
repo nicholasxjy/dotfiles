@@ -1,0 +1,50 @@
+
+theme = AdventureTime
+
+shell-integration = zsh
+
+font-family = "TX-02"
+font-family-bold = "TX-02"
+font-family-italic = "MonoLisa"
+font-family-bold-italic = "MonoLisa"
+
+font-style = Regular
+font-style-bold = ExtraBold
+font-style-italic = Regular Italic
+font-style-bold-italic = Black Italic
+
+font-size = 21
+
+font-feature = calt
+font-feature = ss02
+font-feature = ss04
+font-feature = ss07
+font-feature = ss08
+font-feature = ss10
+font-feature = ss11
+font-feature = ss12
+font-feature = ss17
+font-feature = ss18
+
+# adjust-cell-height = -6%
+
+window-padding-y = 0,0
+window-padding-balance = true
+cursor-style = underline
+cursor-style-blink = true
+
+background-opacity = 0.9
+background-blur-radius = 20
+link-url = true
+macos-titlebar-style = hidden
+copy-on-select = true
+macos-option-as-alt = true
+auto-update = check
+
+cursor-invert-fg-bg = true
+shell-integration-features = no-cursor 
+mouse-hide-while-typing = true
+
+keybind = super+i=inspector:toggle
+keybind = super+r=reload_config
+

@@ -9,13 +9,14 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      vim.g.cmp_engine == "blink" and "saghen/blink.cmp" or "hrsh7th/nvim-cmp",
+      "saghen/blink.cmp",
     },
     opts = {
       diagnostics = {
         underline = true,
         update_in_insert = false,
         virtual_text = false,
+        -- NOTE: tiny diagnostics should disable below
         -- virtual_text = {
         --   spacing = 4,
         --   source = "if_many",

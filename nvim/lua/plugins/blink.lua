@@ -14,6 +14,7 @@ return {
       "rafamadriz/friendly-snippets",
       "Exafunction/codeium.nvim",
       { "Saghen/blink.compat", opts = { enable_events = true } },
+      "MeanderingProgrammer/render-markdown.nvim",
     },
     build = "cargo build --release",
     event = "InsertEnter",
@@ -53,13 +54,18 @@ return {
           },
         },
         sources = {
-          default = { "lsp", "path", "snippets", "buffer", "codeium" },
+          default = { "lsp", "path", "snippets", "buffer", "markdown", "codeium" },
           providers = {
             codeium = {
               name = "codeium",
               score_offset = 100,
               async = true,
               module = "blink.compat.source",
+            },
+            markdown = {
+              name = "RenderMarkdown",
+              module = "render-markdown.integ.blink",
+              fallbacks = { "lsp" },
             },
           },
           cmdline = function()

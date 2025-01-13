@@ -12,7 +12,6 @@ return {
       "ObsidianTags",
     },
     version = "*", -- recommended, use latest release instead of latest commit
-    lazy = true,
     -- ft = "markdown",
     -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
     event = {
@@ -20,26 +19,19 @@ return {
       -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
       -- refer to `:h file-pattern` for more examples
       -- stylua: ignore
-      "BufReadPre " .. vim.fn.expand("~") .. "/obsidian/*.md",
-      "BufNewFile " .. vim.fn.expand("~") .. "/obsidian/*.md",
+      "BufReadPre " .. vim.fn.expand("~") .. "/obsidian/notes/*.md",
+      "BufNewFile " .. vim.fn.expand("~") .. "/obsidian/notes/*.md",
     },
     dependencies = {
       -- Required.
       "nvim-lua/plenary.nvim",
     },
     opts = {
+      ui = { enable = false },
       workspaces = {
-        {
-          name = "home",
-          path = "~/obsidian/home",
-        },
         {
           name = "notes",
           path = "~/obsidian/notes",
-        },
-        {
-          name = "work",
-          path = "~/obsidian/work",
         },
       },
       completion = {

@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.autoformat = true
 
-vim.g.cmp_engine = "blink" -- cmp or blink
+vim.g.cmp_engine = "blink"
 
 local opt = vim.opt
 
