@@ -11,22 +11,20 @@ return {
         borderless_telescope = { border = false, style = "flat" },
         theme = {
           variant = "auto",
-          -- saturation = 0.8,
           colors = {
             fg = "#cdd6f4",
+            bg = "#1e1e2e",
           },
           overrides = function(colors)
             return {
-              SnacksIndentChunk1 = { link = "RainbowDelimiterRed" },
-              SnacksIndentChunk2 = { link = "RainbowDelimiterYellow" },
-              SnacksIndentChunk3 = { link = "RainbowDelimiterBlue" },
-              SnacksIndentChunk4 = { link = "RainbowDelimiterOrange" },
-              SnacksIndentChunk5 = { link = "RainbowDelimiterGreen" },
-              SnacksIndentChunk6 = { link = "RainbowDelimiterViolet" },
-              SnacksIndentChunk7 = { link = "RainbowDelimiterCyan" },
+              Pmenu = { fg = colors.fg, bg = "#11111b" },
+              NormalFloat = { fg = colors.fg, bg = "#11111b" },
 
               FzfLuaTitle = { fg = colors.bgHighlight, bg = colors.red },
               FzfLuaPreviewTitle = { fg = colors.bgHighlight, bg = colors.green },
+
+              SnacksPickerBoxTitle = { fg = colors.bgHighlight, bg = colors.red },
+              SnacksPickerPreviewTitle = { fg = colors.bgHighlight, bg = colors.green },
 
               TelescopePromptTitle = {
                 bg = colors.red,
@@ -42,8 +40,8 @@ return {
               },
               ["lessClass"] = { fg = "#56b7c3" },
               ["@tag"] = { bold = true },
-              ["@type"] = { bold = true, fg = "#FFA62F" },
-              ["@keyword"] = { fg = "#f38ba8", italic = true },
+              ["@type"] = { bold = true, fg = "#DA498D" },
+              ["@keyword"] = { fg = "#C30E59", italic = true },
               ["@tag.attribute"] = { italic = true, fg = "#789DBC" },
               ["@keyword.import"] = { italic = true, fg = "#94e2d5" },
               ["@keyword.export"] = { italic = true, fg = "#94e2d5" },

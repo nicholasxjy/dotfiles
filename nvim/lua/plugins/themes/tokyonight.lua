@@ -5,12 +5,12 @@ return {
     priority = 1000,
     opts = {
       style = "storm",
-      transparent = true,
+      transparent = false,
       terminal_colors = true,
       styles = {
         comments = { italic = true },
-        sidebars = "transparent",
-        floats = "transparent",
+        sidebars = "dark",
+        floats = "dark",
       },
       dim_inactive = true,
       lualine_bold = true,
@@ -20,23 +20,24 @@ return {
         auto = true,
       },
       on_colors = function(colors)
-        -- colors.fg = "#cdd6f4"
-        -- colors.fg_dark = "#ABB4DA"
-        -- colors.fg_gutter = "#3b4261"
-        -- colors.cyan = "#04d1f9"
-        -- colors.magenta = "#bf4f8e"
-        -- colors.magenta2 = "#722f55"
-        -- colors.pink = "#f265b5"
-        -- colors.purple = "#a48cf2"
-        -- colors.orange = "#EF9C66"
-        -- colors.yellow = "#e0af68"
-        -- colors.red = "#f16c75"
-        -- colors.red1 = "#f0313e"
-        -- colors.green = "#37f499"
-        -- colors.green1 = "#80C4E9"
-        -- colors.green2 = "#1F4529"
+        colors.fg = "#cdd6f4"
+        colors.fg_dark = "#ABB4DA"
+        colors.fg_gutter = "#3b4261"
+        colors.cyan = "#04d1f9"
+        colors.magenta = "#bf4f8e"
+        colors.magenta2 = "#722f55"
+        colors.pink = "#f265b5"
+        colors.purple = "#a48cf2"
+        colors.orange = "#EF9C66"
+        colors.yellow = "#e0af68"
+        colors.red = "#f16c75"
+        colors.red1 = "#f0313e"
+        colors.green = "#37f499"
+        colors.green1 = "#80C4E9"
+        colors.green2 = "#1F4529"
       end,
       on_highlights = function(highlights, colors)
+        highlights.FzfLuaNormal = { bg = colors.none }
         highlights.FzfLuaBorder = { fg = colors.bg_highlight }
         highlights.FzfLuaTitle = { fg = colors.bg_dark, bg = colors.red }
         highlights.FzfLuaPreviewTitle = { fg = colors.bg_dark, bg = colors.green }

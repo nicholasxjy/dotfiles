@@ -5,12 +5,6 @@ return {
     "saghen/blink.cmp",
     lazy = false,
     dependencies = {
-      {
-        "xzbdmw/colorful-menu.nvim",
-        config = function()
-          require("colorful-menu").setup({})
-        end,
-      },
       "rafamadriz/friendly-snippets",
       "Exafunction/codeium.nvim",
       { "Saghen/blink.compat", opts = { enable_events = true } },
@@ -42,14 +36,8 @@ return {
           },
           menu = {
             draw = {
-              treesitter = {},
-              columns = { { "kind_icon" }, { "label", gap = 1 } },
-              components = {
-                label = {
-                  text = require("colorful-menu").blink_components_text,
-                  highlight = require("colorful-menu").blink_components_highlight,
-                },
-              },
+              treesitter = { "lsp" },
+              columns = { { "kind_icon", "kind", gap = 1 }, { "label", "source_name", gap = 1 } },
             },
           },
         },
