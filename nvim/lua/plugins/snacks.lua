@@ -12,147 +12,155 @@ return {
         desc = "Toggle Zen Mode",
       },
       {
-        "<leader>h",
+        "<leader>e",
         function()
-          Snacks.picker.buffers()
+          Snacks.picker.explorer()
         end,
-        desc = "Find Buffers",
+        desc = "File explorer",
       },
-      {
-        "<leader>:",
-        function()
-          Snacks.picker.command_history()
-        end,
-        desc = "Command History",
-      },
-      {
-        "/",
-        function()
-          Snacks.picker.grep_buffers()
-        end,
-        desc = "Grep open buffers",
-        noremap = true,
-        silent = true,
-      },
-      {
-        "<leader><space>",
-        function()
-          Snacks.picker.files()
-        end,
-        desc = "Find Files",
-      },
-      {
-        "<leader>bl",
-        function()
-          Snacks.picker.lines()
-        end,
-        desc = "Buffer Blines",
-      },
-      {
-        "<leader>fg",
-        function()
-          Snacks.picker.git_files()
-        end,
-        desc = "Find Files (git-files)",
-      },
-      {
-        "<leader>fr",
-        function()
-          Snacks.picker.recent({ filter = { cwd = true } })
-        end,
-        desc = "Find Recent Files",
-      },
-      {
-        "<leader>ff",
-        function()
-          Snacks.picker.files()
-        end,
-        desc = "Find Files",
-      },
-      {
-        "<leader>gc",
-        function()
-          Snacks.picker.git_log()
-        end,
-        desc = "Git log",
-      },
-      {
-        "<leader>gs",
-        function()
-          Snacks.picker.git_status()
-        end,
-        desc = "Git status",
-      },
-
-      {
-        "<leader>ft",
-        function()
-          Snacks.picker.colorschemes()
-        end,
-        desc = "Find Themes",
-      },
-
-      {
-        "<leader>sa",
-        function()
-          Snacks.picker.autocmds()
-        end,
-        desc = "Auto Commands",
-      },
-
-      {
-        "<leader>sk",
-        function()
-          Snacks.picker.keymaps()
-        end,
-        desc = "Find keymaps",
-      },
-      {
-        "<leader>m",
-        function()
-          Snacks.picker.marks()
-        end,
-        desc = "Goto marks",
-      },
-      {
-        "<leader>sw",
-        function()
-          Snacks.picker.grep_word()
-        end,
-        desc = "Find word under cursor (cwd)",
-      },
-      {
-        "<leader>sg",
-        function()
-          Snacks.picker.grep()
-        end,
-        desc = "Grep",
-      },
-      {
-        "<leader>xl",
-        function()
-          Snacks.picker.loclist()
-        end,
-        desc = "Location list",
-      },
-      {
-        "<leader>xq",
-        function()
-          Snacks.picker.qflist()
-        end,
-        desc = "Quickfix list",
-      },
-      {
-        "<leader>xx",
-        function()
-          Snacks.picker.diagnostics()
-        end,
-        desc = "Diagnostics",
-      },
+      -- {
+      --   "<leader>h",
+      --   function()
+      --     Snacks.picker.buffers()
+      --   end,
+      --   desc = "Find Buffers",
+      -- },
+      -- {
+      --   "<leader>:",
+      --   function()
+      --     Snacks.picker.command_history()
+      --   end,
+      --   desc = "Command History",
+      -- },
+      -- {
+      --   "/",
+      --   function()
+      --     Snacks.picker.grep_buffers()
+      --   end,
+      --   desc = "Grep open buffers",
+      --   noremap = true,
+      --   silent = true,
+      -- },
+      -- {
+      --   "<leader><space>",
+      --   function()
+      --     Snacks.picker.files()
+      --   end,
+      --   desc = "Find Files",
+      -- },
+      -- {
+      --   "<leader>bl",
+      --   function()
+      --     Snacks.picker.lines()
+      --   end,
+      --   desc = "Buffer Blines",
+      -- },
+      -- {
+      --   "<leader>fg",
+      --   function()
+      --     Snacks.picker.git_files()
+      --   end,
+      --   desc = "Find Files (git-files)",
+      -- },
+      -- {
+      --   "<leader>fr",
+      --   function()
+      --     Snacks.picker.recent()
+      --   end,
+      --   desc = "Find Recent Files",
+      -- },
+      -- {
+      --   "<leader>ff",
+      --   function()
+      --     Snacks.picker.files()
+      --   end,
+      --   desc = "Find Files",
+      -- },
+      -- {
+      --   "<leader>gc",
+      --   function()
+      --     Snacks.picker.git_log()
+      --   end,
+      --   desc = "Git log",
+      -- },
+      -- {
+      --   "<leader>gs",
+      --   function()
+      --     Snacks.picker.git_status()
+      --   end,
+      --   desc = "Git status",
+      -- },
+      --
+      -- {
+      --   "<leader>ft",
+      --   function()
+      --     Snacks.picker.colorschemes()
+      --   end,
+      --   desc = "Find Themes",
+      -- },
+      --
+      -- {
+      --   "<leader>sa",
+      --   function()
+      --     Snacks.picker.autocmds()
+      --   end,
+      --   desc = "Auto Commands",
+      -- },
+      --
+      -- {
+      --   "<leader>sk",
+      --   function()
+      --     Snacks.picker.keymaps()
+      --   end,
+      --   desc = "Find keymaps",
+      -- },
+      -- {
+      --   "<leader>m",
+      --   function()
+      --     Snacks.picker.marks()
+      --   end,
+      --   desc = "Goto marks",
+      -- },
+      -- {
+      --   "<leader>sw",
+      --   function()
+      --     Snacks.picker.grep_word()
+      --   end,
+      --   desc = "Find word under cursor (cwd)",
+      -- },
+      -- {
+      --   "<leader>sg",
+      --   function()
+      --     Snacks.picker.grep()
+      --   end,
+      --   desc = "Grep",
+      -- },
+      -- {
+      --   "<leader>xl",
+      --   function()
+      --     Snacks.picker.loclist()
+      --   end,
+      --   desc = "Location list",
+      -- },
+      -- {
+      --   "<leader>xq",
+      --   function()
+      --     Snacks.picker.qflist()
+      --   end,
+      --   desc = "Quickfix list",
+      -- },
+      -- {
+      --   "<leader>xx",
+      --   function()
+      --     Snacks.picker.diagnostics()
+      --   end,
+      --   desc = "Diagnostics",
+      -- },
     },
     opts = {
       picker = {
-        ui_select = true,
+        enabled = true,
+        ui_select = false,
         layout = {
           cycle = true,
           layout = {
@@ -191,7 +199,13 @@ return {
         indent = {
           enabled = false,
           char = "¦",
-          hl = "SnacksIndent",
+          -- hl = {
+          --   "SnacksIndent1",
+          --   "SnacksIndent2",
+          --   "SnacksIndent3",
+          --   "SnacksIndent4",
+          --   "SnacksIndent5",
+          -- },
         },
         scope = {
           enabled = true,
@@ -200,16 +214,16 @@ return {
         },
         chunk = {
           enabled = true,
-          hl = {
-            "SnacksIndentChunk1",
-            "SnacksIndentChunk2",
-            "SnacksIndentChunk3",
-            "SnacksIndentChunk4",
-            "SnacksIndentChunk5",
-            "SnacksIndentChunk6",
-            "SnacksIndentChunk7",
-            "SnacksIndentChunk8",
-          },
+          -- hl = {
+          --   "SnacksIndentChunk1",
+          --   "SnacksIndentChunk2",
+          --   "SnacksIndentChunk3",
+          --   "SnacksIndentChunk4",
+          --   "SnacksIndentChunk5",
+          --   "SnacksIndentChunk6",
+          --   "SnacksIndentChunk7",
+          --   "SnacksIndentChunk8",
+          -- },
         },
       },
       bigfile = { enabled = true },
@@ -255,14 +269,6 @@ return {
     opts = function()
       local Keys = require("utils.lsp-keymaps").get()
       vim.list_extend(Keys, {
-        {
-          "<leader>ss",
-          function()
-            Snacks.picker.lsp_symbols()
-          end,
-          desc = "Find lsp symbols",
-        },
-
         {
           "gd",
           function()

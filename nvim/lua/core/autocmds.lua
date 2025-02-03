@@ -129,6 +129,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
   end,
 })
+
 -- vim.api.nvim_create_autocmd("LspAttach", {
 --   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 --   callback = function(ev)
@@ -137,18 +138,4 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 --       client.server_capabilities.semanticTokensProvider = nil
 --     end
 --   end,
--- })
-
--- vim.api.nvim_create_autocmd("VimEnter", {
---   group = augroup("visual_whitespace_start"),
---   callback = function()
---     require("visual-whitespace").toggle()
---   end,
---   desc = "Toggle Visual Whitespace",
--- })
-
--- vim.api.nvim_create_autocmd("VimEnter", {
---   group = augroup("showkeys_start"),
---   command = "Showkeys",
---   desc = "Toggle showkeys",
 -- })

@@ -6,9 +6,8 @@ return {
     lazy = false,
     dependencies = {
       "rafamadriz/friendly-snippets",
-      "Exafunction/codeium.nvim",
-      { "Saghen/blink.compat", opts = { enable_events = true } },
-      "MeanderingProgrammer/render-markdown.nvim",
+      -- "Exafunction/codeium.nvim",
+      -- { "Saghen/blink.compat", opts = { enable_events = true } },
     },
     build = "cargo build --release",
     event = "InsertEnter",
@@ -22,7 +21,7 @@ return {
           use_nvim_cmp_as_default = false,
           nerd_font_variant = "mono",
         },
-        signature = { enabled = true },
+        signature = { enabled = false },
         completion = {
           documentation = {
             auto_show = true,
@@ -42,20 +41,15 @@ return {
           },
         },
         sources = {
-          default = { "lsp", "path", "snippets", "buffer", "markdown", "codeium" },
-          providers = {
-            codeium = {
-              name = "codeium",
-              score_offset = 100,
-              async = true,
-              module = "blink.compat.source",
-            },
-            markdown = {
-              name = "RenderMarkdown",
-              module = "render-markdown.integ.blink",
-              fallbacks = { "lsp" },
-            },
-          },
+          default = { "lsp", "path", "snippets", "buffer" }, -- codeium
+          -- providers = {
+          -- codeium = {
+          --   name = "codeium",
+          --   score_offset = 100,
+          --   async = true,
+          --   module = "blink.compat.source",
+          -- },
+          -- },
           cmdline = function()
             local type = vim.fn.getcmdtype()
             -- Search forward and backward

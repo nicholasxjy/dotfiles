@@ -11,14 +11,10 @@ return {
         borderless_telescope = { border = false, style = "flat" },
         theme = {
           variant = "auto",
-          colors = {
-            fg = "#cdd6f4",
-            bg = "#1e1e2e",
-          },
           overrides = function(colors)
             return {
-              Pmenu = { fg = colors.fg, bg = "#11111b" },
-              NormalFloat = { fg = colors.fg, bg = "#11111b" },
+              Pmenu = { fg = colors.fg, bg = "#16181a" },
+              NormalFloat = { fg = colors.fg, bg = "#16181a" },
 
               FzfLuaTitle = { fg = colors.bgHighlight, bg = colors.red },
               FzfLuaPreviewTitle = { fg = colors.bgHighlight, bg = colors.green },
@@ -38,9 +34,10 @@ return {
                 bg = colors.green,
                 fg = colors.bg,
               },
-              ["lessClass"] = { fg = "#56b7c3" },
+
               ["@tag"] = { bold = true },
               ["@type"] = { bold = true, fg = "#DA498D" },
+              ["property"] = { fg = "#BEADFA" },
               ["@keyword"] = { fg = "#C30E59", italic = true },
               ["@tag.attribute"] = { italic = true, fg = "#789DBC" },
               ["@keyword.import"] = { italic = true, fg = "#94e2d5" },

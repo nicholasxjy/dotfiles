@@ -37,11 +37,14 @@ return {
       vim.cmd([[do FileType]])
     end,
   },
-
   {
-    "MeanderingProgrammer/render-markdown.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" }, -- if you use standalone mini plugins
-    opts = {},
-    cmd = { "RenderMarkdown" },
+    "OXY2DEV/markview.nvim",
+    lazy = false,
   },
+  -- {
+  --   "MeanderingProgrammer/render-markdown.nvim",
+  --   dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" }, -- if you use standalone mini plugins
+  --   opts = {},
+  --   cmd = { "RenderMarkdown" },
+  -- },
 }

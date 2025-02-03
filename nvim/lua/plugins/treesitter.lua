@@ -70,6 +70,8 @@ return {
         "git_rebase",
         "gitignore",
         "gitattributes",
+        "latex",
+        "typst",
       },
     },
     config = function(_, opts)

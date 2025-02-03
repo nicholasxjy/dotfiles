@@ -9,7 +9,7 @@ return {
         ["cmp.entry.get_documentation"] = true,
       },
       signature = {
-        enabled = vim.g.cmp_engine == "cmp",
+        enabled = true,
       },
       hover = {
         enabled = true,
