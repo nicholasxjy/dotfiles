@@ -7,7 +7,7 @@ return {
 
     opts = vim.tbl_deep_extend("force", opts or {}, {
       terminal_colors = true,
-      variant = "default",
+      variant = "cooler",
       styles = {
         comments = { italic = true },
         keywords = { bold = true },
@@ -15,15 +15,13 @@ return {
     })
     opts.highlight_overrides = vim.tbl_deep_extend("force", opts.highlight_overrides or {}, {
 
-      Pmenu = { fg = colors.fg, bg = colors.bg_dark },
-      NormalFloat = { fg = colors.fg, bg = colors.bg_dark },
+      -- Pmenu = { fg = colors.fg, bg = colors.bg_dark },
+      -- NormalFloat = { fg = colors.fg, bg = colors.bg_dark },
       FzfLuaTitle = { fg = colors.bg, bg = colors.red },
       FzfLuaPreviewTitle = { fg = colors.bg, bg = colors.green },
       FzfLuaBorder = { fg = colors.bg_dark },
 
       SnacksPickerBoxTitle = { fg = colors.bg, bg = colors.bright_red },
-      -- SnacksPickerPreviewTitle = { fg = colors.bg, bg = colors.bright_green },
-      -- SnacksPickerInputTitle = { fg = colors.bg, bg = colors.bright_green },
     })
     require("oldworld").setup(opts)
   end,

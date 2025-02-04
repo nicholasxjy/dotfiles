@@ -19,13 +19,30 @@ return {
         booleans = { "bold" },
         operators = {},
       },
-      color_overrides = {},
+      color_overrides = {
+        mocha = {
+          text = "#F4CDE9",
+          subtext1 = "#DEBAD4",
+          subtext0 = "#C8A6BE",
+          overlay2 = "#B293A8",
+          overlay1 = "#9C7F92",
+          overlay0 = "#866C7D",
+          surface2 = "#705867",
+          surface1 = "#5A4551",
+          surface0 = "#44313B",
+
+          base = "#352939",
+          mantle = "#211924",
+          crust = "#1a1016",
+        },
+      },
       custom_highlights = function(C)
         return {
 
           FzfLuaBorder = { fg = C.mantle },
           FzfLuaTitle = { fg = C.base, bg = C.red },
           FzfLuaPreviewTitle = { fg = C.base, bg = C.green },
+          SnacksPickerBoxTitle = { fg = C.base, bg = C.green },
 
           ["@tag"] = { bold = true },
           ["@keyword.import"] = { fg = C.sky, bold = true },
@@ -37,9 +54,9 @@ return {
       end,
       default_integration = true,
       integrations = {
-        semantic_tokens = true,
+        semantic_tokens = false,
         telescope = {
-          enabled = true,
+          enabled = false,
         },
         flash = true,
         fzf = true,
@@ -53,13 +70,13 @@ return {
         mini = {
           enabled = true,
         },
-        cmp = true,
+        cmp = false,
         dap = true,
         dap_ui = true,
         treesitter_context = true,
         treesitter = true,
         rainbow_delimiters = true,
-        symbols_outline = true,
+        symbols_outline = false,
         illuminate = {
           enabled = true,
           lsp = false,

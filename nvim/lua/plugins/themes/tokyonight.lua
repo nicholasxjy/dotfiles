@@ -12,12 +12,13 @@ return {
         sidebars = "dark",
         floats = "dark",
       },
-      dim_inactive = true,
+      dim_inactive = false,
       lualine_bold = true,
       cache = true,
       plugins = {
         all = true,
         auto = true,
+        semantic_tokens = false,
       },
       on_colors = function(colors)
         -- colors.fg = "#cdd6f4"
@@ -45,12 +46,13 @@ return {
         highlights["@type"] = { fg = "#FF9D23", bold = true }
         highlights["@tag"] = { bold = true }
         highlights["lessClass"] = { italic = true, fg = colors.cyan }
+
         highlights["@tag.attribute"] = { italic = true, fg = colors.blue5 }
         highlights["@constructor"] = { fg = colors.red1 }
-        highlights["@keyword.import"] = { italic = true, fg = colors.red1 }
-        highlights["@keyword.export"] = { italic = true, fg = colors.red1 }
+        highlights["@keyword.import"] = { bold = true, fg = colors.red1 }
+        highlights["@keyword.export"] = { bold = true, fg = colors.red1 }
 
-        highlights["@lsp.type.enum"] = { fg = "#227B94" }
+        highlights["@lsp.type.enum"] = { fg = "#677D6A" }
         highlights["@lsp.type.enumMember"] = { fg = "#C08B5C" }
         highlights["@lsp.type.interface"] = { fg = "#9D5C0D" }
       end,
