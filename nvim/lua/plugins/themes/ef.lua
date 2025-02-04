@@ -28,9 +28,11 @@ return {
       gitsigns = true,
       which_key = true,
     },
-    on_highlights = function(highlights, colors)
+    on_highlights = function(_, colors)
       return {
         LspInlayHint = { bg = colors.bg_inactive, fg = colors.fg_dim },
+        FzfLuaTitle = { fg = colors.bg_alt, bg = colors.red },
+        FzfLuaPreviewTitle = { fg = colors.bg_alt, bg = colors.green },
         ["@tag.tsx"] = { bold = true },
 
         ["@keyword.import"] = { fg = colors.blue_cooler, bold = true },
