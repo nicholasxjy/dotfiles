@@ -3,11 +3,11 @@ local icons = require("core.icons")
 return {
   {
     "saghen/blink.cmp",
-    lazy = false,
     dependencies = {
-      "rafamadriz/friendly-snippets",
+      "L3MON4D3/LuaSnip",
+      version = "v2.*",
     },
-    build = "cargo build --release",
+    version = "*",
     event = "InsertEnter",
     opts = function()
       return {
@@ -23,7 +23,6 @@ return {
         completion = {
           documentation = {
             auto_show = true,
-            auto_show_delay_ms = 200,
           },
           accept = {
             auto_brackets = {
@@ -34,24 +33,21 @@ return {
           menu = {
             draw = {
               treesitter = { "lsp" },
-              columns = { { "kind_icon", "kind", gap = 1 }, { "label", "source_name", gap = 1 } },
+              columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
             },
           },
+          ghost_text = { enabled = true },
         },
+        snippets = { preset = "luasnip" },
         sources = {
-          default = { "lsp", "path", "snippets", "buffer" }, -- codeium
-          cmdline = function()
-            local type = vim.fn.getcmdtype()
-            -- Search forward and backward
-            if type == "/" or type == "?" then
-              return { "buffer" }
-            end
-            -- Commands
-            if type == ":" or type == "@" then
-              return { "cmdline" }
-            end
-            return {}
-          end,
+          default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+          providers = {
+            lazydev = {
+              name = "LazyDev",
+              module = "lazydev.integrations.blink",
+              score_offset = 100,
+            },
+          },
         },
       }
     end,

@@ -38,6 +38,17 @@ return {
             .. (diag.warning and icons.Warn .. diag.warning or "")
           return vim.trim(ret)
         end,
+        offsets = {
+          {
+            filetype = "neo-tree",
+            text = "Neo-tree",
+            highlight = "Directory",
+            text_align = "left",
+          },
+          {
+            filetype = "snacks_layout_box",
+          },
+        },
         get_element_icon = function(opts)
           return custom_icons.ft[opts.filetype]
         end,
