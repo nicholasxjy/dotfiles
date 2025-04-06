@@ -1,6 +1,11 @@
 local LazyUtil = require("lazy.core.util")
 
 local M = {}
+
+function M.is_win()
+  return vim.uv.os_uname().sysname:find("Windows") ~= nil
+end
+
 ---@param name string
 function M.get_plugin(name)
   return require("lazy.core.config").spec.plugins[name]
@@ -90,5 +95,46 @@ function M.on_load(name, fn)
     })
   end
 end
+
+local cache = {} ---@type table<(fun()), table<string, any>>
+---@generic T: fun()
+---@param fn T
+---@return T
+function M.memoize(fn)
+  return function(...)
+    local key = vim.inspect({ ... })
+    cache[fn] = cache[fn] or {}
+    if cache[fn][key] == nil then
+      cache[fn][key] = fn(...)
+    end
+    return cache[fn][key]
+  end
+end
+
+local function find_project_root()
+  local root_patterns = { ".git", "package.json" }
+  local dir = vim.fn.getcwd()
+
+  -- 递归向上查找
+  while dir ~= "/" and dir ~= "C:\\" do
+    for _, pattern in ipairs(root_patterns) do
+      if vim.fn.filereadable(dir .. "/" .. pattern) == 1 or vim.fn.isdirectory(dir .. "/" .. pattern) == 1 then
+        return dir
+      end
+    end
+    dir = vim.fn.fnamemodify(dir, ":h") -- 上一级目录
+  end
+  return nil
+end
+
+local function file_exists_in_root(filename)
+  local root = find_project_root()
+  if not root then
+    return false
+  end
+  return vim.fn.filereadable(root .. "/" .. filename) == 1
+end
+
+M.file_exists_in_root = file_exists_in_root
 
 return M

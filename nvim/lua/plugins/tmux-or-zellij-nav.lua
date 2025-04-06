@@ -1,0 +1,40 @@
+return {
+  -- {
+  --   "swaits/zellij-nav.nvim",
+  --   lazy = true,
+  --   event = "VeryLazy",
+  --   enabled = os.getenv("ZELLIJ") ~= nil,
+  --   cmd = {
+  --     "ZellijNavigateUp",
+  --     "ZellijNavigateDown",
+  --     "ZellijNavigateLeft",
+  --     "ZellijNavigateRight",
+  --   },
+  --   keys = {
+  --     { "<c-h>", "<cmd>ZellijNavigateLeft<cr>" },
+  --     { "<c-j>", "<cmd>ZellijNavigateDown<cr>" },
+  --     { "<c-k>", "<cmd>ZellijNavigateUp<cr>" },
+  --     { "<c-l>", "<cmd>ZellijNavigateRight<cr>" },
+  --   },
+  --   opts = {},
+  -- },
+  --
+  -- {
+  --   "christoomey/vim-tmux-navigator",
+  --   enabled = os.getenv("ZELLIJ") == nil,
+  --   cmd = {
+  --     "TmuxNavigateLeft",
+  --     "TmuxNavigateDown",
+  --     "TmuxNavigateUp",
+  --     "TmuxNavigateRight",
+  --     "TmuxNavigatePrevious",
+  --     "TmuxNavigatorProcessList",
+  --   },
+  --   keys = {
+  --     { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+  --     { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+  --     { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+  --     { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+  --   },
+  -- },
+}

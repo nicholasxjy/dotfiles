@@ -1,8 +1,8 @@
 return {
   "oonamo/ef-themes.nvim",
   opts = {
-    light = "ef-spring",
-    dark = "ef-winter",
+    light = "ef-trio-light",
+    dark = "ef-owl",
     transparent = true,
     styles = {
       -- Set specific styles for specific highlight groups
@@ -13,12 +13,10 @@ return {
       variables = {},
 
       diagnostic = "full", -- Can be "full"
-      pickers = "default", -- Can be "borderless"
+      pickers = "borderless", -- Can be "borderless"
     },
 
     modules = {
-      -- Enable/Disable highlights for a module
-      -- See `h: EfThemes-modules` for the list of available modules
       blink = true,
       fzf = true,
       mini = true,
@@ -30,7 +28,18 @@ return {
     },
     on_highlights = function(_, colors)
       return {
-        LspInlayHint = { bg = colors.bg_inactive, fg = colors.fg_dim },
+
+        BlinkPairsRed = { fg = colors.red },
+        BlinkPairsOrange = { fg = colors.yellow_warmer },
+        BlinkPairsYellow = { fg = colors.yellow },
+        BlinkPairsGreen = { fg = colors.green },
+        BlinkPairsBlue = { fg = colors.blue },
+        BlinkPairsPurple = { fg = colors.magenta },
+        BlinkPairsCyan = { fg = colors.cyan },
+
+        Comment = { fg = "#8b8693" },
+        LspInlayHint = { bg = colors.bg_inactive, fg = "#8b8693", italic = true }, --colors.bg_inactive
+
         FzfLuaTitle = { fg = colors.bg_alt, bg = colors.red },
         FzfLuaPreviewTitle = { fg = colors.bg_alt, bg = colors.green },
 
@@ -40,15 +49,19 @@ return {
         ["@tag.tsx"] = { bold = true },
         ["@tag.attribute.tsx"] = { italic = true },
 
-        ["@keyword.import"] = { fg = colors.blue_cooler, bold = true, italic = true },
-        ["@keyword.export"] = { fg = colors.blue_cooler, bold = true, italic = true },
+        ["@operator"] = { bold = true, fg = colors.yellow_faint },
 
-        ["@keyword.coroutine"] = { fg = colors.red, bold = true, italic = true },
-        ["@keyword.conditional"] = { fg = colors.green_warmer, bold = true, italic = true },
+        ["@keyword.import"] = { fg = "#4CC9FE", italic = true, bold = true },
+        ["@keyword.export"] = { fg = "#4CC9FE", italic = true, bold = true },
 
-        -- ["@lsp.type.enum"] = { fg = "#677D6A" },
-        -- ["@lsp.type.enumMember"] = { fg = "#C08B5C", bold = true },
-        ["@lsp.type.interface"] = { fg = "#9D5C0D", bold = true },
+        ["@keyword.modifier"] = { fg = colors.blue_warmer, italic = true, bold = true },
+
+        ["@keyword.coroutine"] = { fg = colors.red, italic = true, bold = true },
+        ["@keyword.exception"] = { fg = colors.red, italic = true, bold = true },
+
+        ["@lsp.type.enum"] = { fg = colors.green_warmer, bold = true },
+        ["@lsp.type.enumMember"] = { fg = "#04d1f9", bold = true, italic = true },
+        ["@lsp.type.interface"] = { fg = "#9D5C0D", italic = true, bold = true },
       }
     end,
   },

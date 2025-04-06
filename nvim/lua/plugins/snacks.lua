@@ -30,86 +30,291 @@ return {
       {
         "<leader>e",
         function()
-          Snacks.explorer()
+          Snacks.explorer({
+            layout = {
+              preset = "default",
+            },
+            diagnostics = true,
+            git_status = true,
+            hidden = true,
+            ignored = true,
+            jump = {
+              close = true,
+            },
+          })
         end,
         desc = "File explorer",
       },
       {
-        "<leader>:",
+        "<leader>n",
         function()
-          Snacks.picker.command_history()
+          Snacks.picker.notifications()
         end,
-        desc = "Command History",
+        desc = "Notification History",
+      },
+      {
+        "<leader>un",
+        function()
+          Snacks.notifier.hide()
+        end,
+        desc = "Dismiss All Notifications",
       },
       {
         "<leader>/",
         function()
           Snacks.picker.grep_buffers()
         end,
-        desc = "Grep open buffers",
+        desc = "Grep",
       },
       {
-        "<leader>bl",
+        "<leader>:",
         function()
-          Snacks.picker.lines()
+          Snacks.picker.command_history({
+            layout = {
+              preset = "vscode",
+            },
+          })
         end,
-        desc = "Buffer Blines",
+        desc = "Command History",
       },
       {
-        "<leader>fg",
+        "<leader>m",
         function()
-          Snacks.picker.git_files()
+          Snacks.picker.marks({
+            layout = {
+              preset = "select",
+            },
+          })
         end,
-        desc = "Find Files (git-files)",
+        desc = "Marks",
+      },
+      {
+        "<leader>h",
+        function()
+          Snacks.picker.buffers({
+            sort_lastused = true,
+            current = false,
+            layout = {
+              preset = "select",
+            },
+            win = {
+              input = {
+                keys = {
+                  ["dd"] = { "bufdelete", mode = { "n", "i" } },
+                },
+              },
+              list = { keys = { ["dd"] = "bufdelete" } },
+            },
+          })
+        end,
+        desc = "Jump buffers",
+      },
+
+      -- find
+      {
+        "<leader><space>",
+        function()
+          Snacks.picker.smart({
+            filter = { cwd = true },
+            layout = {
+              preset = "bottom",
+            },
+          })
+        end,
+        desc = "Find smart",
+      },
+
+      {
+        "<leader>ff",
+        function()
+          Snacks.picker.files({
+            hidden = true,
+            ignored = true,
+          })
+        end,
+        desc = "Find files",
+      },
+      {
+        "<leader>fp",
+        function()
+          Snacks.picker.projects()
+        end,
+        desc = "Projects",
       },
       {
         "<leader>fr",
         function()
           Snacks.picker.recent()
         end,
-        desc = "Find Recent Files",
+        desc = "Recent",
+      },
+      {
+        "<leader>fa",
+        function()
+          Snacks.picker.autocmds()
+        end,
+        desc = "Autocmds",
+      },
+      {
+        "<leader>fb",
+        function()
+          Snacks.picker.lines()
+        end,
+        desc = "Buffer Lines",
+      },
+      {
+        "<leader>fc",
+        function()
+          Snacks.picker.colorschemes()
+        end,
+        desc = "Colorschemes",
+      },
+      {
+        "<leader>fC",
+        function()
+          Snacks.picker.commands()
+        end,
+        desc = "Commands",
+      },
+      {
+        "<leader>fj",
+        function()
+          Snacks.picker.jumps()
+        end,
+        desc = "Jumps",
+      },
+      {
+        "<leader>fk",
+        function()
+          Snacks.picker.keymaps()
+        end,
+        desc = "Keymaps",
+      },
+      {
+        "<leader>fl",
+        function()
+          Snacks.picker.loclist()
+        end,
+        desc = "Location List",
+      },
+      -- git
+      {
+        "<leader>gf",
+        function()
+          Snacks.picker.git_files()
+        end,
+        desc = "Git files",
       },
       {
         "<leader>gc",
         function()
           Snacks.picker.git_log()
         end,
-        desc = "Git log",
+        desc = "Git commits",
+      },
+      {
+        "<leader>gb",
+        function()
+          Snacks.picker.git_branches()
+        end,
+        desc = "Git branches",
+      },
+      {
+        "<leader>gf",
+        function()
+          Snacks.picker.git_log_file()
+        end,
+        desc = "Git Log file",
+      },
+      {
+        "<leader>gD",
+        function()
+          Snacks.picker.git_diff()
+        end,
+        desc = "Git Diff",
       },
       {
         "<leader>gs",
         function()
           Snacks.picker.git_status()
         end,
-        desc = "Git status",
+        desc = "Git Status",
+      },
+
+      -- search
+      {
+        "<leader>s/",
+        function()
+          Snacks.picker.search_history()
+        end,
+        desc = "Search History",
+      },
+
+      {
+        "<leader>sb",
+        function()
+          Snacks.picker.grep_buffers()
+        end,
+        desc = "Grep Open Buffers",
       },
       {
-        "<leader>sa",
+        "<leader>sg",
         function()
-          Snacks.picker.autocmds()
+          Snacks.picker.grep({
+            layout = {
+              preset = "ivy_split",
+            },
+          })
         end,
-        desc = "Auto Commands",
+        desc = "Grep",
       },
       {
-        "<leader>sk",
+        "<leader>sG",
         function()
-          Snacks.picker.keymaps()
+          Snacks.picker.grep({
+            hidden = true,
+            layout = {
+              preset = "ivy_split",
+            },
+          })
         end,
-        desc = "Find keymaps",
+        desc = "Grep All",
       },
       {
-        "<leader>su",
+        "<leader>sw",
         function()
-          Snacks.picker.undo()
+          Snacks.picker.grep_word({
+            buffers = true,
+            layout = {
+              preset = "ivy_split",
+            },
+          })
         end,
-        desc = "Undo History",
+        desc = "Search word",
+        mode = { "n", "x" },
+      },
+
+      {
+        "<leader>sW",
+        function()
+          Snacks.picker.grep_word({
+            layout = {
+              preset = "ivy_split",
+            },
+          })
+        end,
+        desc = "Search word all",
+        mode = { "n", "x" },
       },
       {
-        "<leader>xl",
+        "<leader>xt",
         function()
-          Snacks.picker.loclist()
+          Snacks.picker.todo_comments({
+            layout = { preset = "bottom" },
+            keywords = { "TODO", "FIX", "FIXME", "PERF", "HACK" },
+          })
         end,
-        desc = "Location list",
+        desc = "TODO/NOTE/FIX etc",
       },
       {
         "<leader>xq",
@@ -118,12 +323,28 @@ return {
         end,
         desc = "Quickfix list",
       },
+
       {
-        "<leader>un",
+        "<leader>xw",
         function()
-          Snacks.notifier.hide()
+          Snacks.picker.diagnostics({
+            layout = {
+              preset = "ivy_split",
+            },
+          })
         end,
-        desc = "Dismiss All Notifications",
+        desc = "Diagnostics",
+      },
+      {
+        "<leader>xx",
+        function()
+          Snacks.picker.diagnostics_buffer({
+            layout = {
+              preset = "ivy_split",
+            },
+          })
+        end,
+        desc = "Buffer Diagnostics",
       },
     },
     opts = {
@@ -134,46 +355,29 @@ return {
       picker = {
         enabled = true,
         ui_select = true,
-        -- layouts = {
-        --   default = {
-        --     layout = {
-        --       box = "horizontal",
-        --       row = 0.4,
-        --       width = 0.86,
-        --       height = 0.5,
-        --       {
-        --         box = "vertical",
-        --         border = "single",
-        --         title = "{title} {live} {flags}",
-        --         { win = "input", height = 1, border = "bottom" },
-        --         { win = "list", border = "none" },
-        --       },
-        --       { win = "preview", title = "{preview}", border = "single", width = 0.5 },
-        --     },
-        --   },
-        -- },
-        layout = {
-          preset = "ivy",
-          cycle = true,
-        },
         matcher = {
           cwd_bonus = true, -- give bonus for matching files in the cwd
           frecency = true, -- frecency bonus
-          history_bonus = true, -- give more weight to chronological order
+          history_bonus = false, -- give more weight to chronological order
         },
         formatters = {
           file = {
-            filename_first = true, -- display filename before the file path
+            filename_first = true,
           },
         },
         win = {
           input = {
             keys = {
-              -- to close the picker on ESC instead of going to normal mode,
               ["<Esc>"] = { "close", mode = { "n", "i" } },
             },
           },
+          list = {
+            keys = {},
+          },
         },
+      },
+      image = {
+        enabled = true,
       },
       dashboard = {
         enabled = true,
@@ -192,20 +396,38 @@ return {
         },
         scope = {
           enabled = true,
-          char = "⁚",
+          --char = "⁚",
+          -- char = "║",
           underline = false,
+          only_current = true,
         },
         chunk = {
           enabled = true,
+          char = {
+            -- corner_top = "┌",
+            -- corner_bottom = "└",
+            corner_top = "╭",
+            corner_bottom = "╰",
+            horizontal = "─",
+            vertical = "│",
+            arrow = "",
+          },
+          only_current = true,
         },
       },
       bigfile = { enabled = true },
       dim = { enabled = true },
-      zen = { enabled = true },
+      zen = {
+        enabled = true,
+        win = {
+          backdrop = {
+            transparent = false,
+          },
+        },
+      },
       scroll = { enabled = false },
       input = { enabled = true },
       words = { enabled = true },
-      toggle = { enabled = true },
       statuscolumn = {
         enabled = true,
         left = { "mark", "sign" }, -- priority of signs on the left (high to low)
@@ -216,12 +438,12 @@ return {
         },
       },
       notifier = { enabled = true },
+      toggle = { enabled = true },
       lazygit = {
         enabled = true,
         win = {
-          position = "float",
-          width = 0.85,
-          height = 0.7,
+          width = 0.9,
+          height = 0.9,
         },
       },
       terminal = {
@@ -229,7 +451,7 @@ return {
         win = {
           position = "float",
           width = 0.85,
-          height = 0.65,
+          height = 0.55,
         },
       },
     },
@@ -264,26 +486,13 @@ return {
       })
     end,
   },
-
   {
+
     "neovim/nvim-lspconfig",
     opts = function()
       local Keys = require("utils.lsp-keymaps").get()
+
       vim.list_extend(Keys, {
-        -- {
-        --   "<leader>ss",
-        --   function()
-        --     Snacks.picker.lsp_symbols()
-        --   end,
-        --   desc = "LSP Symbols",
-        -- },
-        {
-          "<leader>sS",
-          function()
-            Snacks.picker.lsp_workspace_symbols()
-          end,
-          desc = "LSP Workspace Symbols",
-        },
         {
           "gd",
           function()
@@ -296,17 +505,18 @@ return {
           function()
             Snacks.picker.lsp_declarations()
           end,
-          desc = "Goto Declarations",
+          desc = "Goto Declaration",
         },
         {
           "gr",
           function()
             Snacks.picker.lsp_references()
           end,
+          nowait = true,
           desc = "References",
         },
         {
-          "gI",
+          "gi",
           function()
             Snacks.picker.lsp_implementations()
           end,
@@ -318,6 +528,28 @@ return {
             Snacks.picker.lsp_type_definitions()
           end,
           desc = "Goto T[y]pe Definition",
+        },
+        {
+          "<leader>ss",
+          function()
+            Snacks.picker.lsp_symbols({
+              layout = {
+                preset = "sidebar",
+              },
+            })
+          end,
+          desc = "LSP Symbols",
+        },
+        {
+          "<leader>sS",
+          function()
+            Snacks.picker.lsp_workspace_symbols({
+              layout = {
+                preset = "sidebar",
+              },
+            })
+          end,
+          desc = "LSP Workspace Symbols",
         },
       })
     end,

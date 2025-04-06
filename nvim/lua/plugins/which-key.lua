@@ -4,7 +4,7 @@ return {
     event = "VeryLazy",
     opts_extend = { "spec" },
     opts = {
-      preset = "classic",
+      preset = "modern",
       defaults = {},
       spec = {
         {
@@ -15,12 +15,8 @@ return {
           { "<leader>c", group = "code" },
           { "<leader>d", group = "debug" },
           { "<leader>g", group = "git" },
-          { "<leader>gh", group = "hunks" },
+          { "<leader>gd", group = "Diffview" },
           { "<leader>s", group = "search" },
-          { "[", group = "prev" },
-          { "]", group = "next" },
-          { "g", group = "goto" },
-          { "gx", desc = "Open with system app" },
           { "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },
           {
             "<leader>w",
@@ -30,6 +26,10 @@ return {
               return require("which-key.extras").expand.win()
             end,
           },
+          { "[", group = "prev" },
+          { "]", group = "next" },
+          { "g", group = "goto" },
+          { "gx", desc = "Open with system app" },
         },
         { "<BS>", desc = "Decrement Selection", mode = "x" },
         { "<c-space>", desc = "Increment Selection", mode = { "x", "n" } },

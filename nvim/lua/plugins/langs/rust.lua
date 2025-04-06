@@ -7,23 +7,34 @@ return {
     opts = { ensure_installed = { "rust", "ron" } },
   },
 
-  -- Ensure Rust debugger is installed
   {
-    "williamboman/mason.nvim",
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, { "codelldb" })
-    end,
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        rust_analyzer = { enabled = false },
+      },
+    },
   },
   {
     "mrcjkb/rustaceanvim",
+    version = "^6",
+    lazy = false,
     ft = { "rust" },
     opts = {
       server = {
         on_attach = function(_, bufnr)
-          vim.keymap.set("n", "<leader>cR", function()
+          vim.keymap.set("n", "<leader>ca", function()
             vim.cmd.RustLsp("codeAction")
           end, { desc = "Code Action", buffer = bufnr })
+          vim.keymap.set(
+            "n",
+            "K", -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
+            function()
+              vim.cmd.RustLsp({ "hover", "actions" })
+            end,
+            { silent = true, buffer = bufnr }
+          )
+
           vim.keymap.set("n", "<leader>dr", function()
             vim.cmd.RustLsp("debuggables")
           end, { desc = "Rust Debuggables", buffer = bufnr })
@@ -53,7 +64,7 @@ return {
             procMacro = {
               enable = true,
               ignored = {
-                ["async-trait"] = { "async_trait" },
+                -- ["async-trait"] = { "async_trait" },
                 ["napi-derive"] = { "napi" },
                 ["async-recursion"] = { "async_recursion" },
               },

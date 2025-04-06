@@ -4,7 +4,7 @@ return {
     name = "catppuccin",
     opts = {
       flavour = "mocha",
-      transparent_background = false,
+      transparent_background = true,
       term_colors = true,
       no_italic = false, -- Force no italic
       no_bold = false, -- Force no bold
@@ -19,23 +19,7 @@ return {
         booleans = { "bold" },
         operators = {},
       },
-      color_overrides = {
-        mocha = {
-          text = "#F4CDE9",
-          subtext1 = "#DEBAD4",
-          subtext0 = "#C8A6BE",
-          overlay2 = "#B293A8",
-          overlay1 = "#9C7F92",
-          overlay0 = "#866C7D",
-          surface2 = "#705867",
-          surface1 = "#5A4551",
-          surface0 = "#44313B",
-
-          base = "#352939",
-          mantle = "#211924",
-          crust = "#1a1016",
-        },
-      },
+      color_overrides = {},
       custom_highlights = function(C)
         return {
 
@@ -45,16 +29,19 @@ return {
           SnacksPickerBoxTitle = { fg = C.base, bg = C.green },
 
           ["@tag"] = { bold = true },
-          ["@keyword.import"] = { fg = C.sky, bold = true },
-          ["@keyword.export"] = { fg = C.sky, bold = true },
-          ["@lsp.type.enum"] = { fg = "#677D6A" },
-          ["@lsp.type.enumMember"] = { fg = "#C08B5C", bold = true },
+          ["@keyword.import"] = { fg = C.sky, italic = true, bold = true },
+          ["@keyword.export"] = { fg = C.sky, italic = true, bold = true },
+
+          ["@keyword.modifier"] = { fg = C.teal, italic = true, bold = true },
+          -- ["@lsp.type.enum"] = { fg = "#677D6A" },
+          -- ["@lsp.type.enumMember"] = { fg = "#C08B5C", bold = true },
+
           ["@lsp.type.interface"] = { fg = "#9D5C0D", bold = true },
         }
       end,
       default_integration = true,
       integrations = {
-        semantic_tokens = false,
+        semantic_tokens = true,
         telescope = {
           enabled = false,
         },

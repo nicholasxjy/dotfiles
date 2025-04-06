@@ -4,14 +4,12 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      local use_italic = false
-
       require("kanagawa").setup({
         compile = true, -- enable compiling the colorscheme
         undercurl = true, -- enable undercurls
         commentStyle = { italic = true },
         functionStyle = {},
-        keywordStyle = { italic = use_italic, bold = true },
+        keywordStyle = { italic = true, bold = true },
         statementStyle = { bold = true },
         typeStyle = { bold = true },
         transparent = false, -- do not set background color
@@ -24,9 +22,9 @@ return {
             lotus = {},
             dragon = {},
             all = {
-              ui = {
-                bg_gutter = "none",
-              },
+              -- ui = {
+              --   bg_gutter = "none",
+              -- },
             },
           },
         },
@@ -36,12 +34,26 @@ return {
 
           return {
             ["@tag"] = { bold = true },
-            ["@tag.attribute.tsx"] = { italic = use_italic },
-            ["@keyword.import"] = { italic = use_italic, fg = palette.peachRed },
-            ["@keyword.export"] = { italic = use_italic, fg = palette.peachRed },
-            ["@lsp.type.enum"] = { fg = "#808836" },
-            ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
-            ["@lsp.type.interface"] = { fg = "#9D5C0D" },
+            ["@tag.attribute.tsx"] = { italic = true },
+
+            ["@keyword.import"] = { italic = true, bold = true, fg = palette.waveRed },
+            ["@keyword.export"] = { italic = true, bold = true, fg = palette.waveRed },
+
+            ["@operator"] = { bold = true, fg = theme.syn.operator },
+            ["@module"] = { fg = palette.carpYellow },
+            ["@keyword.modifier"] = { fg = palette.sakuraPink, italic = true, bold = true },
+
+            ["@lsp.type.enum"] = { fg = palette.springGreen, bold = true },
+            ["@lsp.type.enumMember"] = { fg = "#04d1f9", bold = true, italic = true },
+            ["@lsp.type.interface"] = { fg = "#9D5C0D", italic = true, bold = true },
+
+            BlinkPairsRed = { fg = palette.peachRed },
+            BlinkPairsOrange = { fg = palette.surimiOrange },
+            BlinkPairsYellow = { fg = palette.carpYellow },
+            BlinkPairsGreen = { fg = palette.springGreen },
+            BlinkPairsBlue = { fg = palette.springBlue },
+            BlinkPairsPurple = { fg = palette.oniViolet },
+            BlinkPairsCyan = { fg = palette.lightBlue },
 
             FzfLuaBorder = { fg = theme.ui.bg_dim },
             FzfLuaTitle = { fg = theme.ui.bg_p1, bg = palette.peachRed },
@@ -82,6 +94,27 @@ return {
             SnacksNotifierInfo = { link = "DiagnosticInfo" },
             SnacksNotifierDebug = { link = "Debug" },
             SnacksNotifierTrace = { link = "Comment" },
+            -- SnacksProfiler
+            SnacksProfilerIconInfo = { bg = theme.ui.bg_search, fg = theme.syn.fun },
+            SnacksProfilerBadgeInfo = { bg = theme.ui.bg_visual, fg = theme.syn.fun },
+            SnacksScratchKey = { link = "SnacksProfilerIconInfo" },
+            SnacksScratchDesc = { link = "SnacksProfilerBadgeInfo" },
+            SnacksProfilerIconTrace = { bg = theme.syn.fun, fg = theme.ui.float.fg_border },
+            SnacksProfilerBadgeTrace = { bg = theme.syn.fun, fg = theme.ui.float.fg_border },
+            SnacksIndent = { fg = theme.ui.bg_p2, nocombine = true },
+            SnacksIndentScope = { fg = theme.ui.pmenu.bg, nocombine = true },
+            SnacksZenIcon = { fg = theme.syn.statement },
+            SnacksInputIcon = { fg = theme.ui.pmenu.bg },
+            SnacksInputBorder = { fg = theme.syn.identifier },
+            SnacksInputTitle = { fg = theme.syn.identifier },
+            -- SnacksPicker
+            SnacksPickerInputBorder = { fg = theme.syn.constant },
+            SnacksPickerInputTitle = { fg = theme.syn.constant },
+            SnacksPickerBoxTitle = { fg = theme.syn.constant },
+            SnacksPickerSelected = { fg = theme.syn.number },
+            SnacksPickerToggle = { link = "SnacksProfilerBadgeInfo" },
+            SnacksPickerPickWinCurrent = { fg = theme.ui.fg, bg = theme.syn.number, bold = true },
+            SnacksPickerPickWin = { fg = theme.ui.fg, bg = theme.ui.bg_search, bold = true },
           }
         end,
         theme = "lotus", -- Load "wave" theme when 'background' option is not set

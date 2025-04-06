@@ -13,7 +13,11 @@ return {
         "html-lsp",
         "eslint-lsp",
         "prettier",
+        "biome",
         "css-lsp",
+        "rust-analyzer",
+        "jdtls",
+        "codelldb",
       },
     },
     config = function(_, opts)

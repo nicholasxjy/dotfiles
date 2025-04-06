@@ -2,7 +2,6 @@
 -- needing to require that when this module loads.
 local lspUtil = require("utils.lsp")
 local util = require("utils.util")
-local java_filetypes = { "java" }
 
 -- Utility function to extend or override a config table, similar to the way
 -- that Plugin.opts works.
@@ -78,7 +77,7 @@ return {
   {
     "mfussenegger/nvim-jdtls",
     dependencies = { "folke/which-key.nvim" },
-    ft = java_filetypes,
+    ft = { "java" },
     opts = function()
       local cmd = { vim.fn.exepath("jdtls") }
       if util.has("mason.nvim") then
@@ -111,16 +110,16 @@ return {
           local fname = vim.api.nvim_buf_get_name(0)
           local root_dir = opts.root_dir(fname)
           local project_name = opts.project_name(root_dir)
-          local cmd = vim.deepcopy(opts.cmd)
+          local f_cmd = vim.deepcopy(opts.cmd)
           if project_name then
-            vim.list_extend(cmd, {
+            vim.list_extend(f_cmd, {
               "-configuration",
               opts.jdtls_config_dir(project_name),
               "-data",
               opts.jdtls_workspace_dir(project_name),
             })
           end
-          return cmd
+          return f_cmd
         end,
 
         -- These depend on nvim-dap, but can additionally be disabled by setting false here.
@@ -129,11 +128,22 @@ return {
         test = true,
         settings = {
           java = {
-            inlayHints = {
-              parameterNames = {
-                enabled = "all",
+            configuration = {
+              updateBuildConfiguration = "interactive",
+              runtimes = {
+                {
+                  name = "JavaSE-1.8",
+                  path = "/usr/local/Cellar/openjdk@8/1.8.0-442/libexec/openjdk.jdk/Contents/Home",
+                  default = true,
+                },
               },
             },
+            eclipse = { downloadSources = true },
+            maven = { downloadSources = true },
+            implementationsCodeLens = { enabled = true },
+            referencesCodeLens = { enabled = true },
+            inlayHints = { parameterNames = { enabled = "all" } },
+            signatureHelp = { enabled = true },
           },
         },
       }
@@ -200,7 +210,7 @@ return {
       -- depending on filetype, so this autocmd doesn't run for the first file.
       -- For that, we call directly below.
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = java_filetypes,
+        pattern = { "java" },
         callback = attach_jdtls,
       })
 

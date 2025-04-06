@@ -1,55 +1,53 @@
 return {
-  {
-    "scottmckendry/cyberdream.nvim",
-    config = function()
-      require("cyberdream").setup({
-        transparent = true,
-        italic_comments = true,
-        hide_fillchars = false,
-        terminal_colors = true,
-        cache = false,
-        borderless_telescope = { border = false, style = "flat" },
-        theme = {
-          variant = "auto",
-          overrides = function(colors)
-            return {
-              Pmenu = { fg = colors.fg, bg = "#16181a" },
-              NormalFloat = { fg = colors.fg, bg = "#16181a" },
+  "scottmckendry/cyberdream.nvim",
+  lazy = false,
+  priority = 1000,
+  opts = {
+    variant = "dark",
+    transparent = true,
+    saturation = 1, -- accepts a value between 0 and 1. 0 will be fully desaturated (greyscale) and 1 will be the full color (default)
+    italic_comments = true,
+    hide_fillchars = false,
+    borderless_pickers = true,
+    terminal_colors = true,
+    cache = true,
+    highlights = {},
+    overrides = function(colors) -- NOTE: This function nullifies the `highlights` option
+      local custom_red = "#F94C10"
+      local custom_purple = "#af85ff"
+      local custom_yellow = "#cf9f8f"
+      return {
+        FzfLuaTitle = { fg = colors.bgHighlight, bg = colors.red },
+        FzfLuaPreviewTitle = { fg = colors.bgHighlight, bg = colors.green },
 
-              FzfLuaTitle = { fg = colors.bgHighlight, bg = colors.red },
-              FzfLuaPreviewTitle = { fg = colors.bgHighlight, bg = colors.green },
+        SnacksPickerBoxTitle = { fg = colors.bg, bg = colors.red },
+        SnacksPickerPreviewTitle = { fg = colors.bg, bg = colors.green },
 
-              SnacksPickerBoxTitle = { fg = colors.bgHighlight, bg = colors.red },
-              SnacksPickerPreviewTitle = { fg = colors.bgHighlight, bg = colors.green },
+        ["@tag"] = { bold = true },
+        ["@type"] = { bold = true, italic = false, fg = "#EC7FA9" },
 
-              TelescopePromptTitle = {
-                bg = colors.red,
-                fg = colors.bg,
-              },
-              TelescopePreviewTitle = {
-                bg = colors.yellow,
-                fg = colors.bg,
-              },
-              TelescopeResultsTitle = {
-                bg = colors.green,
-                fg = colors.bg,
-              },
+        ["@keyword"] = { fg = custom_purple, italic = true, bold = true },
+        ["@operator"] = { fg = custom_yellow, bold = true },
 
-              ["@tag"] = { bold = true },
-              ["@type"] = { bold = true, fg = "#DA498D" },
-              ["property"] = { fg = "#BEADFA" },
-              ["@keyword"] = { fg = "#C30E59", italic = true },
-              ["@tag.attribute"] = { italic = true, fg = "#789DBC" },
-              ["@keyword.import"] = { italic = true, fg = "#94e2d5" },
-              ["@keyword.export"] = { italic = true, fg = "#94e2d5" },
-              ["@lsp.type.enum"] = { fg = "#677D6A" },
-              ["@lsp.type.enumMember"] = { fg = "#C08B5C" },
-              ["@lsp.type.interface"] = { fg = "#9D5C0D" },
-              ["@lsp.type.property"] = { fg = "#BEADFA" },
-            }
-          end,
-        },
-      })
+        ["@property"] = { fg = "#F9C0AB" },
+        ["@lsp.type.property"] = { fg = "#F9C0AB" },
+
+        ["@tag.attribute"] = { italic = true, fg = "#9EC6F3" },
+        ["@keyword.import"] = { bold = true, italic = true, fg = "#94e2d5" },
+        ["@keyword.export"] = { bold = true, italic = true, fg = "#94e2d5" },
+
+        ["@keyword.coroutine"] = { bold = true, italic = true, fg = custom_red },
+        ["@keyword.exception"] = { bold = true, italic = true, fg = custom_red },
+        ["@keyword.conditional"] = { bold = true, italic = true, fg = custom_red },
+
+        ["@lsp.type.enum"] = { fg = "#706233", italic = false, bold = true },
+        ["@lsp.type.enumMember"] = { fg = "#39B5E0", bold = true, italic = false },
+        ["@lsp.type.interface"] = { bold = true, italic = false, fg = "#9D5C0D" },
+      }
     end,
+
+    colors = {
+      fg = "#C6E7FF",
+    },
   },
 }

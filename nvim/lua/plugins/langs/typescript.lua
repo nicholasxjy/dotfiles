@@ -1,6 +1,15 @@
 local lspUtil = require("utils.lsp")
 local util = require("utils.util")
 
+local supported = {
+  "javascript",
+  "javascriptreact",
+  "typescript",
+  "typescriptreact",
+  "vue",
+}
+local has_biome_config = util.file_exists_in_root("biome.json") or util.file_exists_in_root("biome.jsonc")
+
 return {
   {
     "vuki656/package-info.nvim",
@@ -15,14 +24,34 @@ return {
 
   {
     "williamboman/mason.nvim",
-    opts = { ensure_installed = { "html-lsp", "css-lsp", "prettier", "eslint-lsp" } },
+    opts = { ensure_installed = { "html-lsp", "css-lsp", "prettier", "eslint-lsp", "biome" } },
   },
+  {
+    "mfussenegger/nvim-lint",
+    opts = function(_, opts)
+      opts.linters_by_ft = opts.linters_by_ft or {}
+      for _, ft in ipairs(supported) do
+        if has_biome_config then
+          opts.linters_by_ft[ft] = { "biomejs" }
+        else
+          opts.linters_by_ft[ft] = { "eslint" }
+        end
+      end
+    end,
+  },
+
   -- correctly setup lspconfig
   {
     "neovim/nvim-lspconfig",
     opts = {
       -- make sure mason installs the server
       servers = {
+        tsserver = {
+          enabled = false,
+        },
+        ts_ls = {
+          enabled = false,
+        },
         eslint = {
           settings = {
             workingDirectories = { mode = "auto" },
@@ -121,15 +150,24 @@ return {
         },
       },
       setup = {
-        eslint = function(_, opts)
-          lspUtil.on_attach(function(client, buffer)
+        tsserver = function()
+          -- disable tsserver
+          return true
+        end,
+        ts_ls = function()
+          -- disable tsserver
+          return true
+        end,
+        eslint = function(_, _)
+          lspUtil.on_attach(function(client, _)
             if client.name == "eslint" then
-              client.server_capabilities.documentFormattingProvider = true
               vim.api.nvim_create_autocmd("BufWritePre", {
                 group = vim.api.nvim_create_augroup("EslintFixAllCmdGroup", { clear = true }),
                 callback = function()
-                  print("EslintFixAll")
-                  vim.cmd("EslintFixAll")
+                  if vim.fn.exists(":EslintFixAll") > 0 then
+                    print("EslintFixAll")
+                    vim.cmd("EslintFixAll")
+                  end
                 end,
               })
             end

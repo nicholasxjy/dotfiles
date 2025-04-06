@@ -34,6 +34,7 @@ map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc 
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
 map({ "n" }, "<leader>k", "<cmd>w<cr>", { desc = "Save buffer", nowait = true })
+
 -- Buffers
 map("n", "<leader>j", function()
   snacks.bufdelete({ wipe = true })
@@ -44,8 +45,27 @@ map("n", "<leader>bo", function()
 end, { desc = "Delete other buffers" })
 
 map("n", "<leader>q", ":q<cr>", { desc = "Quit", nowait = true })
+
 -- Clear search with <esc>
-map("n", "<esc>", ":noh<cr><esc>", { desc = "Escape and clear hlsearch" })
+map({ "n", "i", "s" }, "<esc>", function()
+  vim.cmd("noh")
+  if vim.snippet then
+    vim.snippet.stop()
+  end
+  return "<esc>"
+end, { expr = true, desc = "Escape and clear hlsearch" })
+
+-- Clear search, diff update and redraw
+-- taken from runtime/lua/_editor.lua
+map(
+  "n",
+  "<leader>ur",
+  "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
+  { desc = "Redraw / Clear hlsearch / Diff Update" }
+)
+
+-- save file
+map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 map("n", "L", ":bnext<cr>", { desc = "Next buffer" })
 map("n", "H", ":bprevious<cr>", { desc = "Previous buffer" })
@@ -75,35 +95,11 @@ map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 map("v", "<", "<gv", {})
 map("v", ">", ">gv", {})
 
-map("n", "<leader>gb", function()
-  Snacks.git.blame_line()
-end, { desc = "Git Blame Line" })
-
 map("n", "i", function()
   return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i"
 end, { expr = true, noremap = true })
 
--- map(
---   { "n", "t" },
---   "<C-h>",
---   "<CMD>NavigatorLeft<CR>",
---   { desc = "Navigate Left", silent = true, noremap = true, nowait = true }
--- )
--- map(
---   { "n", "t" },
---   "<C-l>",
---   "<CMD>NavigatorRight<CR>",
---   { desc = "Navigate Right", silent = true, noremap = true, nowait = true }
--- )
--- map(
---   { "n", "t" },
---   "<C-k>",
---   "<CMD>NavigatorUp<CR>",
---   { desc = "Navigate Up", silent = true, noremap = true, nowait = true }
--- )
--- map(
---   { "n", "t" },
---   "<C-j>",
---   "<CMD>NavigatorDown<CR>",
---   { desc = "Navigate Down", silent = true, noremap = true, nowait = true }
--- )
+-- magic tricks
+map({ "n", "v" }, "ga", "^", { desc = "Go to start of line", nowait = true })
+map({ "n", "v" }, "gl", "$", { desc = "Go to end of line", nowait = true })
+map({ "n", "v" }, "gm", "%", { desc = "Go to matching bracket", nowait = true })

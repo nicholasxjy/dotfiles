@@ -1,0 +1,3 @@
+return {
+  "pbower/vader-nvim",
+}

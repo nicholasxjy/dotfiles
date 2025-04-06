@@ -5,7 +5,7 @@ return {
     priority = 1000,
     opts = {
       style = "storm",
-      transparent = false,
+      transparent = true,
       terminal_colors = true,
       styles = {
         comments = { italic = true },
@@ -18,7 +18,6 @@ return {
       plugins = {
         all = true,
         auto = true,
-        semantic_tokens = false,
       },
       on_colors = function(colors)
         -- colors.fg = "#cdd6f4"
@@ -43,18 +42,28 @@ return {
         highlights.FzfLuaTitle = { fg = colors.bg_dark, bg = colors.red }
         highlights.FzfLuaPreviewTitle = { fg = colors.bg_dark, bg = colors.green }
 
-        highlights["@type"] = { fg = "#FF9D23", bold = true }
+        highlights.BlinkPairsRed = { fg = colors.red }
+        highlights.BlinkPairsOrange = { fg = colors.orange }
+        highlights.BlinkPairsYellow = { fg = colors.yellow }
+        highlights.BlinkPairsGreen = { fg = colors.green }
+        highlights.BlinkPairsBlue = { fg = colors.blue }
+        highlights.BlinkPairsPurple = { fg = colors.magenta }
+        highlights.BlinkPairsCyan = { fg = colors.cyan }
+
+        highlights["@type"] = { fg = "#00a692", bold = true }
         highlights["@tag"] = { bold = true }
         highlights["lessClass"] = { italic = true, fg = colors.cyan }
 
         highlights["@tag.attribute"] = { italic = true, fg = colors.blue5 }
-        highlights["@constructor"] = { fg = colors.red1 }
-        highlights["@keyword.import"] = { bold = true, fg = colors.red1 }
-        highlights["@keyword.export"] = { bold = true, fg = colors.red1 }
 
-        highlights["@lsp.type.enum"] = { fg = "#677D6A" }
-        highlights["@lsp.type.enumMember"] = { fg = "#C08B5C" }
-        highlights["@lsp.type.interface"] = { fg = "#9D5C0D" }
+        highlights["@constructor"] = { fg = colors.red1 }
+
+        highlights["@keyword.import"] = { italic = true, bold = true, fg = "#f16c75" }
+        highlights["@keyword.export"] = { italic = true, bold = true, fg = "#f16c75" }
+
+        highlights["@lsp.type.enum"] = { fg = "#04d1f9", bold = true }
+        highlights["@lsp.type.enumMember"] = { fg = "#EF9C66" }
+        highlights["@lsp.type.interface"] = { fg = "#9D5C0D", bold = true, italic = true }
       end,
     },
   },

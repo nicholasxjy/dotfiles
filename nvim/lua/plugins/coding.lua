@@ -21,4 +21,19 @@ return {
     event = "BufRead",
     opts = {},
   },
+  {
+    "oskarrrrrrr/symbols.nvim",
+    keys = {
+      { ",s", "<cmd>SymbolsToggle<CR>", desc = "Symbols Toggle" },
+    },
+    config = function()
+      local r = require("symbols.recipes")
+      require("symbols").setup(r.DefaultFilters, r.AsciiSymbols, {
+        sidebar = {
+          hide_cursor = true,
+          open_direction = "right",
+        },
+      })
+    end,
+  },
 }

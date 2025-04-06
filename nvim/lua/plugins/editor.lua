@@ -1,36 +1,4 @@
 return {
-  {
-    "christoomey/vim-tmux-navigator",
-    cmd = {
-      "TmuxNavigateLeft",
-      "TmuxNavigateDown",
-      "TmuxNavigateUp",
-      "TmuxNavigateRight",
-      "TmuxNavigatePrevious",
-      "TmuxNavigatorProcessList",
-    },
-    keys = {
-      { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
-      { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-      { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-      { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
-    },
-  },
-  {
-    "nvzone/showkeys",
-    cmd = "ShowkeysToggle",
-    opts = {
-      timeout = 1,
-      maxkeys = 5,
-      position = "bottom-center",
-    },
-  },
-  {
-    "HiPhish/rainbow-delimiters.nvim",
-    dependencies = "nvim-treesitter/nvim-treesitter",
-    event = "BufRead",
-    main = "rainbow-delimiters.setup",
-  },
   { "MunifTanjim/nui.nvim", lazy = true },
   {
     "folke/persistence.nvim",
@@ -42,41 +10,89 @@ return {
     "nmac427/guess-indent.nvim",
     config = function()
       require("guess-indent").setup({
-        auto_cmd = true,
+        auto_cmd = false,
+      })
+
+      vim.api.nvim_create_autocmd("BufReadPost", {
+        desc = "Guess indentation when loading a file",
+        callback = function(args)
+          require("guess-indent").set_from_buffer(args.buf, true, true)
+        end,
+      })
+      vim.api.nvim_create_autocmd("BufNewFile", {
+        desc = "Guess indentation when saving a new file",
+        callback = function(args)
+          vim.api.nvim_create_autocmd("BufWritePost", {
+            buffer = args.buf,
+            once = true,
+            callback = function(wargs)
+              require("guess-indent").set_from_buffer(wargs.buf, true, true)
+            end,
+          })
+        end,
       })
     end,
   },
   {
-    "tris203/precognition.nvim",
+    "max397574/better-escape.nvim",
+    event = "VeryLazy",
     opts = {
-      startVisible = true,
-      disabled_fts = {
-        "startify",
-        "lazy",
-        "mason",
-        "trouble",
-        "neo-tree",
-        "NeoTree",
-        "Trouble",
-        "markdown",
-        "dashboard",
-        "Dashboard",
+      timeout = 300,
+      default_mappings = false,
+      mappings = {
+        i = { j = { k = "<Esc>", j = "<Esc>" } },
       },
     },
   },
   {
-    "mcauley-penney/visual-whitespace.nvim",
-    event = "VeryLazy",
-    config = true,
+    "tummetott/reticle.nvim",
+    event = "VeryLazy", -- optionally lazy load the plugin
+    cmd = {
+      "ReticleToggleCursorline",
+      "ReticleToggleCursorcolumn",
+      "ReticleToggleCursorcross",
+    },
     opts = {
-      highlight = { link = "LineNr" },
+      on_startup = {
+        cursorline = false,
+        cursorcolumn = false,
+      },
+
+      disable_in_insert = true,
+      disable_in_diff = true,
+      always_highlight_number = true,
+      -- Define filetypes which are ignored by the plugin
+      ignore = {
+        cursorline = {
+          "DressingInput",
+          "FTerm",
+          "NvimSeparator",
+          "NvimTree",
+          "TelescopePrompt",
+          "Trouble",
+          "snacks_picker_input",
+        },
+        cursorcolumn = {
+          "snacks_picker_input",
+        },
+      },
+
+      -- Specify filetypes where the cursorline and/or cursorcolumn should be
+      -- explicitly disabled. Typically, you would include these filetypes in
+      -- the 'ignored' table. However, there are situations where plugins enable
+      -- cursorline/cursorcolumn without offering a configuration option for
+      -- disabling them. By adding these filetypes to the 'never' table, you
+      -- can override the plugin's settings and turn off these features.
+      never = {
+        cursorline = {},
+        cursorcolumn = {},
+      },
     },
   },
-  -- {
-  --   "rachartier/tiny-glimmer.nvim",
-  --   event = "TextYankPost",
-  --   opts = {
-  --     -- your configuration
-  --   },
-  -- },
+  {
+    "sphamba/smear-cursor.nvim",
+    event = "VeryLazy",
+    cmd = "SmearCursorToggle",
+    opts = {},
+  },
 }
