@@ -100,6 +100,6 @@ map("n", "i", function()
 end, { expr = true, noremap = true })
 
 -- magic tricks
-map({ "n", "v" }, "ga", "^", { desc = "Go to start of line", nowait = true })
+map({ "n", "v" }, "gh", "^", { desc = "Go to start of line", nowait = true })
 map({ "n", "v" }, "gl", "$", { desc = "Go to end of line", nowait = true })
 map({ "n", "v" }, "gm", "%", { desc = "Go to matching bracket", nowait = true })

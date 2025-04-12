@@ -8,9 +8,14 @@ local supported = {
   "typescriptreact",
   "vue",
 }
-local has_biome_config = util.file_exists_in_root("biome.json") or util.file_exists_in_root("biome.jsonc")
 
 return {
+  {
+    "windwp/nvim-ts-autotag",
+    event = "BufRead",
+    opts = {},
+  },
+
   {
     "vuki656/package-info.nvim",
     dependencies = {
@@ -31,20 +36,13 @@ return {
     opts = function(_, opts)
       opts.linters_by_ft = opts.linters_by_ft or {}
       for _, ft in ipairs(supported) do
-        if has_biome_config then
-          opts.linters_by_ft[ft] = { "biomejs" }
-        else
-          opts.linters_by_ft[ft] = { "eslint" }
-        end
+        opts.linters_by_ft[ft] = { "eslint" }
       end
     end,
   },
-
-  -- correctly setup lspconfig
   {
     "neovim/nvim-lspconfig",
     opts = {
-      -- make sure mason installs the server
       servers = {
         tsserver = {
           enabled = false,
@@ -58,8 +56,6 @@ return {
           },
         },
         vtsls = {
-          -- explicitly add default filetypes, so that we can extend
-          -- them in related extras
           filetypes = {
             "javascript",
             "javascriptreact",
@@ -99,7 +95,7 @@ return {
             {
               "gD",
               function()
-                local params = vim.lsp.util.make_position_params()
+                local params = vim.lsp.util.make_position_params(0, "utf-8")
                 lspUtil.execute({
                   command = "typescript.goToSourceDefinition",
                   arguments = { params.textDocument.uri, params.position },
@@ -151,11 +147,9 @@ return {
       },
       setup = {
         tsserver = function()
-          -- disable tsserver
           return true
         end,
         ts_ls = function()
-          -- disable tsserver
           return true
         end,
         eslint = function(_, _)
@@ -176,7 +170,6 @@ return {
         vtsls = function(_, opts)
           lspUtil.on_attach(function(client, buffer)
             client.commands["_typescript.moveToFileRefactoring"] = function(command, ctx)
-              ---@type string, string, lsp.Range
               local action, uri, range = unpack(command.arguments)
 
               local function move(newf)
@@ -200,7 +193,6 @@ return {
                   },
                 },
               }, function(_, result)
-                ---@type string[]
                 local files = result.body.files
                 table.insert(files, 1, "Enter new path...")
                 vim.ui.select(files, {
@@ -223,7 +215,7 @@ return {
                 end)
               end)
             end
-          end, "vtsls")
+          end)
           -- copy typescript settings to javascript
           opts.settings.javascript =
             vim.tbl_deep_extend("force", {}, opts.settings.typescript, opts.settings.javascript or {})

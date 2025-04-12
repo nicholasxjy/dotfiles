@@ -1,37 +1,18 @@
 return {
-  { "MunifTanjim/nui.nvim", lazy = true },
   {
     "folke/persistence.nvim",
     event = "BufReadPre",
     opts = {},
   },
-  { "nvim-lua/plenary.nvim", lazy = true },
   {
-    "nmac427/guess-indent.nvim",
-    config = function()
-      require("guess-indent").setup({
-        auto_cmd = false,
-      })
-
-      vim.api.nvim_create_autocmd("BufReadPost", {
-        desc = "Guess indentation when loading a file",
-        callback = function(args)
-          require("guess-indent").set_from_buffer(args.buf, true, true)
-        end,
-      })
-      vim.api.nvim_create_autocmd("BufNewFile", {
-        desc = "Guess indentation when saving a new file",
-        callback = function(args)
-          vim.api.nvim_create_autocmd("BufWritePost", {
-            buffer = args.buf,
-            once = true,
-            callback = function(wargs)
-              require("guess-indent").set_from_buffer(wargs.buf, true, true)
-            end,
-          })
-        end,
-      })
-    end,
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = true,
+  },
+  {
+    "Aasim-A/scrollEOF.nvim",
+    event = { "CursorMoved", "WinScrolled" },
+    opts = {},
   },
   {
     "max397574/better-escape.nvim",
@@ -46,7 +27,7 @@ return {
   },
   {
     "tummetott/reticle.nvim",
-    event = "VeryLazy", -- optionally lazy load the plugin
+    event = "VeryLazy",
     cmd = {
       "ReticleToggleCursorline",
       "ReticleToggleCursorcolumn",
@@ -54,8 +35,8 @@ return {
     },
     opts = {
       on_startup = {
-        cursorline = false,
-        cursorcolumn = false,
+        cursorline = true,
+        cursorcolumn = true,
       },
 
       disable_in_insert = true,
@@ -71,9 +52,13 @@ return {
           "TelescopePrompt",
           "Trouble",
           "snacks_picker_input",
+          "snacks_terminal",
+          "mason",
         },
         cursorcolumn = {
           "snacks_picker_input",
+          "snacks_terminal",
+          "mason",
         },
       },
 
@@ -90,9 +75,80 @@ return {
     },
   },
   {
-    "sphamba/smear-cursor.nvim",
+    "HiPhish/rainbow-delimiters.nvim",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    event = "BufRead",
+    main = "rainbow-delimiters.setup",
+  },
+  {
+    "gen740/SmoothCursor.nvim",
+    lazy = false,
+    opts = {
+      type = "default",
+      autostart = true,
+      fancy = {
+        enable = true, -- enable fancy mode
+        head = { cursor = "▷", texthl = "SmoothCursor", linehl = nil }, -- false to disable fancy head
+        body = {
+          { cursor = "󰝥", texthl = "SmoothCursorRed" },
+          { cursor = "󰝥", texthl = "SmoothCursorOrange" },
+          { cursor = "●", texthl = "SmoothCursorYellow" },
+          { cursor = "●", texthl = "SmoothCursorGreen" },
+          { cursor = "•", texthl = "SmoothCursorAqua" },
+          { cursor = ".", texthl = "SmoothCursorBlue" },
+          { cursor = ".", texthl = "SmoothCursorPurple" },
+        },
+        tail = { cursor = nil, texthl = "SmoothCursor" }, -- false to disable fancy tail
+      },
+      enabled_filetypes = nil,
+      disabled_filetypes = nil,
+    },
+    config = function(_, opts)
+      require("smoothcursor").setup(opts)
+    end,
+  },
+  {
+    "mcauley-penney/visual-whitespace.nvim",
     event = "VeryLazy",
-    cmd = "SmearCursorToggle",
-    opts = {},
+    config = true,
+    opts = {
+      highlight = { link = "LineNr" },
+    },
+  },
+  {
+    "mvllow/modes.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("modes").setup({
+        colors = {
+          bg = "", -- Optional bg param, defaults to Normal hl group
+          copy = "#f1ff5e",
+          delete = "#ff6e5e",
+          insert = "#5eff6c",
+          visual = "#ff5ea0",
+        },
+        set_cursor = true,
+        set_cursorline = true,
+        set_number = true,
+        ignore_filetypes = { "NvimTree", "TelescopePrompt" },
+        line_opacity = 0.15,
+      })
+    end,
+  },
+  {
+    "lukas-reineke/virt-column.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- char = "|",
+      -- char = "",
+      -- char = "┇",
+      -- char = "∶",
+      -- char = "∷",
+      char = "║",
+      -- char = "⋮",
+      -- char = "",
+      -- char = "󰮾",
+      virtcolumn = "80",
+    },
   },
 }

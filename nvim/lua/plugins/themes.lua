@@ -1,5 +1,76 @@
 return {
   {
+    "oonamo/ef-themes.nvim",
+    opts = {
+      light = "ef-trio-light",
+      dark = "ef-winter",
+      transparent = true,
+      styles = {
+        -- Set specific styles for specific highlight groups
+        -- Can be any valid attr-list value. See `:h nvim_set_hl`
+        comments = { italic = true },
+        keywords = { bold = true },
+        functions = {},
+        variables = {},
+
+        diagnostic = "full", -- Can be "full"
+        pickers = "borderless", -- Can be "borderless"
+      },
+
+      modules = {
+        blink = true,
+        fzf = true,
+        mini = true,
+        semantic_tokens = true,
+        snacks = true,
+        treesitter = true,
+        gitsigns = true,
+        which_key = true,
+      },
+      on_highlights = function(_, colors)
+        return {
+
+          BlinkPairsRed = { fg = colors.red },
+          BlinkPairsOrange = { fg = colors.yellow_warmer },
+          BlinkPairsYellow = { fg = colors.yellow },
+          BlinkPairsGreen = { fg = colors.green },
+          BlinkPairsBlue = { fg = colors.blue },
+          BlinkPairsPurple = { fg = colors.magenta },
+          BlinkPairsCyan = { fg = colors.cyan },
+
+          Comment = { fg = "#8b8693", italic = true },
+          LspInlayHint = { bg = "NONE", fg = "#8b8693", italic = true }, --colors.bg_inactive
+
+          FzfLuaTitle = { fg = colors.bg_alt, bg = colors.red },
+          FzfLuaPreviewTitle = { fg = colors.bg_alt, bg = colors.green },
+
+          SnacksPickerBoxTitle = { fg = colors.bg_alt, bg = colors.red_cooler },
+          SnacksPickerPreviewTitle = { fg = colors.bg_alt, bg = colors.green_cooler },
+
+          Function = { fg = "#66d9ef", bold = true },
+          ["@function"] = { link = "Function" },
+
+          ["@tag.tsx"] = { bold = true },
+          ["@tag.attribute.tsx"] = { italic = true },
+
+          ["@operator"] = { bold = true, fg = colors.yellow_faint },
+
+          ["@keyword.import"] = { fg = "#94e2d5", italic = true, bold = true },
+          ["@keyword.export"] = { fg = "#94e2d5", italic = true, bold = true },
+
+          ["@keyword.modifier"] = { fg = colors.blue_warmer, italic = true, bold = true },
+          ["@keyword.coroutine"] = { fg = colors.red, italic = true, bold = true },
+          ["@keyword.exception"] = { fg = colors.red, italic = true, bold = true },
+
+          ["@lsp.type.enum"] = { fg = colors.green_warmer, bold = true },
+          ["@lsp.type.enumMember"] = { fg = "#04d1f9", bold = true, italic = true },
+          ["@lsp.type.interface"] = { fg = "#9D5C0D", italic = true, bold = true },
+        }
+      end,
+    },
+  },
+  -- kanagawa
+  {
     "rebelot/kanagawa.nvim",
     lazy = false,
     priority = 1000,
@@ -123,6 +194,70 @@ return {
           light = "lotus",
         },
       })
+    end,
+  },
+  -- cyberdream
+  {
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      variant = "dark",
+      transparent = true,
+      saturation = 1, -- accepts a value between 0 and 1. 0 will be fully desaturated (greyscale) and 1 will be the full color (default)
+      italic_comments = true,
+      hide_fillchars = false,
+      borderless_pickers = true,
+      terminal_colors = true,
+      cache = true,
+      highlights = {},
+      overrides = function(colors) -- NOTE: This function nullifies the `highlights` option
+        local custom_red = "#F94C10"
+        local custom_purple = "#af85ff"
+        local custom_yellow = "#cf9f8f"
+        return {
+          FzfLuaTitle = { fg = colors.bgHighlight, bg = colors.red },
+          FzfLuaPreviewTitle = { fg = colors.bgHighlight, bg = colors.green },
+
+          SnacksPickerBoxTitle = { fg = colors.bg, bg = colors.red },
+          SnacksPickerPreviewTitle = { fg = colors.bg, bg = colors.green },
+
+          ["@tag"] = { bold = true },
+          ["@type"] = { bold = true, italic = false, fg = "#EC7FA9" },
+
+          ["@keyword"] = { fg = custom_purple, italic = true, bold = true },
+          ["@operator"] = { fg = custom_yellow, bold = true },
+
+          ["@property"] = { fg = "#F9C0AB" },
+          ["@lsp.type.property"] = { fg = "#F9C0AB" },
+
+          ["@tag.attribute"] = { italic = true, fg = "#9EC6F3" },
+          ["@keyword.import"] = { bold = true, italic = true, fg = "#94e2d5" },
+          ["@keyword.export"] = { bold = true, italic = true, fg = "#94e2d5" },
+
+          ["@keyword.coroutine"] = { bold = true, italic = true, fg = custom_red },
+          ["@keyword.exception"] = { bold = true, italic = true, fg = custom_red },
+          ["@keyword.conditional"] = { bold = true, italic = true, fg = custom_red },
+
+          ["@lsp.type.enum"] = { fg = "#706233", italic = false, bold = true },
+          ["@lsp.type.enumMember"] = { fg = "#39B5E0", bold = true, italic = false },
+          ["@lsp.type.interface"] = { bold = true, italic = false, fg = "#9D5C0D" },
+        }
+      end,
+
+      colors = {
+        fg = "#C6E7FF",
+      },
+    },
+  },
+  -- aurora
+  {
+    "nicholasxjy/aurora",
+    init = function()
+      vim.g.aurora_italic = 1
+      vim.g.aurora_bold = 1
+      vim.g.aurora_darker = 1
+      vim.g.aurora_transparent = 1
     end,
   },
 }

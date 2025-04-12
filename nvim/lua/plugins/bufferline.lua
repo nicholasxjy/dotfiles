@@ -3,7 +3,6 @@ return {
   {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
-    enabled = false,
     keys = {
       { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
       { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
@@ -28,7 +27,6 @@ return {
         indicator = {
           style = "underline",
         },
-        -- separator_style = "slope",
         close_command = function(n)
           Snacks.bufdelete(n)
         end,

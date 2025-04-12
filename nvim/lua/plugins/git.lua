@@ -24,15 +24,6 @@ return {
     },
   },
   {
-    "akinsho/git-conflict.nvim",
-    config = true,
-    version = "*",
-    opts = {
-      list_opener = "copen",
-      default_mappings = true,
-    },
-  },
-  {
     "sindrets/diffview.nvim",
     event = { "VeryLazy" },
     cmd = {

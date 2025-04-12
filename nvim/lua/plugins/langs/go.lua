@@ -4,60 +4,18 @@ return {
     opts = { ensure_installed = { "go", "gomod", "gowork", "gosum" } },
   },
   {
-    "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "gopls",
-        "goimports",
-        "golines",
-        "golangci-lint-langserver",
-        "delve",
-        "gomodifytags",
-        "gotests",
-        "iferr",
-        "impl",
-      },
-    },
-  },
-  {
-    "stevearc/conform.nvim",
-    opts = {
-      formatters_by_ft = {
-        go = { "goimports", "golines" },
-      },
-    },
-  },
-  {
-    "mfussenegger/nvim-lint",
-    opts = {
-      linters_by_ft = {
-        go = { "golangcilint" },
-      },
-    },
-  },
-  {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
         gopls = {
           settings = {
             gopls = {
-              analyses = {
-                ST1003 = true,
-                fieldalignment = false,
-                fillreturns = true,
-                nilness = true,
-                nonewvars = true,
-                shadow = true,
-                undeclaredname = true,
-                unreachable = true,
-                unusedparams = true,
-                unusedwrite = true,
-                useany = true,
-              },
+              gofumpt = true,
               codelenses = {
-                generate = true, -- show the `go generate` lens.
+                gc_details = false,
+                generate = true,
                 regenerate_cgo = true,
+                run_govulncheck = true,
                 test = true,
                 tidy = true,
                 upgrade_dependency = true,
@@ -72,15 +30,17 @@ return {
                 parameterNames = true,
                 rangeVariableTypes = true,
               },
-              buildFlags = { "-tags", "integration" },
-              completeUnimported = true,
-              diagnosticsDelay = "500ms",
-              gofumpt = true,
-              matcher = "Fuzzy",
-              semanticTokens = true,
-              staticcheck = true,
-              symbolMatcher = "fuzzy",
+              analyses = {
+                nilness = true,
+                unusedparams = true,
+                unusedwrite = true,
+                useany = true,
+              },
               usePlaceholders = true,
+              completeUnimported = true,
+              staticcheck = true,
+              directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+              semanticTokens = true,
             },
           },
         },
@@ -104,6 +64,30 @@ return {
     opts = {},
   },
   {
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "gopls",
+        "goimports",
+        "golines",
+        "golangci-lint-langserver",
+        "delve",
+        "gomodifytags",
+        "gotests",
+        "iferr",
+        "impl",
+      },
+    },
+  },
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        go = { "goimports", "gofumpt" },
+      },
+    },
+  },
+  {
     "mfussenegger/nvim-dap",
     dependencies = {
       {
@@ -118,6 +102,7 @@ return {
   },
   {
     "nvim-neotest/neotest",
+    optional = true,
     dependencies = {
       "fredrikaverpil/neotest-golang",
     },
@@ -131,7 +116,6 @@ return {
       },
     },
   },
-  -- Filetype icons
   {
     "echasnovski/mini.icons",
     opts = {

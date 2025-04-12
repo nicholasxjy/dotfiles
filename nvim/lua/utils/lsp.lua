@@ -1,47 +1,103 @@
----@class lazyvim.util.lsp
 local M = {}
 
----@alias lsp.Client.filter {id?: number, bufnr?: number, name?: string, method?: string, filter?:fun(client: lsp.Client):boolean}
+M.set_keymaps = function()
+  vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
 
----@param opts? lsp.Client.filter
-function M.get_clients(opts)
-  local ret = {} ---@type vim.lsp.Client[]
-  if vim.lsp.get_clients then
-    ret = vim.lsp.get_clients(opts)
-  else
-    ---@diagnostic disable-next-line: deprecated
-    ret = vim.lsp.get_active_clients(opts)
-    if opts and opts.method then
-      ---@param client vim.lsp.Client
-      ret = vim.tbl_filter(function(client)
-        return client.supports_method(opts.method, { bufnr = opts.bufnr })
-      end, ret)
-    end
-  end
-  return opts and opts.filter and vim.tbl_filter(opts.filter, ret) or ret
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
+
+  vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+  vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+
+  vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+  vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })
+  vim.keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, { desc = "Codelens Refresh" })
+  vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
+  vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
+
+  vim.keymap.set("n", "]]", function()
+    Snacks.words.jump(vim.v.count1)
+  end, { desc = "Next Reference" })
+  vim.keymap.set("n", "[[", function()
+    Snacks.words.jump(-vim.v.count1)
+  end, { desc = "Prev Reference" })
+
+  vim.keymap.set("n", "gd", function()
+    require("fzf-lua").lsp_definitions()
+  end, { desc = "Goto Definition" })
+
+  vim.keymap.set("n", "gD", function()
+    require("fzf-lua").lsp_declarations()
+  end, { desc = "Goto Declaration" })
+
+  vim.keymap.set("n", "gr", function()
+    require("fzf-lua").lsp_references()
+  end, { desc = "Goto References" })
+
+  vim.keymap.set("n", "gi", function()
+    require("fzf-lua").lsp_implementations()
+  end, { desc = "Goto Implementation" })
+
+  vim.keymap.set("n", "gy", function()
+    require("fzf-lua").lsp_typedefs()
+  end, { desc = "Goto TypeDefs" })
+
+  vim.keymap.set("n", "gI", function()
+    require("fzf-lua").lsp_incoming_calls()
+  end, { desc = "Incoming Calls" })
+
+  vim.keymap.set("n", "gO", function()
+    require("fzf-lua").lsp_outgoing_calls()
+  end, { desc = "Outgoing Calls" })
+
+  vim.keymap.set("n", "<leader>ss", function()
+    require("fzf-lua").lsp_document_symbols()
+  end, { desc = "Document symbols" })
+
+  vim.keymap.set("n", "<leader>sS", function()
+    require("fzf-lua").lsp_workspace_symbols()
+  end, { desc = "Workspace symbols" })
+
+  vim.keymap.set("n", "<leader>xx", function()
+    require("fzf-lua").diagnostics_document()
+  end, { desc = "Document Diagnostics" })
+
+  vim.keymap.set("n", "<leader>xw", function()
+    require("fzf-lua").diagnostics_workspace()
+  end, { desc = "Workspace Diagnostics" })
+
+  vim.keymap.set("n", "<leader>ca", function()
+    require("fzf-lua").lsp_code_actions()
+  end, { desc = "Code Actions" })
 end
 
----@param on_attach fun(client:vim.lsp.Client, buffer)
----@param name? string
-function M.on_attach(on_attach, name)
-  return vim.api.nvim_create_autocmd("LspAttach", {
+M.on_attach = function(fn)
+  vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
-      local buffer = args.buf ---@type number
+      local buffer = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-      if client and (not name or client.name == name) then
-        return on_attach(client, buffer)
+      if client then
+        return fn(client, buffer)
       end
     end,
   })
 end
 
----@type table<string, table<vim.lsp.Client, table<number, boolean>>>
-M._supports_method = {}
+M.set_method = function(method, fn)
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "LspSupportsMethod",
+    callback = function(args)
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      local buffer = args.data.buffer
+      if client and method == args.data.method then
+        return fn(client, buffer)
+      end
+    end,
+  })
+end
 
-function M.setup()
+M.setup = function(opts)
   local register_capability = vim.lsp.handlers["client/registerCapability"]
   vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
-    ---@diagnostic disable-next-line: no-unknown
     local ret = register_capability(err, res, ctx)
     local client = vim.lsp.get_client_by_id(ctx.client_id)
     if client then
@@ -54,99 +110,30 @@ function M.setup()
     end
     return ret
   end
-  M.on_attach(M._check_methods)
-  M.on_dynamic_capability(M._check_methods)
-end
 
----@param client vim.lsp.Client
-function M._check_methods(client, buffer)
-  -- don't trigger on invalid buffers
-  if not vim.api.nvim_buf_is_valid(buffer) then
-    return
-  end
-  -- don't trigger on non-listed buffers
-  if not vim.bo[buffer].buflisted then
-    return
-  end
-  -- don't trigger on nofile buffers
-  if vim.bo[buffer].buftype == "nofile" then
-    return
-  end
-  for method, clients in pairs(M._supports_method) do
-    clients[client] = clients[client] or {}
-    if not clients[client][buffer] then
-      if client.supports_method and client.supports_method(method, { bufnr = buffer }) then
-        clients[client][buffer] = true
-        vim.api.nvim_exec_autocmds("User", {
-          pattern = "LspSupportsMethod",
-          data = { client_id = client.id, buffer = buffer, method = method },
-        })
+  ---@diagnostic disable-next-line: unused-local
+  M.set_method("textDocument/inlayHint", function(client, buffer)
+    -- inlay hints
+    if opts.inlay_hints.enabled then
+      if
+        vim.api.nvim_buf_is_valid(buffer)
+        and vim.bo[buffer].buftype == ""
+        and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
+      then
+        vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
       end
     end
-  end
-end
+  end)
 
----@param fn fun(client:vim.lsp.Client, buffer):boolean?
----@param opts? {group?: integer}
-function M.on_dynamic_capability(fn, opts)
-  return vim.api.nvim_create_autocmd("User", {
-    pattern = "LspDynamicCapability",
-    group = opts and opts.group or nil,
-    callback = function(args)
-      local client = vim.lsp.get_client_by_id(args.data.client_id)
-      local buffer = args.data.buffer ---@type number
-      if client then
-        return fn(client, buffer)
-      end
-    end,
-  })
-end
-
----@param method string
----@param fn fun(client:vim.lsp.Client, buffer)
-function M.on_supports_method(method, fn)
-  M._supports_method[method] = M._supports_method[method] or setmetatable({}, { __mode = "k" })
-  return vim.api.nvim_create_autocmd("User", {
-    pattern = "LspSupportsMethod",
-    callback = function(args)
-      local client = vim.lsp.get_client_by_id(args.data.client_id)
-      local buffer = args.data.buffer ---@type number
-      if client and method == args.data.method then
-        return fn(client, buffer)
-      end
-    end,
-  })
-end
-
----@return _.lspconfig.options
-function M.get_config(server)
-  local configs = require("lspconfig.configs")
-  return rawget(configs, server)
-end
-
----@return {default_config:lspconfig.Config}
-function M.get_raw_config(server)
-  local ok, ret = pcall(require, "lspconfig.configs." .. server)
-  if ok then
-    return ret
-  end
-  return require("lspconfig.server_configurations." .. server)
-end
-
-function M.is_enabled(server)
-  local c = M.get_config(server)
-  return c and c.enabled ~= false
-end
-
----@param server string
----@param cond fun( root_dir, config): boolean
-function M.disable(server, cond)
-  local util = require("lspconfig.util")
-  local def = M.get_config(server)
-  ---@diagnostic disable-next-line: undefined-field
-  def.document_config.on_new_config = util.add_hook_before(def.document_config.on_new_config, function(config, root_dir)
-    if cond(root_dir, config) then
-      config.enabled = false
+  ---@diagnostic disable-next-line: unused-local
+  M.set_method("textDocument/codeLens", function(client, buffer)
+    -- code lens
+    if opts.codelens.enabled and vim.lsp.codelens then
+      vim.lsp.codelens.refresh()
+      vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+        buffer = buffer,
+        callback = vim.lsp.codelens.refresh,
+      })
     end
   end)
 end
@@ -165,24 +152,20 @@ M.action = setmetatable({}, {
   end,
 })
 
----@class LspCommand: lsp.ExecuteCommandParams
----@field open? boolean
----@field handler? lsp.Handler
-
----@param opts LspCommand
 function M.execute(opts)
   local params = {
     command = opts.command,
     arguments = opts.arguments,
   }
-  if opts.open then
-    require("trouble").open({
-      mode = "lsp_command",
-      params = params,
-    })
-  else
-    return vim.lsp.buf_request(0, "workspace/executeCommand", params, opts.handler)
+  return vim.lsp.buf_request(0, "workspace/executeCommand", params, opts.handler)
+end
+
+function M.get_raw_config(server)
+  local ok, ret = pcall(require, "lspconfig.configs." .. server)
+  if ok then
+    return ret
   end
+  return require("lspconfig.server_configurations." .. server)
 end
 
 return M

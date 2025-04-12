@@ -1,48 +1,37 @@
 local icons = require("core.icons")
-
 return {
   {
     "saghen/blink.cmp",
     dependencies = {
       { "L3MON4D3/LuaSnip", version = "v2.*" },
-      "giuxtaposition/blink-cmp-copilot",
-      "saghen/blink.compat",
-      "Exafunction/codeium.nvim",
-      {
-        "xzbdmw/colorful-menu.nvim",
-        config = function()
-          require("colorful-menu").setup()
-        end,
-      },
     },
     build = "cargo build --release",
     event = "InsertEnter",
     opts = function()
       return {
+        fuzzy = { implementation = "prefer_rust" },
         keymap = {
           preset = "enter",
-          ["<C-k>"] = { "select_prev", "fallback" },
-          ["<C-j>"] = { "select_next", "fallback" },
         },
         appearance = {
-          kind_icons = icons.kind_icons,
+          kind_icons = icons.lazy_kind_icons,
           use_nvim_cmp_as_default = false,
           nerd_font_variant = "mono",
         },
         signature = {
           enabled = true,
-          window = {
-            border = {
-              { "", "DiagnosticHint" },
-              "─",
-              "╮",
-              "│",
-              "╯",
-              "─",
-              "╰",
-              "│",
-            },
-          },
+          -- window = {
+          --   border = {
+          --     { "", "DiagnosticHint" },
+          --     "─",
+          --     "╮",
+          --     "│",
+          --     "╯",
+          --     "─",
+          --     "╰",
+          --     "│",
+          --   },
+          -- },
         },
         completion = {
           ghost_text = {
@@ -82,28 +71,15 @@ return {
             --   "│",
             -- },
             draw = {
-              -- treesitter = { "lsp" },
-              -- We don't need label_description now because label and label_description are already
-              -- combined together in label by colorful-menu.nvim.
-              columns = { { "kind_icon" }, { "label", gap = 1 } },
-              components = {
-                label = {
-                  text = function(ctx)
-                    return require("colorful-menu").blink_components_text(ctx)
-                  end,
-                  highlight = function(ctx)
-                    return require("colorful-menu").blink_components_highlight(ctx)
-                  end,
-                },
-              },
+              treesitter = { "lsp" },
             },
           },
         },
         cmdline = {
           enabled = true,
-          keymap = {
-            preset = "enter",
-          },
+          -- keymap = {
+          --   preset = "enter",
+          -- },
           completion = {
             ghost_text = { enabled = true },
             menu = {
@@ -113,41 +89,7 @@ return {
         },
         snippets = { preset = "luasnip" },
         sources = {
-          default = { "lsp", "path", "snippets", "buffer", "copilot", "codeium" },
-          providers = {
-            copilot = {
-              name = "copilot",
-              module = "blink-cmp-copilot",
-              score_offset = 100,
-              max_items = 1,
-              async = true,
-              transform_items = function(_, items)
-                local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-                local kind_idx = #CompletionItemKind + 1
-                CompletionItemKind[kind_idx] = "Copilot"
-                for _, item in ipairs(items) do
-                  item.kind = kind_idx
-                end
-                return items
-              end,
-            },
-            codeium = {
-              name = "codeium",
-              module = "blink.compat.source",
-              score_offset = 100,
-              max_items = 1,
-              async = true,
-              transform_items = function(_, items)
-                local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-                local kind_idx = #CompletionItemKind + 1
-                CompletionItemKind[kind_idx] = "Codeium"
-                for _, item in ipairs(items) do
-                  item.kind = kind_idx
-                end
-                return items
-              end,
-            },
-          },
+          default = { "lsp", "path", "snippets", "buffer" },
         },
       }
     end,

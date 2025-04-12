@@ -9,15 +9,6 @@ local M = setmetatable({}, {
 
 M.cache = {}
 
----@class LazyRoot
----@field paths string[]
----@field spec LazyRootSpec
-
----@alias LazyRootFn fun(buf: number): (string|string[])
-
----@alias LazyRootSpec string|string[]|LazyRootFn
-
----@type LazyRootSpec[]
 M.spec = { "lsp", { ".git", "lua" }, "cwd" }
 
 M.detectors = {}
@@ -172,13 +163,6 @@ function M.info()
   return roots[1] and roots[1].paths[1] or vim.uv.cwd()
 end
 
--- returns the root directory based on:
--- * lsp workspace folders
--- * lsp root_dir
--- * root pattern of filename of the current buffer
--- * root pattern of cwd
----@param opts? {normalize?:boolean, buf?:number}
----@return string
 function M.get(opts)
   opts = opts or {}
   local buf = opts.buf or vim.api.nvim_get_current_buf()
@@ -201,7 +185,6 @@ function M.git()
   return ret
 end
 
----@param opts? {hl_last?: string}
 function M.pretty_path(opts)
   return ""
 end
