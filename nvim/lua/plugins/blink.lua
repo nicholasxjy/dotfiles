@@ -1,18 +1,48 @@
 local icons = require("core.icons")
-
 return {
   {
-    "saghen/blink.cmp",
-    lazy = false,
-    dependencies = {
-      "rafamadriz/friendly-snippets",
-      -- "Exafunction/codeium.nvim",
-      -- { "Saghen/blink.compat", opts = { enable_events = true } },
+    "xzbdmw/colorful-menu.nvim",
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require("colorful-menu").setup({
+        max_width = 60,
+      })
+    end,
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    event = "BufReadPost",
+    opts = {
+      suggestion = {
+        enabled = false,
+        auto_trigger = true,
+        keymap = {
+          accept = false,
+          next = "<M-]>",
+          prev = "<M-[>",
+        },
+      },
+      filetypes = {
+        markdown = true,
+        help = true,
+      },
     },
+  },
+  {
+    "Saghen/blink.cmp",
+    dependencies = {
+      { "L3MON4D3/LuaSnip", version = "v2.*" },
+      "xzbdmw/colorful-menu.nvim",
+      "giuxtaposition/blink-cmp-copilot",
+    },
+    -- version = "*",
     build = "cargo build --release",
     event = "InsertEnter",
     opts = function()
       return {
+        fuzzy = { implementation = "prefer_rust" },
         keymap = {
           preset = "enter",
         },
@@ -21,11 +51,40 @@ return {
           use_nvim_cmp_as_default = false,
           nerd_font_variant = "mono",
         },
-        signature = { enabled = false },
+        signature = {
+          -- use noice
+          enabled = false,
+          -- window = {
+          --   border = {
+          --     { "", "DiagnosticHint" },
+          --     "─",
+          --     "╮",
+          --     "│",
+          --     "╯",
+          --     "─",
+          --     "╰",
+          --     "│",
+          --   },
+          -- },
+        },
         completion = {
+          ghost_text = {
+            enabled = true,
+          },
           documentation = {
             auto_show = true,
-            auto_show_delay_ms = 200,
+            -- window = {
+            --   border = {
+            --     { "", "DiagnosticHint" },
+            --     "─",
+            --     "╮",
+            --     "│",
+            --     "╯",
+            --     "─",
+            --     "╰",
+            --     "│",
+            --   },
+            -- },
           },
           accept = {
             auto_brackets = {
@@ -34,34 +93,65 @@ return {
             },
           },
           menu = {
+            scrollbar = false,
+            -- border = {
+            --   { "󱐋", "WarningMsg" },
+            --   "─",
+            --   "╮",
+            --   "│",
+            --   "╯",
+            --   "─",
+            --   "╰",
+            --   "│",
+            -- },
             draw = {
-              treesitter = { "lsp" },
-              columns = { { "kind_icon", "kind", gap = 1 }, { "label", "source_name", gap = 1 } },
+              -- treesitter = { "lsp" },
+              --
+              -- We don't need label_description now because label and label_description are already
+              -- combined together in label by colorful-menu.nvim.
+              columns = { { "kind_icon" }, { "label", gap = 1 } },
+              components = {
+                label = {
+                  text = function(ctx)
+                    return require("colorful-menu").blink_components_text(ctx)
+                  end,
+                  highlight = function(ctx)
+                    return require("colorful-menu").blink_components_highlight(ctx)
+                  end,
+                },
+              },
             },
           },
         },
+        cmdline = {
+          enabled = true,
+          keymap = {
+            preset = "enter",
+          },
+          completion = {
+            ghost_text = { enabled = true },
+            list = {
+              selection = {
+                preselect = false,
+                auto_insert = false,
+              },
+            },
+            menu = {
+              auto_show = true,
+            },
+          },
+        },
+        snippets = { preset = "luasnip" },
         sources = {
-          default = { "lsp", "path", "snippets", "buffer" }, -- codeium
-          -- providers = {
-          -- codeium = {
-          --   name = "codeium",
-          --   score_offset = 100,
-          --   async = true,
-          --   module = "blink.compat.source",
-          -- },
-          -- },
-          cmdline = function()
-            local type = vim.fn.getcmdtype()
-            -- Search forward and backward
-            if type == "/" or type == "?" then
-              return { "buffer" }
-            end
-            -- Commands
-            if type == ":" or type == "@" then
-              return { "cmdline" }
-            end
-            return {}
-          end,
+          default = { "lsp", "path", "snippets", "buffer", "copilot" },
+          providers = {
+            copilot = {
+              name = "copilot",
+              module = "blink-cmp-copilot",
+              score_offset = 100,
+              async = true,
+            },
+          },
         },
       }
     end,

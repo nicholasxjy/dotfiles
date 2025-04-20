@@ -10,18 +10,30 @@ return {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "saghen/blink.cmp",
+      {
+        "folke/lazydev.nvim",
+        ft = "lua",
+        opts = {
+          library = {
+            { path = "luvit-meta/library", words = { "vim%.uv" } },
+            { path = "snacks.nvim", words = { "Snacks" } },
+            { path = "lazy.nvim", words = { "LazyVim" } },
+          },
+        },
+      },
     },
     opts = {
       diagnostics = {
         underline = true,
         update_in_insert = false,
-        virtual_text = false,
-        -- NOTE: tiny diagnostics should disable below
-        -- virtual_text = {
-        --   spacing = 4,
-        --   source = "if_many",
-        --   prefix = "●",
-        -- },
+        virtual_text = true,
+        virtual_lines = false,
+        float = {
+          border = "rounded",
+          spacing = 4,
+          source = "if_many",
+          prefix = "● ",
+        },
         severity_sort = true,
         signs = {
           text = {
@@ -33,14 +45,14 @@ return {
         },
       },
       inlay_hints = {
-        enabled = true,
-        exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
+        enabled = false,
+        exclude = {},
       },
       codelens = {
         enabled = false,
       },
       document_highlight = {
-        enabled = false, -- use illuminate
+        enabled = false,
       },
       capabilities = {
         workspace = {
@@ -100,59 +112,18 @@ return {
     },
     config = function(_, opts)
       -- setup keymaps
-      lspUtil.on_attach(function(client, buffer)
-        require("utils.lsp-keymaps").on_attach(client, buffer)
-      end)
-
+      lspUtil.set_keymaps()
+      -- setup
       lspUtil.setup()
-      lspUtil.on_dynamic_capability(require("utils.lsp-keymaps").on_attach)
-
-      -- inlay hints
-      if opts.inlay_hints.enabled then
-        lspUtil.on_supports_method("textDocument/inlayHint", function(client, buffer)
-          if
-            vim.api.nvim_buf_is_valid(buffer)
-            and vim.bo[buffer].buftype == ""
-            and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
-          then
-            vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
-          end
-        end)
-      end
-
-      -- code lens
-      if opts.codelens.enabled and vim.lsp.codelens then
-        lspUtil.on_supports_method("textDocument/codeLens", function(client, buffer)
-          vim.lsp.codelens.refresh()
-          vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-            buffer = buffer,
-            callback = vim.lsp.codelens.refresh,
-          })
-        end)
-      end
-
-      if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
-        opts.diagnostics.virtual_text.prefix = vim.fn.has("nvim-0.10.0") == 0 and "●"
-          or function(diagnostic)
-            for d, icon in pairs(icons.diagnostics) do
-              if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-                return icon
-              end
-            end
-          end
-      end
 
       vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
       local servers = opts.servers
-      local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-      local has_blink, blink = pcall(require, "blink.cmp")
       local capabilities = vim.tbl_deep_extend(
         "force",
         {},
         vim.lsp.protocol.make_client_capabilities(),
-        has_cmp and cmp_nvim_lsp.default_capabilities() or {},
-        has_blink and blink.get_lsp_capabilities() or {},
+        require("blink.cmp").get_lsp_capabilities(),
         opts.capabilities or {}
       )
 
@@ -183,7 +154,7 @@ return {
         all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
       end
 
-      local ensure_installed = {} ---@type string[]
+      local ensure_installed = {}
       for server, server_opts in pairs(servers) do
         if server_opts then
           server_opts = server_opts == true and {} or server_opts
@@ -210,16 +181,8 @@ return {
         })
       end
 
-      if lspUtil.is_enabled("denols") and lspUtil.is_enabled("vtsls") then
-        local is_deno = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc")
-        lspUtil.disable("vtsls", is_deno)
-        lspUtil.disable("denols", function(root_dir, config)
-          if not is_deno(root_dir) then
-            config.settings.deno.enable = false
-          end
-          return false
-        end)
-      end
+      -- log
+      vim.lsp.set_log_level("debug")
     end,
   },
 }

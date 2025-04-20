@@ -2,15 +2,13 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.autoformat = true
 
-vim.g.cmp_engine = "blink"
-
 local opt = vim.opt
 
 -- UI/General
 opt.number = true
 opt.relativenumber = true
 opt.ignorecase = true
-opt.cursorline = true
+opt.cursorline = false
 opt.clipboard = "unnamedplus"
 opt.termguicolors = true
 opt.confirm = true
@@ -45,11 +43,6 @@ opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
-opt.wrap = false -- Disable line wrap
+opt.wrap = true -- Disable line wrap
 opt.undolevels = 10000
 opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
-
-opt.foldcolumn = "1" -- '0' is not bad
-opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-opt.foldlevelstart = 99
-opt.foldenable = true

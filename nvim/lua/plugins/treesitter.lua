@@ -70,7 +70,6 @@ return {
         "git_rebase",
         "gitignore",
         "gitattributes",
-        "latex",
         "typst",
       },
     },

@@ -4,7 +4,7 @@ return {
     event = "VeryLazy",
     opts_extend = { "spec" },
     opts = {
-      preset = "classic",
+      preset = "helix",
       defaults = {},
       spec = {
         {
@@ -15,8 +15,17 @@ return {
           { "<leader>c", group = "code" },
           { "<leader>d", group = "debug" },
           { "<leader>g", group = "git" },
-          { "<leader>gh", group = "hunks" },
+          { "<leader>gd", group = "Diffview" },
           { "<leader>s", group = "search" },
+          { "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },
+          {
+            "<leader>w",
+            group = "windows",
+            proxy = "<c-w>",
+            expand = function()
+              return require("which-key.extras").expand.win()
+            end,
+          },
           { "[", group = "prev" },
           { "]", group = "next" },
           { "g", group = "goto" },

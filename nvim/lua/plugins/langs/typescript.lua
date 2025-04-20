@@ -1,7 +1,21 @@
 local lspUtil = require("utils.lsp")
 local util = require("utils.util")
 
+local supported = {
+  "javascript",
+  "javascriptreact",
+  "typescript",
+  "typescriptreact",
+  "vue",
+}
+
 return {
+  {
+    "windwp/nvim-ts-autotag",
+    event = "BufRead",
+    opts = {},
+  },
+
   {
     "vuki656/package-info.nvim",
     dependencies = {
@@ -15,22 +29,33 @@ return {
 
   {
     "williamboman/mason.nvim",
-    opts = { ensure_installed = { "html-lsp", "css-lsp", "prettier", "eslint-lsp" } },
+    opts = { ensure_installed = { "html-lsp", "css-lsp", "prettier", "eslint-lsp", "biome" } },
   },
-  -- correctly setup lspconfig
+  {
+    "mfussenegger/nvim-lint",
+    opts = function(_, opts)
+      opts.linters_by_ft = opts.linters_by_ft or {}
+      for _, ft in ipairs(supported) do
+        opts.linters_by_ft[ft] = { "eslint" }
+      end
+    end,
+  },
   {
     "neovim/nvim-lspconfig",
     opts = {
-      -- make sure mason installs the server
       servers = {
+        tsserver = {
+          enabled = false,
+        },
+        ts_ls = {
+          enabled = false,
+        },
         eslint = {
           settings = {
             workingDirectories = { mode = "auto" },
           },
         },
         vtsls = {
-          -- explicitly add default filetypes, so that we can extend
-          -- them in related extras
           filetypes = {
             "javascript",
             "javascriptreact",
@@ -70,7 +95,7 @@ return {
             {
               "gD",
               function()
-                local params = vim.lsp.util.make_position_params()
+                local params = vim.lsp.util.make_position_params(0, "utf-8")
                 lspUtil.execute({
                   command = "typescript.goToSourceDefinition",
                   arguments = { params.textDocument.uri, params.position },
@@ -121,24 +146,32 @@ return {
         },
       },
       setup = {
-        eslint = function(_, opts)
-          lspUtil.on_attach(function(client, buffer)
+        tsserver = function()
+          return true
+        end,
+        ts_ls = function()
+          return true
+        end,
+        eslint = function(_, _)
+          lspUtil.on_attach(function(client, _)
             if client.name == "eslint" then
-              client.server_capabilities.documentFormattingProvider = true
               vim.api.nvim_create_autocmd("BufWritePre", {
                 group = vim.api.nvim_create_augroup("EslintFixAllCmdGroup", { clear = true }),
                 callback = function()
-                  print("EslintFixAll")
-                  vim.cmd("EslintFixAll")
+                  if vim.fn.exists(":EslintFixAll") > 0 then
+                    print("EslintFixAll")
+                    vim.cmd("EslintFixAll")
+                  end
                 end,
               })
             end
           end)
         end,
         vtsls = function(_, opts)
+          ---@diagnostic disable-next-line: unused-local
           lspUtil.on_attach(function(client, buffer)
+            ---@diagnostic disable-next-line: unused-local
             client.commands["_typescript.moveToFileRefactoring"] = function(command, ctx)
-              ---@type string, string, lsp.Range
               local action, uri, range = unpack(command.arguments)
 
               local function move(newf)
@@ -162,7 +195,6 @@ return {
                   },
                 },
               }, function(_, result)
-                ---@type string[]
                 local files = result.body.files
                 table.insert(files, 1, "Enter new path...")
                 vim.ui.select(files, {
@@ -177,6 +209,7 @@ return {
                       default = vim.fn.fnamemodify(fname, ":h") .. "/",
                       completion = "file",
                     }, function(newf)
+                      ---@diagnostic disable-next-line: redundant-return-value
                       return newf and move(newf)
                     end)
                   elseif f then
@@ -185,7 +218,7 @@ return {
                 end)
               end)
             end
-          end, "vtsls")
+          end)
           -- copy typescript settings to javascript
           opts.settings.javascript =
             vim.tbl_deep_extend("force", {}, opts.settings.typescript, opts.settings.javascript or {})

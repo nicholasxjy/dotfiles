@@ -16,23 +16,13 @@ return {
     },
     config = function(_, opts)
       local default_formatters_by_ft = {
-        css = { "prettier" },
         go = { "goimports", "gofmt", "golines" },
-        html = { "prettier" },
-        javascript = { "prettier" },
-        typescript = { "prettier" },
-        javascriptreact = { "prettier" },
-        typescriptreact = { "prettier" },
-        json = { "prettier" },
         lua = { "stylua" },
-        markdown = { "prettier" },
         nix = { "nixfmt" },
         rust = { "rustfmt" },
-        scss = { "prettier" },
         sh = { "shfmt" },
         templ = { "templ" },
         toml = { "taplo" },
-        yaml = { "prettier" },
       }
 
       opts.formatters_by_ft = vim.tbl_deep_extend("force", default_formatters_by_ft, opts.formatters_by_ft or {})

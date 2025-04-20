@@ -16,8 +16,6 @@ return {
       },
     },
   },
-
-  -- Markdown preview
   {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
@@ -37,14 +35,30 @@ return {
       vim.cmd([[do FileType]])
     end,
   },
+
   {
-    "OXY2DEV/markview.nvim",
-    lazy = false,
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" },
+    opts = {
+      completions = { blink = { enabled = true } },
+    },
+    ft = { "markdown", "norg", "rmd", "org", "codecompanion" },
+    config = function(_, opts)
+      require("render-markdown").setup(opts)
+      Snacks.toggle({
+        name = "Render Markdown",
+        get = function()
+          return require("render-markdown.state").enabled
+        end,
+        set = function(enabled)
+          local m = require("render-markdown")
+          if enabled then
+            m.enable()
+          else
+            m.disable()
+          end
+        end,
+      }):map("<leader>um")
+    end,
   },
-  -- {
-  --   "MeanderingProgrammer/render-markdown.nvim",
-  --   dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" }, -- if you use standalone mini plugins
-  --   opts = {},
-  --   cmd = { "RenderMarkdown" },
-  -- },
 }
