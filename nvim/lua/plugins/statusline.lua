@@ -25,6 +25,7 @@ return {
       },
       lualine_c = {
         { "fancy_cwd", substitute_home = true },
+        { "filename" },
       },
       lualine_x = {
         { "fancy_macro" },

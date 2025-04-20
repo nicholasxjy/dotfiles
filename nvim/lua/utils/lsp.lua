@@ -22,23 +22,48 @@ M.set_keymaps = function()
   end, { desc = "Prev Reference" })
 
   vim.keymap.set("n", "gd", function()
-    require("fzf-lua").lsp_definitions()
+    Snacks.picker.lsp_definitions({
+      focus = "list",
+      layout = {
+        preset = "dropdown",
+      },
+    })
   end, { desc = "Goto Definition" })
 
   vim.keymap.set("n", "gD", function()
-    require("fzf-lua").lsp_declarations()
+    Snacks.picker.lsp_declarations({
+      focus = "list",
+      layout = {
+        preset = "dropdown",
+      },
+    })
   end, { desc = "Goto Declaration" })
 
   vim.keymap.set("n", "gr", function()
-    require("fzf-lua").lsp_references()
+    Snacks.picker.lsp_references({
+      focus = "list",
+      layout = {
+        preset = "dropdown",
+      },
+    })
   end, { desc = "Goto References" })
 
   vim.keymap.set("n", "gi", function()
-    require("fzf-lua").lsp_implementations()
+    Snacks.picker.lsp_implementations({
+      focus = "list",
+      layout = {
+        preset = "dropdown",
+      },
+    })
   end, { desc = "Goto Implementation" })
 
   vim.keymap.set("n", "gy", function()
-    require("fzf-lua").lsp_typedefs()
+    Snacks.picker.lsp_type_definitions({
+      focus = "list",
+      layout = {
+        preset = "dropdown",
+      },
+    })
   end, { desc = "Goto TypeDefs" })
 
   vim.keymap.set("n", "gI", function()
@@ -50,24 +75,38 @@ M.set_keymaps = function()
   end, { desc = "Outgoing Calls" })
 
   vim.keymap.set("n", "<leader>ss", function()
-    require("fzf-lua").lsp_document_symbols()
+    Snacks.picker.lsp_symbols({
+      layout = {
+        preset = "dropdown",
+      },
+    })
   end, { desc = "Document symbols" })
 
   vim.keymap.set("n", "<leader>sS", function()
-    require("fzf-lua").lsp_workspace_symbols()
+    Snacks.picker.lsp_workspace_symbols({
+      layout = {
+        preset = "dropdown",
+      },
+    })
   end, { desc = "Workspace symbols" })
 
   vim.keymap.set("n", "<leader>xx", function()
-    require("fzf-lua").diagnostics_document()
+    Snacks.picker.diagnostics_buffer({
+      focus = "list",
+      layout = { preset = "dropdown" },
+    })
   end, { desc = "Document Diagnostics" })
 
   vim.keymap.set("n", "<leader>xw", function()
-    require("fzf-lua").diagnostics_workspace()
+    Snacks.picker.diagnostics({
+      focus = "list",
+      layout = { preset = "dropdown" },
+    })
   end, { desc = "Workspace Diagnostics" })
 
-  vim.keymap.set("n", "<leader>ca", function()
-    require("fzf-lua").lsp_code_actions()
-  end, { desc = "Code Actions" })
+  -- vim.keymap.set("n", "<leader>ca", function()
+  --   require("fzf-lua").lsp_code_actions()
+  -- end, { desc = "Code Actions" })
 end
 
 M.on_attach = function(fn)

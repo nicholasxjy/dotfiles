@@ -168,7 +168,9 @@ return {
           end)
         end,
         vtsls = function(_, opts)
+          ---@diagnostic disable-next-line: unused-local
           lspUtil.on_attach(function(client, buffer)
+            ---@diagnostic disable-next-line: unused-local
             client.commands["_typescript.moveToFileRefactoring"] = function(command, ctx)
               local action, uri, range = unpack(command.arguments)
 
@@ -207,6 +209,7 @@ return {
                       default = vim.fn.fnamemodify(fname, ":h") .. "/",
                       completion = "file",
                     }, function(newf)
+                      ---@diagnostic disable-next-line: redundant-return-value
                       return newf and move(newf)
                     end)
                   elseif f then

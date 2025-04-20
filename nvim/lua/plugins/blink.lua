@@ -1,10 +1,43 @@
 local icons = require("core.icons")
 return {
   {
-    "saghen/blink.cmp",
+    "xzbdmw/colorful-menu.nvim",
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require("colorful-menu").setup({
+        max_width = 60,
+      })
+    end,
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    event = "BufReadPost",
+    opts = {
+      suggestion = {
+        enabled = false,
+        auto_trigger = true,
+        keymap = {
+          accept = false,
+          next = "<M-]>",
+          prev = "<M-[>",
+        },
+      },
+      filetypes = {
+        markdown = true,
+        help = true,
+      },
+    },
+  },
+  {
+    "Saghen/blink.cmp",
     dependencies = {
       { "L3MON4D3/LuaSnip", version = "v2.*" },
+      "xzbdmw/colorful-menu.nvim",
+      "giuxtaposition/blink-cmp-copilot",
     },
+    -- version = "*",
     build = "cargo build --release",
     event = "InsertEnter",
     opts = function()
@@ -19,7 +52,8 @@ return {
           nerd_font_variant = "mono",
         },
         signature = {
-          enabled = true,
+          -- use noice
+          enabled = false,
           -- window = {
           --   border = {
           --     { "", "DiagnosticHint" },
@@ -71,17 +105,37 @@ return {
             --   "│",
             -- },
             draw = {
-              treesitter = { "lsp" },
+              -- treesitter = { "lsp" },
+              --
+              -- We don't need label_description now because label and label_description are already
+              -- combined together in label by colorful-menu.nvim.
+              columns = { { "kind_icon" }, { "label", gap = 1 } },
+              components = {
+                label = {
+                  text = function(ctx)
+                    return require("colorful-menu").blink_components_text(ctx)
+                  end,
+                  highlight = function(ctx)
+                    return require("colorful-menu").blink_components_highlight(ctx)
+                  end,
+                },
+              },
             },
           },
         },
         cmdline = {
           enabled = true,
-          -- keymap = {
-          --   preset = "enter",
-          -- },
+          keymap = {
+            preset = "enter",
+          },
           completion = {
             ghost_text = { enabled = true },
+            list = {
+              selection = {
+                preselect = false,
+                auto_insert = false,
+              },
+            },
             menu = {
               auto_show = true,
             },
@@ -89,7 +143,15 @@ return {
         },
         snippets = { preset = "luasnip" },
         sources = {
-          default = { "lsp", "path", "snippets", "buffer" },
+          default = { "lsp", "path", "snippets", "buffer", "copilot" },
+          providers = {
+            copilot = {
+              name = "copilot",
+              module = "blink-cmp-copilot",
+              score_offset = 100,
+              async = true,
+            },
+          },
         },
       }
     end,

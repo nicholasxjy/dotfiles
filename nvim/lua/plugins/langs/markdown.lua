@@ -38,19 +38,9 @@ return {
 
   {
     "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" },
     opts = {
-      code = {
-        sign = false,
-        width = "block",
-        right_pad = 1,
-      },
-      heading = {
-        sign = false,
-        icons = {},
-      },
-      checkbox = {
-        enabled = false,
-      },
+      completions = { blink = { enabled = true } },
     },
     ft = { "markdown", "norg", "rmd", "org", "codecompanion" },
     config = function(_, opts)

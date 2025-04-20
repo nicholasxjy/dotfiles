@@ -17,7 +17,6 @@ return {
     config = function(_, opts)
       local default_formatters_by_ft = {
         go = { "goimports", "gofmt", "golines" },
-
         lua = { "stylua" },
         nix = { "nixfmt" },
         rust = { "rustfmt" },

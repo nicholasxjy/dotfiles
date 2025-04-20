@@ -36,7 +36,7 @@ return {
     opts = {
       on_startup = {
         cursorline = true,
-        cursorcolumn = true,
+        cursorcolumn = false,
       },
 
       disable_in_insert = true,
@@ -53,12 +53,14 @@ return {
           "Trouble",
           "snacks_picker_input",
           "snacks_terminal",
-          "mason",
         },
         cursorcolumn = {
           "snacks_picker_input",
+          "snacks_picker_list",
           "snacks_terminal",
           "mason",
+          "lazy",
+          "fzf",
         },
       },
 
@@ -121,7 +123,7 @@ return {
     config = function()
       require("modes").setup({
         colors = {
-          bg = "", -- Optional bg param, defaults to Normal hl group
+          bg = "#1E1F2A",
           copy = "#f1ff5e",
           delete = "#ff6e5e",
           insert = "#5eff6c",
@@ -130,6 +132,7 @@ return {
         set_cursor = true,
         set_cursorline = true,
         set_number = true,
+        set_signcolumn = true,
         ignore_filetypes = { "NvimTree", "TelescopePrompt" },
         line_opacity = 0.15,
       })
@@ -142,13 +145,26 @@ return {
       -- char = "|",
       -- char = "",
       -- char = "┇",
-      -- char = "∶",
+      char = "∶",
       -- char = "∷",
-      char = "║",
+      -- char = "║",
       -- char = "⋮",
       -- char = "",
       -- char = "󰮾",
       virtcolumn = "80",
+    },
+  },
+  {
+    "nvim-zh/colorful-winsep.nvim",
+    config = true,
+    event = { "WinLeave" },
+  },
+  {
+    "nvzone/showkeys",
+    cmd = "ShowkeysToggle",
+    opts = {
+      timeout = 1,
+      maxkeys = 5,
     },
   },
 }
