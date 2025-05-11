@@ -209,7 +209,7 @@ return {
 
   {
     "jay-babu/mason-nvim-dap.nvim",
-    dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-dap" },
+    dependencies = { "mason-org/mason.nvim", "mfussenegger/nvim-dap" },
     cmd = { "DapInstall", "DapUninstall" },
     opts_extend = { "ensure_installed" },
     opts = {

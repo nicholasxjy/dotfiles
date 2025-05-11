@@ -59,12 +59,12 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
-      { "williamboman/mason.nvim" },
+      { "mason-org/mason.nvim" },
     },
     opts = {},
   },
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
         "gopls",
@@ -91,7 +91,7 @@ return {
     "mfussenegger/nvim-dap",
     dependencies = {
       {
-        "williamboman/mason.nvim",
+        "mason-org/mason.nvim",
         opts = { ensure_installed = { "delve" } },
       },
       {
