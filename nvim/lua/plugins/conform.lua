@@ -16,13 +16,23 @@ return {
     },
     config = function(_, opts)
       local default_formatters_by_ft = {
-        go = { "goimports", "gofmt", "golines" },
-        lua = { "stylua" },
-        nix = { "nixfmt" },
-        rust = { "rustfmt" },
         sh = { "shfmt" },
+        ["yaml.docker-compose"] = { "prettier" },
+
+        go = { "goimports", "gofmt" }, -- golines
+
+        lua = { "stylua" },
+
+        nix = { "nixfmt" },
+
+        rust = { "rustfmt" },
+
         templ = { "templ" },
+
         toml = { "taplo" },
+
+        ["markdown"] = { "prettier" },
+        ["markdown.mdx"] = { "prettier" },
       }
 
       opts.formatters_by_ft = vim.tbl_deep_extend("force", default_formatters_by_ft, opts.formatters_by_ft or {})

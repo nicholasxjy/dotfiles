@@ -35,6 +35,7 @@ return {
             diagnostics = true,
             git_status = true,
             ignored = true,
+            hidden = true,
           })
         end,
         desc = "File explorer",
@@ -52,237 +53,6 @@ return {
           Snacks.picker.notifications()
         end,
         desc = "Notifications",
-      },
-      {
-        "<leader>h",
-        function()
-          Snacks.picker.buffers({
-            current = false,
-            sort_lastused = true,
-            focus = "list",
-            layout = { preset = "select" },
-            win = {
-              list = { keys = { ["dd"] = "bufdelete" } },
-            },
-          })
-        end,
-        desc = "Snacks buffer jump",
-      },
-      {
-        "<leader>m",
-        function()
-          Snacks.picker.marks({
-            focus = "list",
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Snacks marks",
-      },
-      {
-        "<leader><space>",
-        function()
-          Snacks.picker.smart({
-            layout = {
-              preset = "dropdown",
-            },
-          })
-        end,
-        desc = "Snacks smart files",
-      },
-      {
-        "<leader>/",
-        function()
-          Snacks.picker.grep({
-            buffers = true,
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Grep buffers",
-      },
-      {
-        "<leader>:",
-        function()
-          Snacks.picker.command_history({
-            focus = "list",
-            layout = { preset = "select" },
-          })
-        end,
-        desc = "Command History",
-      },
-      {
-        "<leader>ff",
-        function()
-          Snacks.picker.files({
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Find files",
-      },
-      {
-        "<leader>fc",
-        function()
-          Snacks.picker.colorschemes({
-            layout = { preset = "top" },
-          })
-        end,
-        desc = "colorschemes",
-      },
-      {
-        "<leader>fr",
-        function()
-          Snacks.picker.recent({
-            layout = { preset = "bottom" },
-          })
-        end,
-        desc = "Recent",
-      },
-
-      {
-        "<leader>fa",
-        function()
-          Snacks.picker.autocmds({
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Autocmds",
-      },
-      {
-        "<leader>fb",
-        function()
-          Snacks.picker.buffers({
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Buffers",
-      },
-      {
-        "<leader>fC",
-        function()
-          Snacks.picker.commands()
-        end,
-        desc = "Commands",
-      },
-      {
-        "<leader>fj",
-        function()
-          Snacks.picker.jumps()
-        end,
-        desc = "Jumps",
-      },
-      {
-        "<leader>fk",
-        function()
-          Snacks.picker.keymaps()
-        end,
-        desc = "Keymaps",
-      },
-      {
-        "<leader>fl",
-        function()
-          Snacks.picker.loclist()
-        end,
-        desc = "Location List",
-      },
-      {
-
-        "<leader>fH",
-        function()
-          Snacks.picker.highlights()
-        end,
-        desc = "Highlights",
-      },
-
-      -- git
-      {
-        "<leader>gf",
-        function()
-          Snacks.picker.git_files({
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Git files",
-      },
-      {
-        "<leader>gc",
-        function()
-          Snacks.picker.git_log()
-        end,
-        desc = "Git commits",
-      },
-      {
-        "<leader>gb",
-        function()
-          Snacks.picker.git_branches({
-            layout = { preset = "top" },
-          })
-        end,
-        desc = "Git branches",
-      },
-      {
-        "<leader>gC",
-        function()
-          Snacks.picker.git_log_file()
-        end,
-        desc = "Git Log file",
-      },
-      {
-        "<leader>gs",
-        function()
-          Snacks.picker.git_status()
-        end,
-        desc = "Git Status",
-      },
-      -- search
-      {
-        "<leader>s/",
-        function()
-          Snacks.picker.search_history({
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Search History",
-      },
-      {
-        "<leader>sg",
-        function()
-          Snacks.picker.grep({
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Grep",
-      },
-      {
-        "<leader>sG",
-        function()
-          Snacks.picker.grep_buffers({
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Grep buffers",
-      },
-      {
-        "<leader>sw",
-        function()
-          Snacks.picker.grep_word({
-            focus = "list",
-            buffers = true,
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Grep word",
-        mode = { "n", "x" },
-      },
-
-      {
-        "<leader>sW",
-        function()
-          Snacks.picker.grep_word({
-            focus = "list",
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Search word all",
-        mode = { "n", "x" },
       },
       -- trouble
       {
@@ -304,16 +74,6 @@ return {
           Snacks.picker.todo_comments()
         end,
         desc = "TODO",
-      },
-      {
-        "<leader>xq",
-        function()
-          Snacks.picker.qflist({
-            focus = "list",
-            layout = { preset = "dropdown" },
-          })
-        end,
-        desc = "Quickfix list",
       },
     },
     opts = {
@@ -373,13 +133,13 @@ return {
         chunk = {
           enabled = true,
           char = {
-            -- corner_top = "┌",
-            -- corner_bottom = "└",
-            corner_top = "╭",
-            corner_bottom = "╰",
+            corner_top = "┌",
+            corner_bottom = "└",
+            -- corner_top = "╭",
+            -- corner_bottom = "╰",
             horizontal = "─",
             vertical = "│",
-            arrow = "",
+            arrow = "󰶻 ", -- 
           },
           only_current = true,
         },

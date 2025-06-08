@@ -1,1 +1,1 @@
-vim.cmd("colorscheme cuddlefish")
+vim.cmd("colorscheme bamboo")

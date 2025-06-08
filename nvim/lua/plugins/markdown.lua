@@ -1,22 +1,5 @@
 return {
   {
-    "stevearc/conform.nvim",
-    opts = {
-      formatters_by_ft = {
-        ["markdown"] = { "prettier" },
-        ["markdown.mdx"] = { "prettier" },
-      },
-    },
-  },
-  {
-    "neovim/nvim-lspconfig",
-    opts = {
-      servers = {
-        marksman = {},
-      },
-    },
-  },
-  {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     build = function()

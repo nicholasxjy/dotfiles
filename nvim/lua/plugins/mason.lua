@@ -1,44 +1,90 @@
 return {
-  "mason-org/mason.nvim",
-  cmd = "Mason",
-  keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
-  build = ":MasonUpdate",
-  opts_extend = { "ensure_installed" },
-  opts = {
-    ensure_installed = {
-      "stylua",
-      "shfmt",
-      "html-lsp",
-      "eslint-lsp",
-      "prettier",
-      "biome",
-      "css-lsp",
-      "rust-analyzer",
-      "jdtls",
-      "codelldb",
-      "lemminx",
+  {
+    "mason-org/mason.nvim",
+    cmd = {
+      "Mason",
+      "MasonInstall",
+      "MasonUninstall",
+      "MasonUninstallAll",
+      "MasonLog",
+    },
+    build = ":MasonUpdate",
+    keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+    config = function()
+      require("mason").setup({
+        ui = {
+          icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗",
+          },
+        },
+        max_concurrent_installers = 6,
+      })
+    end,
+  },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    event = "BufReadPost",
+    dependencies = {
+      "mason-org/mason.nvim",
+      "mason-org/mason-lspconfig.nvim",
+      "neovim/nvim-lspconfig",
+      "jay-babu/mason-null-ls.nvim",
+      "mfussenegger/nvim-dap",
+      "jay-babu/mason-nvim-dap.nvim",
+    },
+    opts = {
+      auto_update = true,
+      ensure_installed = {
+        "lua-language-server",
+        "stylua",
+
+        "bash-language-server",
+        "shfmt",
+        "shellcheck",
+
+        "hadolint",
+
+        "tailwindcss-language-server",
+        "html-lsp",
+        "css-lsp",
+        "eslint-lsp",
+        "prettier",
+        "biome",
+        "vtsls",
+        "js-debug-adapter",
+
+        "gopls",
+        "goimports",
+        "golines",
+        "golangci-lint-langserver",
+        "delve",
+        "gomodifytags",
+        "gotests",
+        "iferr",
+        "impl",
+
+        "rust-analyzer",
+
+        "jdtls",
+        "java-debug-adapter",
+        "java-test",
+
+        "codelldb",
+
+        "pyright",
+
+        "taplo",
+        "lemminx",
+
+        "ruff",
+        "ruff-lsp",
+      },
     },
   },
-  config = function(_, opts)
-    require("mason").setup(opts)
-    local mr = require("mason-registry")
-    mr:on("package:install:success", function()
-      vim.defer_fn(function()
-        -- trigger FileType event to possibly load this newly installed LSP server
-        require("lazy.core.handler.event").trigger({
-          event = "FileType",
-          buf = vim.api.nvim_get_current_buf(),
-        })
-      end, 100)
-    end)
-
-    mr.refresh(function()
-      for _, tool in ipairs(opts.ensure_installed) do
-        local p = mr.get_package(tool)
-        if not p:is_installed() then
-          p:install()
-        end
-      end
-    end)
-  end,
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    cmd = { "DapInstall", "DapUninstall" },
+  },
 }

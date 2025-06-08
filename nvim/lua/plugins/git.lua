@@ -24,29 +24,31 @@ return {
     },
   },
   {
-    "sindrets/diffview.nvim",
-    event = { "VeryLazy" },
-    cmd = {
-      "DiffviewOpen",
-      "DiffviewFileHistory",
-      "DiffviewClose",
-    },
+    "axkirillov/unified.nvim",
+    event = "VeryLazy",
+    cmd = { "Unified" },
     keys = {
-      { "<leader>gdo", "<cmd>DiffviewOpen<cr>", desc = "Diffview Open" },
-      { "<leader>gdc", "<cmd>DiffviewClose<cr>", desc = "Diffview Close" },
-      { "<leader>gdh", "<cmd>DiffviewFileHistory<cr>", desc = "Diffview File History" },
+      { "<leader>gd", "<cmd>Unified<cr>", desc = "Git diff" },
     },
-    opts = {
-      enhanced_diff_hl = true,
-      view = {
-        default = { winbar_info = true },
-        file_history = { winbar_info = true },
-      },
-      hooks = {
-        diff_buf_read = function(bufnr)
-          vim.b[bufnr].view_activated = false
-        end,
-      },
-    },
+    config = function()
+      require("unified").setup({
+        signs = {
+          add = "│",
+          delete = "│",
+          change = "│",
+        },
+        highlights = {
+          add = "DiffAdd",
+          delete = "DiffDelete",
+          change = "DiffChange",
+        },
+        line_symbols = {
+          add = "+",
+          delete = "-",
+          change = "~",
+        },
+        auto_refresh = true, -- Whether to automatically refresh diff when buffer changes
+      })
+    end,
   },
 }

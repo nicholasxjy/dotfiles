@@ -1,14 +1,6 @@
 local icons = require("core.icons")
+
 return {
-  {
-    "xzbdmw/colorful-menu.nvim",
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require("colorful-menu").setup({
-        max_width = 60,
-      })
-    end,
-  },
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
@@ -34,10 +26,8 @@ return {
     "Saghen/blink.cmp",
     dependencies = {
       { "L3MON4D3/LuaSnip", version = "v2.*" },
-      "xzbdmw/colorful-menu.nvim",
       "giuxtaposition/blink-cmp-copilot",
     },
-    -- version = "*",
     build = "cargo build --release",
     event = "InsertEnter",
     opts = function()
@@ -52,20 +42,7 @@ return {
           nerd_font_variant = "mono",
         },
         signature = {
-          -- use noice
-          enabled = false,
-          -- window = {
-          --   border = {
-          --     { "", "DiagnosticHint" },
-          --     "─",
-          --     "╮",
-          --     "│",
-          --     "╯",
-          --     "─",
-          --     "╰",
-          --     "│",
-          --   },
-          -- },
+          enabled = true,
         },
         completion = {
           ghost_text = {
@@ -73,18 +50,6 @@ return {
           },
           documentation = {
             auto_show = true,
-            -- window = {
-            --   border = {
-            --     { "", "DiagnosticHint" },
-            --     "─",
-            --     "╮",
-            --     "│",
-            --     "╯",
-            --     "─",
-            --     "╰",
-            --     "│",
-            --   },
-            -- },
           },
           accept = {
             auto_brackets = {
@@ -94,32 +59,8 @@ return {
           },
           menu = {
             scrollbar = false,
-            -- border = {
-            --   { "󱐋", "WarningMsg" },
-            --   "─",
-            --   "╮",
-            --   "│",
-            --   "╯",
-            --   "─",
-            --   "╰",
-            --   "│",
-            -- },
             draw = {
-              -- treesitter = { "lsp" },
-              --
-              -- We don't need label_description now because label and label_description are already
-              -- combined together in label by colorful-menu.nvim.
-              columns = { { "kind_icon" }, { "label", gap = 1 } },
-              components = {
-                label = {
-                  text = function(ctx)
-                    return require("colorful-menu").blink_components_text(ctx)
-                  end,
-                  highlight = function(ctx)
-                    return require("colorful-menu").blink_components_highlight(ctx)
-                  end,
-                },
-              },
+              treesitter = { "lsp" },
             },
           },
         },

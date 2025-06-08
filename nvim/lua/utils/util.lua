@@ -3,6 +3,7 @@ local LazyUtil = require("lazy.core.util")
 local M = {}
 
 function M.is_win()
+  ---@diagnostic disable-next-line: undefined-field
   return vim.uv.os_uname().sysname:find("Windows") ~= nil
 end
 
@@ -44,6 +45,7 @@ function M.get_pkg_path(pkg, path, opts)
   opts.warn = opts.warn == nil and true or opts.warn
   path = path or ""
   local ret = root .. "/packages/" .. pkg .. "/" .. path
+  ---@diagnostic disable-next-line: undefined-field
   if opts.warn and not vim.loop.fs_stat(ret) and not require("lazy.core.config").headless() then
     M.warn(
       ("Mason package path not found for **%s**:\n- `%s`\nYou may need to force update the package."):format(pkg, path)
@@ -136,5 +138,13 @@ local function file_exists_in_root(filename)
 end
 
 M.file_exists_in_root = file_exists_in_root
+
+function M.get_raw_config(server)
+  local ok, ret = pcall(require, "lspconfig.configs." .. server)
+  if ok then
+    return ret
+  end
+  return require("lspconfig.server_configurations." .. server)
+end
 
 return M

@@ -42,39 +42,70 @@ return {
       },
       ensure_installed = {
         "bash",
-        "c",
-        "diff",
-        "html",
-        "javascript",
-        "jsdoc",
-        "json",
-        "jsonc",
-        "lua",
-        "luadoc",
-        "luap",
-        "markdown",
-        "markdown_inline",
-        "printf",
-        "python",
-        "query",
-        "regex",
-        "toml",
-        "tsx",
-        "typescript",
-        "vim",
-        "vimdoc",
-        "xml",
-        "yaml",
+
+        "dockerfile",
+
+        "fish",
+
         "git_config",
         "gitcommit",
         "git_rebase",
         "gitignore",
         "gitattributes",
+
+        "go",
+        "gomod",
+        "gowork",
+        "gosum",
+
+        "c",
+        "diff",
+
+        "html",
+        "css",
+
+        "javascript",
+        "jsdoc",
+        "tsx",
+        "typescript",
+
+        "json",
+        "jsonc",
+        "json5",
+
+        "lua",
+        "luadoc",
+        "luap",
+
+        "markdown",
+        "markdown_inline",
+
+        "printf",
+
+        "python",
+        "ninja",
+        "rst",
+
+        "query",
+        "regex",
+        "toml",
+
+        "vim",
+        "vimdoc",
+        "xml",
+        "yaml",
         "typst",
+
+        "rust",
+        "ron",
+
+        "java",
       },
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+      vim.treesitter.language.register("scss", "less")
+      vim.treesitter.language.register("scss", "postcss")
     end,
   },
 }

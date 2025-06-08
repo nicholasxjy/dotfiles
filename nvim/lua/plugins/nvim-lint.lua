@@ -5,7 +5,15 @@ return {
     config = function(_, opts)
       local lint = require("lint")
 
-      local default_linters_by_ft = {}
+      local default_linters_by_ft = {
+        sh = { "shellcheck" },
+        dockerfile = { "hadolint" },
+
+        javascript = { "eslint" },
+        typescript = { "eslint" },
+        typescriptreact = { "eslint" },
+        javascriptreact = { "eslint" },
+      }
 
       lint.linters_by_ft = vim.tbl_deep_extend("force", default_linters_by_ft, opts.linters_by_ft or {})
       -- Create autocommand which carries out the actual linting

@@ -133,7 +133,7 @@ return {
         set_cursorline = true,
         set_number = true,
         set_signcolumn = true,
-        ignore_filetypes = { "NvimTree", "TelescopePrompt" },
+        ignore = { "NvimTree", "TelescopePrompt" },
         line_opacity = 0.15,
       })
     end,
@@ -166,5 +166,15 @@ return {
       timeout = 1,
       maxkeys = 5,
     },
+  },
+  {
+    "goldos24/rainbow-variables-nvim",
+    event = "VeryLazy",
+    config = function()
+      require("rainbow-variables-nvim").start_with_config({
+        reduce_color_collisions = true,
+        semantic_background_colors = "multilevel",
+      })
+    end,
   },
 }

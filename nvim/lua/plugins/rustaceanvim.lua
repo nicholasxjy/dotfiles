@@ -1,5 +1,4 @@
 return {
-  -- LSP for Cargo.toml
   {
     "Saecki/crates.nvim",
     event = { "BufRead Cargo.toml" },
@@ -17,19 +16,6 @@ return {
       },
     },
   },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = { ensure_installed = { "rust", "ron" } },
-  },
-
-  {
-    "mason-org/mason.nvim",
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, { "codelldb" })
-    end,
-  },
-
   {
     "mrcjkb/rustaceanvim",
     version = "^6",
@@ -83,15 +69,20 @@ return {
       },
     },
     config = function(_, opts)
-      local package_path = require("mason-registry").get_package("codelldb"):get_install_path()
-      local codelldb = package_path .. "/extension/adapter/codelldb"
-      local library_path = package_path .. "/extension/lldb/lib/liblldb.dylib"
-      local uname = io.popen("uname"):read("*l")
-      if uname == "Linux" then
-        library_path = package_path .. "/extension/lldb/lib/liblldb.so"
+      local codelldb_path = vim.fn.exepath("codelldb")
+      ---@diagnostic disable-next-line: undefined-field
+      local this_os = vim.uv.os_uname().sysname
+
+      local liblldb_path = vim.fn.expand("$HOME/.local/share/nvim/mason/share/lldb")
+      -- The path in windows is different
+      if this_os:find("Windows") then
+        liblldb_path = liblldb_path .. "\\bin\\lldb.dll"
+      else
+        -- The liblldb extension is .so for linux and .dylib for macOS
+        liblldb_path = liblldb_path .. "/lib/liblldb" .. (this_os == "Linux" and ".so" or ".dylib")
       end
       opts.dap = {
-        adapter = require("rustaceanvim.config").get_codelldb_adapter(codelldb, library_path),
+        adapter = require("rustaceanvim.config").get_codelldb_adapter(codelldb_path, liblldb_path),
       }
       vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, opts or {})
       if vim.fn.executable("rust-analyzer") == 0 then
@@ -101,22 +92,5 @@ return {
         )
       end
     end,
-  },
-  -- Correctly setup lspconfig for Rust 🚀
-  {
-    "neovim/nvim-lspconfig",
-    opts = {
-      servers = {
-        rust_analyzer = { enabled = false },
-      },
-    },
-  },
-  {
-    "nvim-neotest/neotest",
-    opts = {
-      adapters = {
-        ["rustaceanvim.neotest"] = {},
-      },
-    },
   },
 }
