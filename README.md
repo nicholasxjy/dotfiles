@@ -1,17 +1,16 @@
 # dotfiles
 
-My dotfiles
+My DEV Config
 
 ## tmux
 
-[catppuccin](https://github.com/catppuccin/tmux)
+## ghostty
 
 ## neovim
 
-![s1](./screenshots/1.png)
 
-![s2](./screenshots/2.png)
+![s1](./assets/1.png)
 
-![s3](./screenshots/3.png)
-
-![s4](./screenshots/4.png)
+![s2](./assets/2.png)
+![s3](./assets/3.png)
+![s4](./assets/4.png)

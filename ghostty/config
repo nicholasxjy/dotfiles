@@ -1,23 +1,23 @@
 
-theme = AdventureTime
-
+theme = glacier
 shell-integration = zsh
+shell-integration-features = no-cursor 
 
-font-family = "TX-02"
-font-family-bold = "TX-02"
-font-family-italic = "MonoLisa"
-font-family-bold-italic = "MonoLisa"
+font-family = "Monolisa"
+font-family-bold = "Monolisa"
+font-family-italic = "Monolisa"
+font-family-bold-italic = "Monolisa"
 
 font-style = Regular
-font-style-bold = ExtraBold
+font-style-bold = Bold
 font-style-italic = Regular Italic
-font-style-bold-italic = Black Italic
+font-style-bold-italic = Bold Italic
 
-font-size = 21
+font-size = 24
 
 font-feature = calt
+font-feature = liga
 font-feature = ss02
-font-feature = ss04
 font-feature = ss07
 font-feature = ss08
 font-feature = ss10
@@ -26,25 +26,30 @@ font-feature = ss12
 font-feature = ss17
 font-feature = ss18
 
-# adjust-cell-height = -6%
+
+adjust-cell-height = -6%
 
 window-padding-y = 0,0
 window-padding-balance = true
-cursor-style = underline
+# cursor-style = underline
 cursor-style-blink = true
+cursor-color = #B6F500
+cursor-opacity = 0.85
 
-background-opacity = 0.9
-background-blur-radius = 20
+background-opacity = 0.96
+background-blur-radius = 30
 link-url = true
 macos-titlebar-style = hidden
 copy-on-select = true
 macos-option-as-alt = true
 auto-update = check
+auto-update-channel = tip
 
-cursor-invert-fg-bg = true
-shell-integration-features = no-cursor 
+cursor-invert-fg-bg = false
 mouse-hide-while-typing = true
 
 keybind = super+i=inspector:toggle
 keybind = super+r=reload_config
 
+custom-shader = shaders/cursor_blaze_no_trail.glsl
+custom-shader = shaders/cursor_smear.glsl
