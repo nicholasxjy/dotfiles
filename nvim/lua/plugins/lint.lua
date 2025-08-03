@@ -18,17 +18,22 @@ return {
       lint.linters_by_ft = vim.tbl_deep_extend("force", default_linters_by_ft, opts.linters_by_ft or {})
       -- Create autocommand which carries out the actual linting
       -- on the specified events.
-      local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+      local function debounce(ms, fn)
+        local timer = assert(vim.uv.new_timer())
+        return function(...)
+          local argv = { ... }
+          timer:start(ms, 0, function()
+            timer:stop()
+            vim.schedule_wrap(fn)(unpack(argv))
+          end)
+        end
+      end
+
       vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
-        group = lint_augroup,
-        callback = function()
-          -- Only run the linter in buffers that you can modify in order to
-          -- avoid superfluous noise, notably within the handy LSP pop-ups that
-          -- describe the hovered symbol using Markdown.
-          if vim.opt_local.modifiable:get() then
-            lint.try_lint()
-          end
-        end,
+        group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
+        callback = debounce(100, function()
+          require("lint").try_lint()
+        end),
       })
 
       vim.keymap.set("n", "<leader>cL", function()

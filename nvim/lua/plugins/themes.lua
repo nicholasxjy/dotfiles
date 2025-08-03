@@ -1,43 +1,5 @@
 return {
   {
-    "ramojus/mellifluous.nvim",
-    opts = {
-      colorset = "mellifluous", -- mellifluous alduin mountain tender kanagawa_dragon
-      dim_inactive = false,
-      styles = {
-        main_keywords = { italic = true },
-        other_keywords = { italic = false },
-        types = { bold = true, italic = true },
-        operators = { bold = true },
-        strings = {},
-        functions = {},
-        constants = {},
-        comments = { italic = true },
-        markup = {
-          headings = { bold = true },
-        },
-        folds = {},
-      },
-      flat_background = {
-        line_numbers = true,
-        floating_windows = false,
-        file_tree = true,
-        cursor_line_number = true,
-      },
-      highlight_overrides = {
-        dark = function(hl, colors)
-          -- hl.set("@type", { fg = colors.types:darkened(10), bold = true })
-          hl.set("@type.builtin", { fg = "#C34043", bold = false, italic = true })
-          hl.set("@lsp.type.interface", { fg = "#A06A2C", bold = true })
-          hl.set("@lsp.type.namespace", { fg = colors.red:darkened(10), bold = false })
-          hl.set("@lsp.type.enum", { fg = "#7AA89F", bold = true })
-          hl.set("@keyword.import", { fg = "#A3D4D5", italic = true })
-          hl.set("@keyword.export", { fg = "#A3D4D5", italic = true })
-        end,
-      },
-    },
-  },
-  {
     "ribru17/bamboo.nvim",
     lazy = false,
     config = function()
@@ -52,37 +14,49 @@ return {
         cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
         code_style = {
           comments = { italic = true },
-          conditionals = { italic = true },
-          keywords = { italic = false },
+          conditionals = { italic = true, bold = true },
+          keywords = { italic = false, bold = true },
           functions = {},
           namespaces = { italic = false },
-          parameters = { italic = true },
+          parameters = { italic = false },
           strings = {},
           variables = {},
         },
 
         lualine = {
-          transparent = true,
+          transparent = false,
         },
 
-        colors = {},
+        colors = {
+          bg0 = "#222236",
+          bg1 = "#262640",
+          bg_d = "#041F24",
+        },
         highlights = {
           NormalFloat = { fg = "$fg", bg = "$bg1" },
           FloatBorder = { fg = "$bg1", bg = "$bg1" },
 
+          PmenuSel = { bg = "$bg_d" },
           Comment = { fg = "#4f5172", italic = true },
-          LspInlayHint = { fg = "#363a4f", bg = "NONE" },
-          ["@type"] = { fg = "$yellow", fmt = "bold,italic" },
-          ["@keyword.import"] = { fg = "#a3336f", fmt = "italic" },
-          ["@keyword.export"] = { fg = "#a3336f", fmt = "italic" },
+          LspInlayHint = { fg = "#35374B", bg = "NONE" }, --"#1F2544" --"#35374B" -- #503C3C
+
+          ["@comment"] = { fg = "#4f5172", fmt = "italic" },
+          ["@type"] = { fg = "$yellow", fmt = "bold" },
+          ["@attribute"] = { fg = "#94aef9" },
+          ["@keyword.import"] = { fg = "#a3336f", fmt = "italic,bold" },
+          ["@keyword.export"] = { fg = "#a3336f", fmt = "italic,bold" },
           ["@keyword.return"] = { fg = "#C65E53", fmt = "italic,bold" },
           ["@keyword.coroutine"] = { fg = "#BB5D7D", fmt = "italic,bold" },
+          ["@keyword.modifier"] = { fg = "#9486e4", fmt = "italic" },
+          ["@lsp.type.modifier"] = { fg = "#9486e4", fmt = "italic" },
 
           ["@type.builtin"] = { fg = "#c45a99" },
           ["@lsp.type.enum"] = { fg = "#7AA89F" },
+          ["@lsp.typemod.enum"] = { fg = "#7AA89F" },
           ["@lsp.type.enumMember"] = { fg = "#597BC0" },
-          ["@lsp.type.interface"] = { fg = "#A06A2C", fmt = "bold,italic" },
-          ["@lsp.type.namespace"] = { fg = "#85c3f9" },
+          ["@lsp.typemod.enumMember"] = { fg = "#597BC0" },
+          ["@lsp.type.interface"] = { fg = "#A06A2C", fmt = "bold" },
+          ["@lsp.type.namespace"] = { fg = "#88a4f7" },
         },
 
         diagnostics = {
@@ -97,16 +71,15 @@ return {
     "oonamo/ef-themes.nvim",
     opts = {
       light = "ef-spring", -- Ef-theme to select for light backgrounds
-      dark = "ef-bio", -- Ef-theme to select for dark backgrounds
+      dark = "ef-symbiosis", -- Ef-theme to select for dark backgrounds
       transparent = false,
       styles = {
         comments = { italic = true },
-        keywords = { bold = true, italic = true },
+        keywords = { bold = false, italic = true },
         functions = {},
         variables = {},
         classes = { bold = true },
-        types = { bold = true },
-
+        types = { bold = true, italic = false },
         diagnostic = "full", -- Can be "full"
         pickers = "borderless", -- Can be "borderless"
       },
@@ -122,32 +95,96 @@ return {
         render_markdown = true,
       },
       on_colors = function(colors, name)
-        colors.bg_main = "#12121f"
-        colors.bg_dim = "#1d1d2f"
+        colors.bg_main = "#0d1b2a"
+        colors.bg_dim = "#12121f"
         colors.bg_active = "#222236"
         colors.bg_inactive = "#262640"
-        colors.fg_main = "#B5C0D0"
+        colors.fg_main = "#d4d7ff"
       end,
       on_highlights = function(highlights, colors, name)
-        return {
+        local kinds = {
+          Array = "fg_dim",
+          Boolean = "constant",
+          Class = "type",
+          Color = "string",
+          Constant = "constant",
+          Constructor = "magenta",
+          Enum = "type",
+          EnumMember = "type",
+          Event = "constant",
+          Field = "accent_2",
+          File = "fg_main",
+          Folder = "accent_0",
+          Function = "fnname",
+          Interface = "accent_1",
+          Key = "accent_2",
+          Keyword = "keyword",
+          Method = "preprocessor",
+          Module = "preprocessor",
+          Namespace = "preprocessor",
+          Null = "builtin",
+          Number = "constant",
+          Object = "constant",
+          Operator = "fg_dim",
+          Package = "preprocessor",
+          Property = "green_cool",
+          Reference = "link",
+          Snippet = "fg_alt",
+          String = "string",
+          Struct = "type",
+          Unit = "type",
+          Text = "fg_main",
+          TypeParameter = "type",
+          Variable = "variable",
+          Value = "string",
+        }
+        local custom_hls = {
           Comment = { fg = "#4f5172", italic = true },
-          LspInlayHint = { fg = "#363a4f", bg = "NONE" },
+          LspInlayHint = { fg = "#34392D", bg = "NONE" }, --"#1F2544" --"#35374B" -- #503C3C
           ["@keyword.import"] = { fg = "#a3336f", italic = true, bold = true },
           ["@keyword.export"] = { fg = "#a3336f", italic = true, bold = true },
           ["@keyword.return"] = { fg = "#C65E53", italic = true, bold = true },
           ["@keyword.coroutine"] = { fg = "#BB5D7D", italic = true, bold = true },
           ["@keyword.modifier"] = { fg = "#85c3f9", bold = true, italic = false },
 
+          ["@punctuation.delimiter"] = { fg = colors.fg_dim, italic = false },
+
           ["@type.builtin"] = { fg = "#c45a99" },
           ["@lsp.type.enum"] = { fg = "#7AA89F" },
           ["@lsp.type.enumMember"] = { fg = "#597BC0" },
           ["@lsp.type.modifier"] = { fg = "#9486e4", bold = true, italic = false },
-          ["@lsp.type.interface"] = { fg = "#A06A2C", bold = true, italic = false },
+          ["@lsp.type.interface"] = { fg = "#A06A2C", bold = true, italic = true },
         }
+        -- add navic support
+        for k, v in pairs(kinds) do
+          custom_hls[string.format("NavicIcons%s", k)] = { fg = colors[v] }
+        end
+        custom_hls["BlinkPairsRed"] = { fg = colors.rainbow_1 }
+        custom_hls["BlinkPairsOrange"] = { fg = colors.rainbow_2 }
+        custom_hls["BlinkPairsYellow"] = { fg = colors.rainbow_3 }
+        custom_hls["BlinkPairsGreen"] = { fg = colors.rainbow_4 }
+        custom_hls["BlinkPairsCyan"] = { fg = colors.rainbow_5 }
+        custom_hls["BlinkPairsBlue"] = { fg = colors.rainbow_6 }
+        custom_hls["BlinkPairsViolet"] = { fg = colors.rainbow_7 }
+
+        return custom_hls
       end,
     },
   },
 }
+
+-- -- Color Definition
+-- local forest = hsl("#34392D")
+-- local maple = hsl("#F4D2AE")
+-- local paduak = hsl("#FF9653")
+-- local walnut = hsl("#CC967B")
+-- local white_oak = hsl("#B5955E")
+-- local dark_walnut = hsl("#685742")
+-- local lush_green = hsl("#6C9861")
+-- local golden_oak = hsl("#c9a554")
+--
+-- local olive = hsl("#97976D")
+--
 -- bg1 = "#12121f",
 -- bg2 = "#171728",
 -- bg3 = "#1d1d2f",
@@ -211,3 +248,4 @@ return {
 -- bg2 = '#383b35',
 -- bg3 = '#3a3d37',
 -- bg_d = '#1c1e1b',
+--

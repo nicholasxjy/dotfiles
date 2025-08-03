@@ -68,7 +68,6 @@ return {
       "tailwindcss",
       "vtsls",
       "vuels",
-      "emmet_ls",
       "emmet_language_server",
 
       "gopls",
@@ -100,18 +99,20 @@ return {
         vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
         vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
 
-        -- vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+        vim.keymap.set({ "n", "v", "x" }, "<leader>ca", function()
+          require("tiny-code-action").code_action()
+        end, { desc = "Code Action" })
         --
         vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })
         vim.keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, { desc = "Codelens Refresh" })
         vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
         vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
-        vim.keymap.set({ "n", "v" }, "<leader>cf", function()
-          vim.lsp.buf.format({
-            async = true,
-            range = { ["start"] = vim.api.nvim_buf_get_mark(0, "<"), ["end"] = vim.api.nvim_buf_get_mark(0, ">") },
-          })
-        end, { desc = "Lsp format", silent = true, remap = false })
+        -- vim.keymap.set({ "n", "v" }, "<leader>cf", function()
+        --   vim.lsp.buf.format({
+        --     async = true,
+        --     range = { ["start"] = vim.api.nvim_buf_get_mark(0, "<"), ["end"] = vim.api.nvim_buf_get_mark(0, ">") },
+        --   })
+        -- end, { desc = "Lsp format", silent = true, remap = false })
         -- Diagnostic keymaps
         local diagnostic_goto = function(count, severity)
           local opts = { count = count, severity = severity and vim.diagnostic.severity[severity] or nil }
@@ -128,53 +129,46 @@ return {
         vim.keymap.set("n", "]w", diagnostic_goto(1, "WARN"), { desc = "Next warning" })
         vim.keymap.set("n", "[w", diagnostic_goto(-1, "WARN"), { desc = "Prev warning" })
 
-        vim.keymap.set("n", "gd", Snacks.picker.lsp_definitions, { desc = "Goto Definition" })
-        vim.keymap.set("n", "gD", Snacks.picker.lsp_declarations, { desc = "Goto Declaration" })
-        vim.keymap.set("n", "gr", Snacks.picker.lsp_references, { desc = "Goto References" })
-        vim.keymap.set("n", "gi", Snacks.picker.lsp_implementations, { desc = "Goto Implementation" })
-        vim.keymap.set("n", "gy", Snacks.picker.lsp_type_definitions, { desc = "Goto TypeDefs" })
+        vim.keymap.set("n", "gd", require("fzf-lua").lsp_definitions, { desc = "Goto Definition" })
+        vim.keymap.set("n", "gD", require("fzf-lua").lsp_declarations, { desc = "Goto Declaration" })
+        vim.keymap.set("n", "gr", require("fzf-lua").lsp_references, { desc = "Goto References" })
+        vim.keymap.set("n", "gi", require("fzf-lua").lsp_implementations, { desc = "Goto Implementation" })
+        vim.keymap.set("n", "gy", require("fzf-lua").lsp_typedefs, { desc = "Goto TypeDefs" })
+        vim.keymap.set("n", "gy", require("fzf-lua").lsp_typedefs, { desc = "Goto TypeDefs" })
 
         vim.keymap.set("n", "gI", function() require("fzf-lua").lsp_incoming_calls() end, { desc = "Incoming Calls" })
         vim.keymap.set("n", "gO", function() require("fzf-lua").lsp_outgoing_calls() end, { desc = "Outgoing Calls" })
 
-        vim.keymap.set("n", "<leader>ss", Snacks.picker.lsp_symbols, { desc = "Document symbols" })
-        vim.keymap.set("n", "<leader>sS", Snacks.picker.lsp_workspace_symbols, { desc = "Workspace symbols" })
+        vim.keymap.set("n", "<leader>sf", function() require("fzf-lua").lsp_finder() end,{ desc = "All LSP locations, combined view" })
+        vim.keymap.set("n", "<leader>ss", function() require("fzf-lua").lsp_document_symbols() end,{ desc = "Document symbols" })
+        vim.keymap.set("n", "<leader>sS", function() require("fzf-lua").lsp_live_workspace_symbols() end, { desc = "Workspace symbols" })
 
         vim.keymap.set("n", "<leader>xx", function() require("fzf-lua").diagnostics_document() end, { desc = "Document Diagnostics" })
         vim.keymap.set("n", "<leader>xw", function() require("fzf-lua").diagnostics_workspace() end, { desc = "Workspace Diagnostics" })
+        --stylua: ignore end
+        --
+        local has = function(method, bufnr)
+          return client and client:supports_method(method, bufnr)
+        end
 
-        vim.keymap.set("n", "<leader>ca", function()
-          require("fzf-lua").lsp_code_actions({ winopts = { height = 0.33, width = 0.33, relative = "cursor" } })
-        end, { desc = "Code Actions" })
-
-        if client then
-          if client:supports_method("textDocument/inlayHint") then
-            vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
-          end
-
-          -- if client:supports_method("textDocument/codeLens") then
-          --   vim.lsp.codelens.refresh()
-          --   -- vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-          --   --   buffer = buffer,
-          --   --   callback = vim.lsp.codelens.refresh,
-          --   -- })
-          -- end
-          --
-          if client:supports_method("textDocument/documentColor") then
-            vim.lsp.document_color.enable(true, buffer)
-          end
-          if client.name == "eslint" then
-            vim.api.nvim_create_autocmd("BufWritePre", {
-              buffer = buffer,
-              group = vim.api.nvim_create_augroup("eslintFix", { clear = true }),
-              callback = function()
-                if vim.fn.exists(":LspEslintFixAll") > 0 then
-                  print("EslintFixAll")
-                  vim.cmd("LspEslintFixAll")
-                end
-              end,
-            })
-          end
+        if has("textDocument/inlayHint") then
+          vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+        end
+        --
+        if has("textDocument/documentColor") then
+          vim.lsp.document_color.enable(true, buffer, { style = "virtual" })
+        end
+        if client and client.name == "eslint" then
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = buffer,
+            group = vim.api.nvim_create_augroup("eslintFix", { clear = true }),
+            callback = function()
+              if vim.fn.exists(":LspEslintFixAll") > 0 then
+                print("EslintFixAll")
+                vim.cmd("LspEslintFixAll")
+              end
+            end,
+          })
         end
       end,
     })

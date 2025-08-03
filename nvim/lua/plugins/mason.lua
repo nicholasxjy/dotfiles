@@ -57,7 +57,6 @@ return {
         "biome",
         "vtsls",
         "js-debug-adapter",
-        "emmet-ls",
         "emmet-language-server",
 
         "gopls",

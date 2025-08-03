@@ -1,45 +1,11 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    version = false,
-    dependencies = {
-      { "nvim-treesitter/nvim-treesitter-textobjects", lazy = true },
-    },
+    lazy = false,
+    branch = "main",
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     opts_extend = { "ensure_installed" },
     opts = {
-      highlight = { enable = true },
-      indent = { enable = true },
-      incremental_selection = { enable = true },
-      textobjects = {
-        select = {
-          enable = false,
-          -- lookahead = true,
-          -- keymaps = {
-          --   ["ak"] = { query = "@block.outer", desc = "around block" },
-          --   ["ik"] = { query = "@block.inner", desc = "inside block" },
-          --   ["ac"] = { query = "@class.outer", desc = "around class" },
-          --   ["ic"] = { query = "@class.inner", desc = "inside class" },
-          --   ["a?"] = { query = "@conditional.outer", desc = "around conditional" },
-          --   ["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
-          --   ["af"] = { query = "@function.outer", desc = "around function " },
-          --   ["if"] = { query = "@function.inner", desc = "inside function " },
-          --   ["ao"] = { query = "@loop.outer", desc = "around loop" },
-          --   ["io"] = { query = "@loop.inner", desc = "inside loop" },
-          --   ["aa"] = { query = "@parameter.outer", desc = "around argument" },
-          --   ["ia"] = { query = "@parameter.inner", desc = "inside argument" },
-          -- },
-        },
-        move = {
-          enable = false,
-          -- goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
-          -- goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
-          -- goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
-          -- goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
-        },
-      },
       ensure_installed = {
         "bash",
 
@@ -86,7 +52,7 @@ return {
         "ninja",
         "rst",
 
-        "query",
+        -- "query",
         "regex",
         "toml",
 
@@ -103,9 +69,72 @@ return {
       },
     },
     config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+      require("nvim-treesitter").install(opts.ensure_installed or {})
+      require("nvim-treesitter").setup(opts)
+
       vim.treesitter.language.register("scss", "less")
       vim.treesitter.language.register("scss", "postcss")
+
+      local function attach(bufnr, winnr)
+        vim.treesitter.start(bufnr)
+        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        vim.wo[winnr][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+      end
+
+      -- NOTE: injected language parsers are not auto-installed
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter", { clear = true }),
+        callback = function(ev)
+          local bufnr, ft = ev.buf, ev.match
+          local winnr = vim.api.nvim_get_current_win()
+
+          local ok = pcall(attach, bufnr, winnr)
+          if not ok then
+            local lang = vim.treesitter.language.get_lang(ft) or ft
+            if lang == "" or not vim.tbl_contains(require("nvim-treesitter.config").get_available(), lang) then
+              return
+            end
+            require("nvim-treesitter").install(lang):await(function(_, did_install)
+              if did_install then
+                attach(bufnr, winnr)
+              end
+            end)
+          end
+        end,
+      })
     end,
+  },
+
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    lazy = true,
+    branch = "main",
+    keys = function()
+      local move = require("nvim-treesitter-textobjects.move")
+      return {
+        -- stylua: ignore start
+        { "]a", function() move.goto_next_start("@parameter.inner", "textobjects") end, mode = { "n", "x", "o" } },
+        { "]A", function() move.goto_next_end("@parameter.inner", "textobjects") end, mode = { "n", "x", "o" } },
+        { "[a", function() move.goto_previous_start("@parameter.inner", "textobjects") end, mode = { "n", "x", "o" } },
+        { "[A", function() move.goto_previous_end("@parameter.inner", "textobjects") end, mode = { "n", "x", "o" } },
+        { "]c", function() move.goto_next_start("@class.outer", "textobjects") end, mode = { "n", "x", "o" } },
+        { "]C", function() move.goto_next_end("@class.outer", "textobjects") end, mode = { "n", "x", "o" } },
+        { "[c", function() move.goto_previous_start("@class.outer", "textobjects") end, mode = { "n", "x", "o" } },
+        { "[C", function() move.goto_previous_end("@class.outer", "textobjects") end, mode = { "n", "x", "o" } },
+        { "]f", function() move.goto_next_start("@function.outer", "textobjects") end, mode = { "n", "x", "o" } },
+        { "]F", function() move.goto_next_end("@function.outer", "textobjects") end, mode = { "n", "x", "o" } },
+        { "[f", function() move.goto_previous_start("@function.outer", "textobjects") end, mode = { "n", "x", "o" } },
+        { "[F", function() move.goto_previous_end("@function.outer", "textobjects") end, mode = { "n", "x", "o" } },
+        -- stylua: ignore end
+      }
+    end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = "VeryLazy",
+    opts = {
+      mode = "cursor",
+      max_lines = 3,
+    },
   },
 }

@@ -31,7 +31,7 @@ return {
     opts = {
       on_startup = {
         cursorline = true,
-        cursorcolumn = false,
+        cursorcolumn = true,
       },
 
       disable_in_insert = true,
@@ -76,6 +76,7 @@ return {
     dependencies = "nvim-treesitter/nvim-treesitter",
     event = "BufRead",
     main = "rainbow-delimiters.setup",
+    enabled = false,
   },
   {
     "gen740/SmoothCursor.nvim",

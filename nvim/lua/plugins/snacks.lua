@@ -1,21 +1,21 @@
-local myselect = {
-  preview = false,
-  layout = {
-    backdrop = false,
-    row = 0.4,
-    width = 0.75,
-    min_width = 80,
-    height = 0.4,
-    min_height = 3,
-    box = "vertical",
-    border = "rounded",
-    title = "{title}",
-    title_pos = "center",
-    { win = "input", height = 1, border = "bottom" },
-    { win = "list", border = "none" },
-    { win = "preview", title = "{preview}", height = 0.4, border = "top" },
-  },
-}
+local icons = require("core.icons")
+
+-- Dashboard
+local header = [[
+█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ ▀ ▀▀▀█  █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ ▀ ▀▀▀▀█
+█ │░███▀█▀▀▀▀▀▓████▓▄ ▀▀▀▀ │░████▓▄   │▓████▓▄  █
+█ │▒███████  │▓███████     │▒███████  │▓███████ █
+█ │▓███████  │▓███████     │▓███████  │▓███████ █
+▀ │▓███████  │▓███████     │▓███████  │▓███████ █
+▀ │▓███████  │▓███████▄ ▄  │▓███████  │▓███████ █
+█ │▓███████                │▓███████   ▓███████ █▄▄▄
+█ │▓███████▀▀ ▀    ▀       │▓███████▀▀▀▓█▄█████▄ ▄ █
+█▄▄▄▄▄▄▄▄ ▀ █▀▀▀▀▀▀▀▀▀▀▀▀█▄▄▄▄ ▄ ▄▄▄▄▄▄▄▄▄▄▄ ▄ ▄▄▄▄█
+        █ ▀ █
+  <fh>  ▀▀▀▀▀                                       ]]
+local footer = [[
+▀ ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ ▀ ▀▀▀▀▀▀▀▀▀▀▀▀▀ ▀
+                                      n e o v i m   ]]
 return {
   {
     "folke/snacks.nvim",
@@ -27,60 +27,28 @@ return {
       {
         "<leader>e",
         function()
-          ---@diagnostic disable-next-line: missing-fields
-          Snacks.explorer({
-            diagnostics = true,
-            git_status = true,
-            ignored = true,
-            hidden = true,
-          })
+          Snacks.explorer({ diagnostics = true, git_status = true, ignored = true, hidden = true, })
         end,
         desc = "File explorer",
       },
-      { "<leader><space>", function() Snacks.picker.smart({ layout = myselect, }) end, desc = "Snacks Smart", },
-      { "<leader>h", function() Snacks.picker.buffers({ layout = myselect, }) end, desc = "Snacks Buffers", },
       { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications", },
-      { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notifications", },
-      -- trouble
-      {
-        "<leader>xt",
-        function()
-          ---@diagnostic disable-next-line: undefined-field
-          Snacks.picker.todo_comments({
-            focus = "list",
-            layout = { preset = "dropdown" },
-            keywords = { "TODO", "FIX", "FIXME" },
-          })
-        end,
-        desc = "Todo/Fix/Fixme",
-      },
-      {
-        "<leader>xT",
-        function()
-          ---@diagnostic disable-next-line: undefined-field
-          Snacks.picker.todo_comments()
-        end,
-        desc = "TODO",
-      },
+      { "<leader>N", function() Snacks.picker.notifications({ layout = { preset = "dropdown" } }) end, desc = "Notifications", },
+      { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git log", },
+      { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git log line", },
+      { "<leader>gF", function() Snacks.picker.git_log_file() end, desc = "Git log file", },
+
       -- stylua: ignore end
     },
     opts = {
-      explorer = {
-        enabled = true,
-        replace_netrw = false,
-      },
+      explorer = { enabled = true, replace_netrw = false },
       picker = {
         enabled = true,
         ui_select = false,
+        layout = { cycle = false },
         matcher = {
-          cwd_bonus = true, -- give bonus for matching files in the cwd
-          frecency = true, -- frecency bonus
-          history_bonus = true, -- give more weight to chronological order
-        },
-        formatters = {
-          -- file = {
-          -- filename_first = true,
-          -- },
+          cwd_bonus = true,
+          frecency = true,
+          history_bonus = true,
         },
         win = {
           input = {
@@ -88,30 +56,41 @@ return {
               ["<Esc>"] = { "close", mode = { "n", "i" } },
             },
           },
-          list = {
-            keys = {},
-          },
         },
+        icons = { kinds = icons.symbol_map },
       },
-      image = {
-        enabled = true,
-      },
+      image = { enabled = true },
       dashboard = {
         enabled = true,
+        preset = {
+          header = header,
+        },
         sections = {
-          { section = "header" },
+          { section = "header", gap = 0, padding = 0 },
           { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
           { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
           { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+          {
+            text = {
+              {
+                footer,
+                hl = "SnacksDashboardHeader",
+              },
+            },
+            gap = 0,
+            padding = 1,
+          },
           { section = "startup" },
         },
       },
       indent = {
         indent = {
           enabled = false,
-          char = "",
-          only_current = true,
-          only_scope = true,
+          -- only_current = true,
+          -- only_scope = true,
+          char = "⋮",
+          -- char = "",
+          -- char = "⁘",
         },
         scope = {
           enabled = true,
@@ -129,21 +108,14 @@ return {
             corner_bottom = "╰",
             horizontal = "─",
             vertical = "│",
-            arrow = "", --"󰶻  ", -- 
+            arrow = "",
           },
           only_current = true,
         },
       },
       bigfile = { enabled = true },
       dim = { enabled = true },
-      zen = {
-        enabled = true,
-        win = {
-          backdrop = {
-            transparent = false,
-          },
-        },
-      },
+      zen = { enabled = true },
       scroll = { enabled = false },
       input = { enabled = true },
       words = { enabled = false },
@@ -158,21 +130,8 @@ return {
       },
       notifier = { enabled = true },
       toggle = { enabled = true },
-      lazygit = {
-        enabled = true,
-        win = {
-          width = 0.9,
-          height = 0.9,
-        },
-      },
-      terminal = {
-        enabled = true,
-        -- win = {
-        --   position = "float",
-        --   width = 0.85,
-        --   height = 0.55,
-        -- },
-      },
+      lazygit = { enabled = true },
+      terminal = { enabled = true },
     },
     init = function()
       vim.api.nvim_create_autocmd("User", {

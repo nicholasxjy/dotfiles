@@ -24,20 +24,36 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     keys = {
       {
+        "<leader>cf",
+        function()
+          require("conform").format()
+        end,
+        mode = { "n", "x", "v" },
+        desc = "Format",
+      },
+      {
         "<leader>cF",
         function()
           require("conform").format({
-            lsp_format = "fallback",
-            async = false,
-            timeout_ms = 3000,
+            formatters = { "injected" },
           })
         end,
-        desc = "Conform format",
-        mode = { "n", "v" },
+        desc = "Conform format injected langs",
+        mode = { "n", "v", "x" },
       },
     },
-    config = function(_, opts)
-      local default_formatters_by_ft = {
+    opts = {
+      format_on_save = function(bufnr)
+        if vim.g.autoformat == false or vim.b[bufnr].autoformat == false then
+          return
+        end
+        return {
+          lsp_format = "fallback",
+          timeout_ms = 500,
+        }
+      end,
+      formatters_by_ft = {
+        query = { "format-queries" },
         sh = { "shfmt" },
         go = { "goimports", "gofmt" }, -- golines
         lua = { "stylua" },
@@ -45,30 +61,16 @@ return {
         rust = { "rustfmt" },
         templ = { "templ" },
         toml = { "taplo" },
-      }
-
-      for _, ft in ipairs(supported) do
-        default_formatters_by_ft[ft] = default_formatters_by_ft[ft] or {}
-        table.insert(default_formatters_by_ft[ft], "prettier")
-        -- table.insert(default_formatters_by_ft[ft], "biome")
-      end
-
-      opts.formatters_by_ft = vim.tbl_deep_extend("force", default_formatters_by_ft, opts.formatters_by_ft or {})
-
-      opts.formatters =
-        vim.tbl_deep_extend("force", { injected = { options = { ignore_errors = true } } }, opts.formatters or {})
-
-      require("conform").setup(opts)
-
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        pattern = "*",
-        callback = function(args)
-          if not vim.g.autoformat or vim.b.autoformat == false then
-            return
-          end
-          require("conform").format({ bufnr = args.buf, lsp_format = "fallback" })
-        end,
-      })
+      },
+      default_format_opts = {
+        timeout_ms = 3000,
+        async = false,
+        quiet = false,
+        lsp_format = "fallback",
+      },
+    },
+    init = function()
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
     end,
   },
 }

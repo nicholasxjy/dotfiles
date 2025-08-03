@@ -5,7 +5,18 @@ return {
   config = function()
     require("tiny-inline-diagnostic").setup({
       options = {
-        multilines = true,
+        show_source = {
+          enabled = true,
+          if_many = true,
+        },
+        set_arrow_to_diag_color = true,
+        multilines = {
+          enabled = true,
+          always_show = true,
+        },
+        show_all_diags_on_cursorline = true,
+        enable_on_insert = false,
+        enable_on_select = false,
       },
     })
   end,
