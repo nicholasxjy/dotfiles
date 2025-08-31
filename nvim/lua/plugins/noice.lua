@@ -1,47 +1,35 @@
 return {
   "folke/noice.nvim",
   event = "VeryLazy",
+  dependencies = {
+    "MunifTanjim/nui.nvim",
+    "rcarriga/nvim-notify",
+  },
   opts = {
     lsp = {
+      override = {
+        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+        ["vim.lsp.util.stylize_markdown"] = true,
+        ["cmp.entry.get_documentation"] = true,
+      },
       signature = { enabled = false },
       hover = { enabled = true },
     },
-    notify = { enabled = false },
-    cmdline = {
-      view = "cmdline",
-    },
     presets = {
-      bottom_search = true,
-      long_message_to_split = true,
-      -- command_palette = {
-      --   views = {
-      --     cmdline_popup = {
-      --       position = {
-      --         row = "40%",
-      --         col = "50%",
-      --       },
-      --     },
-      --   },
-      -- },
+      bottom_search = false, -- use a classic bottom cmdline for search
+      long_message_to_split = true, -- long messages will be sent to a split
+      inc_rename = false, -- enables an input dialog for inc-rename.nvim
+      lsp_doc_border = vim.g.transparent, -- add a border to hover docs and signature help
+      command_palette = {
+        views = {
+          cmdline_popup = {
+            position = {
+              row = "80%",
+              col = "50%",
+            },
+          },
+        },
+      },
     },
   },
-  keys = {
-    {
-      "<S-Enter>",
-      function()
-        require("noice").redirect(vim.fn.getcmdline())
-      end,
-      mode = "c",
-      desc = "Redirect Cmdline",
-    },
-  },
-  config = function(_, opts)
-    -- HACK: noice shows messages from before it was enabled,
-    -- but this is not ideal when Lazy is installing plugins,
-    -- so clear the messages in this case.
-    if vim.o.filetype == "lazy" then
-      vim.cmd([[messages clear]])
-    end
-    require("noice").setup(opts)
-  end,
 }

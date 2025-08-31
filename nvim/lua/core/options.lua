@@ -2,6 +2,9 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.autoformat = true
 
+vim.g.transparent = false
+vim.g.bordered = vim.g.transparent
+
 local opt = vim.opt
 
 -- UI/General

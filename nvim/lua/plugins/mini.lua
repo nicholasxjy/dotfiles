@@ -78,20 +78,23 @@ return {
     config = function()
       local miniSplitJoin = require("mini.splitjoin")
       miniSplitJoin.setup({
-        mappings = { toggle = "" }, -- Disable default mapping
+        mappings = { toggle = "gS" },
       })
-      vim.keymap.set({ "n", "x" }, "sj", function()
-        miniSplitJoin.join()
-      end, { desc = "Join arguments" })
-      vim.keymap.set({ "n", "x" }, "sk", function()
-        miniSplitJoin.split()
-      end, { desc = "Split arguments" })
     end,
   },
   {
     "echasnovski/mini.trailspace",
     version = false,
     event = "VeryLazy",
+    keys = {
+      {
+        "<leader>ut",
+        function()
+          require("mini.trailspace").trim()
+        end,
+        desc = "Trailspace",
+      },
+    },
     config = function()
       require("mini.trailspace").setup({
         only_in_normal_buffers = true,

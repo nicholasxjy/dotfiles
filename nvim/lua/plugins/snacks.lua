@@ -1,21 +1,5 @@
 local icons = require("core.icons")
 
--- Dashboard
-local header = [[
-█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ ▀ ▀▀▀█  █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ ▀ ▀▀▀▀█
-█ │░███▀█▀▀▀▀▀▓████▓▄ ▀▀▀▀ │░████▓▄   │▓████▓▄  █
-█ │▒███████  │▓███████     │▒███████  │▓███████ █
-█ │▓███████  │▓███████     │▓███████  │▓███████ █
-▀ │▓███████  │▓███████     │▓███████  │▓███████ █
-▀ │▓███████  │▓███████▄ ▄  │▓███████  │▓███████ █
-█ │▓███████                │▓███████   ▓███████ █▄▄▄
-█ │▓███████▀▀ ▀    ▀       │▓███████▀▀▀▓█▄█████▄ ▄ █
-█▄▄▄▄▄▄▄▄ ▀ █▀▀▀▀▀▀▀▀▀▀▀▀█▄▄▄▄ ▄ ▄▄▄▄▄▄▄▄▄▄▄ ▄ ▄▄▄▄█
-        █ ▀ █
-  <fh>  ▀▀▀▀▀                                       ]]
-local footer = [[
-▀ ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ ▀ ▀▀▀▀▀▀▀▀▀▀▀▀▀ ▀
-                                      n e o v i m   ]]
 return {
   {
     "folke/snacks.nvim",
@@ -23,20 +7,15 @@ return {
     priority = 1000,
     keys = {
       -- stylua: ignore start
+      -- {"ff", function() require("utils.snf").fff() end, desc = "Snacks fff files" },
+      { "<leader>ue", function() Snacks.explorer({layout = {preset="right"}}) end, desc = "Snacks explorer", },
       { "<leader>z", function() Snacks.zen() end, desc = "Toggle Zen Mode", },
-      {
-        "<leader>e",
-        function()
-          Snacks.explorer({ diagnostics = true, git_status = true, ignored = true, hidden = true, })
-        end,
-        desc = "File explorer",
-      },
       { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications", },
       { "<leader>N", function() Snacks.picker.notifications({ layout = { preset = "dropdown" } }) end, desc = "Notifications", },
       { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git log", },
       { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git log line", },
       { "<leader>gF", function() Snacks.picker.git_log_file() end, desc = "Git log file", },
-
+      { "<leader>fc", function() Snacks.picker.colorschemes({ layout = { preset = "top" } }) end, desc = "Colorschemes", },
       -- stylua: ignore end
     },
     opts = {
@@ -44,7 +23,9 @@ return {
       picker = {
         enabled = true,
         ui_select = false,
-        layout = { cycle = false },
+        layout = {
+          cycle = false,
+        },
         matcher = {
           cwd_bonus = true,
           frecency = true,
@@ -57,28 +38,29 @@ return {
             },
           },
         },
-        icons = { kinds = icons.symbol_map },
+        icons = { kinds = icons.lspkind },
       },
       image = { enabled = true },
       dashboard = {
         enabled = true,
-        preset = {
-          header = header,
-        },
         sections = {
-          { section = "header", gap = 0, padding = 0 },
-          { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
-          { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-          { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+          { section = "header" },
+          { section = "keys", gap = 1, padding = 1 },
+          { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+          { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
           {
-            text = {
-              {
-                footer,
-                hl = "SnacksDashboardHeader",
-              },
-            },
-            gap = 0,
+            pane = 2,
+            icon = " ",
+            title = "Git Status",
+            section = "terminal",
+            enabled = function()
+              return Snacks.git.get_root() ~= nil
+            end,
+            cmd = "git status --short --branch --renames",
+            height = 5,
             padding = 1,
+            ttl = 5 * 60,
+            indent = 3,
           },
           { section = "startup" },
         },
@@ -93,14 +75,14 @@ return {
           -- char = "⁘",
         },
         scope = {
-          enabled = true,
+          enabled = false,
           --char = "⁚",
           -- char = "║",
           underline = false,
           only_current = true,
         },
         chunk = {
-          enabled = true,
+          enabled = false,
           char = {
             -- corner_top = "┌",
             -- corner_bottom = "└",
@@ -114,13 +96,13 @@ return {
         },
       },
       bigfile = { enabled = true },
-      dim = { enabled = true },
+      dim = { enabled = false },
       zen = { enabled = true },
       scroll = { enabled = false },
       input = { enabled = true },
       words = { enabled = false },
       statuscolumn = {
-        enabled = true,
+        enabled = false,
         left = { "mark", "sign" }, -- priority of signs on the left (high to low)
         right = { "fold", "git" }, -- priority of signs on the right (high to low)
         folds = {
@@ -137,17 +119,6 @@ return {
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         callback = function()
-          -- Setup some globals for debugging (lazy-loaded)
-          ---@diagnostic disable-next-line: duplicate-set-field
-          _G.dd = function(...)
-            Snacks.debug.inspect(...)
-          end
-          ---@diagnostic disable-next-line: duplicate-set-field
-          _G.bt = function()
-            Snacks.debug.backtrace()
-          end
-          vim.print = _G.dd -- Override print to use snacks for `:=` command
-
           -- Create some toggle mappings
           Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
           Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")

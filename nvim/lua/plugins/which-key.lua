@@ -4,7 +4,7 @@ return {
     event = "VeryLazy",
     opts_extend = { "spec" },
     opts = {
-      preset = "classic",
+      preset = vim.g.transparent and "helix" or "classic",
       defaults = {},
       spec = {
         {

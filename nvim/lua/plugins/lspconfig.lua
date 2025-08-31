@@ -95,24 +95,28 @@ return {
 
         -- keymaps
         vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
+        vim.keymap.set("n", "K", function()
+          vim.lsp.buf.hover({
+            border = "rounded",
+          })
+        end, { desc = "Hover" })
         vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
         vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
 
         vim.keymap.set({ "n", "v", "x" }, "<leader>ca", function()
-          require("tiny-code-action").code_action()
+          require("fzf-lua").lsp_code_actions({
+            winopts = {
+              height = 0.6,
+              width = 0.7,
+              relative = "cursor",
+            },
+          })
         end, { desc = "Code Action" })
         --
         vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })
         vim.keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, { desc = "Codelens Refresh" })
         vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
         vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
-        -- vim.keymap.set({ "n", "v" }, "<leader>cf", function()
-        --   vim.lsp.buf.format({
-        --     async = true,
-        --     range = { ["start"] = vim.api.nvim_buf_get_mark(0, "<"), ["end"] = vim.api.nvim_buf_get_mark(0, ">") },
-        --   })
-        -- end, { desc = "Lsp format", silent = true, remap = false })
         -- Diagnostic keymaps
         local diagnostic_goto = function(count, severity)
           local opts = { count = count, severity = severity and vim.diagnostic.severity[severity] or nil }

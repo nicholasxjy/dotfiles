@@ -5,11 +5,6 @@ return {
     opts = {},
   },
   {
-    "Aasim-A/scrollEOF.nvim",
-    event = { "CursorMoved", "WinScrolled" },
-    opts = {},
-  },
-  {
     "max397574/better-escape.nvim",
     event = "VeryLazy",
     opts = {
@@ -31,7 +26,7 @@ return {
     opts = {
       on_startup = {
         cursorline = true,
-        cursorcolumn = true,
+        cursorcolumn = false,
       },
 
       disable_in_insert = true,
@@ -121,9 +116,9 @@ return {
         colors = {
           bg = "#1E1F2A",
           copy = "#f1ff5e",
-          delete = "#ff6e5e",
+          delete = "#eb0089",
           insert = "#5eff6c",
-          visual = "#ff5ea0",
+          visual = "#e482ff",
         },
         set_cursor = true,
         set_cursorline = true,
@@ -143,17 +138,12 @@ return {
       -- char = "┇",
       -- char = "∶",
       -- char = "∷",
-      char = "║",
+      -- char = "║",
       -- char = "⋮",
       -- char = "",
-      -- char = "󰮾",
+      char = "󰮾",
       virtcolumn = "80",
     },
-  },
-  {
-    "nvim-zh/colorful-winsep.nvim",
-    config = true,
-    event = { "WinLeave" },
   },
   {
     "kevinhwang91/nvim-hlslens",
@@ -174,12 +164,6 @@ return {
         kopts
       )
     end,
-  },
-  {
-    "razak17/tailwind-fold.nvim",
-    opts = {},
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    ft = { "html", "svelte", "astro", "vue", "typescriptreact", "php", "blade" },
   },
   {
     "vvvvv/yfix.nvim",

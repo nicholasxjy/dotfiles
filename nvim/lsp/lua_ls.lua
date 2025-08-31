@@ -15,7 +15,7 @@ return {
       },
       telemetry = { enable = false },
       codeLens = {
-        enable = true,
+        enable = false,
       },
       completion = {
         callSnippet = "Replace",

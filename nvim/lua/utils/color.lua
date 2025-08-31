@@ -1,119 +1,50 @@
-local M = {}
+local util = {}
 
-local oklab_utils = require("utils.oklab")
+util.bg = "#000000"
+util.fg = "#ffffff"
 
-local function hex_to_oklch(hex)
-  local rgb = oklab_utils.hex2rgb(hex)
-  local oklab = oklab_utils.rgb2oklab(rgb)
-  local oklch = oklab_utils.oklab2oklch(oklab)
-  return oklch
+---Converts a hex color code string to a table of integer values
+---@param hex_str string: Hex color code of the format `#rrggbb`
+---@return table rgb: Table of {r, g, b} integers
+local function hexToRgb(hex_str)
+  local r, g, b = string.match(hex_str, "^#(%x%x)(%x%x)(%x%x)")
+  assert(r, "Invalid hex string: " .. hex_str)
+  return { tonumber(r, 16), tonumber(g, 16), tonumber(b, 16) }
 end
 
-local function oklch_to_hex(oklch)
-  local oklab = oklab_utils.oklch2oklab(oklch)
-  local rgb = oklab_utils.oklab2rgb(oklab)
-  local hex = oklab_utils.rgb2hex(rgb)
-  return hex
-end
+---Blends two hex colors, given a blending amount
+---@param fg string: A hex color code of the format `#rrggbb`
+---@param bg string: A hex color code of the format `#rrggbb`
+---@param alpha number: A blending factor, between `0` and `1`.
+---@return string hex: A blended hex color code of the format `#rrggbb`
+function util.blend(fg, bg, alpha)
+  local bg_rgb = hexToRgb(bg)
+  local fg_rgb = hexToRgb(fg)
 
-local function hex_to_okhsl(hex)
-  local oklch = hex_to_oklch(hex)
-  local okhsl = oklab_utils.oklch2okhsl(oklch)
-  return okhsl
-end
-
-local function okhsl_to_hex(okhsl)
-  local oklch = oklab_utils.okhsl2oklch(okhsl)
-  local hex = oklch_to_hex(oklch)
-  return hex
-end
-
-local function clip(val, from, to)
-  if val > to then
-    return to
-  elseif val < from then
-    return from
-  end
-  return val
-end
-
-local color_meta = {}
-
-function color_meta:with_overlay(overlay_color, transparency)
-  local overlay_rgb = oklab_utils.hex2rgb(overlay_color.hex or overlay_color)
-  local rgb = oklab_utils.hex2rgb(self.hex)
-
-  transparency = transparency / 100
-
-  local result_rgb = {}
-  for key, _ in pairs(rgb) do
-    result_rgb[key] = rgb[key] + (overlay_rgb[key] - rgb[key]) * transparency
+  local blendChannel = function(i)
+    local ret = ((1 - alpha) * fg_rgb[i] + (alpha * bg_rgb[i]))
+    return math.floor(math.min(math.max(0, ret), 255) + 0.5)
   end
 
-  return M.new(oklab_utils.rgb2hex(result_rgb))
+  return string.format("#%02X%02X%02X", blendChannel(1), blendChannel(2), blendChannel(3))
 end
 
-function color_meta:lightened(val)
-  local oklch = hex_to_oklch(self.hex)
-  oklch.l = clip(oklch.l + val, 0, 100)
-  return M.new(oklch_to_hex(oklch))
+---Darkens a color by a given amount
+---@param hex string: The color to be darkened, of the form `#rrggbb`
+---@param amount number: How much to darken the color by, between `0` and `1`
+---@param bg string?: An optional custom darkening value
+---@return string result: The darkened color
+function util.darken(hex, amount, bg)
+  return util.blend(hex, bg or util.bg, math.abs(amount))
 end
 
-function color_meta:darkened(val)
-  return self:lightened(-val)
+---Lightens a color by a given amount
+---@param hex string: The color to be lightened, of the form `#rrggbb`
+---@param amount number: How much to lighten the color by, between `0` and `1`
+---@param fg string?: An optional custom lightening value
+---@return string result: The lightened color
+function util.lighten(hex, amount, fg)
+  return util.blend(hex, fg or util.fg, math.abs(amount))
 end
 
-function color_meta:with_lightness(val)
-  local oklch = hex_to_oklch(self.hex)
-  oklch.l = clip(val, 0, 100)
-  return M.new(oklch_to_hex(oklch))
-end
-
-function color_meta:saturated(val)
-  local okhsl = hex_to_okhsl(self.hex)
-  okhsl.s = clip(okhsl.s + val, 0, 100)
-  return M.new(okhsl_to_hex(okhsl))
-end
-
-function color_meta:desaturated(val)
-  return self:saturated(-val)
-end
-
-function color_meta:with_saturation(val)
-  local okhsl = hex_to_okhsl(self.hex)
-  okhsl.s = clip(val, 0, 100)
-  return M.new(okhsl_to_hex(okhsl))
-end
-
-function color_meta:get_hsl()
-  return hex_to_okhsl(self.hex)
-end
-
-function M.colorset_to_hsl(colors)
-  for name, color in pairs(colors) do
-    local okhsl = hex_to_okhsl(color.hex)
-    okhsl.h = okhsl.h or 0
-    print(string.format("%s = { h = %0.0f, s = %0.0f, l = %0.0f }", name, okhsl.h, okhsl.s, okhsl.l))
-  end
-end
-
-function M.ensure_correct_type(color)
-  if not color.hex then
-    return M.new(color)
-  end
-  return color
-end
-
-function M.new(hex)
-  local color = { hex = hex }
-  setmetatable(color, { __index = color_meta })
-  return color
-end
-
-function M.new_from_hsl(hsl)
-  local color = { hex = okhsl_to_hex(hsl) }
-  setmetatable(color, { __index = color_meta })
-  return color
-end
-
-return M
+return util
