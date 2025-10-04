@@ -33,12 +33,12 @@ map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
 map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
-map({ "n" }, "<leader>k", "<cmd>w<cr>", { desc = "Save buffer", nowait = true })
+map({ "n" }, "<leader>k", "<cmd>w<cr>", { desc = "Save buffer", nowait = true, silent = true })
 
 -- Buffers
 map("n", "<leader>j", function()
   snacks.bufdelete({ wipe = true })
-end, { desc = "Delete buffer", nowait = true })
+end, { desc = "Delete buffer", nowait = true, silent = true })
 
 map("n", "<leader>bo", function()
   snacks.bufdelete.other()
@@ -86,9 +86,9 @@ end, { desc = "which_key_ignore" })
 map("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
 map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
 
-map("n", "<leader>gg", function()
-  snacks.lazygit()
-end, { desc = "Lazygit" })
+-- map("n", "<leader>gg", function()
+--   snacks.lazygit()
+-- end, { desc = "Lazygit" })
 
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 -- better indenting

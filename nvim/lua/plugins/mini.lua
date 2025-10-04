@@ -1,6 +1,6 @@
 return {
   {
-    "echasnovski/mini.icons",
+    "nvim-mini/mini.icons",
     lazy = true,
     version = false,
     opts = {
@@ -32,22 +32,26 @@ return {
     end,
   },
   {
-    "echasnovski/mini.ai",
+    "nvim-mini/mini.ai",
     version = false,
     event = "VeryLazy",
-    opts = function()
-      local spec_treesitter = require("mini.ai").gen_spec.treesitter
-      return {
-        custom_textobjects = {
-          B = spec_treesitter({ a = "@block.outer", i = "@block.inner" }),
-          C = spec_treesitter({ a = "@class.outer", i = "@class.inner" }),
-          F = spec_treesitter({ a = "@function.outer", i = "@function.inner" }),
-        },
-      }
-    end,
+    opts = {
+      mappings = {
+        around = "a",
+        inside = "i",
+
+        around_next = "an",
+        inside_next = "in",
+        around_last = "al",
+        inside_last = "il",
+
+        goto_left = "g[",
+        goto_right = "g]",
+      },
+    },
   },
   {
-    "echasnovski/mini.surround",
+    "nvim-mini/mini.surround",
     version = false,
     event = "VeryLazy",
     keys = {
@@ -72,7 +76,7 @@ return {
   },
   -- Split & join
   {
-    "echasnovski/mini.splitjoin",
+    "nvim-mini/mini.splitjoin",
     version = false,
     event = "VeryLazy",
     config = function()
@@ -83,7 +87,7 @@ return {
     end,
   },
   {
-    "echasnovski/mini.trailspace",
+    "nvim-mini/mini.trailspace",
     version = false,
     event = "VeryLazy",
     keys = {
@@ -98,6 +102,69 @@ return {
     config = function()
       require("mini.trailspace").setup({
         only_in_normal_buffers = true,
+      })
+    end,
+  },
+  {
+    "nvim-mini/mini.clue",
+    version = false,
+    event = "VeryLazy",
+    keys = {
+      { "<leader>a", "", desc = "+ai" },
+      { "<leader>c", "", desc = "+codes" },
+      { "<leader>f", "", desc = "+find" },
+      { "<leader>s", "", desc = "+search" },
+      { "<leader>x", "", desc = "+diagnostics" },
+      { "<leader>g", "", desc = "+git" },
+      { "<leader>u", "", desc = "+ui" },
+      { "<leader>b", "", desc = "+buffers" },
+      { "<leader>d", "", desc = "+debug" },
+    },
+    config = function()
+      local miniclue = require("mini.clue")
+      miniclue.setup({
+        triggers = {
+          -- Leader triggers
+          { mode = "n", keys = "<Leader>" },
+          { mode = "x", keys = "<Leader>" },
+
+          -- Built-in completion
+          { mode = "i", keys = "<C-x>" },
+
+          -- `g` key
+          { mode = "n", keys = "g" },
+          { mode = "x", keys = "g" },
+
+          -- Marks
+          { mode = "n", keys = "'" },
+          { mode = "n", keys = "`" },
+          { mode = "x", keys = "'" },
+          { mode = "x", keys = "`" },
+
+          -- Registers
+          { mode = "n", keys = '"' },
+          { mode = "x", keys = '"' },
+          { mode = "i", keys = "<C-r>" },
+          { mode = "c", keys = "<C-r>" },
+
+          -- Window commands
+          { mode = "n", keys = "<C-w>" },
+
+          -- `z` key
+          { mode = "n", keys = "z" },
+          { mode = "x", keys = "z" },
+        },
+        clues = {
+          miniclue.gen_clues.builtin_completion(),
+          miniclue.gen_clues.g(),
+          miniclue.gen_clues.marks(),
+          miniclue.gen_clues.registers(),
+          miniclue.gen_clues.windows(),
+          miniclue.gen_clues.z(),
+        },
+        window = {
+          delay = 200,
+        },
       })
     end,
   },

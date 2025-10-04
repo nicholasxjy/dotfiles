@@ -57,7 +57,8 @@ return {
         "biome",
         "vtsls",
         "js-debug-adapter",
-        "emmet-language-server",
+
+        "json-lsp",
 
         "gopls",
         "goimports",

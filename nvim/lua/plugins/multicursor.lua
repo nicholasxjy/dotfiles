@@ -8,13 +8,18 @@ return {
 
       local set = vim.keymap.set
 
+      set({ "n", "x" }, "\\", function()
+        mc.addCursor()
+      end, { desc = "Add cursor under current position" })
+
       -- Add or skip cursor above/below the main cursor.
       set({ "n", "x" }, "<up>", function()
         mc.lineAddCursor(-1)
-      end)
+      end, { desc = "Del cursor at line" })
       set({ "n", "x" }, "<down>", function()
         mc.lineAddCursor(1)
-      end)
+      end, { desc = "Add cursor at line" })
+
       set({ "n", "x" }, "<leader><up>", function()
         mc.lineSkipCursor(-1)
       end)
@@ -23,12 +28,13 @@ return {
       end)
 
       -- Add or skip adding a new cursor by matching word/selection
-      set({ "n", "x" }, "<leader>nn", function()
+      set({ "n", "x" }, "<C-d>", function()
         mc.matchAddCursor(1)
-      end)
-      set({ "n", "x" }, "<leader>np", function()
+      end, { desc = "Add a new cursor by matching word/selection" })
+
+      set({ "n", "x" }, "\\n", function()
         mc.matchAddCursor(-1)
-      end)
+      end, { desc = "Skip adding a new cursor by matching word/selection" })
 
       -- Add and remove cursors with control + left click.
       set("n", "<c-leftmouse>", mc.handleMouse)
@@ -60,7 +66,7 @@ return {
       hl(0, "MultiCursorCursor", { reverse = true })
       hl(0, "MultiCursorVisual", { link = "Visual" })
       hl(0, "MultiCursorSign", { link = "SignColumn" })
-      hl(0, "MultiCursorMatchPreview", { link = "Search" })
+      hl(0, "MultiCursorMatchPreview", { link = "IncSearch" })
       hl(0, "MultiCursorDisabledCursor", { reverse = true })
       hl(0, "MultiCursorDisabledVisual", { link = "Visual" })
       hl(0, "MultiCursorDisabledSign", { link = "SignColumn" })

@@ -23,31 +23,4 @@ return {
       end,
     },
   },
-  {
-    "axkirillov/unified.nvim",
-    event = "VeryLazy",
-    keys = {
-      { "<leader>gd", "<cmd>Unified<cr>", desc = "Git diff" },
-    },
-    config = function()
-      require("unified").setup({
-        signs = {
-          add = "│",
-          delete = "│",
-          change = "│",
-        },
-        highlights = {
-          add = "DiffAdd",
-          delete = "DiffDelete",
-          change = "DiffChange",
-        },
-        line_symbols = {
-          add = "+",
-          delete = "-",
-          change = "~",
-        },
-        auto_refresh = true, -- Whether to automatically refresh diff when buffer changes
-      })
-    end,
-  },
 }

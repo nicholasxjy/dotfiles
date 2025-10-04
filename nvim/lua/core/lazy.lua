@@ -16,10 +16,12 @@ require("lazy").setup({
   },
   install = {
     missing = true,
-    colorscheme = { "ef-theme" },
+    colorscheme = { "bamboo" },
   },
   checker = { enabled = true },
-  ui = {},
+  ui = {
+    border = vim.g.bordered and "rounded" or "none",
+  },
   performance = {
     rtp = {
       disabled_plugins = {

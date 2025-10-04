@@ -67,21 +67,15 @@ return {
     },
   },
   {
-    "HiPhish/rainbow-delimiters.nvim",
-    dependencies = "nvim-treesitter/nvim-treesitter",
-    event = "BufRead",
-    main = "rainbow-delimiters.setup",
-    enabled = false,
-  },
-  {
     "gen740/SmoothCursor.nvim",
     lazy = false,
+    enabled = false,
     opts = {
       type = "default",
       autostart = true,
       fancy = {
         enable = true, -- enable fancy mode
-        head = { cursor = "▷", texthl = "SmoothCursor", linehl = nil }, -- false to disable fancy head
+        head = { cursor = " ", texthl = "SmoothCursor", linehl = nil }, -- false to disable fancy head
         body = {
           { cursor = "󰝥", texthl = "SmoothCursorRed" },
           { cursor = "󰝥", texthl = "SmoothCursorOrange" },

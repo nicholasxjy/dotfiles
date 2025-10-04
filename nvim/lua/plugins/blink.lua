@@ -1,4 +1,4 @@
-local icons = require("core.icons")
+local misc = require("utils.misc")
 
 local function has_words_before()
   local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
@@ -7,45 +7,82 @@ end
 
 return {
   {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
+    "folke/lazydev.nvim",
+    ft = "lua",
     opts = {
-      suggestion = { enabled = false },
-      panel = { enabled = false },
-      filetypes = {
-        markdown = true,
-        help = true,
+      library = {
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        { path = "snacks.nvim", words = { "Snacks" } },
+        { path = "lazy.nvim", words = { "LazyVim" } },
+        { path = "dart.nvim", words = { "Dart" } },
       },
     },
   },
   {
+    "L3MON4D3/LuaSnip",
+    build = "make install_jsregexp",
+    lazy = true,
+    dependencies = { { "rafamadriz/friendly-snippets", lazy = true } },
+    config = function()
+      local ls = require("luasnip")
+      ls.config.setup({
+        enable_autosnippets = true,
+        history = true,
+        updateevents = "TextChanged,TextChangedI",
+        delete_check_events = "TextChanged",
+        region_check_events = "CursorMoved",
+      })
+      ls.filetype_extend("typescript", { "javascript" })
+      ls.filetype_extend("javascriptreact", { "javascript" })
+      ls.filetype_extend("typescriptreact", { "javascript" })
+
+      vim.tbl_map(function(type)
+        require("luasnip.loaders.from_" .. type).lazy_load()
+      end, { "vscode", "snipmate", "lua" })
+    end,
+  },
+  {
     "Saghen/blink.cmp",
     dependencies = {
-      { "L3MON4D3/LuaSnip", version = "v2.*" },
       "fang2hou/blink-copilot",
       { "xzbdmw/colorful-menu.nvim", opts = {} },
+      "onsails/lspkind.nvim",
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
     opts = function()
       return {
-        fuzzy = { implementation = "prefer_rust" },
+        fuzzy = {
+          implementation = "prefer_rust",
+          sorts = {
+            function(a, b)
+              local sort = require("blink.cmp.fuzzy.sort")
+              if a.source_id == "spell" and b.source_id == "spell" then
+                return sort.label(a, b)
+              end
+            end,
+            "score",
+            "kind",
+            "label",
+          },
+        },
         keymap = {
           ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
           ["<Up>"] = { "select_prev", "fallback" },
           ["<Down>"] = { "select_next", "fallback" },
           ["<C-N>"] = { "select_next", "show" },
           ["<C-P>"] = { "select_prev", "show" },
-          ["<C-J>"] = { "select_next", "fallback" },
-          ["<C-K>"] = { "select_prev", "fallback" },
+          ["<C-J>"] = { "snippet_forward", "select_next", "fallback" },
+          ["<C-K>"] = { "snippet_backward", "select_prev", "fallback" },
           ["<C-U>"] = { "scroll_documentation_up", "fallback" },
           ["<C-D>"] = { "scroll_documentation_down", "fallback" },
           ["<C-e>"] = { "hide", "fallback" },
           ["<CR>"] = { "accept", "fallback" },
           ["<Tab>"] = {
-            "select_next",
             "snippet_forward",
+            function()
+              return require("sidekick").nes_jump_or_apply()
+            end,
             function(cmp)
               if has_words_before() or vim.api.nvim_get_mode().mode == "c" then
                 return cmp.show()
@@ -54,8 +91,8 @@ return {
             "fallback",
           },
           ["<S-Tab>"] = {
-            "select_prev",
             "snippet_backward",
+            "select_prev",
             function(cmp)
               if vim.api.nvim_get_mode().mode == "c" then
                 return cmp.show()
@@ -68,7 +105,7 @@ return {
           enabled = true,
           window = { show_documentation = true, border = vim.g.bordered and "rounded" or "none" },
         },
-        appearance = { kind_icons = icons.lspkind },
+        -- appearance = { kind_icons = ui.icons.lazy_kind_icons },
         completion = {
           ghost_text = { enabled = true },
           documentation = {
@@ -102,18 +139,25 @@ return {
             } or "none",
             draw = {
               columns = {
-                { "kind_icon" },
-                { "label", "kind", "source_name", gap = 1 },
+                { "kind_icon", "label", gap = 1 },
+                -- { "kind", "source_name" },
               },
-              treesitter = { "lsp" },
+              -- treesitter = { "lsp" },
               components = {
-                kind = {
+                kind_icon = {
                   text = function(ctx)
-                    return "(" .. ctx.kind:lower() .. ")"
+                    return misc.get_kind_icon(ctx).text
+                  end,
+                  highlight = function(ctx)
+                    return misc.get_kind_icon(ctx).highlight
                   end,
                 },
+                -- kind = {
+                --   text = function(ctx)
+                --     return "(" .. ctx.kind:lower() .. ")"
+                --   end,
+                -- },
                 label = {
-                  width = { max = 40 },
                   text = function(ctx)
                     return require("colorful-menu").blink_components_text(ctx)
                   end,
@@ -123,7 +167,7 @@ return {
                 },
                 source_name = {
                   text = function(ctx)
-                    return "[" .. ctx.source_name:upper() .. "]"
+                    return " " .. "[" .. ctx.source_name .. "]"
                   end,
                   highlight = function()
                     return "Comment"
@@ -144,12 +188,17 @@ return {
         },
         snippets = { preset = "luasnip" },
         sources = {
-          default = { "lsp", "path", "snippets", "buffer", "copilot" },
+          default = { "lazydev", "lsp", "path", "snippets", "buffer", "copilot" },
           providers = {
             copilot = {
               name = "copilot",
               module = "blink-copilot",
               async = true,
+              score_offset = 100,
+            },
+            lazydev = {
+              name = "LazyDev",
+              module = "lazydev.integrations.blink",
               score_offset = 100,
             },
           },
@@ -159,69 +208,5 @@ return {
     config = function(_, opts)
       require("blink.cmp").setup(opts)
     end,
-  },
-  {
-    "saghen/blink.pairs",
-    event = { "BufReadPre", "BufNewFile" },
-    build = "cargo build --release",
-    opts = {
-      highlights = {
-        enabled = true,
-        groups = {
-          "BlinkPairsRed",
-          "BlinkPairsOrange",
-          "BlinkPairsYellow",
-          "BlinkPairsGreen",
-          "BlinkPairsCyan",
-          "BlinkPairsBlue",
-          "BlinkPairsViolet",
-        },
-      },
-    },
-  },
-  {
-    "saghen/blink.indent",
-    event = { "BufReadPre", "BufNewFile" },
-    opts = {
-      static = {
-        enabled = true,
-        char = "",
-        priority = 1,
-        highlights = {
-          "BlinkIndentRed",
-          "BlinkIndentOrange",
-          "BlinkIndentYellow",
-          "BlinkIndentGreen",
-          "BlinkIndentViolet",
-          "BlinkIndentCyan",
-        },
-      },
-      scope = {
-        enabled = true,
-        char = "║",
-        priority = 1024,
-        highlights = {
-          "BlinkIndentOrange",
-          "BlinkIndentViolet",
-          "BlinkIndentBlue",
-          "BlinkIndentRed",
-          "BlinkIndentCyan",
-          "BlinkIndentYellow",
-          "BlinkIndentGreen",
-        },
-        underline = {
-          enabled = true,
-          highlights = {
-            "BlinkIndentOrangeUnderline",
-            "BlinkIndentVioletUnderline",
-            "BlinkIndentBlueUnderline",
-            "BlinkIndentRedUnderline",
-            "BlinkIndentCyanUnderline",
-            "BlinkIndentYellowUnderline",
-            "BlinkIndentGreenUnderline",
-          },
-        },
-      },
-    },
   },
 }

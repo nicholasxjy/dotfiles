@@ -1,9 +1,11 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.autoformat = true
-
-vim.g.transparent = false
+vim.g.inlay_hints = true
+vim.g.transparent = true
 vim.g.bordered = vim.g.transparent
+
+vim.o.winborder = vim.g.bordered and "rounded" or "none"
 
 local opt = vim.opt
 
