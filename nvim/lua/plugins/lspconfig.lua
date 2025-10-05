@@ -99,7 +99,6 @@ return {
       "zls",
     })
 
-    --- This file sets up the LSP client, key mappings, and autocommands for LSP features.
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("UserLspConfig", {}),
       callback = function(args)
@@ -129,7 +128,10 @@ return {
         vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
         -- Diagnostic keymaps
         local diagnostic_goto = function(count, severity)
-          local opts = { count = count, severity = severity and vim.diagnostic.severity[severity] or nil }
+          local opts = {
+            count = count,
+            severity = severity and vim.diagnostic.severity[severity] or nil,
+          }
           return function()
             vim.diagnostic.jump(opts)
           end

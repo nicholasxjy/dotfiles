@@ -18,16 +18,26 @@ return {
       vim.cmd([[do FileType]])
     end,
   },
-
   {
-    "MeanderingProgrammer/render-markdown.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.icons" },
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    dependencies = {
+      "Saghen/blink.cmp",
+    },
     opts = {
-      completions = { lsp = { enabled = true } },
-      code = {
-        language_border = "",
+      preview = {
+        enable = true,
+        icon_provider = "mini",
+      },
+      markdown = {
+        enable = true,
+      },
+      markdown_inline = {
+        enable = true,
+      },
+      html = {
+        enable = true,
       },
     },
-    ft = { "markdown", "norg", "rmd", "org", "codecompanion" },
   },
 }

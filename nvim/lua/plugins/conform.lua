@@ -72,5 +72,12 @@ return {
     init = function()
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
     end,
+    config = function(_, opts)
+      for _, ft in ipairs(supported) do
+        opts.formatters_by_ft[ft] = { "prettier" }
+      end
+
+      require("conform").setup(opts)
+    end,
   },
 }

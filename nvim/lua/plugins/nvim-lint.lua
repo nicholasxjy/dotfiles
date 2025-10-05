@@ -2,20 +2,19 @@ return {
   {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
-    config = function(_, opts)
+    config = function()
       local lint = require("lint")
-
-      local default_linters_by_ft = {
+      local linters_by_ft = {
         sh = { "shellcheck" },
         dockerfile = { "hadolint" },
-
         javascript = { "eslint" },
         typescript = { "eslint" },
         typescriptreact = { "eslint" },
         javascriptreact = { "eslint" },
+        go = { "golangcilint" },
       }
 
-      lint.linters_by_ft = vim.tbl_deep_extend("force", default_linters_by_ft, opts.linters_by_ft or {})
+      lint.linters_by_ft = linters_by_ft
       -- Create autocommand which carries out the actual linting
       -- on the specified events.
       local function debounce(ms, fn)
@@ -30,7 +29,7 @@ return {
       end
 
       vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
-        group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
+        group = vim.api.nvim_create_augroup("xue-nvim-lint", { clear = true }),
         callback = debounce(100, function()
           require("lint").try_lint()
         end),
