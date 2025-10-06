@@ -5,6 +5,7 @@ return {
     "nicholasxjy/bamboo.nvim",
     lazy = false,
     branch = "dev",
+    priority = 1000,
     config = function()
       local float_border_color = "#3B38A0"
       local float_title_fg = "#D92C54"
@@ -36,6 +37,7 @@ return {
           transparent = true,
         },
         highlights = {
+          CursorLine = { bg = "#2f447f" },
           FloatTitle = { fg = float_title_fg, fmt = "bold" },
           NormalFloat = { bg = dim_bg, fg = "$fg" },
           FloatBorder = { bg = dim_bg, fg = float_border_fg },

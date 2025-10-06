@@ -252,7 +252,7 @@ return {
             group = vim.api.nvim_create_augroup("eslintFix", { clear = true }),
             callback = function()
               if vim.fn.exists(":LspEslintFixAll") > 0 then
-                Snacks.notifier("EslintFixAll", "info")
+                -- Snacks.notifier("EslintFixAll", "info")
                 vim.cmd("LspEslintFixAll")
               end
             end,

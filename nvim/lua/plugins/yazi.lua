@@ -14,8 +14,8 @@ return {
   },
   opts = {
     open_for_directories = true,
-    floating_window_scaling_factor = 0.99,
-    yazi_floating_window_border = "none",
+    floating_window_scaling_factor = 0.9,
+    yazi_floating_window_border = "rounded",
     yazi_floating_window_zindex = 250,
   },
   init = function()

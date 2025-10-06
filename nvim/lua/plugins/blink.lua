@@ -140,9 +140,9 @@ return {
             draw = {
               columns = {
                 { "kind_icon", "label", gap = 1 },
-                -- { "kind", "source_name" },
+                { "kind" },
               },
-              -- treesitter = { "lsp" },
+              treesitter = { "lsp" },
               components = {
                 kind_icon = {
                   text = function(ctx)
@@ -152,11 +152,6 @@ return {
                     return misc.get_kind_icon(ctx).highlight
                   end,
                 },
-                -- kind = {
-                --   text = function(ctx)
-                --     return "(" .. ctx.kind:lower() .. ")"
-                --   end,
-                -- },
                 label = {
                   text = function(ctx)
                     return require("colorful-menu").blink_components_text(ctx)
@@ -188,7 +183,7 @@ return {
         },
         snippets = { preset = "luasnip" },
         sources = {
-          default = { "lazydev", "lsp", "path", "snippets", "buffer", "copilot" },
+          default = { "lazydev", "lsp", "path", "snippets", "buffer" },
           providers = {
             copilot = {
               name = "copilot",

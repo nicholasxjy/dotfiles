@@ -219,20 +219,20 @@ return {
       },
       indent = {
         indent = {
-          enabled = false,
+          enabled = true,
           -- only_current = true,
           -- only_scope = true,
           -- char = "⋮",
           char = "",
           -- char = "⁘",
           hl = {
-            "SnacksIndentRed",
-            "SnacksIndentOrange",
-            "SnacksIndentYellow",
-            "SnacksIndentGreen",
-            "SnacksIndentCyan",
-            "SnacksIndentBlue",
-            "SnacksIndentViolet",
+            "RainbowDelimiterRed",
+            "RainbowDelimiterOrange",
+            "RainbowDelimiterYellow",
+            "RainbowDelimiterGreen",
+            "RainbowDelimiterCyan",
+            "RainbowDelimiterBlue",
+            "RainbowDelimiterViolet",
           },
         },
         scope = {
