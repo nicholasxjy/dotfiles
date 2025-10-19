@@ -19,25 +19,24 @@ return {
     end,
   },
   {
-    "OXY2DEV/markview.nvim",
-    lazy = false,
-    dependencies = {
-      "Saghen/blink.cmp",
-    },
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.icons" },
     opts = {
-      preview = {
-        enable = true,
-        icon_provider = "mini",
-      },
-      markdown = {
-        enable = true,
-      },
-      markdown_inline = {
-        enable = true,
-      },
-      html = {
-        enable = true,
+      completions = { blink = { enabled = true } },
+      code = {
+        language_border = "",
+        width = "block",
+        right_pad = 1,
       },
     },
+    ft = { "markdown", "norg", "rmd", "org", "codecompanion" },
+    config = function(_, opts)
+      require("render-markdown").setup(opts)
+      Snacks.toggle({
+        name = "Render Markdown",
+        get = require("render-markdown").get,
+        set = require("render-markdown").set,
+      }):map("<leader>um")
+    end,
   },
 }

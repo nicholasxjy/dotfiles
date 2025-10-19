@@ -1,5 +1,3 @@
-local snacks = require("snacks")
-
 local map = function(modes, lhs, rhs, opts)
   local options = { silent = true }
   if opts then
@@ -37,11 +35,11 @@ map({ "n" }, "<leader>k", "<cmd>w<cr>", { desc = "Save buffer", nowait = true, s
 
 -- Buffers
 map("n", "<leader>j", function()
-  snacks.bufdelete({ wipe = true })
+  Snacks.bufdelete({ wipe = true })
 end, { desc = "Delete buffer", nowait = true, silent = true })
 
 map("n", "<leader>bo", function()
-  snacks.bufdelete.other()
+  Snacks.bufdelete.other()
 end, { desc = "Delete other buffers" })
 
 map("n", "<leader>q", ":q<cr>", { desc = "Quit", nowait = true })
@@ -86,9 +84,9 @@ end, { desc = "which_key_ignore" })
 map("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
 map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
 
--- map("n", "<leader>gg", function()
---   snacks.lazygit()
--- end, { desc = "Lazygit" })
+map("n", "<leader>gg", function()
+  Snacks.lazygit()
+end, { desc = "Lazygit" })
 
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 -- better indenting
@@ -103,3 +101,9 @@ end, { expr = true, noremap = true })
 map({ "n", "v" }, "gh", "^", { desc = "Go to start of line", nowait = true })
 map({ "n", "v" }, "gl", "$", { desc = "Go to end of line", nowait = true })
 map({ "n", "v" }, "gm", "%", { desc = "Go to matching bracket", nowait = true })
+
+-- Duplicate and comment first instance
+map("n", "ycc", "yygccp", { remap = true, desc = "Duplicate current line and comment the first one out" })
+
+-- Search only in visual area when in visual mode
+map("x", "/", "<Esc>/\\%V", { desc = "Search only in visual area" })

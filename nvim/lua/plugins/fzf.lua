@@ -56,23 +56,12 @@ return {
     },
     keys = {
       -- stylua: ignore start
-      {
-        "<leader>/",
-        function() require("fzf-lua").lgrep_curbuf() end,
-        desc = "Find words in current buffer"
-      },
-      { "<leader>sl", function()require("fzf-lua").resume() end, desc = "Fzf resume" },
       { "<leader>:", function() require("fzf-lua").commands() end, desc = "Commands", },
+      { "<leader>/", function() require("fzf-lua").lgrep_curbuf() end, desc = "Find words in current buffer", },
       { "<leader>m", function() require("fzf-lua").marks() end, desc = "Fzf marks", },
       { "<leader>bb", function() require("fzf-lua").blines() end, desc = "Fzf blines", },
       { "<leader>fg", function() require("fzf-lua").global() end, desc = "Global", },
-      { "<leader>fa", function() require("fzf-lua").autocmds() end, desc = "Autocmds", },
       { "<leader>fb", function() require("fzf-lua").buffers() end, desc = "Buffers", },
-      { "<leader>fl", function() require("fzf-lua").loclist() end, desc = "Location list", },
-      { "<leader>fk", function() require("fzf-lua").keymaps() end, desc = "Keymaps", },
-      { "<leader>fj", function() require("fzf-lua").jumps() end, desc = "Jumps", },
-      { "<leader>fr", function() require("fzf-lua").registers() end, desc = "Registers", },
-      { "<leader>xq", function() require("fzf-lua").quickfix() end, desc = "Quickfix", },
       { "<leader>gB", function() require("fzf-lua").git_blame() end, desc = "Git blame", },
       { "<leader>gt", function() require("fzf-lua").git_tags() end, desc = "Git tags", },
       { "<leader>gh", function() require("fzf-lua").git_hunks() end, desc = "Git hunks", },

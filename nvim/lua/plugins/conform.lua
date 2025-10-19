@@ -1,21 +1,24 @@
 local supported = {
-  "css",
   "graphql",
   "handlebars",
+  "markdown",
+  "markdown.mdx",
+  "yaml",
+  "yaml.docker-compose",
+}
+
+local fe_supported = {
+  "css",
   "html",
   "javascript",
   "javascriptreact",
   "json",
   "jsonc",
   "less",
-  "markdown",
-  "markdown.mdx",
   "scss",
   "typescript",
   "typescriptreact",
   "vue",
-  "yaml",
-  "yaml.docker-compose",
 }
 
 return {
@@ -75,6 +78,10 @@ return {
     config = function(_, opts)
       for _, ft in ipairs(supported) do
         opts.formatters_by_ft[ft] = { "prettier" }
+      end
+
+      for _, ft in ipairs(fe_supported) do
+        opts.formatters_by_ft[ft] = { "prettier", "biome", stop_after_first = true }
       end
 
       require("conform").setup(opts)

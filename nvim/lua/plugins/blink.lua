@@ -1,4 +1,5 @@
 local misc = require("utils.misc")
+local ui = require("core.ui")
 
 local function has_words_before()
   local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
@@ -7,16 +8,12 @@ end
 
 return {
   {
-    "folke/lazydev.nvim",
-    ft = "lua",
-    opts = {
-      library = {
-        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-        { path = "snacks.nvim", words = { "Snacks" } },
-        { path = "lazy.nvim", words = { "LazyVim" } },
-        { path = "dart.nvim", words = { "Dart" } },
-      },
-    },
+    "onsails/lspkind.nvim",
+    config = function()
+      require("lspkind").init({
+        symbol_map = ui.icons.lspkind_kind_icons,
+      })
+    end,
   },
   {
     "L3MON4D3/LuaSnip",
@@ -46,7 +43,8 @@ return {
     dependencies = {
       "fang2hou/blink-copilot",
       { "xzbdmw/colorful-menu.nvim", opts = {} },
-      "onsails/lspkind.nvim",
+      "archie-judd/blink-cmp-words",
+      "folke/lazydev.nvim",
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -55,14 +53,9 @@ return {
         fuzzy = {
           implementation = "prefer_rust",
           sorts = {
-            function(a, b)
-              local sort = require("blink.cmp.fuzzy.sort")
-              if a.source_id == "spell" and b.source_id == "spell" then
-                return sort.label(a, b)
-              end
-            end,
+            "exact",
             "score",
-            "kind",
+            "sort_text",
             "label",
           },
         },
@@ -80,9 +73,10 @@ return {
           ["<CR>"] = { "accept", "fallback" },
           ["<Tab>"] = {
             "snippet_forward",
-            function()
+            function() -- sidekick next edit suggestion
               return require("sidekick").nes_jump_or_apply()
             end,
+            "select_next",
             function(cmp)
               if has_words_before() or vim.api.nvim_get_mode().mode == "c" then
                 return cmp.show()
@@ -105,7 +99,6 @@ return {
           enabled = true,
           window = { show_documentation = true, border = vim.g.bordered and "rounded" or "none" },
         },
-        -- appearance = { kind_icons = ui.icons.lazy_kind_icons },
         completion = {
           ghost_text = { enabled = true },
           documentation = {
@@ -139,7 +132,8 @@ return {
             } or "none",
             draw = {
               columns = {
-                { "kind_icon", "label", gap = 1 },
+                { "kind_icon" },
+                { "label", gap = 1 },
                 { "kind" },
               },
               treesitter = { "lsp" },
@@ -184,7 +178,30 @@ return {
         snippets = { preset = "luasnip" },
         sources = {
           default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+          per_filetype = {
+            text = { "dictionary" },
+            markdown = { "thesaurus" },
+          },
           providers = {
+            thesaurus = {
+              name = "blink-cmp-words",
+              module = "blink-cmp-words.thesaurus",
+              opts = {
+                score_offset = 0,
+                definition_pointers = { "!", "&", "^" },
+                similarity_pointers = { "&", "^" },
+                similarity_depth = 2,
+              },
+            },
+            dictionary = {
+              name = "blink-cmp-words",
+              module = "blink-cmp-words.dictionary",
+              opts = {
+                dictionary_search_threshold = 3,
+                score_offset = 0,
+                definition_pointers = { "!", "&", "^" },
+              },
+            },
             copilot = {
               name = "copilot",
               module = "blink-copilot",

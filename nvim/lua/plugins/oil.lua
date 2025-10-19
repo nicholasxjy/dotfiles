@@ -21,7 +21,18 @@ return {
         show_hidden = true,
       },
       float = {
-        border = "rounded",
+        padding = 2,
+        border = "rounded", --vim.g.bordered and "rounded" or "none",
+        max_height = 0.9,
+        max_width = 0.8,
+        win_options = {
+          winhighlight = "Normal:NormalFloat,FloatTitle:FloatTitle,FloatBorder:FloatBorder",
+        },
+      },
+      confirmation = {
+        win_options = {
+          winhighlight = "Normal:Normal,FloatTitle:FloatTitle,FloatBorder:FloatBorder",
+        },
       },
       keymaps = {
         ["<Tab>"] = {

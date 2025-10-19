@@ -7,6 +7,7 @@ return {
   {
     "max397574/better-escape.nvim",
     event = "VeryLazy",
+    enabled = false,
     opts = {
       timeout = 300,
       default_mappings = false,
@@ -43,6 +44,8 @@ return {
           "Trouble",
           "snacks_picker_input",
           "snacks_terminal",
+          "render-markdown",
+          "CodeCompanion",
         },
         cursorcolumn = {
           "snacks_picker_input",
@@ -51,6 +54,9 @@ return {
           "mason",
           "lazy",
           "fzf",
+          "oil",
+          "render-markdown",
+          "CodeCompanion",
         },
       },
 
@@ -67,15 +73,46 @@ return {
     },
   },
   {
+    "HiPhish/rainbow-delimiters.nvim",
+    ft = {
+      "html",
+      "clojure",
+      "query",
+      "scheme",
+      "lisp",
+      "commonlisp",
+      "php",
+      "javascriptreact",
+      "typescriptreact",
+    },
+    config = function()
+      require("rainbow-delimiters.setup").setup({
+        query = {
+          [""] = "",
+          javascript = "rainbow-tags-react",
+          tsx = "rainbow-tags-react",
+          commonlisp = "rainbow-delimiters",
+          scheme = "rainbow-delimiters",
+          query = function(bufnr)
+            -- Use blocks for read-only buffers like in `:InspectTree`
+            local is_nofile = vim.bo[bufnr].buftype == "nofile"
+            return is_nofile and "rainbow-blocks" or "rainbow-delimiters"
+          end,
+          clojure = "rainbow-delimiters",
+          html = "rainbow-delimiters",
+        },
+      })
+    end,
+  },
+  {
     "gen740/SmoothCursor.nvim",
     lazy = false,
-    enabled = false,
     opts = {
       type = "default",
       autostart = true,
       fancy = {
-        enable = true, -- enable fancy mode
-        head = { cursor = " ", texthl = "SmoothCursor", linehl = nil }, -- false to disable fancy head
+        enable = true,
+        head = { cursor = "", texthl = "SmoothCursor", linehl = nil }, -- ▷
         body = {
           { cursor = "󰝥", texthl = "SmoothCursorRed" },
           { cursor = "󰝥", texthl = "SmoothCursorOrange" },
@@ -85,10 +122,17 @@ return {
           { cursor = ".", texthl = "SmoothCursorBlue" },
           { cursor = ".", texthl = "SmoothCursorPurple" },
         },
-        tail = { cursor = nil, texthl = "SmoothCursor" }, -- false to disable fancy tail
+        tail = { cursor = nil, texthl = "SmoothCursor" },
       },
       enabled_filetypes = nil,
-      disabled_filetypes = nil,
+      disabled_filetypes = {
+        "render-markdown",
+        "CodeCompanion",
+        "oil",
+        "snacks_picker_input",
+        "snacks_picker_list",
+        "fzf",
+      },
     },
     config = function(_, opts)
       require("smoothcursor").setup(opts)
@@ -99,7 +143,7 @@ return {
     event = "VeryLazy",
     config = true,
     opts = {
-      highlight = { link = "LineNr" },
+      -- highlight = { link = "LineNr" },
     },
   },
   {
@@ -108,18 +152,14 @@ return {
     config = function()
       require("modes").setup({
         colors = {
-          bg = "#1E1F2A",
-          copy = "#f1ff5e",
-          delete = "#eb0089",
-          insert = "#5eff6c",
-          visual = "#e482ff",
+          bg = "#35374B", -- Optional bg param, defaults to Normal hl group
         },
         set_cursor = true,
         set_cursorline = true,
         set_number = true,
         set_signcolumn = true,
         ignore = { "NvimTree", "TelescopePrompt" },
-        line_opacity = 0.15,
+        line_opacity = 0.1,
       })
     end,
   },
@@ -133,31 +173,11 @@ return {
       -- char = "∶",
       -- char = "∷",
       -- char = "║",
-      char = "⋮",
+      -- char = "⋮",
       -- char = "",
-      -- char = "󰮾",
+      char = "󰮾",
       virtcolumn = "80",
     },
-  },
-  {
-    "kevinhwang91/nvim-hlslens",
-    event = "VeryLazy",
-    config = function()
-      require("hlslens").setup()
-      local kopts = { noremap = true, silent = true }
-      vim.api.nvim_set_keymap(
-        "n",
-        "n",
-        [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
-        kopts
-      )
-      vim.api.nvim_set_keymap(
-        "n",
-        "N",
-        [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
-        kopts
-      )
-    end,
   },
   {
     "vvvvv/yfix.nvim",
@@ -168,5 +188,20 @@ return {
         normal_mode = true,
       })
     end,
+  },
+  {
+    "nvzone/showkeys",
+    cmd = "ShowkeysToggle",
+    opts = {
+      timeout = 1,
+      maxkeys = 5,
+      position = "top-right",
+    },
+  },
+  {
+    "folke/ts-comments.nvim",
+    opts = {},
+    event = "VeryLazy",
+    enabled = vim.fn.has("nvim-0.10.0") == 1,
   },
 }

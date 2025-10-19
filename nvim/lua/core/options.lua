@@ -2,11 +2,11 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.autoformat = true
 vim.g.inlay_hints = true
-vim.g.transparent = true
+vim.g.codelens = true
+vim.g.transparent = false
 vim.g.bordered = vim.g.transparent
 
 vim.o.winborder = vim.g.bordered and "rounded" or "none"
-
 local opt = vim.opt
 
 -- UI/General
@@ -44,7 +44,6 @@ opt.smartindent = true -- Insert indents automatically
 opt.splitbelow = true -- Put new windows below current
 opt.splitkeep = "screen"
 opt.splitright = true -- Put new windows right of current
--- opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width

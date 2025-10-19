@@ -16,11 +16,7 @@ return {
       {
         "ff",
         function()
-          Snacks.picker.smart({
-            prompt = " ",
-            filter = { cwd = true },
-            layout = ui.layout.select,
-          })
+          Snacks.picker.smart({ filter = { cwd = true }, layout = ui.layout.ivy })
         end,
         desc = "Snacks smart",
         silent = true,
@@ -29,10 +25,9 @@ return {
         "nn",
         function()
           Snacks.picker.buffers({
-            prompt = " ",
-            layout = ui.layout.select,
-            current = false,
+            layout = ui.layout.ivy,
             sort_lastused = true,
+            current = false,
           })
         end,
         desc = "Snacks buffers",
@@ -58,29 +53,6 @@ return {
           Snacks.picker.notifications({ layout = ui.layout.dropdown })
         end,
         desc = "Notifications",
-      },
-      --search
-      {
-        "<leader>r",
-        function()
-          Snacks.picker.resume({ layout = ui.layout.dropdown })
-        end,
-        desc = "Resume",
-      },
-      {
-        "<leader>sg",
-        function()
-          Snacks.picker.grep({ layout = ui.layout.dropdown })
-        end,
-        desc = "Grep",
-      },
-      {
-        "<leader>sw",
-        function()
-          Snacks.picker.grep_word({ layout = ui.layout.dropdown })
-        end,
-        desc = "Visual selection or word",
-        mode = { "n", "x", "v" },
       },
       {
         "<leader>gf",
@@ -138,28 +110,52 @@ return {
         end,
         desc = "Colorschemes",
       },
+      -- search
+      {
+        "<leader>sg",
+        function()
+          Snacks.picker.grep({ layout = ui.layout.dropdown })
+        end,
+        desc = "Snacks Grep",
+      },
+      {
+        "<leader>sw",
+        function()
+          Snacks.picker.grep_word({ layout = ui.layout.dropdown })
+        end,
+        desc = "Grep visual selection or word",
+        mode = { "n", "v", "x" },
+      },
+      {
+        "<leader>r",
+        function()
+          Snacks.picker.resume({ layout = ui.layout.dropdown })
+        end,
+        desc = "Snacks resume",
+      },
       {
         "<leader>xt",
         function()
           ---@diagnostic disable-next-line: undefined-field
-          Snacks.picker.todo_comments({
-            keywords = {
-              "TODO",
-              "FIX",
-              "FIXME",
-              "NOTE",
-              "PERF",
-              "HACK",
-            },
-          })
+          Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME", "NOTE", "PERF", "HACK" } })
         end,
         desc = "Todo/Fix/Fixme etc",
       },
+
+      -- stylua: ignore start
+      { "<leader>fa", function() Snacks.picker.autocmds({ layout = ui.layout.dropdown }) end, desc = "Autocmds", },
+      { "<leader>fl", function() Snacks.picker.loclist({ layout = ui.layout.dropdown }) end, desc = "Location list", },
+      { "<leader>fk", function() Snacks.picker.keymaps({ layout = ui.layout.dropdown }) end, desc = "Keymaps", },
+      { "<leader>fj", function() Snacks.picker.jumps({ layout = ui.layout.dropdown }) end, desc = "Jumps", },
+      { "<leader>fr", function() Snacks.picker.registers({ layout = ui.layout.dropdown }) end, desc = "Registers", },
+      { "<leader>xq", function() Snacks.picker.qflist({ layout = ui.layout.dropdown }) end, desc = "Quickfix", },
+      -- stylua: ignore end
     },
     opts = {
       explorer = { enabled = true, replace_netrw = false },
       picker = {
         enabled = true,
+        prompt = "> ", -- --
         ui_select = true,
         layout = {
           cycle = false,
@@ -171,8 +167,8 @@ return {
         },
         formatters = {
           file = {
-            filename_first = true,
-            truncate = 80,
+            filename_first = false,
+            truncate = 60,
           },
           severity = {
             icons = true, -- show severity icons
@@ -191,28 +187,20 @@ return {
       },
       image = { enabled = true },
       dashboard = {
-        -- Used by the `header` section
         preset = {
           header = [[
- __     __             __  __         ____    U  ___ u  ____
- \ \   /"/u  ___     U|' \/ '|u    U /"___|u   \/"_ \/ |  _"\
-  \ \ / //  |_"_|    \| |\/| |/    \| |  _ /   | | | |/| | | |
-  /\ V /_,-. | |      | |  | |      | |_| |.-,_| |_| |U| |_| |\
- U  \_/-(_/U/| |\u    |_|  |_|       \____| \_)-\___/  |____/ u
-   //   .-,_|___|_,-.<<,-,,-.        _)(|_       \\     |||_
-  (__)   \_)-' '-(_/  (./  \.)      (__)__)     (__)   (__)_)
+███████╗ ██████╗██╗  ██╗ ██████╗
+██╔════╝██╔════╝██║  ██║██╔═══██╗
+█████╗  ██║     ███████║██║   ██║
+██╔══╝  ██║     ██╔══██║██║   ██║
+███████╗╚██████╗██║  ██║╚██████╔╝
+╚══════╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝
       ]],
         },
         sections = {
           { section = "header" },
           { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
-          {
-            icon = " ",
-            title = "Recent Files",
-            section = "recent_files",
-            indent = 2,
-            padding = 1,
-          },
+          { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
           { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
           { section = "startup" },
         },
@@ -220,19 +208,19 @@ return {
       indent = {
         indent = {
           enabled = true,
-          -- only_current = true,
-          -- only_scope = true,
+          only_current = true,
+          only_scope = true,
           -- char = "⋮",
           char = "",
           -- char = "⁘",
           hl = {
-            "RainbowDelimiterRed",
-            "RainbowDelimiterOrange",
-            "RainbowDelimiterYellow",
-            "RainbowDelimiterGreen",
-            "RainbowDelimiterCyan",
-            "RainbowDelimiterBlue",
-            "RainbowDelimiterViolet",
+            "SnacksIndentRed",
+            "SnacksIndentOrange",
+            "SnacksIndentYellow",
+            "SnacksIndentGreen",
+            "SnacksIndentCyan",
+            "SnacksIndentBlue",
+            "SnacksIndentViolet",
           },
         },
         scope = {
@@ -254,6 +242,15 @@ return {
             arrow = "",
           },
           only_current = true,
+          hl = {
+            "SnacksIndentChunkRed",
+            "SnacksIndentChunkOrange",
+            "SnacksIndentChunkYellow",
+            "SnacksIndentChunkGreen",
+            "SnacksIndentChunkCyan",
+            "SnacksIndentChunkBlue",
+            "SnacksIndentChunkViolet",
+          },
         },
       },
       bigfile = { enabled = true },
@@ -261,7 +258,7 @@ return {
       zen = { enabled = true },
       scroll = { enabled = false },
       input = { enabled = true },
-      words = { enabled = false },
+      words = { enabled = true },
       statuscolumn = {
         left = { "mark", "sign" }, -- priority of signs on the left (high to low)
         right = { "fold", "git" }, -- priority of signs on the right (high to low)
@@ -286,19 +283,10 @@ return {
           Snacks.toggle.diagnostics():map("<leader>ud")
           Snacks.toggle.line_number():map("<leader>ul")
           Snacks.toggle
-            .option("conceallevel", {
-              off = 0,
-              on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2,
-            })
+            .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
             :map("<leader>uc")
           Snacks.toggle.treesitter():map("<leader>uT")
-          Snacks.toggle
-            .option("background", {
-              off = "light",
-              on = "dark",
-              name = "Dark Background",
-            })
-            :map("<leader>ub")
+          Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
           Snacks.toggle.inlay_hints():map("<leader>uh")
           Snacks.toggle.indent():map("<leader>ug")
           Snacks.toggle.dim():map("<leader>uD")

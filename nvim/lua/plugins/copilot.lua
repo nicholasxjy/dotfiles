@@ -2,7 +2,8 @@ return {
   "zbirenbaum/copilot.lua",
   cmd = "Copilot",
   build = ":Copilot auth",
-  event = "BufReadPost",
+  event = { "BufReadPost", "InsertEnter" },
+  dependencies = { "copilotlsp-nvim/copilot-lsp" },
   opts = {
     suggestion = {
       enabled = false,
@@ -18,6 +19,9 @@ return {
     filetypes = {
       markdown = true,
       help = true,
+    },
+    nes = {
+      enabled = true,
     },
   },
 }
