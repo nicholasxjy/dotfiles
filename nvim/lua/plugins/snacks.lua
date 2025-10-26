@@ -16,21 +16,12 @@ return {
       {
         "ff",
         function()
-          Snacks.picker.smart({ filter = { cwd = true }, layout = ui.layout.ivy })
-        end,
-        desc = "Snacks smart",
-        silent = true,
-      },
-      {
-        "nn",
-        function()
-          Snacks.picker.buffers({
-            layout = ui.layout.ivy,
-            sort_lastused = true,
-            current = false,
+          Snacks.picker.smart({
+            filter = { cwd = true },
+            layout = ui.layout.ivy_border,
           })
         end,
-        desc = "Snacks buffers",
+        desc = "Snacks smart",
         silent = true,
       },
       {
@@ -55,101 +46,16 @@ return {
         desc = "Notifications",
       },
       {
-        "<leader>gf",
-        function()
-          Snacks.picker.git_files()
-        end,
-        desc = "Git files",
-      },
-      {
-        "<leader>gb",
-        function()
-          Snacks.picker.git_branches()
-        end,
-        desc = "Git branches",
-      },
-      {
-        "<leader>gc",
-        function()
-          Snacks.picker.git_log()
-        end,
-        desc = "Git log",
-      },
-      {
-        "<leader>gC",
-        function()
-          Snacks.picker.git_log_file()
-        end,
-        desc = "Git log file",
-      },
-      {
-        "<leader>gs",
-        function()
-          Snacks.picker.git_status()
-        end,
-        desc = "Git status",
-      },
-      {
-        "<leader>gd",
-        function()
-          Snacks.picker.git_diff()
-        end,
-        desc = "Git diff",
-      },
-      {
-        "<leader>gL",
-        function()
-          Snacks.picker.git_log_line()
-        end,
-        desc = "Git log line",
-      },
-      {
-        "<leader>fc",
-        function()
-          Snacks.picker.colorschemes({ layout = { preset = "top" } })
-        end,
-        desc = "Colorschemes",
-      },
-      -- search
-      {
-        "<leader>sg",
-        function()
-          Snacks.picker.grep({ layout = ui.layout.dropdown })
-        end,
-        desc = "Snacks Grep",
-      },
-      {
-        "<leader>sw",
-        function()
-          Snacks.picker.grep_word({ layout = ui.layout.dropdown })
-        end,
-        desc = "Grep visual selection or word",
-        mode = { "n", "v", "x" },
-      },
-      {
-        "<leader>r",
-        function()
-          Snacks.picker.resume({ layout = ui.layout.dropdown })
-        end,
-        desc = "Snacks resume",
-      },
-      {
         "<leader>xt",
         function()
           ---@diagnostic disable-next-line: undefined-field
-          Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME", "NOTE", "PERF", "HACK" } })
+          Snacks.picker.todo_comments({
+            layout = ui.layout.dropdown,
+            keywords = { "TODO", "FIX", "FIXME", "NOTE", "PERF", "HACK" },
+          })
         end,
         desc = "Todo/Fix/Fixme etc",
       },
-
-      -- stylua: ignore start
-      { "<leader>fa", function() Snacks.picker.autocmds({ layout = ui.layout.dropdown }) end, desc = "Autocmds", },
-      { "<leader>fl", function() Snacks.picker.loclist({ layout = ui.layout.dropdown }) end, desc = "Location list", },
-      { "<leader>fk", function() Snacks.picker.keymaps({ layout = ui.layout.dropdown }) end, desc = "Keymaps", },
-      { "<leader>fj", function() Snacks.picker.jumps({ layout = ui.layout.dropdown }) end, desc = "Jumps", },
-      { "<leader>fr", function() Snacks.picker.registers({ layout = ui.layout.dropdown }) end, desc = "Registers", },
-      { "<leader>xq", function() Snacks.picker.qflist({ layout = ui.layout.dropdown }) end, desc = "Quickfix", },
-      -- stylua: ignore end
     },
     opts = {
       explorer = { enabled = true, replace_netrw = false },
@@ -167,7 +73,7 @@ return {
         },
         formatters = {
           file = {
-            filename_first = false,
+            filename_first = true,
             truncate = 60,
           },
           severity = {
@@ -180,10 +86,27 @@ return {
           input = {
             keys = {
               ["<Esc>"] = { "close", mode = { "n", "i" } },
+              ["<leader>h"] = {
+                "sidekick_send",
+                mode = { "n", "i" },
+              },
+            },
+          },
+          list = {
+            keys = {
+              ["<c-j>"] = "list_down",
+              ["<c-k>"] = "list_up",
+              ["<c-n>"] = "list_down",
+              ["<c-p>"] = "list_up",
             },
           },
         },
         icons = { kinds = ui.icons.lspkind_kind_icons },
+        actions = {
+          sidekick_send = function(...)
+            return require("sidekick.cli.snacks").send(...)
+          end,
+        },
       },
       image = { enabled = true },
       dashboard = {
@@ -207,12 +130,12 @@ return {
       },
       indent = {
         indent = {
-          enabled = true,
+          enabled = false,
           only_current = true,
           only_scope = true,
           -- char = "⋮",
           char = "",
-          -- char = "⁘",
+          -- char = "┊",
           hl = {
             "SnacksIndentRed",
             "SnacksIndentOrange",
@@ -224,14 +147,22 @@ return {
           },
         },
         scope = {
-          enabled = false,
-          --char = "⁚",
+          enabled = true,
           char = "║",
           underline = true,
           only_current = true,
+          hl = {
+            "SnacksIndentScopeRed",
+            "SnacksIndentScopeOrange",
+            "SnacksIndentScopeYellow",
+            "SnacksIndentScopeGreen",
+            "SnacksIndentScopeCyan",
+            "SnacksIndentScopeBlue",
+            "SnacksIndentScopeViolet",
+          },
         },
         chunk = {
-          enabled = true,
+          enabled = false,
           char = {
             -- corner_top = "┌",
             -- corner_bottom = "└",
@@ -271,6 +202,8 @@ return {
       toggle = { enabled = true },
       lazygit = { enabled = false },
       terminal = { enabled = true },
+      scope = { enabled = true },
+      gitbrowse = { enabled = true },
     },
     init = function()
       vim.api.nvim_create_autocmd("User", {

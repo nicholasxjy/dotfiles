@@ -1,7 +1,7 @@
 return {
   settings = {
     gopls = {
-      semanticTokens = false,
+      semanticTokens = true,
       analyses = {
         unusedparams = true,
       },

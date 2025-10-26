@@ -3,9 +3,10 @@ vim.g.maplocalleader = " "
 vim.g.autoformat = true
 vim.g.inlay_hints = true
 vim.g.codelens = true
+vim.g.copilot_enabled = true
+
 vim.g.transparent = false
 vim.g.bordered = vim.g.transparent
-
 vim.o.winborder = vim.g.bordered and "rounded" or "none"
 local opt = vim.opt
 

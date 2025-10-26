@@ -43,6 +43,8 @@ map("n", "<leader>bo", function()
 end, { desc = "Delete other buffers" })
 
 map("n", "<leader>q", ":q<cr>", { desc = "Quit", nowait = true })
+map("n", "<leader>L", ":Lazy<cr>", { desc = "Lazy" })
+map("n", "<leader>M", ":Mason<cr>", { desc = "Mason" })
 
 -- Clear search with <esc>
 map({ "n", "i", "s" }, "<esc>", function()

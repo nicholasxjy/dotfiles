@@ -33,11 +33,10 @@ return {
   },
   keys = {
     {
-      "<tab>",
+      "<Tab>",
       function()
-        -- if there is a next edit, jump to it, otherwise apply it if any
         if not require("sidekick").nes_jump_or_apply() then
-          return "<Tab>" -- fallback to normal tab
+          return "<Tab>"
         end
       end,
       expr = true,
@@ -91,4 +90,24 @@ return {
       desc = "Sidekick Switch Focus",
     },
   },
+  config = function(_, opts)
+    require("sidekick").setup(opts)
+    local disabled = false
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "SidekickNesHide",
+      callback = function()
+        if disabled then
+          disabled = false
+          require("tiny-inline-diagnostic").enable()
+        end
+      end,
+    })
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "SidekickNesShow",
+      callback = function()
+        disabled = true
+        require("tiny-inline-diagnostic").disable()
+      end,
+    })
+  end,
 }

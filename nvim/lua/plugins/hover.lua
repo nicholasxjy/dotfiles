@@ -14,7 +14,7 @@ return {
         winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
       },
       preview_window = false,
-      title = true,
+      title = false,
       mouse_providers = {
         -- "hover.providers.lsp",
       },
@@ -26,10 +26,8 @@ return {
       require("hover").open()
     end, { desc = "hover.nvim (open)", silent = true, noremap = true })
 
-    vim.keymap.set("n", "<MouseMove>", function()
-      require("hover").mouse()
-    end, { desc = "hover.nvim (mouse)" })
-
-    vim.o.mousemoveevent = true
+    vim.keymap.set("n", "gK", function()
+      require("hover").enter()
+    end, { desc = "hover.nvim (enter)" })
   end,
 }

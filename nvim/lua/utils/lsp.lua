@@ -22,6 +22,14 @@ M.keymap_setup = function()
 
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
   vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
+
+  vim.keymap.set("n", "]]", function()
+    Snacks.words.jump(vim.v.count1)
+  end, { desc = "Next Reference" })
+  vim.keymap.set("n", "[[", function()
+    Snacks.words.jump(-vim.v.count1)
+  end, { desc = "Prev Reference" })
+
   -- Diagnostic keymaps
   local diagnostic_goto = function(count, severity)
     local opts = { count = count, severity = severity and vim.diagnostic.severity[severity] or nil }
@@ -38,112 +46,66 @@ M.keymap_setup = function()
   vim.keymap.set("n", "[w", diagnostic_goto(-1, "WARN"), { desc = "Prev warning" })
 
   vim.keymap.set("n", "gd", function()
-    Snacks.picker.lsp_definitions()
+    require("fzf-lua").lsp_definitions({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Goto Definition" })
 
   vim.keymap.set("n", "gD", function()
-    Snacks.picker.lsp_declarations()
+    require("fzf-lua").lsp_declarations({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Goto Declaration" })
 
   vim.keymap.set("n", "gr", function()
-    Snacks.picker.lsp_references()
+    require("fzf-lua").lsp_references({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Goto References" })
 
   vim.keymap.set("n", "gi", function()
-    Snacks.picker.lsp_implementations()
+    require("fzf-lua").lsp_implementations({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Goto Implementation" })
 
   vim.keymap.set("n", "gy", function()
-    Snacks.picker.lsp_type_definitions()
+    require("fzf-lua").lsp_typedefs({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Goto TypeDefs" })
 
   vim.keymap.set("n", "gI", function()
-    require("fzf-lua").lsp_incoming_calls()
+    require("fzf-lua").lsp_incoming_calls({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Incoming Calls" })
 
   vim.keymap.set("n", "gO", function()
-    require("fzf-lua").lsp_outgoing_calls()
+    require("fzf-lua").lsp_outgoing_calls({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Outgoing Calls" })
 
   vim.keymap.set("n", "<leader>ss", function()
-    Snacks.picker.lsp_symbols({
-      layout = ui.layout.dropdown,
-      filter = {
-        default = {
-          "Class",
-          "Constructor",
-          "Constant",
-          "Enum",
-          "Field",
-          "Function",
-          "Interface",
-          "Method",
-          "Module",
-          "Namespace",
-          "Package",
-          "Property",
-          "Struct",
-          "Type",
-          "Trait",
-        },
-      },
-    })
+    require("fzf-lua").lsp_document_symbols({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Lsp symbols" })
 
   vim.keymap.set("n", "<leader>sS", function()
-    Snacks.picker.lsp_workspace_symbols({ layout = ui.layout.dropdown })
+    require("fzf-lua").lsp_workspace_symbols({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Workspace lsp symbols" })
 
   vim.keymap.set("n", "<leader>xx", function()
-    Snacks.picker.diagnostics_buffer({ layout = ui.layout.dropdown })
+    require("fzf-lua").lsp_document_diagnostics({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Diagnostics" })
 
   vim.keymap.set("n", "<leader>xX", function()
-    Snacks.picker.diagnostics({ layout = ui.layout.dropdown })
+    require("fzf-lua").lsp_workspace_diagnostics({ winopts = ui.fzf.dropdown.winopts })
   end, { desc = "Workspace Diagnostics" })
 
-  vim.keymap.set("n", "]]", function()
-    Snacks.words.jump(vim.v.count1)
-  end, { desc = "Next Reference" })
-  vim.keymap.set("n", "[[", function()
-    Snacks.words.jump(-vim.v.count1)
-  end, { desc = "Prev Reference" })
-
-  -- vim.keymap.set("n", "<leader>xw", function()
-  --   require("fzf-lua").diagnostics_workspace({
-  --     winopts = {
-  --       title = "Workspace Diagnostics(Warns)",
-  --     },
-  --     severity_limit = vim.diagnostic.severity.WARN,
-  --   })
-  -- end, { desc = "Workspace Diagnostics(Warns)" })
-  --
-  -- vim.keymap.set("n", "<leader>xe", function()
-  --   require("fzf-lua").diagnostics_workspace({
-  --     winopts = {
-  --       title = "Workspace Diagnostics(Errors)",
-  --     },
-  --     severity_limit = vim.diagnostic.severity.ERROR,
-  --   })
-  -- end, { desc = "Workspace Diagnostics(Errors)" })
-
   vim.keymap.set("n", "<leader>xw", function()
-    Snacks.picker.diagnostics({
-      layout = ui.layout.dropdown,
-      severity = { min = vim.diagnostic.severity.WARN },
+    require("fzf-lua").lsp_workspace_diagnostics({
+      winopts = vim.tbl_extend("force", ui.fzf.dropdown.winopts, {
+        title = "Diagnostics Warns",
+      }),
+      severity_limit = vim.diagnostic.severity.WARN,
     })
   end, { desc = "Workspace Diagnostics(Warns)" })
 
   vim.keymap.set("n", "<leader>xe", function()
-    Snacks.picker.diagnostics({
-      layout = ui.layout.dropdown,
-      severity = { min = vim.diagnostic.severity.ERROR },
+    require("fzf-lua").lsp_workspace_diagnostics({
+      winopts = vim.tbl_extend("force", ui.fzf.dropdown.winopts, {
+        title = "Diagnostics Errors",
+      }),
+      severity_limit = vim.diagnostic.severity.ERROR,
     })
   end, { desc = "Workspace Diagnostics(Errors)" })
-
-  vim.keymap.set("n", "<leader>ff", function()
-    require("fzf-lua").lsp_finder()
-  end, { desc = "Fzf finder" })
 end
 
 M.methods_setup = function(client, bufnr)
@@ -167,37 +129,7 @@ M.methods_setup = function(client, bufnr)
   end
 
   if client:supports_method(Methods.textDocument_inlayHints) then
-    local inlay_hints_group = vim.api.nvim_create_augroup("xue/toggle_inlay_hints", { clear = false })
-    if vim.g.inlay_hints then
-      -- Initial inlay hint display.
-      -- Idk why but without the delay inlay hints aren't displayed at the very start.
-      vim.defer_fn(function()
-        local mode = vim.api.nvim_get_mode().mode
-        vim.lsp.inlay_hint.enable(mode == "n" or mode == "v", { bufnr = bufnr })
-      end, 500)
-    end
-
-    vim.api.nvim_create_autocmd("InsertEnter", {
-      group = inlay_hints_group,
-      desc = "Enable inlay hints",
-      buffer = bufnr,
-      callback = function()
-        if vim.g.inlay_hints then
-          vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
-        end
-      end,
-    })
-
-    vim.api.nvim_create_autocmd("InsertLeave", {
-      group = inlay_hints_group,
-      desc = "Disable inlay hints",
-      buffer = bufnr,
-      callback = function()
-        if vim.g.inlay_hints then
-          vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-        end
-      end,
-    })
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
 
   if client:supports_method(Methods.textDocument_documentHighlight) then

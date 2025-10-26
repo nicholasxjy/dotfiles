@@ -41,15 +41,18 @@ return {
   {
     "Saghen/blink.cmp",
     dependencies = {
-      "fang2hou/blink-copilot",
+      { "fang2hou/blink-copilot" },
       { "xzbdmw/colorful-menu.nvim", opts = {} },
-      "archie-judd/blink-cmp-words",
-      "folke/lazydev.nvim",
+      { "folke/lazydev.nvim" },
+      { "folke/sidekick.nvim" },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
     opts = function()
       return {
+        enabled = function()
+          return not vim.tbl_contains({ "bigfile" }, vim.bo.filetype)
+        end,
         fuzzy = {
           implementation = "prefer_rust",
           sorts = {
@@ -72,10 +75,10 @@ return {
           ["<C-e>"] = { "hide", "fallback" },
           ["<CR>"] = { "accept", "fallback" },
           ["<Tab>"] = {
-            "snippet_forward",
-            function() -- sidekick next edit suggestion
+            function()
               return require("sidekick").nes_jump_or_apply()
             end,
+            "snippet_forward",
             "select_next",
             function(cmp)
               if has_words_before() or vim.api.nvim_get_mode().mode == "c" then
@@ -136,7 +139,7 @@ return {
                 { "label", gap = 1 },
                 { "kind" },
               },
-              treesitter = { "lsp" },
+              -- treesitter = { "lsp" },
               components = {
                 kind_icon = {
                   text = function(ctx)
@@ -154,14 +157,6 @@ return {
                     return require("colorful-menu").blink_components_highlight(ctx)
                   end,
                 },
-                source_name = {
-                  text = function(ctx)
-                    return " " .. "[" .. ctx.source_name .. "]"
-                  end,
-                  highlight = function()
-                    return "Comment"
-                  end,
-                },
               },
             },
           },
@@ -172,41 +167,30 @@ return {
           completion = {
             ghost_text = { enabled = false },
             list = { selection = { preselect = false, auto_insert = true } },
-            menu = { auto_show = true },
+            menu = {
+              auto_show = function()
+                return vim.fn.getcmdtype() == ":"
+              end,
+            },
           },
         },
         snippets = { preset = "luasnip" },
         sources = {
-          default = { "lazydev", "lsp", "path", "snippets", "buffer" },
-          per_filetype = {
-            text = { "dictionary" },
-            markdown = { "thesaurus" },
-          },
+          default = { "lazydev", "lsp", "path", "snippets", "buffer", "copilot" },
           providers = {
-            thesaurus = {
-              name = "blink-cmp-words",
-              module = "blink-cmp-words.thesaurus",
-              opts = {
-                score_offset = 0,
-                definition_pointers = { "!", "&", "^" },
-                similarity_pointers = { "&", "^" },
-                similarity_depth = 2,
-              },
-            },
-            dictionary = {
-              name = "blink-cmp-words",
-              module = "blink-cmp-words.dictionary",
-              opts = {
-                dictionary_search_threshold = 3,
-                score_offset = 0,
-                definition_pointers = { "!", "&", "^" },
-              },
-            },
             copilot = {
               name = "copilot",
               module = "blink-copilot",
               async = true,
               score_offset = 100,
+              enabled = function()
+                return vim.g.copilot_enabled
+              end,
+              opts = {
+                max_completions = 3,
+                max_items = 2,
+                max_attempts = 4,
+              },
             },
             lazydev = {
               name = "LazyDev",
@@ -219,6 +203,28 @@ return {
     end,
     config = function(_, opts)
       require("blink.cmp").setup(opts)
+
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      vim.tbl_deep_extend("force", capabilities, {
+        workspace = {
+          fileOperations = {
+            didRename = true,
+            willRename = true,
+          },
+        },
+        textDocument = {
+          foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true,
+          },
+        },
+      })
+      capabilities =
+        vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities(capabilities, true))
+
+      vim.lsp.config("*", {
+        capabilities = capabilities,
+      })
     end,
   },
 }

@@ -84,11 +84,13 @@ return {
       "php",
       "javascriptreact",
       "typescriptreact",
+      "lua",
     },
     config = function()
       require("rainbow-delimiters.setup").setup({
         query = {
           [""] = "",
+          lua = "rainbow-delimiters",
           javascript = "rainbow-tags-react",
           tsx = "rainbow-tags-react",
           commonlisp = "rainbow-delimiters",

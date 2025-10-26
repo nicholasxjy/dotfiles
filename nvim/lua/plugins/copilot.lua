@@ -21,7 +21,7 @@ return {
       help = true,
     },
     nes = {
-      enabled = true,
+      enabled = false,
     },
   },
 }
