@@ -2,12 +2,20 @@ return {
   {
     "folke/persistence.nvim",
     event = "BufReadPre",
+    opts = {
+      dir = vim.fn.stdpath("state") .. "/sessions/", -- directory where session files are saved
+      need = 0,
+      branch = true, -- use git branch to save session
+    },
+  },
+  {
+    "folke/ts-comments.nvim",
     opts = {},
+    event = "VeryLazy",
   },
   {
     "max397574/better-escape.nvim",
     event = "VeryLazy",
-    enabled = false,
     opts = {
       timeout = 300,
       default_mappings = false,
@@ -26,14 +34,13 @@ return {
     },
     opts = {
       on_startup = {
-        cursorline = true,
+        cursorline = false,
         cursorcolumn = false,
       },
 
       disable_in_insert = true,
       disable_in_diff = true,
       always_highlight_number = true,
-      -- Define filetypes which are ignored by the plugin
       ignore = {
         cursorline = {
           "DressingInput",
@@ -73,40 +80,6 @@ return {
     },
   },
   {
-    "HiPhish/rainbow-delimiters.nvim",
-    ft = {
-      "html",
-      "clojure",
-      "query",
-      "scheme",
-      "lisp",
-      "commonlisp",
-      "php",
-      "javascriptreact",
-      "typescriptreact",
-      "lua",
-    },
-    config = function()
-      require("rainbow-delimiters.setup").setup({
-        query = {
-          [""] = "",
-          lua = "rainbow-delimiters",
-          javascript = "rainbow-tags-react",
-          tsx = "rainbow-tags-react",
-          commonlisp = "rainbow-delimiters",
-          scheme = "rainbow-delimiters",
-          query = function(bufnr)
-            -- Use blocks for read-only buffers like in `:InspectTree`
-            local is_nofile = vim.bo[bufnr].buftype == "nofile"
-            return is_nofile and "rainbow-blocks" or "rainbow-delimiters"
-          end,
-          clojure = "rainbow-delimiters",
-          html = "rainbow-delimiters",
-        },
-      })
-    end,
-  },
-  {
     "gen740/SmoothCursor.nvim",
     lazy = false,
     opts = {
@@ -114,7 +87,7 @@ return {
       autostart = true,
       fancy = {
         enable = true,
-        head = { cursor = "", texthl = "SmoothCursor", linehl = nil }, -- ▷
+        head = { cursor = ">", texthl = "SmoothCursor", linehl = nil }, -- ▷
         body = {
           { cursor = "󰝥", texthl = "SmoothCursorRed" },
           { cursor = "󰝥", texthl = "SmoothCursorOrange" },
@@ -149,21 +122,15 @@ return {
     },
   },
   {
-    "mvllow/modes.nvim",
+    "rasulomaroff/reactive.nvim",
     event = "VeryLazy",
-    config = function()
-      require("modes").setup({
-        colors = {
-          bg = "#35374B", -- Optional bg param, defaults to Normal hl group
-        },
-        set_cursor = true,
-        set_cursorline = true,
-        set_number = true,
-        set_signcolumn = true,
-        ignore = { "NvimTree", "TelescopePrompt" },
-        line_opacity = 0.1,
-      })
-    end,
+    opts = {
+      builtin = {
+        cursorline = true,
+        cursor = true,
+        modemsg = true,
+      },
+    },
   },
   {
     "lukas-reineke/virt-column.nvim",
@@ -176,8 +143,8 @@ return {
       -- char = "∷",
       -- char = "║",
       -- char = "⋮",
-      -- char = "",
-      char = "󰮾",
+      char = "",
+      -- char = "󰮾",
       virtcolumn = "80",
     },
   },
@@ -192,18 +159,28 @@ return {
     end,
   },
   {
-    "nvzone/showkeys",
-    cmd = "ShowkeysToggle",
+    "NStefan002/screenkey.nvim",
+    lazy = false,
     opts = {
-      timeout = 1,
-      maxkeys = 5,
-      position = "top-right",
+      win_opts = {
+        row = vim.o.lines - vim.o.cmdheight - 1,
+        col = vim.o.columns - 1,
+        relative = "editor",
+        anchor = "SE",
+        width = 20,
+        height = 2,
+        border = "single",
+        title = "Screenkey",
+        title_pos = "center",
+        style = "minimal",
+        focusable = false,
+        noautocmd = true,
+      },
+      hl_groups = {
+        ["screenkey.hl.key"] = { link = "Type" },
+        ["screenkey.hl.map"] = { link = "Keyword" },
+        ["screenkey.hl.sep"] = { link = "Normal" },
+      },
     },
-  },
-  {
-    "folke/ts-comments.nvim",
-    opts = {},
-    event = "VeryLazy",
-    enabled = vim.fn.has("nvim-0.10.0") == 1,
   },
 }

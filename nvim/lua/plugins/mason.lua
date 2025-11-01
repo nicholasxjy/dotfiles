@@ -10,7 +10,7 @@ return {
       upgrade_pip = true,
     },
     ui = {
-      border = vim.g.bordered and "rounded" or "none",
+      border = "single",
     },
     ensure_installed = {
 

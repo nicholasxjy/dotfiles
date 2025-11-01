@@ -33,15 +33,15 @@ M.layout = {
     layout = {
       backdrop = false,
       row = -1,
-      width = 0.95,
+      width = 0.99,
       min_width = 80,
-      height = 0.9,
+      height = 0.7,
       border = "none",
       box = "vertical",
       { win = "preview", title = "{preview}", height = 0.55, border = "rounded" },
       {
         box = "vertical",
-        border = "rounded",
+        border = "none",
         title = "{title} {live} {flags}",
         title_pos = "center",
         { win = "input", height = 1, border = "bottom" },
@@ -105,16 +105,16 @@ M.layout = {
       row = -1,
       width = 0,
       min_width = 120,
-      height = 0.3,
+      height = 0.35,
       backdrop = false,
       {
         box = "vertical",
-        border = vim.g.bordered,
+        border = "none",
         title = "{title} {live} {flags}",
         { win = "input", height = 1, border = "bottom" },
-        { win = "list", border = "none" },
+        { win = "list", border = false },
       },
-      { win = "preview", title = "{preview}", border = vim.g.bordered, width = 0.45 },
+      { win = "preview", title = "{preview}", border = "rounded", width = 0.45 },
     },
   },
 }
@@ -122,14 +122,14 @@ M.layout = {
 M.fzf = {
   dropdown = {
     winopts = {
-      height = 0.9, -- window height
+      height = 0.7, -- window height
       width = 1, -- window width
       row = 1, -- window row position (0=top, 1=bottom)
       col = 0, -- window col position (0=left, 1=right)
       border = vim.g.bordered and "rounded" or "none",
       backdrop = 100,
       preview = {
-        border = vim.g.bordered and "rounded" or "none",
+        border = "rounded",
         wrap = true,
         hidden = false,
         layout = "vertical",
@@ -139,14 +139,14 @@ M.fzf = {
   },
   ivy = {
     winopts = {
-      height = 0.3, -- window height
+      height = 0.35, -- window height
       width = 1, -- window width
       row = 1, -- window row position (0=top, 1=bottom)
       col = 0, -- window col position (0=left, 1=right)
       border = vim.g.bordered and "rounded" or "none",
       backdrop = 100,
       preview = {
-        border = vim.g.bordered and "rounded" or "none",
+        border = "rounded",
         wrap = true,
         hidden = false,
         layout = "horizontal",

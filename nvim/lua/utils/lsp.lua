@@ -13,9 +13,7 @@ M.keymap_setup = function()
   vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
 
-  vim.keymap.set({ "n", "v", "x" }, "<leader>ca", function()
-    vim.lsp.buf.code_action()
-  end, { desc = "Code Action", noremap = true, silent = true })
+  vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
   --
   vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })
   vim.keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, { desc = "Codelens Refresh" })
@@ -46,64 +44,97 @@ M.keymap_setup = function()
   vim.keymap.set("n", "[w", diagnostic_goto(-1, "WARN"), { desc = "Prev warning" })
 
   vim.keymap.set("n", "gd", function()
-    require("fzf-lua").lsp_definitions({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.lsp_definitions({
+      layout = ui.layout.dropdown,
+    })
   end, { desc = "Goto Definition" })
 
   vim.keymap.set("n", "gD", function()
-    require("fzf-lua").lsp_declarations({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.lsp_declarations({ layout = ui.layout.dropdown })
   end, { desc = "Goto Declaration" })
 
   vim.keymap.set("n", "gr", function()
-    require("fzf-lua").lsp_references({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.lsp_references({ layout = ui.layout.dropdown })
   end, { desc = "Goto References" })
 
   vim.keymap.set("n", "gi", function()
-    require("fzf-lua").lsp_implementations({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.lsp_implementations({ layout = ui.layout.dropdown })
   end, { desc = "Goto Implementation" })
 
   vim.keymap.set("n", "gy", function()
-    require("fzf-lua").lsp_typedefs({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.lsp_type_definitions({ layout = ui.layout.dropdown })
   end, { desc = "Goto TypeDefs" })
 
   vim.keymap.set("n", "gI", function()
-    require("fzf-lua").lsp_incoming_calls({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.lsp_incoming_calls({ layout = ui.layout.dropdown })
   end, { desc = "Incoming Calls" })
 
   vim.keymap.set("n", "gO", function()
-    require("fzf-lua").lsp_outgoing_calls({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.lsp_outgoing_calls({ layout = ui.layout.dropdown })
   end, { desc = "Outgoing Calls" })
 
   vim.keymap.set("n", "<leader>ss", function()
-    require("fzf-lua").lsp_document_symbols({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.lsp_symbols({ layout = ui.layout.dropdown })
   end, { desc = "Lsp symbols" })
 
   vim.keymap.set("n", "<leader>sS", function()
-    require("fzf-lua").lsp_workspace_symbols({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.lsp_workspace_symbols({ layout = ui.layout.dropdown })
   end, { desc = "Workspace lsp symbols" })
 
   vim.keymap.set("n", "<leader>xx", function()
-    require("fzf-lua").lsp_document_diagnostics({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.diagnostics_buffer({
+      layout = ui.layout.dropdown,
+    })
   end, { desc = "Diagnostics" })
 
   vim.keymap.set("n", "<leader>xX", function()
-    require("fzf-lua").lsp_workspace_diagnostics({ winopts = ui.fzf.dropdown.winopts })
+    Snacks.picker.diagnostics({
+      layout = ui.layout.dropdown,
+      sort = {
+        fields = {
+          "severity",
+          "is_current",
+          "is_cwd",
+          "file",
+          "lnum",
+        },
+      },
+    })
   end, { desc = "Workspace Diagnostics" })
 
   vim.keymap.set("n", "<leader>xw", function()
-    require("fzf-lua").lsp_workspace_diagnostics({
-      winopts = vim.tbl_extend("force", ui.fzf.dropdown.winopts, {
-        title = "Diagnostics Warns",
-      }),
-      severity_limit = vim.diagnostic.severity.WARN,
+    Snacks.picker.diagnostics({
+      layout = ui.layout.dropdown,
+      sort = {
+        fields = {
+          "severity",
+          "is_current",
+          "is_cwd",
+          "file",
+          "lnum",
+        },
+      },
+      filter = {
+        severity = { min = vim.diagnostic.severity.WARN },
+      },
     })
   end, { desc = "Workspace Diagnostics(Warns)" })
 
   vim.keymap.set("n", "<leader>xe", function()
-    require("fzf-lua").lsp_workspace_diagnostics({
-      winopts = vim.tbl_extend("force", ui.fzf.dropdown.winopts, {
-        title = "Diagnostics Errors",
-      }),
-      severity_limit = vim.diagnostic.severity.ERROR,
+    Snacks.picker.diagnostics({
+      layout = ui.layout.dropdown,
+      sort = {
+        fields = {
+          "severity",
+          "is_current",
+          "is_cwd",
+          "file",
+          "lnum",
+        },
+      },
+      filter = {
+        severity = { min = vim.diagnostic.severity.ERROR },
+      },
     })
   end, { desc = "Workspace Diagnostics(Errors)" })
 end

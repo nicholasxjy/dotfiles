@@ -1,4 +1,5 @@
 local ui = require("core.ui")
+local match_fg = "#EFBF04" --"#ff7f50" --"#F92772"
 
 return {
   {
@@ -7,7 +8,7 @@ return {
     priority = 1000,
     branch = "dev",
     opts = {
-      style = "multiplex", -- Choose between 'vulgaris' (regular), 'multiplex' (greener), and 'light'
+      style = "vulgaris", -- Choose between 'vulgaris' (regular), 'multiplex' (greener), and 'light'
       toggle_style_key = nil, -- Keybind to toggle theme style. Leave it nil to disable it, or set it to a string, e.g. "<leader>ts"
       toggle_style_list = { "vulgaris", "multiplex", "light" }, -- List of styles to toggle between
       transparent = vim.g.transparent, -- Show/hide background
@@ -22,8 +23,8 @@ return {
       code_style = {
         comments = { italic = true },
         conditionals = { italic = true, bold = true },
-        keywords = { bold = true, italic = true },
-        functions = {},
+        keywords = { bold = false, italic = true },
+        functions = { bold = true },
         namespaces = { italic = true },
         parameters = { italic = true },
         strings = {},
@@ -34,24 +35,60 @@ return {
       lualine = {
         transparent = true, -- lualine center bar transparency
       },
-
-      -- Custom Highlights --
       colors = {
+        fg = "#EAEAEA",
+        bg0 = "#121212",
+        bg1 = "#262626",
+        red = "#B91C1C",
+        green = "#059669",
+        yellow = "#FBBF24",
+        orange = "#F59E0B",
+        blue = "#3B82F6",
+        light_blue = "#6c67ea",
+        cyan = "#1EA7A0",
+        coral = "#DC2626",
+        purple = "#ae81ef",
         rainbows = ui.rainbow_colors,
       }, -- Override default colors
       highlights = {
-        CursorLineNr = { fg = "$yellow", fmt = "bold" },
+        ["@tag.attribute"] = { fg = "#b4b0e0", fmt = "italic" },
+        ["@keyword.import"] = { fg = "#01d5f1", fmt = "bold" },
+        ["@keyword.export"] = { fg = "#01d5f1", fmt = "bold" },
+        ["@lsp.type.interface"] = { fg = "#99582a", fmt = "bold,italic" },
+        ["@lsp.type.enum"] = { fg = "#9EC410", fmt = "bold" },
+        ["@lsp.type.enumMember"] = { fg = "#BF9903", fmt = "italic" },
+        ["@lsp.typemod.enum.readonly"] = { fg = "#9EC410", fmt = "bold" },
+        ["@lsp.typemod.enumMember.readonly"] = { fg = "#BF9903", fmt = "italic" },
+        ["@lsp.mod.readonly"] = { fg = "#D97706" },
+        Comment = { fg = "#8A8A8D", fmt = "italic" },
+        ["@comment"] = { fg = "#8A8A8D", fmt = "italic" },
+        CursorLineNr = { bg = "$yellow", fmt = "bold" },
         PmenuSel = { bg = "#2f2a7a", fmt = "bold" }, --#2f2a7a --"#2f447f" -- "#503240"
-        FloatBorder = { fg = vim.g.transparent and "#3B38A0" or "none" },
+        FloatBorder = { fg = "#3B38A0", bg = "none" },
+        NormalFloat = { bg = vim.g.transparent and "none" or "$bg0" },
         FloatTitle = { fg = "#D92C54", fmt = "bold,italic" },
+        MiniClueBorder = { link = "FloatBorder" },
+        MiniClueDescGroup = { fg = "$yellow", fmt = "bold" },
+        MiniClueTitle = { link = "FloatTitle" },
+        MiniClueNextKey = { fg = "$coral", fmt = "bold" },
+        MiniFilesBorder = { link = "FloatBorder" },
+        MiniFilesNormal = { link = "NormalFloat" },
+        MiniTablineCurrent = { fg = "$orange", bg = "$fg", fmt = "bold,underline" },
+        MiniTablineFill = { bg = "$bg0" },
+        MiniTablineHidden = { fg = "$light_grey", bg = "$bg0" },
+
+        DartFill = { link = "MiniTablineFill" },
+
+        BlinkCmpLabelMatch = { fg = match_fg, fmt = "bold" },
+
         SnacksPickerTitle = { link = "FloatTitle" },
         SnacksPickerList = { bg = vim.g.transparent and "none" or "$bg0" },
         SnacksPickerPreview = { bg = vim.g.transparent and "none" or "$bg0" },
         SnacksPickerInput = { bg = vim.g.transparent and "none" or "$bg0" },
         SnacksPickerInputBorder = { fg = "#3B38A0" },
-        SnacksPickerBorder = { fg = vim.g.transparent and "#3B38A0" or "$bg0" },
+        SnacksPickerBorder = { fg = "#3B38A0", bg = "none" },
         SnacksPickerPreviewTitle = { fg = "$cyan", fmt = "bold,italic" },
-        SnacksPickerMatch = { fg = "$orange", fmt = "italic,bold,underline" },
+        SnacksPickerMatch = { fg = match_fg, fmt = "bold,underline" },
         SnacksPickerCursorLine = { link = "PmenuSel" },
         SnacksPickerListCursorLine = { link = "PmenuSel" },
         SnacksPickerDir = { fg = "$light_grey", fmt = "italic" },
@@ -88,56 +125,6 @@ return {
         darker = false, -- darker colors for diagnostic
         undercurl = true, -- use undercurl instead of underline for diagnostics
         background = true, -- use background color for virtual text
-      },
-    },
-  },
-  {
-    "rebelot/kanagawa.nvim",
-    opts = {
-      compile = false, -- enable compiling the colorscheme
-      undercurl = true, -- enable undercurls
-      commentStyle = { italic = true },
-      functionStyle = {},
-      keywordStyle = { italic = true },
-      statementStyle = { bold = true },
-      typeStyle = {},
-      transparent = false, -- do not set background color
-      dimInactive = false, -- dim inactive window `:h hl-NormalNC`
-      terminalColors = true, -- define vim.g.terminal_color_{0,17}
-      colors = { -- add/modify theme and palette colors
-        palette = {},
-        theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
-      },
-      overrides = function(colors) -- add/modify highlights
-        -- local theme = colors.theme
-        return {
-          SnacksIndentChunkRed = { link = "RainbowDelimiterRed" },
-          SnacksIndentChunkOrange = { link = "RainbowDelimiterOrange" },
-          SnacksIndentChunkYellow = { link = "RainbowDelimiterYellow" },
-          SnacksIndentChunkGreen = { link = "RainbowDelimiterGreen" },
-          SnacksIndentChunkCyan = { link = "RainbowDelimiterCyan" },
-          SnacksIndentChunkBlue = { link = "RainbowDelimiterBlue" },
-          SnacksIndentChunkViolet = { link = "RainbowDelimiterViolet" },
-          SnacksIndentRed = { link = "RainbowDelimiterRed" },
-          SnacksIndentOrange = { link = "RainbowDelimiterOrange" },
-          SnacksIndentYellow = { link = "RainbowDelimiterYellow" },
-          SnacksIndentGreen = { link = "RainbowDelimiterGreen" },
-          SnacksIndentCyan = { link = "RainbowDelimiterCyan" },
-          SnacksIndentBlue = { link = "RainbowDelimiterBlue" },
-          SnacksIndentViolet = { link = "RainbowDelimiterViolet" },
-          SnacksIndentScopeRed = { link = "RainbowDelimiterRed" },
-          SnacksIndentScopeOrange = { link = "RainbowDelimiterOrange" },
-          SnacksIndentScopeYellow = { link = "RainbowDelimiterYellow" },
-          SnacksIndentScopeGreen = { link = "RainbowDelimiterGreen" },
-          SnacksIndentScopeCyan = { link = "RainbowDelimiterCyan" },
-          SnacksIndentScopeBlue = { link = "RainbowDelimiterBlue" },
-          SnacksIndentScopeViolet = { link = "RainbowDelimiterViolet" },
-        }
-      end,
-      theme = "wave", -- Load "wave" theme
-      background = { -- map the value of 'background' option to a theme
-        dark = "wave", -- try "dragon" !
-        light = "lotus",
       },
     },
   },

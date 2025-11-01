@@ -16,17 +16,18 @@ return {
         ["--no-scrollbar"] = true,
       },
       winopts = {
-        border = vim.g.bordered and "rounded" or "none",
-        backdrop = vim.g.transparent and 100 or 80,
-        width = 0.85,
-        height = 0.95,
-        row = 0.7,
+        height = 0.9, -- window height
+        width = 1, -- window width
+        row = 1, -- window row position (0=top, 1=bottom)
+        col = 0,
+        border = "rounded",
+        backdrop = 100,
         preview = {
-          border = vim.g.bordered and "rounded" or "none",
+          border = "rounded",
           wrap = true,
           hidden = false,
           layout = "vertical",
-          vertical = "up:50%",
+          vertical = "up:55%",
         },
       },
       files = {
@@ -36,12 +37,15 @@ return {
         color_icons = true,
         formatter = "path.filename_first",
       },
+      oldfiles = {
+        formatter = "path.filename_first",
+      },
       buffers = {
         formatter = "path.filename_first",
       },
       lsp = {
         symbols = {
-          symbol_icons = ui.icons.lspkind_kind_icons,
+          symbol_icons = ui.icons.mini_kind_icons,
         },
       },
       diagnostics = {
@@ -51,104 +55,6 @@ return {
       },
     },
     keys = {
-      {
-        "<leader>:",
-        function()
-          require("fzf-lua").commands({
-            winopts = ui.fzf.ivy.winopts,
-          })
-        end,
-        desc = "Fzf commands",
-      },
-      {
-        "<leader>/",
-        function()
-          require("fzf-lua").blines({
-            winopts = ui.fzf.dropdown.winopts,
-          })
-        end,
-        desc = "Fzf blines",
-      },
-      {
-        "<leader>m",
-        function()
-          require("fzf-lua").marks({
-            winopts = ui.fzf.ivy.winopts,
-          })
-        end,
-        desc = "Fzf marks",
-      },
-      {
-        "<leader>r",
-        function()
-          require("fzf-lua").live_grep({
-            resume = true,
-            winopts = ui.fzf.dropdown.winopts,
-          })
-        end,
-        desc = "Fzf resume live grep",
-      },
-
-      {
-        "<leader>R",
-        function()
-          require("fzf-lua").resume()
-        end,
-        desc = "Fzf resume",
-      },
-      {
-        "nn",
-        function()
-          require("fzf-lua").buffers({
-            sort_lastused = true,
-            ignore_current_buffer = false,
-            winopts = ui.fzf.ivy.winopts,
-            cwd_only = true,
-          })
-        end,
-        desc = "Fzf buffers",
-        silent = true,
-      },
-      -- search
-      {
-        "<leader>sg",
-        function()
-          require("fzf-lua").live_grep({
-            winopts = ui.fzf.dropdown.winopts,
-            cwd_only = true,
-          })
-        end,
-        desc = "Fzf live grep",
-      },
-      {
-        "<leader>sG",
-        function()
-          require("fzf-lua").live_grep({
-            winopts = ui.fzf.dropdown.winopts,
-          })
-        end,
-        desc = "Fzf live grep (glob)",
-      },
-      {
-        "<leader>sw",
-        function()
-          require("fzf-lua").grep_cword({
-            winopts = ui.fzf.dropdown.winopts,
-          })
-        end,
-        desc = "Fzf grep word under cursor",
-      },
-      {
-        "<leader>sv",
-        function()
-          require("fzf-lua").grep_visual({
-            winopts = ui.fzf.dropdown.winopts,
-          })
-        end,
-        desc = "Fzf grep visual selection",
-        mode = { "n", "x", "v" },
-      },
-      -- find
       {
         "<leader>fb",
         function()
@@ -177,44 +83,37 @@ return {
       {
         "<leader>fa",
         function()
-          require("fzf-lua").autocmds()
+          require("fzf-lua").autocmds({ winopts = ui.fzf.dropdown.winopts })
         end,
         desc = "Fzf Autocmds",
       },
       {
         "<leader>fl",
         function()
-          require("fzf-lua").loclist()
+          require("fzf-lua").loclist({ winopts = ui.fzf.dropdown.winopts })
         end,
         desc = "Fzf location list",
       },
       {
         "<leader>fk",
         function()
-          require("fzf-lua").keymaps()
+          require("fzf-lua").keymaps({ winopts = ui.fzf.dropdown.winopts })
         end,
         desc = "Fzf keymaps",
       },
       {
         "<leader>fj",
         function()
-          require("fzf-lua").jumps()
+          require("fzf-lua").jumps({ winopts = ui.fzf.dropdown.winopts })
         end,
         desc = "Fzf jumps",
       },
       {
         "<leader>fr",
         function()
-          require("fzf-lua").registers()
+          require("fzf-lua").registers({ winopts = ui.fzf.dropdown.winopts })
         end,
         desc = "Fzf registers",
-      },
-      {
-        "<leader>xq",
-        function()
-          require("fzf-lua").qflist()
-        end,
-        desc = "Fzf quickfix",
       },
       -- git
       {
@@ -269,21 +168,21 @@ return {
       {
         "<leader>gt",
         function()
-          require("fzf-lua").git_tags()
+          require("fzf-lua").git_tags({ winopts = ui.fzf.dropdown.winopts })
         end,
         desc = "Git tags",
       },
       {
         "<leader>gh",
         function()
-          require("fzf-lua").git_hunks()
+          require("fzf-lua").git_hunks({ winopts = ui.fzf.dropdown.winopts })
         end,
         desc = "Git hunks",
       },
       {
         "<leader>gw",
         function()
-          require("fzf-lua").git_worktrees()
+          require("fzf-lua").git_worktrees({ winopts = ui.fzf.dropdown.winopts })
         end,
         desc = "Git worktrees",
       },

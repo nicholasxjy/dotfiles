@@ -8,6 +8,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
+    { import = "plugins.snacks" },
     { import = "plugins" },
   },
   defaults = {
@@ -20,7 +21,7 @@ require("lazy").setup({
   },
   checker = { enabled = true },
   ui = {
-    border = vim.g.bordered and "rounded" or "none",
+    border = "single",
   },
   performance = {
     rtp = {

@@ -1,4 +1,3 @@
---- Show LSP clients in the statusline
 local function lsp_component()
   local buf_clients = vim.lsp.get_clients({ bufnr = 0 })
   local conform_installed, conform = pcall(require, "conform")
@@ -23,29 +22,7 @@ end
 return {
   "nvim-lualine/lualine.nvim",
   event = "VeryLazy",
-  dependencies = {
-    "nvim-mini/mini.icons",
-    {
-      "linrongbin16/lsp-progress.nvim",
-      config = function()
-        local api = require("lsp-progress.api")
-        require("lsp-progress").setup({
-          console_log = false,
-          file_log = false,
-          format = function(client_messages)
-            local sign = " LSP"
-            if #client_messages > 0 then
-              return sign .. " " .. table.concat(client_messages, " ")
-            end
-            if #api.lsp_clients() > 0 then
-              return sign
-            end
-            return ""
-          end,
-        })
-      end,
-    },
-  },
+  dependencies = { "nvim-mini/mini.icons" },
   opts = {
     options = {
       theme = "auto",
@@ -92,10 +69,10 @@ return {
         },
         {
           function()
-            return require("lsp-progress").progress() .. " " .. lsp_component()
+            return "[" .. lsp_component() .. "]"
           end,
           color = function()
-            return { fg = Snacks.util.color("Keyword") }
+            return { fg = Snacks.util.color("Type") }
           end,
         },
       },
