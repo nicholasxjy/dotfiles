@@ -1,5 +1,48 @@
+# Download Znap, if it's not there yet.
+[[ -r ~/.config/zsh/znap/znap.zsh ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git ~/.config/zsh/znap
+source ~/.config/zsh/znap/znap.zsh  # Start Znap
 
-# If you come from bash you might have to change your $PATH.
+znap source zsh-users/zsh-completions
+znap source zsh-users/zsh-autosuggestions
+znap source zsh-users/zsh-syntax-highlighting
+znap source SukkaW/zsh-proxy
+znap source jeffreytse/zsh-vi-mode
+znap source marlonrichert/zcolors
+znap source Aloxaf/fzf-tab
+znap source zdharma-continuum/fast-syntax-highlighting
+
+autoload -U compinit; compinit
+
+source ~/.config/zsh/Aloxaf/fzf-tab/fzf-tab.plugin.zsh
+source ~/.config/zsh/zdharma-continuum/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source ~/.config/zsh/zsh-users/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+source ~/.config/zsh/SukkaW/zsh-proxy/zsh-proxy.plugin.zsh
+source ~/.config/zsh/marlonrichert/zcolors/zcolors.plugin.zsh
+source ~/.config/zsh/jeffreytse/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+fpath=(~/.config/zsh/zsh-users/zsh-completions/src $fpath)
+
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+# NOTE: don't use escape sequences (like '%F{red}%d%f') here, fzf-tab will ignore them
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+# custom fzf flags
+# NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
+zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+# To make fzf-tab follow FZF_DEFAULT_OPTS.
+# NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' switch-group '<' '>'
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -25,11 +68,11 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # Uncomment one of the following lines to change the auto-update behavior
 # zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
+zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
@@ -71,78 +114,62 @@ zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-proxy)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-# VI Mode!!!
-bindkey jj vi-cmd-mode
+
+
 # User configuration
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
   --highlight-line \
   --info=inline-right \
   --ansi \
   --layout=reverse \
-  --color=bg:-1,bg+:#2A2A37,fg:-1,fg+:#DCD7BA,hl:#938AA9,hl+:#c4746e \
-  --color=header:#b6927b,info:#658594,pointer:#7AA89F \
-  --color=marker:#7AA89F,prompt:#c4746e,spinner:#8ea49e \
 "
 ### FZF ###
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export PATH=$HOME/bin:$PATH
-export PATH=/opt/homebrew/bin:$PATH
-export GOPATH=$HOME/go
+export LESS=-R
 
-# export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
-# You may need to manually set your language environment
+export SHELL="/bin/zsh"
+export EZA_CONFIG_DIR="~/.config/eza"
+
+export PATH=$HOME/bin:$PATH
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/homebrew/sbin:$PATH"
+export GOPATH=$HOME/go
+export MANPATH="/usr/local/man:$MANPATH"
+export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"
+
 export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
+export EDITOR='nvim'
 
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
 alias python=python3
 alias cat=bat
 alias nvim=~/nvim-macos-arm64/bin/nvim
 alias coding="tmuxinator start coding"
 
 # # Eza
-alias ls="eza --icons"
-alias ll="eza -l --icons --git -a"
-alias lt="eza --tree --level=2 --long --icons --git"
+alias ls='eza --color=always --icons=always --no-user'
+alias ll='eza --color=always -l --icons=always --no-user'
+alias la='eza --color=always --icons=always -a -l --octal-permissions --no-permissions'
+alias lt="eza --tree --color=always"
 
-# Example aliases
 alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
 
-eval "$(starship init zsh)"
 eval "$(atuin init zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(mise activate zsh)"
+eval "$(starship init zsh)"
 
-# Download Znap, if it's not there yet.
-[[ -r ~/.config/zsh/znap/znap.zsh ]] ||
-    git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git ~/.config/zsh/znap
-source ~/.config/zsh/znap/znap.zsh  # Start Znap
-
-znap source marlonrichert/zsh-autocomplete
-znap source zsh-users/zsh-autosuggestions
-znap source zsh-users/zsh-syntax-highlighting
-znap source SukkaW/zsh-proxy
-
+# yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
