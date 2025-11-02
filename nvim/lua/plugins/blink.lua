@@ -1,4 +1,3 @@
-local misc = require("utils.misc")
 local ui = require("core.ui")
 
 return {

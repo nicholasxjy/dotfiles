@@ -21,7 +21,9 @@ require("lazy").setup({
   },
   checker = { enabled = true },
   ui = {
+    size = { width = 0.7, height = 0.65 },
     border = "single",
+    backdrop = 100,
   },
   performance = {
     rtp = {

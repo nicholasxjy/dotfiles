@@ -11,6 +11,9 @@ return {
     },
     ui = {
       border = "single",
+      backdrop = 100,
+      height = 0.65,
+      width = 0.7,
     },
     ensure_installed = {
 

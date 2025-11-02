@@ -34,8 +34,8 @@ return {
     },
     opts = {
       on_startup = {
-        cursorline = false,
-        cursorcolumn = false,
+        cursorline = true,
+        cursorcolumn = true,
       },
 
       disable_in_insert = true,

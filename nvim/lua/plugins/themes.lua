@@ -1,5 +1,6 @@
 local ui = require("core.ui")
 local match_fg = "#EFBF04" --"#ff7f50" --"#F92772"
+-- local blink_match_fg = "#77d507"
 
 return {
   {
@@ -36,7 +37,7 @@ return {
         transparent = true, -- lualine center bar transparency
       },
       colors = {
-        fg = "#EAEAEA",
+        fg = "#dacfe4",
         bg0 = "#121212",
         bg1 = "#262626",
         red = "#B91C1C",
@@ -60,9 +61,9 @@ return {
         ["@lsp.typemod.enum.readonly"] = { fg = "#9EC410", fmt = "bold" },
         ["@lsp.typemod.enumMember.readonly"] = { fg = "#BF9903", fmt = "italic" },
         ["@lsp.mod.readonly"] = { fg = "#D97706" },
-        Comment = { fg = "#8A8A8D", fmt = "italic" },
-        ["@comment"] = { fg = "#8A8A8D", fmt = "italic" },
-        CursorLineNr = { bg = "$yellow", fmt = "bold" },
+        Comment = { fg = "#3f4060", fmt = "italic" },
+        ["@comment"] = { fg = "#3f4060", fmt = "italic" },
+        CursorLineNr = { fg = "$yellow", fmt = "bold" },
         PmenuSel = { bg = "#2f2a7a", fmt = "bold" }, --#2f2a7a --"#2f447f" -- "#503240"
         FloatBorder = { fg = "#3B38A0", bg = "none" },
         NormalFloat = { bg = vim.g.transparent and "none" or "$bg0" },
@@ -77,8 +78,6 @@ return {
         MiniTablineFill = { bg = "$bg0" },
         MiniTablineHidden = { fg = "$light_grey", bg = "$bg0" },
 
-        DartFill = { link = "MiniTablineFill" },
-
         BlinkCmpLabelMatch = { fg = match_fg, fmt = "bold" },
 
         SnacksPickerTitle = { link = "FloatTitle" },
@@ -91,7 +90,7 @@ return {
         SnacksPickerMatch = { fg = match_fg, fmt = "bold,underline" },
         SnacksPickerCursorLine = { link = "PmenuSel" },
         SnacksPickerListCursorLine = { link = "PmenuSel" },
-        SnacksPickerDir = { fg = "$light_grey", fmt = "italic" },
+        SnacksPickerDir = { fg = "#616686", fmt = "italic,bold" },
 
         FzfLuaTitle = { link = "FloatTitle" },
         FzfLuaPreviewTitle = { link = "SnacksPickerPreviewTitle" },

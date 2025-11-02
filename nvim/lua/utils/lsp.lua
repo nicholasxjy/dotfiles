@@ -4,11 +4,11 @@ local M = {}
 
 M.keymap_setup = function()
   vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
-  -- vim.keymap.set("n", "K", function()
-  --   vim.lsp.buf.hover({
-  --     border = "rounded",
-  --   })
-  -- end, { desc = "Hover", silent = true, noremap = true })
+  vim.keymap.set("n", "K", function()
+    vim.lsp.buf.hover({
+      border = "rounded",
+    })
+  end, { desc = "Hover", silent = true, noremap = true })
 
   vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })

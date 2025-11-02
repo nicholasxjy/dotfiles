@@ -90,6 +90,7 @@ return {
       function()
         Snacks.picker.smart({
           filter = { cwd = true },
+          layout = ui.layout.dropdown_pick,
         })
       end,
       desc = "Snacks smart",
@@ -101,6 +102,7 @@ return {
         Snacks.picker.buffers({
           sort_lastused = true,
           current = false,
+          layout = ui.layout.dropdown_pick,
         })
       end,
       desc = "Snacks buffers",
