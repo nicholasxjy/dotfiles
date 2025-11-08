@@ -35,10 +35,10 @@ M.layout = {
       row = -1,
       width = 0.85,
       min_width = 80,
-      height = 0.7,
+      height = 0.9,
       border = "none",
       box = "vertical",
-      { win = "preview", title = "{preview}", height = 0.55, border = "rounded" },
+      { win = "preview", title = "{preview}", height = 0.45, border = "rounded" },
       {
         box = "vertical",
         border = "none",
@@ -53,12 +53,12 @@ M.layout = {
     layout = {
       backdrop = false,
       row = -1,
-      width = 0.65,
+      width = 0.75,
       min_width = 80,
-      height = 0.5,
+      height = 0.7,
       border = "none",
       box = "vertical",
-      { win = "preview", title = "{preview}", height = 0.55, border = "rounded" },
+      { win = "preview", title = "{preview}", height = 0.5, border = "rounded" },
       {
         box = "vertical",
         border = "none",
@@ -154,6 +154,23 @@ M.fzf = {
         hidden = false,
         layout = "vertical",
         vertical = "up:55%",
+      },
+    },
+  },
+  dropdown_pick = {
+    winopts = {
+      height = 0.65, -- window height
+      width = 0.7, -- window width
+      row = 1, -- window row position (0=top, 1=bottom)
+      -- col = 0, -- window col position (0=left, 1=right)
+      border = "none",
+      backdrop = 100,
+      preview = {
+        border = "rounded",
+        wrap = true,
+        hidden = false,
+        layout = "vertical",
+        vertical = "up:50%",
       },
     },
   },
@@ -456,13 +473,13 @@ M.themes = {
     redd = "#f76260",
     rede = "#d84e43",
     redf = "#f83e03",
-    redg = "#ff7273",
-
     blue = "#4c77e4",
+
+    redg = "#ff7273",
     blue1 = "#4cc7e4",
     blue2 = "#5ca7e4",
-    blue3 = "#6690c4",
     blue4 = "#3649dc",
+    blue3 = "#6690c4",
     blue5 = "#71C3E3",
     blue6 = "#50B4DC",
     blue7 = "#6189bb",
@@ -543,4 +560,27 @@ M.themes = {
     pink9 = "#e55285",
   },
 }
+
+M.lemon = {
+  black = "#040404",
+  dark_gray = "#161616",
+  gray = "#212121",
+  light_gray = "#565656",
+  darker_white = "#808080",
+  dark_white = "#cacaca",
+  white = "#f0f0f0",
+  red = "#ed505e",
+  dark_green = "#0B1B10",
+  lime = "#2ed592",
+  green = "#2ED563",
+  dark_yellow = "#1D190D",
+  orange = "#fa8a49",
+  yellow = "#F0BE42",
+  blue = "#5088ed",
+  pink = "#f45ab4",
+  dark_cyan = "#0C1918",
+  cyan = "#37C3B5",
+  light_cyan = "#6AD8ED",
+}
+
 return M

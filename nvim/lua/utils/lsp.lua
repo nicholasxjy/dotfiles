@@ -1,7 +1,142 @@
-local ui = require("core.ui")
-
 local M = {}
 
+local is_fzf_picker = vim.g.picker == "fzf"
+local fzflua = require("fzf-lua")
+
+local function lsp_definitions()
+  if is_fzf_picker then
+    fzflua.lsp_definitions()
+  else
+    Snacks.picker.lsp_definitions()
+  end
+end
+
+local function lsp_declarations()
+  if is_fzf_picker then
+    fzflua.lsp_declarations()
+  else
+    Snacks.picker.lsp_declarations()
+  end
+end
+
+local function lsp_implementations()
+  if is_fzf_picker then
+    fzflua.lsp_implementations()
+  else
+    Snacks.picker.lsp_implementations()
+  end
+end
+local function lsp_references()
+  if is_fzf_picker then
+    fzflua.lsp_references()
+  else
+    Snacks.picker.lsp_references()
+  end
+end
+local function lsp_type_definitions()
+  if is_fzf_picker then
+    fzflua.lsp_typedefs()
+  else
+    Snacks.picker.lsp_type_definitions()
+  end
+end
+local function lsp_incoming_calls()
+  if is_fzf_picker then
+    fzflua.lsp_incoming_calls()
+  else
+    Snacks.picker.lsp_incoming_calls()
+  end
+end
+local function lsp_outgoing_calls()
+  if is_fzf_picker then
+    fzflua.lsp_outgoing_calls()
+  else
+    Snacks.picker.lsp_outgoing_calls()
+  end
+end
+local function lsp_symbols()
+  if is_fzf_picker then
+    fzflua.lsp_document_symbols()
+  else
+    Snacks.picker.lsp_symbols()
+  end
+end
+local function lsp_workspace_symbols()
+  if is_fzf_picker then
+    fzflua.lsp_workspace_symbols()
+  else
+    Snacks.picker.lsp_workspace_symbols()
+  end
+end
+
+local function diagnostics_buffer()
+  if is_fzf_picker then
+    fzflua.diagnostics_document()
+  else
+    Snacks.picker.diagnostics_buffer()
+  end
+end
+
+local function diagnostics_workspace()
+  if is_fzf_picker then
+    fzflua.diagnostics_workspace()
+  else
+    Snacks.picker.diagnostics({
+      sort = {
+        fields = {
+          "severity",
+          "is_current",
+          "is_cwd",
+          "file",
+          "lnum",
+        },
+      },
+    })
+  end
+end
+
+local function diagnostics_workspace_warns()
+  if is_fzf_picker then
+    fzflua.diagnostics_workspace({
+      severity_limit = vim.diagnostic.severity.WARN,
+      sort = true,
+    })
+  else
+    Snacks.picker.diagnostics({
+      sort = {
+        fields = {
+          "severity",
+          "is_current",
+          "is_cwd",
+          "file",
+          "lnum",
+        },
+      },
+      severity = { min = vim.diagnostic.severity.WARN },
+    })
+  end
+end
+local function diagnostics_workspace_errors()
+  if is_fzf_picker then
+    fzflua.diagnostics_workspace({
+      sort = true,
+      severity_limit = vim.diagnostic.severity.ERROR,
+    })
+  else
+    Snacks.picker.diagnostics({
+      sort = {
+        fields = {
+          "severity",
+          "is_current",
+          "is_cwd",
+          "file",
+          "lnum",
+        },
+      },
+      severity = { min = vim.diagnostic.severity.ERROR },
+    })
+  end
+end
 M.keymap_setup = function()
   vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
   vim.keymap.set("n", "K", function()
@@ -43,104 +178,35 @@ M.keymap_setup = function()
   vim.keymap.set("n", "]w", diagnostic_goto(1, "WARN"), { desc = "Next warning" })
   vim.keymap.set("n", "[w", diagnostic_goto(-1, "WARN"), { desc = "Prev warning" })
 
-  vim.keymap.set("n", "gd", function()
-    Snacks.picker.lsp_definitions({
-      layout = ui.layout.dropdown,
-    })
-  end, { desc = "Goto Definition" })
+  vim.keymap.set("n", "gd", lsp_definitions, { desc = "Goto Definition", noremap = true })
+  vim.keymap.set("n", "gD", lsp_declarations, { desc = "Goto Declaration", noremap = true })
+  vim.keymap.set("n", "gr", lsp_references, { desc = "Goto References", noremap = true })
+  vim.keymap.set("n", "gi", lsp_implementations, { desc = "Goto Implementation", noremap = true })
+  vim.keymap.set("n", "gy", lsp_type_definitions, { desc = "Goto TypeDefs", noremap = true })
+  vim.keymap.set("n", "gI", lsp_incoming_calls, { desc = "Incoming Calls", noremap = true })
+  vim.keymap.set("n", "gO", lsp_outgoing_calls, { desc = "Outgoing Calls", noremap = true })
+  vim.keymap.set("n", "<leader>ss", lsp_symbols, { desc = "Lsp symbols" })
+  vim.keymap.set("n", "<leader>sS", lsp_workspace_symbols, { desc = "Workspace lsp symbols" })
 
-  vim.keymap.set("n", "gD", function()
-    Snacks.picker.lsp_declarations({ layout = ui.layout.dropdown })
-  end, { desc = "Goto Declaration" })
-
-  vim.keymap.set("n", "gr", function()
-    Snacks.picker.lsp_references({ layout = ui.layout.dropdown })
-  end, { desc = "Goto References" })
-
-  vim.keymap.set("n", "gi", function()
-    Snacks.picker.lsp_implementations({ layout = ui.layout.dropdown })
-  end, { desc = "Goto Implementation" })
-
-  vim.keymap.set("n", "gy", function()
-    Snacks.picker.lsp_type_definitions({ layout = ui.layout.dropdown })
-  end, { desc = "Goto TypeDefs" })
-
-  vim.keymap.set("n", "gI", function()
-    Snacks.picker.lsp_incoming_calls({ layout = ui.layout.dropdown })
-  end, { desc = "Incoming Calls" })
-
-  vim.keymap.set("n", "gO", function()
-    Snacks.picker.lsp_outgoing_calls({ layout = ui.layout.dropdown })
-  end, { desc = "Outgoing Calls" })
-
-  vim.keymap.set("n", "<leader>ss", function()
-    Snacks.picker.lsp_symbols({ layout = ui.layout.dropdown })
-  end, { desc = "Lsp symbols" })
-
-  vim.keymap.set("n", "<leader>sS", function()
-    Snacks.picker.lsp_workspace_symbols({ layout = ui.layout.dropdown })
-  end, { desc = "Workspace lsp symbols" })
-
-  vim.keymap.set("n", "<leader>xx", function()
-    Snacks.picker.diagnostics_buffer({
-      layout = ui.layout.dropdown,
-    })
-  end, { desc = "Diagnostics" })
-
-  vim.keymap.set("n", "<leader>xX", function()
-    Snacks.picker.diagnostics({
-      layout = ui.layout.dropdown,
-      sort = {
-        fields = {
-          "severity",
-          "is_current",
-          "is_cwd",
-          "file",
-          "lnum",
-        },
-      },
-    })
-  end, { desc = "Workspace Diagnostics" })
-
-  vim.keymap.set("n", "<leader>xw", function()
-    Snacks.picker.diagnostics({
-      layout = ui.layout.dropdown,
-      sort = {
-        fields = {
-          "severity",
-          "is_current",
-          "is_cwd",
-          "file",
-          "lnum",
-        },
-      },
-      filter = {
-        severity = { min = vim.diagnostic.severity.WARN },
-      },
-    })
-  end, { desc = "Workspace Diagnostics(Warns)" })
-
-  vim.keymap.set("n", "<leader>xe", function()
-    Snacks.picker.diagnostics({
-      layout = ui.layout.dropdown,
-      sort = {
-        fields = {
-          "severity",
-          "is_current",
-          "is_cwd",
-          "file",
-          "lnum",
-        },
-      },
-      filter = {
-        severity = { min = vim.diagnostic.severity.ERROR },
-      },
-    })
-  end, { desc = "Workspace Diagnostics(Errors)" })
+  vim.keymap.set("n", "<leader>xx", diagnostics_buffer, { desc = "Diagnostics" })
+  vim.keymap.set("n", "<leader>xX", diagnostics_workspace, { desc = "Workspace Diagnostics" })
+  vim.keymap.set("n", "<leader>xw", diagnostics_workspace_warns, { desc = "Workspace Diagnostics(Warns)" })
+  vim.keymap.set("n", "<leader>xe", diagnostics_workspace_errors, { desc = "Workspace Diagnostics(Errors)" })
 end
+
+local disable_semantic_ls = {
+  "jdtls",
+  "gopls",
+  "lua_ls",
+}
 
 M.methods_setup = function(client, bufnr)
   local Methods = vim.lsp.protocol.Methods
+
+  -- NOTE: disalbe semantic tokens
+  if client.server_capabilities.semanticTokensProvider and vim.tbl_contains(disable_semantic_ls, client.name) then
+    client.server_capabilities.semanticTokensProvider = nil
+  end
 
   if client:supports_method(Methods.textDocument_linkedEditingRange) and vim.fn.has("nvim-0.12") == 1 then
     vim.lsp.linked_editing_range.enable(true, {
@@ -154,13 +220,15 @@ M.methods_setup = function(client, bufnr)
     })
   end
 
+  -- NOTE: use nvim-highlight-colors instead
   -- Handle textDocument/documentColor support
   if client:supports_method(Methods.textDocument_documentColor) and vim.fn.has("nvim-0.12") == 1 then
-    vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
+    vim.lsp.document_color.enable(true, bufnr, { style = "background" }) --background, foreground, virtual
   end
 
+  -- disable inlay hints by default
   if client:supports_method(Methods.textDocument_inlayHints) then
-    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
   end
 
   if client:supports_method(Methods.textDocument_documentHighlight) then

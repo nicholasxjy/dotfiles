@@ -35,7 +35,7 @@ return {
     opts = {
       on_startup = {
         cursorline = true,
-        cursorcolumn = true,
+        cursorcolumn = false,
       },
 
       disable_in_insert = true,
@@ -135,6 +135,7 @@ return {
   {
     "lukas-reineke/virt-column.nvim",
     event = "VeryLazy",
+    enabled = false,
     opts = {
       -- char = "|",
       -- char = "",
@@ -147,16 +148,6 @@ return {
       -- char = "󰮾",
       virtcolumn = "80",
     },
-  },
-  {
-    "vvvvv/yfix.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("yfix").setup({
-        insert_mode = true,
-        normal_mode = true,
-      })
-    end,
   },
   {
     "NStefan002/screenkey.nvim",

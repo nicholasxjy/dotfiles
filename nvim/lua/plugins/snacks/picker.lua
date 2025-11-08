@@ -18,7 +18,7 @@ return {
       },
       formatters = {
         file = {
-          filename_first = false,
+          filename_first = true,
           truncate = 60,
         },
         severity = {
@@ -46,7 +46,7 @@ return {
           },
         },
       },
-      icons = { kinds = ui.icons.mini_kind_icons },
+      icons = { kinds = ui.icons.lspkind_kind_icons },
       actions = {
         sidekick_send = function(...)
           return require("sidekick.cli.snacks").send(...)
@@ -176,11 +176,18 @@ return {
       desc = "Notifications",
     },
     {
-      "<leader>xq",
+      "<leader>fq",
       function()
         Snacks.picker.qflist()
       end,
       desc = "Snacks quickfix",
+    },
+    {
+      "<leader>fl",
+      function()
+        Snacks.picker.loclist()
+      end,
+      desc = "Snacks loclist",
     },
     {
       "<leader>xt",

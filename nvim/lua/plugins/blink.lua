@@ -1,5 +1,5 @@
+local misc = require("utils.misc")
 local ui = require("core.ui")
-
 return {
   {
     "onsails/lspkind.nvim",
@@ -38,6 +38,7 @@ return {
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
       { "folke/sidekick.nvim" },
+      { "xzbdmw/colorful-menu.nvim", opts = {} },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -125,15 +126,25 @@ return {
             draw = {
               columns = {
                 { "kind_icon" },
-                { "label", "label_description", gap = 1 },
+                { "label", gap = 1 },
                 { "kind" },
               },
               treesitter = { "lsp" },
               components = {
                 kind_icon = {
                   text = function(ctx)
-                    local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-                    return kind_icon
+                    return misc.get_kind_icon(ctx).text
+                  end,
+                  -- highlight = function(ctx)
+                  --   return misc.get_kind_icon(ctx).highlight
+                  -- end,
+                },
+                label = {
+                  text = function(ctx)
+                    return require("colorful-menu").blink_components_text(ctx)
+                  end,
+                  highlight = function(ctx)
+                    return require("colorful-menu").blink_components_highlight(ctx)
                   end,
                 },
               },

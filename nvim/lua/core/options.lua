@@ -5,6 +5,9 @@ vim.g.inlay_hints = true
 vim.g.codelens = true
 vim.g.copilot_enabled = true
 
+vim.g.kind_icons = "lspkind"
+vim.g.picker = "snacks"
+
 vim.g.transparent = false
 vim.g.bordered = vim.g.transparent
 vim.o.winborder = "rounded"
