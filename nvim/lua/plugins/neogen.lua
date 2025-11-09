@@ -1,5 +1,3 @@
-local util = require("utils.util")
-
 return {
   "danymat/neogen",
   cmd = "Neogen",
@@ -12,26 +10,9 @@ return {
       desc = "Generate Annotations (Neogen)",
     },
   },
-  opts = function(_, opts)
-    if opts.snippet_engine ~= nil then
-      return
-    end
-
-    local map = {
-      ["LuaSnip"] = "luasnip",
-      ["nvim-snippy"] = "snippy",
-      ["vim-vsnip"] = "vsnip",
-    }
-
-    for plugin, engine in pairs(map) do
-      if util.has(plugin) then
-        opts.snippet_engine = engine
-        return
-      end
-    end
-
-    if vim.snippet then
-      opts.snippet_engine = "nvim"
-    end
-  end,
+  opts = {
+    enabled = true, --if you want to disable Neogen
+    snippet_engine = "luasnip",
+    input_after_comment = true, -- (default: true) automatic jump (with insert mode) on inserted annotation
+  },
 }

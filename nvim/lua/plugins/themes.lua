@@ -142,6 +142,19 @@ return {
   {
     "nicholasxjy/Lemons.nvim",
     branch = "dev",
-    lazy = false,
+    config = function()
+      require("lemons").setup({
+        transparent = true,
+        overrides = function(c)
+          return {
+            FzfLuaBorder = { link = "FloatBorder" },
+            StatusLine = { bg = "NONE" },
+            PmenuSel = { fg = c.black, bg = "#10aef8" },
+            ["@keyword.return"] = { fg = "#ff7f50", bold = true },
+          }
+        end,
+      })
+      require("lemons").load()
+    end,
   },
 }

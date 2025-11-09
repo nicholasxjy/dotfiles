@@ -3,6 +3,7 @@ return {
     "folke/snacks.nvim",
     opts = {
       indent = {
+        enabled = false,
         indent = {
           enabled = false,
           only_current = true,
@@ -21,7 +22,7 @@ return {
           },
         },
         scope = {
-          enabled = true,
+          enabled = false,
           char = "║",
           -- char = "┊",
           underline = true,

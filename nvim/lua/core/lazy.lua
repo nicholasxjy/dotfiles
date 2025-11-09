@@ -9,6 +9,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     { import = "plugins.snacks" },
+    { import = "plugins.blink" },
     { import = "plugins" },
   },
   defaults = {

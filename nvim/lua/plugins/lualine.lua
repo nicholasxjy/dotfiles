@@ -72,7 +72,7 @@ return {
             return "[" .. lsp_component() .. "]"
           end,
           color = function()
-            return { fg = Snacks.util.color("Type") }
+            return { fg = Snacks.util.color("Keyword") }
           end,
         },
       },

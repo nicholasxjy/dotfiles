@@ -38,7 +38,12 @@ return {
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
       { "folke/sidekick.nvim" },
-      { "xzbdmw/colorful-menu.nvim", opts = {} },
+      {
+        "xzbdmw/colorful-menu.nvim",
+        opts = {
+          max_width = 40,
+        },
+      },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
