@@ -59,9 +59,9 @@ return {
   {
     "nvim-mini/mini.ai",
     version = false,
+    event = "VeryLazy",
     opts = function()
       local ai = require("mini.ai")
-
       return {
         custom_textobjects = {
           ["?"] = false,
@@ -91,14 +91,6 @@ return {
         mappings = {
           around = "a",
           inside = "i",
-
-          around_next = "",
-          inside_next = "",
-          around_last = "",
-          inside_last = "",
-
-          goto_left = "",
-          goto_right = "",
         },
         n_lines = 500,
       }
@@ -108,36 +100,16 @@ return {
   {
     "nvim-mini/mini.surround",
     version = false,
+    event = "VeryLazy",
     opts = {
       mappings = {
-        add = "sa",
-        delete = "sd",
-        find = "",
-        find_left = "",
-        highlight = "",
-        replace = "sr",
-        update_n_lines = "",
-      },
-      custom_surroundings = {
-        c = { -- Comment
-          input = { "%*%*().-()%*%*" },
-          output = { left = "/*", right = "*/" },
-        },
-        t = { -- HTML tag
-          input = { "<(%w+)>().-()</%1>" },
-          output = function()
-            local tag = vim.fn.input("Tag: ")
-            return { left = "<" .. tag .. ">", right = "</" .. tag .. ">" }
-          end,
-        },
+        add = "gsa",
+        delete = "gsd",
+        replace = "gsr",
       },
     },
     config = function(_, opts)
       require("mini.surround").setup(opts)
-
-      -- `:h MiniSurround-vim-surround-config`
-      vim.keymap.del("x", "sa")
-      vim.keymap.set("x", "s", [[:<C-u>lua MiniSurround.add('visual')<CR>]], { silent = true })
     end,
   },
   -- Split & join
@@ -345,14 +317,4 @@ return {
       })
     end,
   },
-  -- {
-  --   "nvim-mini/mini.tabline",
-  --   version = false,
-  --   event = "VeryLazy",
-  --   opts = {
-  --     show_icons = true,
-  --     format = nil,
-  --     tabpage_section = "right",
-  --   },
-  -- },
 }

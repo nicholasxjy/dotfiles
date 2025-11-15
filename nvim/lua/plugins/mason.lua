@@ -18,6 +18,7 @@ return {
     ensure_installed = {
 
       "lua-language-server",
+      "emmylua_ls",
       "stylua",
 
       "dockerfile-language-server",

@@ -1,6 +1,7 @@
-local misc = require("utils.misc")
 local ui = require("core.ui")
+
 return {
+  { "nvim-tree/nvim-web-devicons", opts = {} },
   {
     "onsails/lspkind.nvim",
     config = function()
@@ -38,12 +39,6 @@ return {
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
       { "folke/sidekick.nvim" },
-      {
-        "xzbdmw/colorful-menu.nvim",
-        opts = {
-          max_width = 40,
-        },
-      },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -91,7 +86,7 @@ return {
           enabled = true,
           window = {
             show_documentation = true,
-            border = "rounded",
+            border = "single",
           },
         },
         completion = {
@@ -100,7 +95,7 @@ return {
             auto_show = true,
             auto_show_delay_ms = 100,
             window = {
-              border = {
+              border = vim.g.bordered and {
                 { "", "DiagnosticHint" },
                 "─",
                 "╮",
@@ -109,16 +104,15 @@ return {
                 "─",
                 "╰",
                 "│",
-              },
+              } or "none",
               max_height = 20,
-              max_width = 50,
+              max_width = 40,
             },
           },
           accept = { auto_brackets = { enabled = true } },
           list = { selection = { preselect = true, auto_insert = true } },
           menu = {
-            scrollbar = false,
-            border = {
+            border = vim.g.bordered and {
               { "󱐋", "WarningMsg" },
               "─",
               "╮",
@@ -127,29 +121,50 @@ return {
               "─",
               "╰",
               "│",
-            },
+            } or "none",
             draw = {
               columns = {
-                { "kind_icon" },
-                { "label", gap = 1 },
-                { "kind" },
+                { "label", "label_description", gap = 1 },
+                { "kind_icon", "kind", gap = 1 },
               },
               treesitter = { "lsp" },
               components = {
                 kind_icon = {
                   text = function(ctx)
-                    return misc.get_kind_icon(ctx).text
-                  end,
-                  -- highlight = function(ctx)
-                  --   return misc.get_kind_icon(ctx).highlight
-                  -- end,
-                },
-                label = {
-                  text = function(ctx)
-                    return require("colorful-menu").blink_components_text(ctx)
+                    local icon = ctx.kind_icon
+                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                      local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+                      if dev_icon then
+                        icon = dev_icon
+                      end
+                    else
+                      icon = require("lspkind").symbolic(ctx.kind, {
+                        mode = "symbol",
+                      })
+                    end
+                    return icon .. ctx.icon_gap
                   end,
                   highlight = function(ctx)
-                    return require("colorful-menu").blink_components_highlight(ctx)
+                    local hl = ctx.kind_hl
+                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                      local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+                      if dev_icon then
+                        hl = dev_hl
+                      end
+                    end
+                    return hl
+                  end,
+                },
+                kind = {
+                  highlight = function(ctx)
+                    local hl = ctx.kind_hl
+                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                      local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+                      if dev_icon then
+                        hl = dev_hl
+                      end
+                    end
+                    return hl
                   end,
                 },
               },

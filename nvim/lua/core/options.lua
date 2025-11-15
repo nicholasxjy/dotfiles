@@ -3,7 +3,7 @@ vim.g.maplocalleader = " "
 vim.g.autoformat = true
 vim.g.inlay_hints = true
 vim.g.codelens = true
-vim.g.copilot_enabled = true
+vim.g.copilot_enabled = false
 
 vim.g.kind_icons = "lspkind"
 vim.g.picker = "snacks"

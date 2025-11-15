@@ -6,11 +6,24 @@ return {
       -- default: 'terminal', 'quickfix', 'nofile', 'prompt'
       buftypes = { include_defaults = true },
       -- default: 'lspinfo', 'packer', 'checkhealth', 'help', 'man', 'gitcommit', 'dashboard', ''
-      filetypes = { include_defaults = true },
+      filetypes = {
+        include_defaults = true,
+        "snacks_picker_input",
+        "snacks_picker_list",
+        "snacks_picker_preview",
+        "snacks_terminal",
+        "mason",
+        "lazy",
+        "fzf",
+        "oil",
+      },
     },
     static = {
-      enabled = false,
-      char = "▎",
+      enabled = true,
+      -- char = "▎",
+      -- char = "⋮",
+      char = "",
+      -- char = "┊",
       priority = 1,
       highlights = {
         "BlinkIndentRed",

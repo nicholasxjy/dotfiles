@@ -49,6 +49,7 @@ return {
       icons = { kinds = ui.icons.lspkind_kind_icons },
       actions = {
         sidekick_send = function(...)
+          ---@diagnostic disable-next-line: undefined-field
           return require("sidekick.cli.snacks").send(...)
         end,
       },

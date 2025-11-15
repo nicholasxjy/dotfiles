@@ -38,7 +38,7 @@ M.layout = {
       height = 0.9,
       border = "none",
       box = "vertical",
-      { win = "preview", title = "{preview}", height = 0.45, border = "rounded" },
+      { win = "preview", title = "{preview}", height = 0.45, border = "single" },
       {
         box = "vertical",
         border = "none",
@@ -58,7 +58,7 @@ M.layout = {
       height = 0.7,
       border = "none",
       box = "vertical",
-      { win = "preview", title = "{preview}", height = 0.5, border = "rounded" },
+      { win = "preview", title = "{preview}", height = 0.5, border = "single" },
       {
         box = "vertical",
         border = "none",
@@ -149,7 +149,7 @@ M.fzf = {
       border = vim.g.bordered and "rounded" or "none",
       backdrop = 100,
       preview = {
-        border = "rounded",
+        border = "single",
         wrap = true,
         hidden = false,
         layout = "vertical",
@@ -166,7 +166,7 @@ M.fzf = {
       border = "none",
       backdrop = 100,
       preview = {
-        border = "rounded",
+        border = "single",
         wrap = true,
         hidden = false,
         layout = "vertical",
