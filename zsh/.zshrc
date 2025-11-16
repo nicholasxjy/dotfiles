@@ -48,13 +48,6 @@ zinit ice wait'0b' lucid
 zinit light b4b4r07/enhancd
 export ENHANCD_FILTER=fzf:fzy:peco
 
-# HISTORY SUBSTRING SEARCHING
-zinit ice wait'0b' lucid atload'!export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND="bg=green,fg=black,bold"'
-zinit light zsh-users/zsh-history-substring-search
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
 # TAB COMPLETIONS
 zinit light-mode for \
     blockf \
@@ -67,6 +60,10 @@ zinit wait'1' lucid for \
     OMZ::lib/clipboard.zsh \
     OMZ::lib/git.zsh \
     OMZ::plugins/systemd/systemd.plugin.zsh
+# Add in snippets
+zinit snippet OMZP::sudo
+zinit snippet OMZP::docker
+zinit snippet OMZP::command-not-found
 
 zstyle ':completion:*' completer _expand _complete _ignored _approximate
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -76,17 +73,16 @@ zstyle ':completion:*:descriptions' format '-- %d --'
 zstyle ':completion:*:processes' command 'ps -au$USER'
 zstyle ':completion:complete:*:options' sort false
 zstyle ':fzf-tab:*' query-string prefix first
-# zstyle ':fzf-tab:complete:_zlua:*' query-string input
 zstyle ':fzf-tab:*' continuous-trigger '/'
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm,cmd -w -w"
 zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags --preview=$extract'ps --pid=$in[(w)1] -o cmd --no-headers -w -w' --preview-window=down:3:wrap
-# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --no-quotes -1 --color=always $realpath'  # disable for tmux-popup
 zstyle ':fzf-tab:*' switch-group ',' '.'
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 zstyle ':fzf-tab:*' popup-pad 0 0
 zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:eza' file-sort modification
 zstyle ':completion:*:eza' sort false
+
 # TMUX plugin manager
 zinit ice lucid wait'!0a' as'null' id-as'tpm' \
   atclone' \
@@ -112,9 +108,6 @@ zinit light hlissner/zsh-autopair
 # FORGIT
 zinit ice wait lucid id-as'forgit' atload'alias gr=forgit::checkout::file'
 zinit load 'wfxr/forgit'
-# FORYADM
-zinit ice wait lucid id-as'foryadm'
-zinit load 'disrupted/foryadm'
 # cheat.sh
 zinit wait'2a' lucid \
   id-as'cht.sh' \
@@ -127,24 +120,10 @@ zinit wait'2b' lucid \
   mv'cht* -> _cht' \
   as'completion' \
   for https://cheat.sh/:zsh
-# mmv renamer
-zinit ice lucid wait'0' as'program' id-as'mmv' from'gh-r' \
-  mv'mmv* -> mmv' pick'mmv/mmv'
-zinit light 'itchyny/mmv'
-# python automatic virtualenv
-zinit light MichaelAquilina/zsh-autoswitch-virtualenv
 
-# quickenv (direnv replacement)
-zinit ice lucid wait'0' as'program' id-as'quickenv' from'gh-r' \
-  mv'quickenv* -> quickenv' pick'quickenv'
-zinit light 'untitaker/quickenv'
+# proxy
+zinit light SukkaW/zsh-proxy
 
-#####################
-# HISTORY           #
-#####################
-[ -z "$HISTFILE" ] && HISTFILE="$HOME/.zhistory"
-HISTSIZE=290000
-SAVEHIST=$HISTSIZE
 
 #####################
 # SETOPT            #
@@ -167,16 +146,6 @@ setopt listpacked
 setopt automenu
 setopt interactivecomments    # recognize comments
 
-export QUOTING_STYLE=literal  # ls: do not wrap in single quotes
-chpwd() {
-  if [[ $(ls | wc -l) -ge 20 ]]; then
-    # print as grid
-    eza --no-quotes -G -a -F --icons --group-directories-first --git --color=always --ignore-glob=".DS_Store|__*"
-  else
-    # print as list and add left padding
-    eza --no-quotes -1 -a -F --icons --group-directories-first --git --color=always --ignore-glob=".DS_Store|__*" | sed 's/^/  /'
-  fi
-}
 #####################
 # HOMEBREW          #
 #####################
@@ -186,7 +155,6 @@ if type brew &>/dev/null; then
     export HOMEBREW_CASK_OPTS=--no-quarantine
     export PATH="$HOMEBREW_HOME/bin:$PATH"
     export PATH="$HOMEBREW_HOME/sbin:$PATH"
-    export SHELL="$HOMEBREW_HOME/bin/zsh"
 
     # completions
     FPATH="$HOMEBREW_HOME/share/zsh/site-functions:$FPATH"
@@ -209,6 +177,7 @@ fi
 #####################
 # export TERM=xterm-256color
 # export TERMINAL='kitty'
+export SHELL="/bin/zsh"
 export EDITOR='nvim'
 export VISUAL=$EDITOR
 export PAGER='less'
@@ -227,7 +196,6 @@ export WORDCHARS='~!#$%^&*(){}[]<>?.+;'  # sane moving between words on the prom
 export PROMPT_EOL_MARK=''  # hide % at end of output
 export GPG_TTY=$(tty)
 
-export SHELL="/bin/zsh"
 export EZA_CONFIG_DIR="~/.config/eza"
 export PATH=$HOME/bin:$PATH
 export PATH="/opt/homebrew/bin:$PATH"
@@ -264,12 +232,6 @@ autoload colors && colors
 #####################
 # FZF SETTINGS      #
 #####################
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2>/dev/null'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_CTRL_T_OPTS='--preview="bat --color=always --style=header {} 2>/dev/null" --preview-window=right:60%:wrap'
-export FZF_ALT_C_COMMAND='fd -t d -d 1'
-export FZF_ALT_C_OPTS='--preview="eza --no-quotes -1 --icons --git --git-ignore {}" --preview-window=right:60%:wrap'
-
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
   --highlight-line \
   --info=inline-right \
@@ -291,7 +253,7 @@ alias .....='cd ../../../..'
 alias python=python3
 alias cat=bat
 alias nvim=~/nvim-macos-arm64/bin/nvim
-alias coding="tmuxinator start coding"
+alias coding="zellij -s coding"
 
 # # Eza
 alias ls='eza --color=always --icons=always --no-user'
@@ -301,15 +263,15 @@ alias lt="eza --tree --color=always"
 
 alias zshconfig="nvim ~/.zshrc"
 
-eval "$(atuin init zsh)"
-eval "$(zoxide init --cmd cd zsh)"
+# eval "$(atuin init zsh)"
+# eval "$(zoxide init --cmd cd zsh)"
 eval "$(mise activate zsh)"
 
-function zoxide_fzf() {
-    LBUFFER+=$(zoxide query --list | fzf)
-}
-zle -N zoxide_fzf
-bindkey '^o' zoxide_fzf
+# function zoxide_fzf() {
+#     LBUFFER+=$(zoxide query --list | fzf)
+# }
+# zle -N zoxide_fzf
+# bindkey '^o' zoxide_fzf
 
 # yazi
 function y() {
