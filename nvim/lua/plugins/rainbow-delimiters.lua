@@ -17,9 +17,9 @@ return {
   config = function()
     require("rainbow-delimiters.setup").setup({
       query = {
-        [""] = "",
-        javascript = "rainbow-tags-react",
-        tsx = "rainbow-tags-react",
+        [""] = "rainbow-delimiters",
+        javascript = "rainbow-delimiters",
+        tsx = "rainbow-delimiters",
         commonlisp = "rainbow-delimiters",
         scheme = "rainbow-delimiters",
         query = function(bufnr)

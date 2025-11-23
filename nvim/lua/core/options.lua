@@ -9,7 +9,7 @@ vim.g.kind_icons = "lspkind"
 vim.g.picker = "snacks"
 
 vim.g.transparent = false
-vim.g.bordered = vim.g.transparent
+vim.g.bordered = true
 vim.o.winborder = "rounded"
 
 local opt = vim.opt
@@ -17,7 +17,8 @@ local opt = vim.opt
 opt.number = true
 opt.relativenumber = true
 opt.ignorecase = true
-opt.cursorline = false
+opt.cursorline = true
+opt.cursorcolumn = false
 opt.clipboard = "unnamedplus"
 opt.termguicolors = true
 opt.confirm = true

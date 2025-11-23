@@ -95,7 +95,6 @@ return {
         n_lines = 500,
       }
     end,
-    event = "BufRead",
   },
   {
     "nvim-mini/mini.surround",

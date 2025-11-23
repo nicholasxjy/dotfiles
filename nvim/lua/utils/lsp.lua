@@ -141,7 +141,7 @@ M.keymap_setup = function()
   vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
   vim.keymap.set("n", "K", function()
     vim.lsp.buf.hover({
-      border = "rounded",
+      border = "single",
     })
   end, { desc = "Hover", silent = true, noremap = true })
 
@@ -194,19 +194,19 @@ M.keymap_setup = function()
   vim.keymap.set("n", "<leader>xe", diagnostics_workspace_errors, { desc = "Workspace Diagnostics(Errors)" })
 end
 
-local disable_semantic_ls = {
-  "jdtls",
-  "gopls",
-  "lua_ls",
-}
+-- local disable_semantic_ls = {
+--   "jdtls",
+--   "gopls",
+--   "lua_ls",
+-- }
 
 M.methods_setup = function(client, bufnr)
   local Methods = vim.lsp.protocol.Methods
 
   -- NOTE: disalbe semantic tokens
-  if client.server_capabilities.semanticTokensProvider and vim.tbl_contains(disable_semantic_ls, client.name) then
-    client.server_capabilities.semanticTokensProvider = nil
-  end
+  -- if client.server_capabilities.semanticTokensProvider and vim.tbl_contains(disable_semantic_ls, client.name) then
+  --   client.server_capabilities.semanticTokensProvider = nil
+  -- end
 
   if client:supports_method(Methods.textDocument_linkedEditingRange) and vim.fn.has("nvim-0.12") == 1 then
     vim.lsp.linked_editing_range.enable(true, {

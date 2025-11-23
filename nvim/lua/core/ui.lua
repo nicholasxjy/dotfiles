@@ -1,5 +1,72 @@
 local M = {}
 
+M.cmp_draw = {
+  mini = {
+    kind_icon = {
+      text = function(ctx)
+        local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+        return kind_icon
+      end,
+      highlight = function(ctx)
+        local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+        return hl
+      end,
+    },
+    kind = {
+      text = function(ctx)
+        return "[" .. ctx.kind .. "]"
+      end,
+      highlight = function(ctx)
+        local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+        return hl
+      end,
+    },
+  },
+  lspkind = {
+    kind_icon = {
+      text = function(ctx)
+        local icon = ctx.kind_icon
+        if vim.tbl_contains({ "Path" }, ctx.source_name) then
+          local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+          if dev_icon then
+            icon = dev_icon
+          end
+        else
+          icon = require("lspkind").symbolic(ctx.kind, {
+            mode = "symbol",
+          })
+        end
+        return icon .. ctx.icon_gap
+      end,
+      highlight = function(ctx)
+        local hl = ctx.kind_hl
+        if vim.tbl_contains({ "Path" }, ctx.source_name) then
+          local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+          if dev_icon then
+            hl = dev_hl
+          end
+        end
+        return hl
+      end,
+    },
+    kind = {
+      text = function(ctx)
+        return "[" .. ctx.kind .. "]"
+      end,
+      highlight = function(ctx)
+        local hl = ctx.kind_hl
+        if vim.tbl_contains({ "Path" }, ctx.source_name) then
+          local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+          if dev_icon then
+            hl = dev_hl
+          end
+        end
+        return hl
+      end,
+    },
+  },
+}
+
 M.rainbow_colors = {
   red = "#E82424",
   orange = "#cc6d00",
@@ -38,7 +105,7 @@ M.layout = {
       height = 0.9,
       border = "none",
       box = "vertical",
-      { win = "preview", title = "{preview}", height = 0.45, border = "single" },
+      { win = "preview", title = "{preview}", height = 0.45, border = "rounded" },
       {
         box = "vertical",
         border = "none",
@@ -55,10 +122,10 @@ M.layout = {
       row = -1,
       width = 0.75,
       min_width = 80,
-      height = 0.7,
+      height = 0.4,
       border = "none",
       box = "vertical",
-      { win = "preview", title = "{preview}", height = 0.5, border = "single" },
+      -- { win = "preview", title = "{preview}", height = 0.5, border = "single" },
       {
         box = "vertical",
         border = "none",
@@ -137,23 +204,44 @@ M.layout = {
       { win = "preview", title = "{preview}", border = "rounded", width = 0.45 },
     },
   },
+  right = {
+    preview = "main",
+    layout = {
+      backdrop = false,
+      width = 40,
+      min_width = 40,
+      height = 0,
+      position = "right",
+      border = "none",
+      box = "vertical",
+      {
+        win = "input",
+        height = 1,
+        border = true,
+        title = "{title} {live} {flags}",
+        title_pos = "center",
+      },
+      { win = "list", border = "none" },
+      { win = "preview", title = "{preview}", height = 0.4, border = "top" },
+    },
+  },
 }
 
 M.fzf = {
   dropdown = {
     winopts = {
-      height = 0.7, -- window height
-      width = 1, -- window width
+      height = 0.70, -- window height
+      width = 0.80, -- window width
       row = 1, -- window row position (0=top, 1=bottom)
-      col = 0, -- window col position (0=left, 1=right)
-      border = vim.g.bordered and "rounded" or "none",
+      col = 0.50, -- window col position (0=left, 1=right)
+      border = "none",
       backdrop = 100,
       preview = {
-        border = "single",
+        border = "rounded",
         wrap = true,
         hidden = false,
         layout = "vertical",
-        vertical = "up:55%",
+        vertical = "up:45%",
       },
     },
   },
@@ -166,7 +254,7 @@ M.fzf = {
       border = "none",
       backdrop = 100,
       preview = {
-        border = "single",
+        border = "rounded",
         wrap = true,
         hidden = false,
         layout = "vertical",
@@ -401,186 +489,6 @@ M.icons = {
     modified = " ",
     removed = " ",
   },
-}
-
-M.themes = {
-  colors = {
-    white = "#e7c3fb",
-    text = "#dacfe4",
-    textdark = "#b4b0e0",
-    bright = "#ddd0f4",
-    fg = "#a9b1d6",
-    fg1 = "#989cbf",
-    fg2 = "#888ca9",
-    fg3 = "#787c99",
-    fg4 = "#616686",
-
-    black = "#070510",
-    dark = "#141020",
-    neardark = "#1a1926",
-    neardarkb = "#30234f",
-    neardark2 = "#211c2f",
-    neardark3 = "#282E39",
-    neardark4 = "#303047",
-    neardark5 = "#3a3754",
-    neardark6 = "#3f4060",
-    neardark7 = "#4f4764",
-
-    menu = "#3f2562",
-    green = "#addb67",
-    yellow = "#ecc48d",
-    gray = "#637077",
-
-    yellow1 = "#fbfcbf",
-    yellow2 = "#fbec9f",
-    yellow3 = "#fbed7d",
-    yellow4 = "#f4d554",
-    yellow5 = "#e7dc8c",
-    yellow6 = "#E6DB74",
-    yellow7 = "#DBC08A",
-    yellow8 = "#bBa03A",
-
-    tan = "#DDCFBF",
-    orange1 = "#ffbe00",
-    orange2 = "#ffce51",
-
-    green0 = "#1aad16",
-    green1 = "#9dd067",
-    green2 = "#7fdbca",
-    green3 = "#A6E22D",
-    green4 = "#99c794",
-    green5 = "#1ABC9C",
-    green6 = "#2ba245",
-    green7 = "#9ece6a",
-    green8 = "#9eeb61",
-    green9 = "#67d5b5",
-    greena = "#77d507",
-    dimgreen = "#123314",
-
-    red = "#ff5874",
-    red1 = "#f05874",
-    red2 = "#ec5f67",
-    red3 = "#F92772",
-    red4 = "#e73c50",
-    red5 = "#ac3f27",
-    red6 = "#D93234",
-    red7 = "#C33C4A",
-    red8 = "#FF435B",
-    red9 = "#FF5D71",
-    reda = "#FF6D5B",
-    redb = "#f75f5f",
-    redc = "#ea6853",
-    redd = "#f76260",
-    rede = "#d84e43",
-    redf = "#f83e03",
-    blue = "#4c77e4",
-
-    redg = "#ff7273",
-    blue1 = "#4cc7e4",
-    blue2 = "#5ca7e4",
-    blue4 = "#3649dc",
-    blue3 = "#6690c4",
-    blue5 = "#71C3E3",
-    blue6 = "#50B4DC",
-    blue7 = "#6189bb",
-    blue8 = "#7BA1D0",
-    blue9 = "#2782d4",
-    bluea = "#10aef8",
-    blueb = "#a8dff9",
-    bluec = "#88dfe9",
-    blued = "#01d5f1",
-    bluee = "#45b5e1",
-    bluef = "#65d5e1",
-    blue10 = "#6c67ea",
-
-    gray1 = "#111017",
-    gray2 = "#22202a",
-    gray3 = "#333042",
-    gray4 = "#4f425e",
-    gray5 = "#5f496e",
-    gray6 = "#6f527e",
-    gray7 = "#777087",
-    graya = "#aab7cf",
-    grayb = "#bbb0cf",
-    graye = "#E5DFEF",
-    warmgray = "#a8916E",
-    darkgray = "#645775",
-    grayaf = "#AFBAD4",
-
-    purple = "#be9af7",
-    purple0 = "#c4a2ff",
-    purple1 = "#ae81ef",
-    purple2 = "#9e71cf",
-    purple3 = "#7d2c9d",
-    purple4 = "#7202da",
-    purple5 = "#8372Ba",
-    purple6 = "#9ca7ea",
-    darkpurple = "#57109a",
-    darkpurple2 = "#4d0c5d",
-
-    hoki = "#5f7e97",
-
-    pink = "#F92772",
-    aqua = "#66d9ef",
-    darkaqua = "#0fb9e0",
-    orange = "#FD9720",
-    purered = "#ff0000",
-    darkred = "#821040",
-    darkred2 = "#5f0000",
-    lightgreen = "#d7ffaf",
-    darkgreen = "#5f875f",
-    changefg = "#d7d7ff",
-    changebg = "#5f5f87",
-    cyan = "#A1EFE4",
-    br_green = "#9EC410",
-    br_yellow = "#E7C547",
-    br_blue = "#7AA6DA",
-    br_purple = "#B77EE0",
-    br_cyan = "#54CED6",
-    br_white = "#ececec",
-    background = "#282C34",
-
-    crimson = "#DC143C",
-    violet = "#EE82EE",
-    tomato = "#FF6347",
-    cranberry = "#CD5C5C",
-    emerald = "#50c878",
-    coral = "#ff7f50",
-    sky = "#87ceeb",
-
-    pink0 = "#ffbbd6",
-    pink1 = "#fab1c2",
-    pink2 = "#f19bb6",
-    pink3 = "#fecbc9",
-    pink4 = "#6D3B66",
-    pink5 = "#9D599D",
-    pink6 = "#B376B3",
-    pink7 = "#D57CD5",
-    pink8 = "#CCA1D6",
-    pink9 = "#e55285",
-  },
-}
-
-M.lemon = {
-  black = "#040404",
-  dark_gray = "#161616",
-  gray = "#212121",
-  light_gray = "#565656",
-  darker_white = "#808080",
-  dark_white = "#cacaca",
-  white = "#f0f0f0",
-  red = "#ed505e",
-  dark_green = "#0B1B10",
-  lime = "#2ed592",
-  green = "#2ED563",
-  dark_yellow = "#1D190D",
-  orange = "#fa8a49",
-  yellow = "#F0BE42",
-  blue = "#5088ed",
-  pink = "#f45ab4",
-  dark_cyan = "#0C1918",
-  cyan = "#37C3B5",
-  light_cyan = "#6AD8ED",
 }
 
 return M

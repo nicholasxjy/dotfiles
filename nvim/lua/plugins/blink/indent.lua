@@ -19,7 +19,7 @@ return {
       },
     },
     static = {
-      enabled = true,
+      enabled = false,
       -- char = "▎",
       -- char = "⋮",
       char = "",
@@ -37,8 +37,11 @@ return {
     },
     scope = {
       enabled = true,
+      -- char = "▎",
       char = "║",
       -- char = "┊",
+      -- char = "󰇘",
+      -- char = "",
       priority = 1000,
       highlights = {
         "BlinkIndentRed",
@@ -50,7 +53,7 @@ return {
         "BlinkIndentViolet",
       },
       underline = {
-        enabled = true,
+        enabled = false,
         highlights = {
           "BlinkIndentRedUnderline",
           "BlinkIndentOrangeUnderline",

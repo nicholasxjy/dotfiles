@@ -25,61 +25,6 @@ return {
     },
   },
   {
-    "tummetott/reticle.nvim",
-    event = "VeryLazy",
-    cmd = {
-      "ReticleToggleCursorline",
-      "ReticleToggleCursorcolumn",
-      "ReticleToggleCursorcross",
-    },
-    opts = {
-      on_startup = {
-        cursorline = true,
-        cursorcolumn = false,
-      },
-
-      disable_in_insert = true,
-      disable_in_diff = true,
-      always_highlight_number = true,
-      ignore = {
-        cursorline = {
-          "DressingInput",
-          "FTerm",
-          "NvimSeparator",
-          "NvimTree",
-          "TelescopePrompt",
-          "Trouble",
-          "snacks_picker_input",
-          "snacks_terminal",
-          "render-markdown",
-          "CodeCompanion",
-        },
-        cursorcolumn = {
-          "snacks_picker_input",
-          "snacks_picker_list",
-          "snacks_terminal",
-          "mason",
-          "lazy",
-          "fzf",
-          "oil",
-          "render-markdown",
-          "CodeCompanion",
-        },
-      },
-
-      -- Specify filetypes where the cursorline and/or cursorcolumn should be
-      -- explicitly disabled. Typically, you would include these filetypes in
-      -- the 'ignored' table. However, there are situations where plugins enable
-      -- cursorline/cursorcolumn without offering a configuration option for
-      -- disabling them. By adding these filetypes to the 'never' table, you
-      -- can override the plugin's settings and turn off these features.
-      never = {
-        cursorline = {},
-        cursorcolumn = {},
-      },
-    },
-  },
-  {
     "gen740/SmoothCursor.nvim",
     lazy = false,
     opts = {
@@ -119,17 +64,6 @@ return {
     config = true,
     opts = {
       -- highlight = { link = "LineNr" },
-    },
-  },
-  {
-    "rasulomaroff/reactive.nvim",
-    event = "VeryLazy",
-    opts = {
-      builtin = {
-        cursorline = true,
-        cursor = true,
-        modemsg = true,
-      },
     },
   },
   {

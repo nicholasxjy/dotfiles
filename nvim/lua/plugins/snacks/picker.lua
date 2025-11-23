@@ -31,10 +31,6 @@ return {
         input = {
           keys = {
             ["<Esc>"] = { "close", mode = { "n", "i" } },
-            ["<leader>h"] = {
-              "sidekick_send",
-              mode = { "n", "i" },
-            },
           },
         },
         list = {
@@ -49,7 +45,6 @@ return {
       icons = { kinds = ui.icons.lspkind_kind_icons },
       actions = {
         sidekick_send = function(...)
-          ---@diagnostic disable-next-line: undefined-field
           return require("sidekick.cli.snacks").send(...)
         end,
       },
@@ -57,9 +52,9 @@ return {
   },
   keys = {
     {
-      "<leader>ue",
+      "<leader>E",
       function()
-        Snacks.explorer({ layout = { preset = "right" } })
+        Snacks.explorer({ layout = ui.layout.right })
       end,
       desc = "Snacks explorer",
     },
@@ -90,7 +85,11 @@ return {
       "ff",
       function()
         Snacks.picker.smart({
+          hidden = true,
           filter = { cwd = true },
+          preview = function()
+            return false
+          end,
           layout = ui.layout.dropdown_pick,
         })
       end,

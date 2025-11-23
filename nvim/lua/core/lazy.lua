@@ -18,12 +18,12 @@ require("lazy").setup({
   },
   install = {
     missing = true,
-    colorscheme = { "bamboo" },
+    colorscheme = { "oasis" },
   },
   checker = { enabled = true },
   ui = {
     size = { width = 0.7, height = 0.65 },
-    border = "single",
+    border = vim.g.bordered and "rounded" or "none",
     backdrop = 100,
   },
   performance = {

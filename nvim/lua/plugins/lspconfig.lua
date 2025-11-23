@@ -68,8 +68,8 @@ return {
     })
 
     vim.lsp.enable({
-      -- "lua_ls",
-      "emmylua_ls",
+      "lua_ls",
+      -- "emmylua_ls",
 
       "bashls",
 

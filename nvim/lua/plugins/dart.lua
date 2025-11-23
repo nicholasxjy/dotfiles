@@ -1,6 +1,7 @@
 return {
   "iofq/dart.nvim",
   event = "VeryLazy",
+  enabled = false,
   dependencies = {
     "nvim-mini/mini.icons",
   },

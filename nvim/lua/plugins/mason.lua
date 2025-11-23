@@ -10,7 +10,7 @@ return {
       upgrade_pip = true,
     },
     ui = {
-      border = "single",
+      border = vim.g.bordered and "rounded" or "none",
       backdrop = 100,
       height = 0.65,
       width = 0.7,
@@ -20,6 +20,7 @@ return {
       "lua-language-server",
       "emmylua_ls",
       "stylua",
+      "marksman",
 
       "dockerfile-language-server",
       "docker-compose-language-service",

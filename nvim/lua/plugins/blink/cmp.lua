@@ -39,13 +39,17 @@ return {
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
       { "folke/sidekick.nvim" },
+      { "nicholasxjy/colorful-menu.nvim", opts = {} },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
     opts = function()
       return {
         enabled = function()
-          return not vim.tbl_contains({ "bigfile" }, vim.bo.filetype)
+          return not vim.tbl_contains(
+            { "bigfile", "grug-far", "snacks_picker", "snacks_picker_input" },
+            vim.bo.filetype
+          ) and vim.b.completion ~= false and vim.bo.buftype ~= "prompt"
         end,
         fuzzy = {
           implementation = "prefer_rust",
@@ -86,7 +90,7 @@ return {
           enabled = true,
           window = {
             show_documentation = true,
-            border = "single",
+            border = "rounded",
           },
         },
         completion = {
@@ -112,6 +116,7 @@ return {
           accept = { auto_brackets = { enabled = true } },
           list = { selection = { preselect = true, auto_insert = true } },
           menu = {
+            scrollbar = false,
             border = vim.g.bordered and {
               { "󱐋", "WarningMsg" },
               "─",
@@ -124,47 +129,53 @@ return {
             } or "none",
             draw = {
               columns = {
-                { "label", "label_description", gap = 1 },
-                { "kind_icon", "kind", gap = 1 },
+                { "kind_icon" },
+                { "label", gap = 1 },
+                { "kind" },
               },
               treesitter = { "lsp" },
               components = {
+                label = {
+                  text = function(ctx)
+                    return require("colorful-menu").blink_components_text(ctx)
+                  end,
+                  highlight = function(ctx)
+                    return require("colorful-menu").blink_components_highlight(ctx)
+                  end,
+                },
                 kind_icon = {
                   text = function(ctx)
-                    local icon = ctx.kind_icon
                     if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                      local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
-                      if dev_icon then
-                        icon = dev_icon
+                      local mini_icon, _ = require("mini.icons").get_icon(ctx.item.data.type, ctx.label)
+                      if mini_icon then
+                        return mini_icon .. ctx.icon_gap
                       end
-                    else
-                      icon = require("lspkind").symbolic(ctx.kind, {
-                        mode = "symbol",
-                      })
                     end
+                    local icon = require("lspkind").symbolic(ctx.kind, { mode = "symbol" })
                     return icon .. ctx.icon_gap
                   end,
                   highlight = function(ctx)
-                    local hl = ctx.kind_hl
                     if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                      local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
-                      if dev_icon then
-                        hl = dev_hl
+                      local mini_icon, mini_hl = require("mini.icons").get_icon(ctx.item.data.type, ctx.label)
+                      if mini_icon then
+                        return mini_hl
                       end
                     end
-                    return hl
+                    return ctx.kind_hl
                   end,
                 },
                 kind = {
+                  text = function(ctx)
+                    return "[" .. ctx.kind .. "]"
+                  end,
                   highlight = function(ctx)
-                    local hl = ctx.kind_hl
                     if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                      local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
-                      if dev_icon then
-                        hl = dev_hl
+                      local mini_icon, mini_hl = require("mini.icons").get_icon(ctx.item.data.type, ctx.label)
+                      if mini_icon then
+                        return mini_hl
                       end
                     end
-                    return hl
+                    return ctx.kind_hl
                   end,
                 },
               },
@@ -203,7 +214,7 @@ return {
         },
         snippets = { preset = "luasnip" },
         sources = {
-          default = { "lazydev", "lsp", "path", "snippets", "buffer", "copilot" },
+          default = { "lazydev", "lsp", "path", "snippets", "buffer" }, --"copilot"
           providers = {
             copilot = {
               name = "copilot",
