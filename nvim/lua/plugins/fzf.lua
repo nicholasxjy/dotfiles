@@ -8,10 +8,7 @@ return {
     opts = {
       "border-fused",
       "hide",
-      fzf_colors = {
-        true,
-        ["hl+"] = { "fg", "SnacksPickerMatch", "bold", "italic", "underline" },
-      },
+      fzf_colors = true,
       fzf_opts = {
         ["--no-scrollbar"] = true,
       },
@@ -55,6 +52,17 @@ return {
       },
     },
     keys = {
+      {
+        "nn",
+        function()
+          require("fzf-lua").buffers({
+            sort_lastused = true,
+            winopts = ui.fzf.ivy_pick.winopts,
+          })
+        end,
+        desc = "Fzf buffers",
+        silent = true,
+      },
       {
         "<leader>fb",
         function()

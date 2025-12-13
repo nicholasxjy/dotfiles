@@ -12,10 +12,12 @@ return {
         "snacks_picker_list",
         "snacks_picker_preview",
         "snacks_terminal",
+        "snacks_picker",
         "mason",
         "lazy",
         "fzf",
         "oil",
+        "fyler",
       },
     },
     static = {

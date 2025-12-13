@@ -1,6 +1,6 @@
 local function lsp_component()
   local buf_clients = vim.lsp.get_clients({ bufnr = 0 })
-  local conform_installed, conform = pcall(require, "conform")
+  -- local conform_installed, conform = pcall(require, "conform")
   local buf_client_names = {}
 
   for _, client in pairs(buf_clients) do
@@ -9,12 +9,12 @@ local function lsp_component()
     end
   end
 
-  if conform_installed then
-    local formatters = conform.list_formatters(0)
-    for _, source in ipairs(formatters) do
-      table.insert(buf_client_names, source.name)
-    end
-  end
+  -- if conform_installed then
+  --   local formatters = conform.list_formatters(0)
+  --   for _, source in ipairs(formatters) do
+  --     table.insert(buf_client_names, source.name)
+  --   end
+  -- end
 
   return table.concat(buf_client_names, ",")
 end

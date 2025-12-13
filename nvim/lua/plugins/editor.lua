@@ -69,7 +69,6 @@ return {
   {
     "lukas-reineke/virt-column.nvim",
     event = "VeryLazy",
-    enabled = false,
     opts = {
       -- char = "|",
       -- char = "",
@@ -78,8 +77,8 @@ return {
       -- char = "∷",
       -- char = "║",
       -- char = "⋮",
-      char = "",
-      -- char = "󰮾",
+      -- char = "",
+      char = "󰮾",
       virtcolumn = "80",
     },
   },
@@ -113,6 +112,105 @@ return {
     lazy = false,
     opts = {
       skip_filetypes = {},
+    },
+  },
+  {
+    "mvllow/modes.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("modes").setup({
+        colors = {
+          bg = "#0D0D1A", -- Optional bg param, defaults to Normal hl group
+          -- copy = "#f5c359",
+          -- delete = "#c75c6a",
+          -- change = "#c75c6a", -- Optional param, defaults to delete
+          -- format = "#c79585",
+          -- insert = "#78ccc5",
+          -- replace = "#245361",
+          -- select = "#9745be", -- Optional param, defaults to visual
+          -- visual = "#9745be",
+        },
+
+        -- Set opacity for cursorline and number background
+        line_opacity = 0.15,
+
+        -- Enable cursor highlights
+        set_cursor = true,
+
+        -- Enable cursorline initially, and disable cursorline for inactive windows
+        -- or ignored filetypes
+        set_cursorline = true,
+
+        -- Enable line number highlights to match cursorline
+        set_number = true,
+
+        -- Enable sign column highlights to match cursorline
+        set_signcolumn = true,
+
+        -- Disable modes highlights for specified filetypes
+        -- or enable with prefix "!" if otherwise disabled (please PR common patterns)
+        -- Can also be a function fun():boolean that disables modes highlights when true
+        ignore = { "NvimTree", "TelescopePrompt", "!minifiles" },
+      })
+    end,
+  },
+  {
+    "brenoprata10/nvim-highlight-colors",
+    event = "VeryLazy",
+    opts = {},
+  },
+  {
+    "tummetott/reticle.nvim",
+    event = "VeryLazy",
+    opts = {
+      on_startup = {
+        cursorline = true,
+        cursorcolumn = true,
+      },
+      disable_in_insert = false,
+      disable_in_diff = true,
+      always_highlight_number = true,
+      ignore = {
+        cursorline = {
+          "DressingInput",
+          "FTerm",
+          "NvimSeparator",
+          "NvimTree",
+          "TelescopePrompt",
+          "Trouble",
+          "snacks_picker_input",
+          "snacks_picker_list",
+          "snacks_picker_preview",
+          "snacks_dashboard",
+        },
+        cursorcolumn = {
+          "DressingInput",
+          "FTerm",
+          "NvimSeparator",
+          "NvimTree",
+          "TelescopePrompt",
+          "Trouble",
+          "snacks_picker_input",
+          "snacks_picker_list",
+          "snacks_picker_preview",
+          "snacks_dashboard",
+          "fyler",
+          "minifiles",
+        },
+      },
+
+      -- Specify filetypes where the cursorline and/or cursorcolumn should be
+      -- explicitly disabled. Typically, you would include these filetypes in
+      -- the 'ignored' table. However, there are situations where plugins enable
+      -- cursorline/cursorcolumn without offering a configuration option for
+      -- disabling them. By adding these filetypes to the 'never' table, you
+      -- can override the plugin's settings and turn off these features.
+      never = {
+        cursorline = {},
+        cursorcolumn = {
+          "fyler",
+        },
+      },
     },
   },
 }

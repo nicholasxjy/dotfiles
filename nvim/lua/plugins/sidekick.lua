@@ -2,15 +2,18 @@ return {
   "folke/sidekick.nvim",
   opts = {
     nes = {
-      enabled = true,
+      enabled = false,
     },
     cli = {
       watch = true,
       win = {
-        layout = "float",
+        layout = "left",
         float = {
           width = 0.8,
           height = 0.8,
+        },
+        split = {
+          width = 80,
         },
         keys = {
           hide_n = { "q", "hide", mode = "n" }, -- hide the terminal window in normal mode
@@ -20,8 +23,14 @@ return {
         },
       },
       mux = {
-        backend = "zellij",
+        backend = vim.env.ZELLIJ and "zellij" or "tmux",
         enabled = true,
+        create = "split",
+        split = {
+          -- vertical = true, -- vertical or horizontal split
+          horizontal = true,
+          size = 0.4, -- size of the split (0-1 for percentage)
+        },
       },
       tools = {
         copilot = {

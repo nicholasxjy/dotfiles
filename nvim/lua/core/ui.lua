@@ -1,72 +1,5 @@
 local M = {}
 
-M.cmp_draw = {
-  mini = {
-    kind_icon = {
-      text = function(ctx)
-        local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-        return kind_icon
-      end,
-      highlight = function(ctx)
-        local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
-        return hl
-      end,
-    },
-    kind = {
-      text = function(ctx)
-        return "[" .. ctx.kind .. "]"
-      end,
-      highlight = function(ctx)
-        local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
-        return hl
-      end,
-    },
-  },
-  lspkind = {
-    kind_icon = {
-      text = function(ctx)
-        local icon = ctx.kind_icon
-        if vim.tbl_contains({ "Path" }, ctx.source_name) then
-          local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
-          if dev_icon then
-            icon = dev_icon
-          end
-        else
-          icon = require("lspkind").symbolic(ctx.kind, {
-            mode = "symbol",
-          })
-        end
-        return icon .. ctx.icon_gap
-      end,
-      highlight = function(ctx)
-        local hl = ctx.kind_hl
-        if vim.tbl_contains({ "Path" }, ctx.source_name) then
-          local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
-          if dev_icon then
-            hl = dev_hl
-          end
-        end
-        return hl
-      end,
-    },
-    kind = {
-      text = function(ctx)
-        return "[" .. ctx.kind .. "]"
-      end,
-      highlight = function(ctx)
-        local hl = ctx.kind_hl
-        if vim.tbl_contains({ "Path" }, ctx.source_name) then
-          local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
-          if dev_icon then
-            hl = dev_hl
-          end
-        end
-        return hl
-      end,
-    },
-  },
-}
-
 M.rainbow_colors = {
   red = "#E82424",
   orange = "#cc6d00",
@@ -100,12 +33,12 @@ M.layout = {
     layout = {
       backdrop = false,
       row = -1,
-      width = 0.85,
+      -- width = 0.7,
       min_width = 80,
-      height = 0.9,
+      height = 0.8,
       border = "none",
       box = "vertical",
-      { win = "preview", title = "{preview}", height = 0.45, border = "rounded" },
+      { win = "preview", title = "{preview}", height = 0.5, border = "rounded" },
       {
         box = "vertical",
         border = "none",
@@ -156,7 +89,24 @@ M.layout = {
       box = "vertical",
       backdrop = false,
       row = -1,
-      width = 0,
+      -- width = 1,
+      height = 0.35,
+      border = "none",
+      title = " {title} {live} {flags}",
+      title_pos = "left",
+      { win = "input", height = 1, border = "bottom" },
+      {
+        box = "horizontal",
+        { win = "list", border = "none" },
+      },
+    },
+  },
+  ivy_pick = {
+    layout = {
+      box = "vertical",
+      backdrop = false,
+      row = -1,
+      width = 0.7,
       height = 0.35,
       border = "top",
       title = " {title} {live} {flags}",
@@ -174,7 +124,7 @@ M.layout = {
       backdrop = false,
       row = -1,
       width = 0,
-      height = 0.45,
+      height = 0.4,
       border = "top",
       title = " {title} {live} {flags}",
       title_pos = "left",
@@ -192,7 +142,7 @@ M.layout = {
       row = -1,
       width = 0,
       min_width = 120,
-      height = 0.35,
+      height = 0.4,
       backdrop = false,
       {
         box = "vertical",
@@ -268,6 +218,23 @@ M.fzf = {
       width = 1, -- window width
       row = 1, -- window row position (0=top, 1=bottom)
       col = 0, -- window col position (0=left, 1=right)
+      border = vim.g.bordered and "rounded" or "none",
+      backdrop = 100,
+      preview = {
+        border = "rounded",
+        wrap = true,
+        hidden = false,
+        layout = "horizontal",
+        horizontal = "right:45%",
+      },
+    },
+  },
+  ivy_pick = {
+    winopts = {
+      height = 0.4, -- window height
+      -- width = 0.7, -- window width
+      row = 1, -- window row position (0=top, 1=bottom)
+      -- col = 0, -- window col position (0=left, 1=right)
       border = vim.g.bordered and "rounded" or "none",
       backdrop = 100,
       preview = {
@@ -454,7 +421,46 @@ M.icons = {
     StaticMethod = "󰰑",
     TypeAlias = "",
   },
-
+  codicons = {
+    Text = "",
+    Method = "",
+    Function = "",
+    Constructor = "",
+    Field = "",
+    Variable = "",
+    Class = "",
+    Interface = "",
+    Module = "",
+    Property = "",
+    Unit = "",
+    Value = "",
+    Enum = "",
+    Keyword = "",
+    Snippet = "",
+    Color = "",
+    File = "",
+    Reference = "",
+    Folder = "",
+    EnumMember = "",
+    Constant = "",
+    Struct = "",
+    Event = "",
+    Operator = "",
+    TypeParameter = "",
+    Codeium = "󰚩",
+    Copilot = "",
+    Control = "",
+    Collapsed = "",
+    Component = "󰅴",
+    Fragment = "󰩦",
+    Key = "",
+    Macro = "󰁥",
+    Null = "",
+    Package = "",
+    Parameter = "",
+    StaticMethod = "󰰑",
+    TypeAlias = "",
+  },
   misc = {
     dots = "󰇘",
     bug = "",

@@ -1,12 +1,12 @@
+local cmpUtil = require("utils.cmp")
 local ui = require("core.ui")
 
 return {
-  { "nvim-tree/nvim-web-devicons", opts = {} },
   {
     "onsails/lspkind.nvim",
     config = function()
       require("lspkind").init({
-        symbol_map = ui.icons.lspkind_kind_icons,
+        symbol_map = ui.icons.codicons,
       })
     end,
   },
@@ -39,7 +39,6 @@ return {
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
       { "folke/sidekick.nvim" },
-      { "nicholasxjy/colorful-menu.nvim", opts = {} },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -61,17 +60,11 @@ return {
           },
         },
         keymap = {
-          ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
-          ["<Up>"] = { "select_prev", "fallback" },
-          ["<Down>"] = { "select_next", "fallback" },
-          ["<C-n>"] = { "select_next", "show" },
-          ["<C-p>"] = { "select_prev", "show" },
+          preset = "enter",
           ["<C-j>"] = { "select_next", "fallback" },
           ["<C-k>"] = { "select_prev", "fallback" },
           ["<C-u>"] = { "scroll_documentation_up", "fallback" },
           ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-          ["<C-e>"] = { "hide", "fallback" },
-          ["<CR>"] = { "accept", "fallback" },
           ["<Tab>"] = {
             function()
               return require("sidekick").nes_jump_or_apply()
@@ -129,39 +122,27 @@ return {
             } or "none",
             draw = {
               columns = {
-                { "kind_icon" },
-                { "label", gap = 1 },
+                { "kind_icon", "label", gap = 1 },
                 { "kind" },
               },
               treesitter = { "lsp" },
+
               components = {
-                label = {
-                  text = function(ctx)
-                    return require("colorful-menu").blink_components_text(ctx)
-                  end,
-                  highlight = function(ctx)
-                    return require("colorful-menu").blink_components_highlight(ctx)
-                  end,
-                },
                 kind_icon = {
                   text = function(ctx)
-                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                      local mini_icon, _ = require("mini.icons").get_icon(ctx.item.data.type, ctx.label)
-                      if mini_icon then
-                        return mini_icon .. ctx.icon_gap
-                      end
-                    end
-                    local icon = require("lspkind").symbolic(ctx.kind, { mode = "symbol" })
-                    return icon .. ctx.icon_gap
+                    return cmpUtil.get_kind_icon(ctx).text
                   end,
                   highlight = function(ctx)
-                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                      local mini_icon, mini_hl = require("mini.icons").get_icon(ctx.item.data.type, ctx.label)
-                      if mini_icon then
-                        return mini_hl
-                      end
+                    return cmpUtil.get_kind_icon(ctx).highlight
+                  end,
+                },
+                label = {
+                  width = { fill = true, max = 50 },
+                  text = function(ctx)
+                    if ctx.label_detail and ctx.label_detail ~= "" then
+                      return ctx.label .. "(" .. ctx.label_detail .. ")"
                     end
-                    return ctx.kind_hl
+                    return ctx.label
                   end,
                 },
                 kind = {
@@ -169,13 +150,15 @@ return {
                     return "[" .. ctx.kind .. "]"
                   end,
                   highlight = function(ctx)
-                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                      local mini_icon, mini_hl = require("mini.icons").get_icon(ctx.item.data.type, ctx.label)
-                      if mini_icon then
-                        return mini_hl
-                      end
-                    end
-                    return ctx.kind_hl
+                    return cmpUtil.get_kind_icon(ctx).highlight
+                  end,
+                },
+                source_name = {
+                  text = function(ctx)
+                    return "[" .. ctx.source_name .. "]"
+                  end,
+                  highlight = function(ctx)
+                    return cmpUtil.get_kind_icon(ctx).highlight
                   end,
                 },
               },
@@ -185,22 +168,9 @@ return {
         cmdline = {
           enabled = true,
           keymap = {
-            ["<Up>"] = { "select_prev", "fallback" },
-            ["<Down>"] = { "select_next", "fallback" },
-            ["<C-n>"] = { "select_next", "show" },
-            ["<C-p>"] = { "select_prev", "show" },
+            preset = "cmdline",
             ["<C-j>"] = { "select_next", "fallback" },
             ["<C-k>"] = { "select_prev", "fallback" },
-            ["<C-e>"] = { "hide", "fallback" },
-            ["<CR>"] = { "accept", "hide", "fallback" },
-            ["<Tab>"] = {
-              function()
-                return require("sidekick").nes_jump_or_apply()
-              end,
-              "snippet_forward",
-              "select_next",
-              "fallback",
-            },
           },
           completion = {
             ghost_text = { enabled = true },
@@ -214,7 +184,7 @@ return {
         },
         snippets = { preset = "luasnip" },
         sources = {
-          default = { "lazydev", "lsp", "path", "snippets", "buffer" }, --"copilot"
+          default = { "lazydev", "lsp", "path", "snippets", "buffer", "copilot" },
           providers = {
             copilot = {
               name = "copilot",

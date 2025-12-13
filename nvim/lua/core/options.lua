@@ -3,13 +3,13 @@ vim.g.maplocalleader = " "
 vim.g.autoformat = true
 vim.g.inlay_hints = true
 vim.g.codelens = true
-vim.g.copilot_enabled = false
+vim.g.copilot_enabled = true
 
 vim.g.kind_icons = "lspkind"
 vim.g.picker = "snacks"
 
 vim.g.transparent = false
-vim.g.bordered = true
+vim.g.bordered = false
 vim.o.winborder = "rounded"
 
 local opt = vim.opt
@@ -55,3 +55,5 @@ opt.winminwidth = 5 -- Minimum window width
 opt.wrap = true -- Disable line wrap
 opt.undolevels = 10000
 opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
+
+vim.o.statuscolumn = "%!v:lua.require('core.statuscolumn').setup()"

@@ -10,6 +10,8 @@ return {
     "php",
     "javascriptreact",
     "typescriptreact",
+    "javascript",
+    "typescript",
     "rust",
     "go",
     "lua",
@@ -19,7 +21,9 @@ return {
       query = {
         [""] = "rainbow-delimiters",
         javascript = "rainbow-delimiters",
+        typescript = "rainbow-delimiters",
         tsx = "rainbow-delimiters",
+        typescriptreact = "rainbow-delimiters",
         commonlisp = "rainbow-delimiters",
         scheme = "rainbow-delimiters",
         query = function(bufnr)

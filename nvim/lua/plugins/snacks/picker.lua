@@ -42,11 +42,14 @@ return {
           },
         },
       },
-      icons = { kinds = ui.icons.lspkind_kind_icons },
+      icons = { kinds = ui.icons.codicons },
       actions = {
         sidekick_send = function(...)
           return require("sidekick.cli.snacks").send(...)
         end,
+      },
+      debug = {
+        scores = false,
       },
     },
   },
@@ -87,27 +90,24 @@ return {
         Snacks.picker.smart({
           hidden = true,
           filter = { cwd = true },
-          preview = function()
-            return false
-          end,
-          layout = ui.layout.dropdown_pick,
+          layout = ui.layout.ivy_border,
         })
       end,
       desc = "Snacks smart",
       silent = true,
     },
-    {
-      "nn",
-      function()
-        Snacks.picker.buffers({
-          sort_lastused = true,
-          current = false,
-          layout = ui.layout.dropdown_pick,
-        })
-      end,
-      desc = "Snacks buffers",
-      silent = true,
-    },
+    -- {
+    --   "nn",
+    --   function()
+    --     Snacks.picker.buffers({
+    --       sort_lastused = true,
+    --       current = false,
+    --       layout = ui.layout.ivy,
+    --     })
+    --   end,
+    --   desc = "Snacks buffers",
+    --   silent = true,
+    -- },
     {
       "<leader>r",
       function()

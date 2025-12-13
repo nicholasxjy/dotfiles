@@ -220,15 +220,15 @@ M.methods_setup = function(client, bufnr)
     })
   end
 
-  -- NOTE: use nvim-highlight-colors instead
+  -- NOTE: use ccc instead
   -- Handle textDocument/documentColor support
-  if client:supports_method(Methods.textDocument_documentColor) and vim.fn.has("nvim-0.12") == 1 then
-    vim.lsp.document_color.enable(true, bufnr, { style = "background" }) --background, foreground, virtual
-  end
+  -- if client:supports_method(Methods.textDocument_documentColor) and vim.fn.has("nvim-0.12") == 1 then
+  --   vim.lsp.document_color.enable(true, bufnr, { style = "background" }) --background, foreground, virtual
+  -- end
 
-  -- disable inlay hints by default
+  -- enable inlay hints by default
   if client:supports_method(Methods.textDocument_inlayHints) then
-    vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
 
   if client:supports_method(Methods.textDocument_documentHighlight) then

@@ -1,92 +1,18 @@
 return {
   {
-    "ribru17/bamboo.nvim",
-    opts = {
-      style = "multiplex", -- Choose between 'vulgaris' (regular), 'multiplex' (greener), and 'light'
-      transparent = vim.g.transparent,
-      lualine = {
-        transparent = true, -- lualine center bar transparency
-      },
-      code_style = {
-        comments = { italic = true },
-        conditionals = { italic = true },
-        keywords = {},
-        functions = {},
-        namespaces = { italic = true },
-        parameters = { italic = true },
-        strings = {},
-        variables = {},
-      },
-      colors = {
-        bg0 = "#333333",
-        red = "#CB4251",
-        aqua = "#0fb9e0",
-        lime = "#2ed592",
-        green = "#2ed563",
-        orange = "#F37A2E",
-        yellow = "#EADD61", --"#f0be42",
-        blue = "#38D0EF",
-        pink = "#f45ab4",
-        cyan = "#37c3b5",
-        purple = "#be9af7",
-      },
-      highlights = {
-        Comment = { fg = "#6D90A8", fmt = "italic" },
-        ["@comment"] = { link = "Comment" },
-        PmenuMatch = { bg = "#555555", fg = "#FFB870", fmt = "bold" },
-        PmenuMatchSel = { bold = true, sp = "bg0" },
-        FloatTitle = { fg = "$red", fmt = "bold" },
-        FloatBorder = { fg = "#3B38A0" },
-        Type = { fg = "$yellow", fmt = "bold" },
-        TablineFill = { fg = "$grey", bg = "bg0" },
-        MiniTablineFill = { fg = "$grey", bg = "bg0" },
-        MiniTablineHidden = { fg = "$fg", bg = "$bg1" },
-        ["@keyword.import"] = { fg = "#2ed592", fmt = "bold" },
-        ["@keyword.export"] = { fg = "#2ed592", fmt = "bold" },
-
-        ["@lsp.typemod.enum"] = { fg = "#61AEFF", fmt = "bold" },
-        ["@lsp.typemod.enumMember"] = { fg = "#9EC410", fmt = "bold" },
-        ["@lsp.typemod.enum.rust"] = { fg = "#61AEFF", fmt = "bold" },
-        ["@lsp.typemod.enumMember.rust"] = { fg = "#9EC410", fmt = "bold" },
-
-        ["@lsp.type.modifier"] = { link = "@keyword.modifier" },
-        ["@lsp.type.interface"] = { fg = "#D4A017", fmt = "bold,italic" },
-
-        BlinkCmpMenu = { bg = "$bg0" },
-        BlinkCmpDoc = { bg = "$bg0" },
-
-        SnacksPickerMatch = { link = "PmenuMatch" },
-
-        BlinkIndentRed = { link = "RainbowDelimiterRed" },
-        BlinkIndentOrange = { link = "RainbowDelimiterOrange" },
-        BlinkIndentYellow = { link = "RainbowDelimiterYellow" },
-        BlinkIndentGreen = { link = "RainbowDelimiterGreen" },
-        BlinkIndentCyan = { link = "RainbowDelimiterCyan" },
-        BlinkIndentBlue = { link = "RainbowDelimiterBlue" },
-        BlinkIndentViolet = { link = "RainbowDelimiterViolet" },
-
-        BlinkIndentRedUnderline = { link = "RainbowDelimiterRed" },
-        BlinkIndentOrangeUnderline = { link = "RainbowDelimiterOrange" },
-        BlinkIndentYellowUnderline = { link = "RainbowDelimiterYellow" },
-        BlinkIndentGreenUnderline = { link = "RainbowDelimiterGreen" },
-        BlinkIndentCyanUnderline = { link = "RainbowDelimiterCyan" },
-        BlinkIndentBlueUnderline = { link = "RainbowDelimiterBlue" },
-        BlinkIndentVioletUnderline = { link = "RainbowDelimiterViolet" },
-      },
-    },
-  },
-  {
     "uhs-robert/oasis.nvim",
     priority = 1000,
     lazy = false,
     config = function()
-      local c = require("oasis.color_palettes.oasis_desert")
+      local c = require("oasis.color_palettes.oasis_desert").dark
       local palette = require("oasis.palette")
+      local float_border = "#B68973" --palette.sapphire[900]    --"#3B38A0"
       local opts = {
-        dark_style = "desert", -- Style to use when vim.o.background is "dark"
-        light_style = "day", -- Style to use when vim.o.background is "light"
-        style = nil, -- Optional: Set a single style to disable auto-switching (e.g., "lagoon", "desert")
-        use_legacy_comments = false, -- Uses the legacy comment color from desert.vim for the "desert" style only (a bright sky blue)
+        style = "desert",
+        dark_style = "auto", -- Style to use when vim.o.background is "dark"
+        light_style = "auto", -- Style to use when vim.o.background is "light"
+        use_legacy_comments = false,
+        themed_syntax = true,
 
         styles = {
           bold = true, -- Enable bold text (keywords, functions, etc.)
@@ -96,82 +22,97 @@ return {
           strikethrough = true, -- Enable strikethrough text (deprecations)
         },
 
-        -- Display options
-        transparent = vim.g.transparent, -- Set to true for transparent backgrounds (bye bye theme backgrounds)
-        terminal_colors = true, -- Apply Oasis colors to Neovim's built-in terminal
-
-        palette_overrides = {
-          oasis_night = {
-            ui = {
-              border = c.ui.border,
-            },
-          },
-        }, -- Override colors in specific palettes
+        transparent = vim.g.transparent,
+        terminal_colors = true,
+        contrast = {
+          min_ratio = 5.8, -- Clamp 4.5–7.0; target contrast for syntax/terminal colors. Increase for more contrast, decrease for more pop.
+          force_aaa = false, -- When true, forces AAA (7.0) wherever possible; as a result some colors will appear muddy (bye bye non-primary colors).
+        },
+        palette_overrides = {},
         highlight_overrides = {
 
-          FloatBorder = { fg = palette.lagoon[600], bg = vim.g.transparent and "NONE" or c.bg.core },
-          NormalFloat = { fg = c.fg.strong, bg = c.bg.core },
-          Type = { fg = palette.gold[300], bold = true },
-          Function = { fg = palette.lagoon[600] },
-          Keyword = { fg = palette.lavender[400] },
-          PmenuMatch = { fg = c.ui.match.bg, bg = c.bg.surface, bold = true },
+          MoreMsg = { fg = c.fg.dim, bold = true, italic = true },
+          Cursor = { bg = "#00FF7F" },
+          NormalFloat = { bg = c.bg.mantle },
+          FloatBorder = { fg = float_border, bg = c.bg.core },
+          FloatTitle = { fg = "#CB4251", bold = true },
+          PmenuMatch = { fg = c.ui.match.bg, bold = true },
 
+          MiniFilesNormal = { bg = c.bg.core, fg = c.fg.core },
+          MiniClueDescSingle = { bg = c.bg.core, fg = c.fg.dim },
+          MiniClueNextKey = { bg = c.bg.core, fg = c.fg.comment, bold = true },
+          MiniClueSeparator = "FloatBorder",
+
+          SnacksPicker = { bg = c.bg.core },
+          SnacksPickerFile = { fg = c.fg.core },
+          SnacksPickerDir = { fg = c.fg.comment, italic = true },
+          SnacksPickerMatch = { fg = c.ui.match.bg, bg = c.fg.dim, bold = true },
+          SnacksPickerInput = { bg = c.bg.core },
+          SnacksPickerInputBorder = { bg = c.bg.core, fg = float_border },
+          SnacksPickerPreview = { bg = c.bg.core },
+          SnacksPickerPrompt = "Special",
+          SnacksPickerListCursorLine = { bg = c.bg.mantle, bold = true },
           --
-          SnacksPickerInput = { link = "NormalFloat" },
-          SnacksPickerInputBorder = { bg = c.bg.core, fg = palette.lagoon[600] },
-          SnacksPickerPreview = { link = "NormalFloat" },
-          SnacksPickerPreviewBorder = { bg = c.bg.core, fg = palette.lagoon[600] },
-          SnacksPickerMatch = { link = "PmenuMatch" },
+          FzfLuaFzfMatch = "SnacksPickerMatch",
+          FzfLuaTitle = "FloatTitle",
+          FzfLuaPreviewTitle = { fg = palette.lagoon[600], bold = true },
           --
-          BlinkCmpMenu = { link = "NormalFloat" },
-          BlinkCmpMenuBorder = { link = "FloatBorder" },
-          BlinkCmpDocBorder = { link = "FloatBorder" },
-          BlinkCmpSignatureHelpBorder = { link = "FloatBorder" },
-          --
-          ["@module"] = { fg = palette.coral[200], bold = false },
-          ["@operator"] = { fg = palette.brown[400], bold = false },
-          ["@keyword"] = { link = "Keyword" },
-          ["@punctuation.delimiter"] = { fg = palette.brown[500] },
-          ["@parameter"] = { fg = palette.red[800], italic = true },
+          BlinkCmpMenu = { bg = c.bg.mantle },
+          BlinkCmpDoc = "BlinkCmpMenu",
+          BlinkCmpMenuBorder = "FloatBorder",
+          BlinkCmpDocBorder = "FloatBorder",
+          BlinkCmpSignatureHelpBorder = "FloatBorder",
+          BlinkCmpLabelMatch = "PmenuMatch",
+          BlinkCmpMenuSelection = "PmenuSel",
+          BlinkCmpKind = "Special",
+          -- --
+          Type = { fg = palette.gold[500], bold = true },
+          Function = { fg = palette.lagoon[300] },
+          ["@module"] = { fg = palette.rose[500], bold = false, italic = false },
+          ["@operator"] = { fg = palette.gold[800], bold = false },
+          ["@keyword"] = { fg = palette.lavender[300] },
+          ["@punctuation.delimiter"] = { fg = palette.gold[800] },
+          ["@parameter"] = { fg = palette.sunshine[200] },
           ["@variable.parameter"] = "@parameter",
           ["@type.builtin"] = { fg = palette.sunset[400] },
-          ["@keyword.import"] = { fg = palette.cactus[700], bold = true },
-          ["@keyword.export"] = { link = "@keyword.import" },
-          ["@keyword.return"] = { fg = palette.sunrise[700], bold = true, italic = true },
-          ["@keyword.modifier"] = { fg = palette.lavender[600] },
-          ["@lsp.type.modifier"] = { link = "@keyword.modifier" },
-          ["@lsp.type.interface"] = { fg = palette.dune[500], bold = true, italic = true },
-          ["@lsp.type.property"] = { fg = palette.aloe[400] },
-          ["@lsp.type.namespace"] = { link = "@module" },
-          ["@lsp.type.enum"] = { fg = palette.azure[600], bold = true, italic = false },
-          ["@lsp.type.enumMember"] = { fg = palette.moss[500], bold = true },
+          ["@keyword.import"] = { fg = palette.cyan[500], bold = true },
+          ["@keyword.export"] = "@keyword.import",
+          ["@keyword.return"] = { fg = palette.lavender[400], bold = true, italic = false },
+          ["@keyword.modifier"] = { fg = palette.lavender[200] },
+          ["@lsp.type.keyword"] = "Keyword",
+          ["@lsp.type.modifier"] = "@keyword.modifier",
+          ["@lsp.type.interface"] = { fg = palette.sunshine[700], bold = true },
+          ["@lsp.type.namespace"] = "@module",
+          ["@lsp.type.enum"] = { fg = palette.sapphire[700], bold = true, italic = false },
+          ["@lsp.type.enumMember"] = { fg = palette.palm[600], bold = true },
 
-          BlinkCmpKindMethod = { link = "Function" },
-          BlinkCmpKindFunction = { link = "Function" },
-          BlinkCmpKindVariable = { link = "Identifier" },
-          BlinkCmpKindProperty = { link = "Identifier" },
+          BlinkCmpKindMethod = "Function",
+          BlinkCmpKindFunction = "Function",
+          BlinkCmpKindVariable = "Identifier",
+          BlinkCmpKindProperty = "Identifier",
 
-          BlinkCmpKindClass = { link = "Type" },
-          BlinkCmpKindStruct = { link = "Type" },
-          BlinkCmpKindTypeParameter = { link = "Type" },
+          BlinkCmpKindClass = "Type",
+          BlinkCmpKindStruct = "Type",
+          BlinkCmpKindTypeParameter = "Type",
 
           BlinkCmpKindConstructor = { fg = c.syntax.builtinFunc },
 
-          BlinkCmpKindEnum = { link = "@lsp.type.enum" },
-          BlinkCmpKindEnumMember = { link = "@lsp.type.enumMember" },
-          BlinkCmpKindInterface = { link = "@lsp.type.interface" },
+          BlinkCmpKindEnum = "@lsp.type.enum",
+          BlinkCmpKindEnumMember = "@lsp.type.enumMember",
+          BlinkCmpKindInterface = "@lsp.type.interface",
 
-          BlinkCmpKindModule = { link = "@module" },
-          BlinkCmpKindPackage = { link = "@module" },
-          BlinkCmpKindNameSpace = { link = "@module" },
+          BlinkCmpKindModule = "@module",
+          BlinkCmpKindPackage = "@module",
+          BlinkCmpKindNameSpace = "@module",
 
-          BlinkCmpKindNumber = { link = "Number" },
-          BlinkCmpKindBoolean = { link = "Boolean" },
-          BlinkCmpKindConstant = { link = "Constant" },
-          BlinkCmpKindKeyword = { link = "Keyword" },
-          BlinkCmpKindString = { link = "String" },
-          BlinkCmpKindOperator = { link = "Operator" },
-          BlinkCmpKindSnippet = { fg = palette.lavender[400] },
+          BlinkCmpKindNumber = "Number",
+          BlinkCmpKindBoolean = "Boolean",
+          BlinkCmpKindConstant = "Constant",
+          BlinkCmpKindKeyword = "Keyword",
+          BlinkCmpKindBuffer = "String",
+          BlinkCmpKindString = "String",
+          BlinkCmpKindOperator = "Operator",
+          BlinkCmpKindSnippet = { fg = palette.lavender[600] },
           BlinkCmpKindField = { fg = palette.rose[700] },
 
           --
@@ -190,7 +131,7 @@ return {
           BlinkIndentCyanUnderline = { link = "RainbowDelimiterCyan" },
           BlinkIndentBlueUnderline = { link = "RainbowDelimiterBlue" },
           BlinkIndentVioletUnderline = { link = "RainbowDelimiterViolet" },
-        }, -- Override specific highlight groups
+        },
       }
       require("oasis").setup(opts)
     end,
