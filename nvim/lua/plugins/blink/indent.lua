@@ -1,6 +1,7 @@
 return {
   "saghen/blink.indent",
   event = "VeryLazy",
+  enabled = false,
   opts = {
     blocked = {
       -- default: 'terminal', 'quickfix', 'nofile', 'prompt'

@@ -1,13 +1,15 @@
 local M = {}
 
 M.rainbow_colors = {
-  red = "#E82424",
-  orange = "#cc6d00",
-  yellow = "#de9800",
-  green = "#5e857a",
-  cyan = "#4e8ca2",
-  blue = "#4d699b",
-  purple = "#957FB8",
+  blue = "#5ea1ff",
+  green = "#5eff6c",
+  cyan = "#5ef1ff",
+  red = "#ff6e5e",
+  yellow = "#f1ff5e",
+  magenta = "#ff5ef1",
+  pink = "#ff5ea0",
+  orange = "#ffbd5e",
+  purple = "#bd5eff",
 }
 
 M.layout = {
@@ -105,9 +107,9 @@ M.layout = {
     layout = {
       box = "vertical",
       backdrop = false,
-      row = -1,
-      width = 0.7,
-      height = 0.35,
+      row = 0.6,
+      width = 0.8,
+      height = 0.4,
       border = "top",
       title = " {title} {live} {flags}",
       title_pos = "left",
@@ -151,7 +153,7 @@ M.layout = {
         { win = "input", height = 1, border = "bottom" },
         { win = "list", border = false },
       },
-      { win = "preview", title = "{preview}", border = "rounded", width = 0.45 },
+      { win = "preview", title = "{preview}", border = "rounded", width = 0.5 },
     },
   },
   right = {
@@ -242,7 +244,7 @@ M.fzf = {
         wrap = true,
         hidden = false,
         layout = "horizontal",
-        horizontal = "right:45%",
+        horizontal = "right:50%",
       },
     },
   },
@@ -354,7 +356,7 @@ M.icons = {
     Interface = " ",
     Key = " ",
     Keyword = " ",
-    Method = " ",
+    Method = "󰊕 ",
     Module = " ",
     Namespace = "󰦮 ",
     Null = " ",

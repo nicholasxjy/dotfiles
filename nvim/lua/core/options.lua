@@ -3,13 +3,13 @@ vim.g.maplocalleader = " "
 vim.g.autoformat = true
 vim.g.inlay_hints = true
 vim.g.codelens = true
-vim.g.copilot_enabled = true
+vim.g.copilot_enabled = false
 
 vim.g.kind_icons = "lspkind"
 vim.g.picker = "snacks"
 
 vim.g.transparent = false
-vim.g.bordered = false
+vim.g.bordered = true
 vim.o.winborder = "rounded"
 
 local opt = vim.opt
@@ -55,5 +55,8 @@ opt.winminwidth = 5 -- Minimum window width
 opt.wrap = true -- Disable line wrap
 opt.undolevels = 10000
 opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
+
+-- views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3
 
 vim.o.statuscolumn = "%!v:lua.require('core.statuscolumn').setup()"

@@ -9,7 +9,7 @@ return {
       ui_select = true,
       layout = {
         cycle = false,
-        layout = ui.layout.dropdown.layout,
+        -- layout = ui.layout.dropdown.layout,
       },
       matcher = {
         cwd_bonus = true,
@@ -31,6 +31,10 @@ return {
         input = {
           keys = {
             ["<Esc>"] = { "close", mode = { "n", "i" } },
+            ["<a-a>"] = {
+              "sidekick_send",
+              mode = { "n", "i" },
+            },
           },
         },
         list = {
@@ -42,7 +46,7 @@ return {
           },
         },
       },
-      icons = { kinds = ui.icons.codicons },
+      icons = { kinds = ui.icons.lazy_kind_icons },
       actions = {
         sidekick_send = function(...)
           return require("sidekick.cli.snacks").send(...)
@@ -62,24 +66,9 @@ return {
       desc = "Snacks explorer",
     },
     {
-      "<leader>:",
-      function()
-        Snacks.picker.commands()
-      end,
-      desc = "Snacks commands",
-    },
-    {
-      "<leader>/",
-      function()
-        Snacks.picker.lines({ layout = ui.layout.ivy_border })
-      end,
-      desc = "Snacks lines",
-      silent = true,
-    },
-    {
       "<leader>m",
       function()
-        Snacks.picker.marks()
+        Snacks.picker.marks({ layout = ui.layout.dropdown })
       end,
       desc = "Snacks marks",
       silent = true,
@@ -90,28 +79,28 @@ return {
         Snacks.picker.smart({
           hidden = true,
           filter = { cwd = true },
-          layout = ui.layout.ivy_border,
+          layout = ui.layout.vscode,
         })
       end,
       desc = "Snacks smart",
       silent = true,
     },
-    -- {
-    --   "nn",
-    --   function()
-    --     Snacks.picker.buffers({
-    --       sort_lastused = true,
-    --       current = false,
-    --       layout = ui.layout.ivy,
-    --     })
-    --   end,
-    --   desc = "Snacks buffers",
-    --   silent = true,
-    -- },
+    {
+      "nn",
+      function()
+        Snacks.picker.buffers({
+          sort_lastused = true,
+          current = false,
+          layout = ui.layout.vscode,
+        })
+      end,
+      desc = "Snacks buffers",
+      silent = true,
+    },
     {
       "<leader>r",
       function()
-        Snacks.picker.resume()
+        Snacks.picker.resume({ layout = ui.layout.dropdown })
       end,
       desc = "Snacks resume",
     },
@@ -120,6 +109,7 @@ return {
       "<leader>sw",
       function()
         Snacks.picker.grep_word({
+          layout = ui.layout.dropdown,
           filter = { cwd = true },
         })
       end,
@@ -130,6 +120,7 @@ return {
       "<leader>sW",
       function()
         Snacks.picker.grep_word({
+          layout = ui.layout.dropdown,
           filter = { cwd = true },
           buffers = true,
           dirs = { vim.fn.expand("%:p") }, -- current buffer
@@ -142,6 +133,7 @@ return {
       "<leader>sg",
       function()
         Snacks.picker.grep({
+          layout = ui.layout.dropdown,
           filter = { cwd = true },
         })
       end,
@@ -150,7 +142,7 @@ return {
     {
       "<leader>sG",
       function()
-        Snacks.picker.grep()
+        Snacks.picker.grep({ layout = ui.layout.dropdown })
       end,
       desc = "Snacks live grep",
     },
@@ -176,24 +168,11 @@ return {
       desc = "Notifications",
     },
     {
-      "<leader>fq",
-      function()
-        Snacks.picker.qflist()
-      end,
-      desc = "Snacks quickfix",
-    },
-    {
-      "<leader>fl",
-      function()
-        Snacks.picker.loclist()
-      end,
-      desc = "Snacks loclist",
-    },
-    {
       "<leader>xt",
       function()
         ---@diagnostic disable-next-line: undefined-field
         Snacks.picker.todo_comments({
+          layout = ui.layout.dropdown,
           keywords = { "TODO", "FIX", "FIXME", "NOTE", "PERF", "HACK" },
         })
       end,

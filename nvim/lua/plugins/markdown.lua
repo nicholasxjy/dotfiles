@@ -22,6 +22,7 @@ return {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.icons" },
     opts = {
+      file_types = { "markdown", "Avante" },
       completions = { blink = { enabled = true } },
       code = {
         language_border = "",
@@ -29,7 +30,7 @@ return {
         right_pad = 1,
       },
     },
-    ft = { "markdown", "norg", "rmd", "org", "codecompanion" },
+    ft = { "markdown", "norg", "rmd", "org", "codecompanion", "Avante" },
     config = function(_, opts)
       require("render-markdown").setup(opts)
       Snacks.toggle({

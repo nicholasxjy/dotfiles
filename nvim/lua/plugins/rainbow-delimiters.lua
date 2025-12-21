@@ -12,9 +12,9 @@ return {
     "typescriptreact",
     "javascript",
     "typescript",
-    "rust",
-    "go",
-    "lua",
+    -- "rust",
+    -- "go",
+    -- "lua",
   },
   config = function()
     require("rainbow-delimiters.setup").setup({
@@ -33,9 +33,9 @@ return {
         end,
         clojure = "rainbow-delimiters",
         html = "rainbow-delimiters",
-        lua = "rainbow-delimiters",
-        go = "rainbow-delimiters",
-        rust = "rainbow-delimiters",
+        -- lua = "rainbow-delimiters",
+        -- go = "rainbow-delimiters",
+        -- rust = "rainbow-delimiters",
       },
     })
   end,

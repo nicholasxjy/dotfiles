@@ -53,15 +53,18 @@ return {
     },
     keys = {
       {
-        "nn",
+        "<leader>:",
         function()
-          require("fzf-lua").buffers({
-            sort_lastused = true,
-            winopts = ui.fzf.ivy_pick.winopts,
-          })
+          require("fzf-lua").commands()
         end,
-        desc = "Fzf buffers",
-        silent = true,
+        desc = "Fzf commands",
+      },
+      {
+        "<leader>/",
+        function()
+          require("fzf-lua").blines()
+        end,
+        desc = "Fzf blines",
       },
       {
         "<leader>fb",
@@ -78,6 +81,20 @@ return {
           require("fzf-lua").colorschemes()
         end,
         desc = "Fzf colorschemes",
+      },
+      {
+        "<leader>fq",
+        function()
+          require("fzf-lua").quickfix()
+        end,
+        desc = "Fzf quickfix",
+      },
+      {
+        "<leader>fl",
+        function()
+          require("fzf-lua").loclist()
+        end,
+        desc = "Fzf loclist",
       },
       {
         "<leader>fg",

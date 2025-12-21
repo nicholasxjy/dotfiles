@@ -1,3 +1,4 @@
+local ui = require("core.ui")
 local M = {}
 
 local is_fzf_picker = vim.g.picker == "fzf"
@@ -7,7 +8,7 @@ local function lsp_definitions()
   if is_fzf_picker then
     fzflua.lsp_definitions()
   else
-    Snacks.picker.lsp_definitions()
+    Snacks.picker.lsp_definitions({ layout = ui.layout.dropdown })
   end
 end
 
@@ -15,7 +16,7 @@ local function lsp_declarations()
   if is_fzf_picker then
     fzflua.lsp_declarations()
   else
-    Snacks.picker.lsp_declarations()
+    Snacks.picker.lsp_declarations({ layout = ui.layout.dropdown })
   end
 end
 
@@ -23,49 +24,49 @@ local function lsp_implementations()
   if is_fzf_picker then
     fzflua.lsp_implementations()
   else
-    Snacks.picker.lsp_implementations()
+    Snacks.picker.lsp_implementations({ layout = ui.layout.dropdown })
   end
 end
 local function lsp_references()
   if is_fzf_picker then
     fzflua.lsp_references()
   else
-    Snacks.picker.lsp_references()
+    Snacks.picker.lsp_references({ layout = ui.layout.dropdown })
   end
 end
 local function lsp_type_definitions()
   if is_fzf_picker then
     fzflua.lsp_typedefs()
   else
-    Snacks.picker.lsp_type_definitions()
+    Snacks.picker.lsp_type_definitions({ layout = ui.layout.dropdown })
   end
 end
 local function lsp_incoming_calls()
   if is_fzf_picker then
     fzflua.lsp_incoming_calls()
   else
-    Snacks.picker.lsp_incoming_calls()
+    Snacks.picker.lsp_incoming_calls({ layout = ui.layout.dropdown })
   end
 end
 local function lsp_outgoing_calls()
   if is_fzf_picker then
     fzflua.lsp_outgoing_calls()
   else
-    Snacks.picker.lsp_outgoing_calls()
+    Snacks.picker.lsp_outgoing_calls({ layout = ui.layout.dropdown })
   end
 end
 local function lsp_symbols()
   if is_fzf_picker then
     fzflua.lsp_document_symbols()
   else
-    Snacks.picker.lsp_symbols()
+    Snacks.picker.lsp_symbols({ layout = ui.layout.dropdown })
   end
 end
 local function lsp_workspace_symbols()
   if is_fzf_picker then
     fzflua.lsp_workspace_symbols()
   else
-    Snacks.picker.lsp_workspace_symbols()
+    Snacks.picker.lsp_workspace_symbols({ layout = ui.layout.dropdown })
   end
 end
 
@@ -73,7 +74,7 @@ local function diagnostics_buffer()
   if is_fzf_picker then
     fzflua.diagnostics_document()
   else
-    Snacks.picker.diagnostics_buffer()
+    Snacks.picker.diagnostics_buffer({ layout = ui.layout.dropdown })
   end
 end
 
@@ -82,6 +83,7 @@ local function diagnostics_workspace()
     fzflua.diagnostics_workspace()
   else
     Snacks.picker.diagnostics({
+      layout = ui.layout.dropdown,
       sort = {
         fields = {
           "severity",
@@ -103,6 +105,7 @@ local function diagnostics_workspace_warns()
     })
   else
     Snacks.picker.diagnostics({
+      layout = ui.layout.dropdown,
       sort = {
         fields = {
           "severity",
@@ -124,6 +127,7 @@ local function diagnostics_workspace_errors()
     })
   else
     Snacks.picker.diagnostics({
+      layout = ui.layout.dropdown,
       sort = {
         fields = {
           "severity",
@@ -140,14 +144,11 @@ end
 M.keymap_setup = function()
   vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
   vim.keymap.set("n", "K", function()
-    vim.lsp.buf.hover({
-      border = "single",
-    })
-  end, { desc = "Hover", silent = true, noremap = true })
+    vim.lsp.buf.hover()
+  end, { desc = "Hover", silent = true })
 
   vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-
   vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
   --
   vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })

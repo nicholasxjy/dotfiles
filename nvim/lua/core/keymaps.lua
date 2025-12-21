@@ -11,6 +11,15 @@ local map = function(modes, lhs, rhs, opts)
   end
 end
 
+local unmap = vim.keymap.del
+
+-- remove default keybindings that cause `gr` delay
+unmap("n", "gri")
+unmap("n", "grr")
+unmap("n", "gra")
+unmap("n", "grn")
+unmap("n", "grt")
+
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true })

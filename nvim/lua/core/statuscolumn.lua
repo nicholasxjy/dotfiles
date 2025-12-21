@@ -3,7 +3,7 @@ local M = {}
 -- ┃, ┆, ┇, ┊, ┋, ╎, ╏, ║, ╽, ╿
 
 M.border = function()
-  return "%#StatusBorder#╿ " -- ┃, ┆, ┇, ┊, ┋, ╎, ╏, ║, ╽, ╿
+  return "%#StatusBorder#┃ " -- ┃, ┆, ┇, ┊, ┋, ╎, ╏, ║, ╽, ╿
 end
 
 M.number = function()
@@ -40,11 +40,11 @@ M.folds = function()
   end
 
   if foldlevel > foldlevel_before then
-    return "%#" .. "Type" .. "# "
+    return "%#" .. group .. "# "
   end
 
   if foldlevel > foldlevel_after then
-    return "%#" .. group .. "#╰ "
+    return "%#" .. group .. "# "
   end
 
   return "%#" .. group .. "#╎ "
@@ -54,7 +54,7 @@ M.setup = function()
   local text = ""
 
   text = table.concat({
-    "%s",
+    " %s",
     M.number(),
     M.folds(),
     M.border(),

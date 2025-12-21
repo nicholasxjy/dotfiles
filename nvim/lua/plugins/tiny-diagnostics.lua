@@ -7,10 +7,20 @@ return {
       preset = "modern",
       transparent_bg = false,
       transparent_cursorline = true,
+      signs = {
+        vertical = " │",
+        vertical_end = " └",
+      },
+      blend = {
+        factor = 0.1,
+      },
       options = {
         show_source = {
           enabled = true,
           if_many = true,
+        },
+        add_messages = {
+          display_count = true,
         },
         set_arrow_to_diag_color = true,
         multilines = {

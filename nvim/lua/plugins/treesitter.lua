@@ -1,18 +1,22 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    lazy = vim.fn.argc(-1) == 0,
-    branch = "main",
-    version = false,
-    event = "VeryLazy",
+    dependencies = {
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        opts = {
+          max_lines = 4,
+          multiline_threshold = 2,
+        },
+      },
+    },
+    lazy = false,
     build = ":TSUpdate",
-    cmd = { "TSUpdate", "TSInstall", "TSLog", "TSUninstall" },
-    opts_extend = { "ensure_installed" },
-    opts = {
-      indent = { enable = true },
-      highlight = { enable = true },
-      folds = { enable = true },
-      ensure_installed = {
+    config = function()
+      local ts = require("nvim-treesitter")
+
+      -- Install core parsers at startup
+      ts.install({
         "bash",
 
         "dockerfile",
@@ -72,45 +76,45 @@ return {
         "ron",
 
         "java",
-      },
-    },
-    config = function(_, opts)
-      require("nvim-treesitter").install(opts.ensure_installed or {})
-      require("nvim-treesitter").setup(opts)
+      }, {
+        max_jobs = 8,
+      })
 
-      vim.treesitter.language.register("scss", "less")
-      vim.treesitter.language.register("scss", "postcss")
+      local group = vim.api.nvim_create_augroup("TreesitterSetup", { clear = true })
 
-      local function attach(bufnr, winnr)
-        vim.treesitter.start(bufnr)
-        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-        vim.wo[winnr][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-      end
+      local ignore_filetypes = {
+        "checkhealth",
+        "lazy",
+        "mason",
+        "snacks_dashboard",
+        "snacks_notif",
+        "snacks_win",
+      }
 
-      -- NOTE: injected language parsers are not auto-installed
+      -- Auto-install parsers and enable highlighting on FileType
       vim.api.nvim_create_autocmd("FileType", {
-        group = vim.api.nvim_create_augroup("treesitter", { clear = true }),
-        callback = function(ev)
-          local bufnr, ft = ev.buf, ev.match
-          local winnr = vim.api.nvim_get_current_win()
-
-          local ok = pcall(attach, bufnr, winnr)
-          if not ok then
-            local lang = vim.treesitter.language.get_lang(ft) or ft
-            if lang == "" or not vim.tbl_contains(require("nvim-treesitter.config").get_available(), lang) then
-              return
-            end
-            require("nvim-treesitter").install(lang):await(function(_, did_install)
-              if did_install then
-                attach(bufnr, winnr)
-              end
-            end)
+        group = group,
+        desc = "Enable treesitter highlighting and indentation",
+        callback = function(event)
+          if vim.tbl_contains(ignore_filetypes, event.match) then
+            return
           end
+
+          local lang = vim.treesitter.language.get_lang(event.match) or event.match
+          local buf = event.buf
+
+          -- Start highlighting immediately (works if parser exists)
+          pcall(vim.treesitter.start, buf, lang)
+
+          -- Enable treesitter indentation
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+          -- Install missing parsers (async, no-op if already installed)
+          ts.install({ lang })
         end,
       })
     end,
   },
-
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     lazy = true,

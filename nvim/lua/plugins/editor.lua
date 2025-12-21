@@ -32,7 +32,7 @@ return {
       autostart = true,
       fancy = {
         enable = true,
-        head = { cursor = ">", texthl = "SmoothCursor", linehl = nil }, -- ▷
+        head = { cursor = "▷", texthl = "SmoothCursor", linehl = nil }, -- ▷
         body = {
           { cursor = "󰝥", texthl = "SmoothCursorRed" },
           { cursor = "󰝥", texthl = "SmoothCursorOrange" },
@@ -63,7 +63,7 @@ return {
     event = "VeryLazy",
     config = true,
     opts = {
-      -- highlight = { link = "LineNr" },
+      highlight = { link = "LineNr" },
     },
   },
   {
@@ -78,8 +78,10 @@ return {
       -- char = "║",
       -- char = "⋮",
       -- char = "",
-      char = "󰮾",
+      char = "╿",
+      -- char = "󰮾",
       virtcolumn = "80",
+      highlight = "LineNr",
     },
   },
   {
@@ -121,14 +123,14 @@ return {
       require("modes").setup({
         colors = {
           bg = "#0D0D1A", -- Optional bg param, defaults to Normal hl group
-          -- copy = "#f5c359",
-          -- delete = "#c75c6a",
-          -- change = "#c75c6a", -- Optional param, defaults to delete
-          -- format = "#c79585",
-          -- insert = "#78ccc5",
-          -- replace = "#245361",
-          -- select = "#9745be", -- Optional param, defaults to visual
-          -- visual = "#9745be",
+          copy = "#f5c359",
+          delete = "#c75c6a",
+          change = "#c75c6a", -- Optional param, defaults to delete
+          format = "#c79585",
+          insert = "#78ccc5",
+          replace = "#245361",
+          select = "#9745be", -- Optional param, defaults to visual
+          visual = "#9745be",
         },
 
         -- Set opacity for cursorline and number background
@@ -165,9 +167,9 @@ return {
     opts = {
       on_startup = {
         cursorline = true,
-        cursorcolumn = true,
+        cursorcolumn = false,
       },
-      disable_in_insert = false,
+      disable_in_insert = true,
       disable_in_diff = true,
       always_highlight_number = true,
       ignore = {
@@ -182,6 +184,9 @@ return {
           "snacks_picker_list",
           "snacks_picker_preview",
           "snacks_dashboard",
+          "oil",
+          "lazygit",
+          "lazy",
         },
         cursorcolumn = {
           "DressingInput",
@@ -196,6 +201,10 @@ return {
           "snacks_dashboard",
           "fyler",
           "minifiles",
+          "mason",
+          "lazy",
+          "oil",
+          "lazygit",
         },
       },
 
@@ -212,5 +221,19 @@ return {
         },
       },
     },
+  },
+  {
+    "Wansmer/treesj",
+    keys = {
+      {
+        "gS",
+        function()
+          require("treesj").toggle()
+        end,
+        desc = "Toggle split/join",
+        silent = true,
+      },
+    },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
 }

@@ -3,14 +3,6 @@ local ui = require("core.ui")
 
 return {
   {
-    "onsails/lspkind.nvim",
-    config = function()
-      require("lspkind").init({
-        symbol_map = ui.icons.codicons,
-      })
-    end,
-  },
-  {
     "L3MON4D3/LuaSnip",
     build = "make install_jsregexp",
     lazy = true,
@@ -39,6 +31,14 @@ return {
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
       { "folke/sidekick.nvim" },
+      {
+        "onsails/lspkind.nvim",
+        config = function()
+          require("lspkind").init({
+            symbol_map = ui.icons.lazy_kind_icons,
+          })
+        end,
+      },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -46,18 +46,18 @@ return {
       return {
         enabled = function()
           return not vim.tbl_contains(
-            { "bigfile", "grug-far", "snacks_picker", "snacks_picker_input" },
+            { "bigfile", "grug-far", "snacks_picker", "snacks_picker_input", "fyler", "minifiles" },
             vim.bo.filetype
           ) and vim.b.completion ~= false and vim.bo.buftype ~= "prompt"
         end,
         fuzzy = {
           implementation = "prefer_rust",
-          sorts = {
-            "exact",
-            "score",
-            "sort_text",
-            "label",
-          },
+          -- sorts = {
+          --   "exact",
+          --   "score",
+          --   "sort_text",
+          --   "label",
+          -- },
         },
         keymap = {
           preset = "enter",
@@ -66,9 +66,9 @@ return {
           ["<C-u>"] = { "scroll_documentation_up", "fallback" },
           ["<C-d>"] = { "scroll_documentation_down", "fallback" },
           ["<Tab>"] = {
-            function()
-              return require("sidekick").nes_jump_or_apply()
-            end,
+            -- function()
+            --   return require("sidekick").nes_jump_or_apply()
+            -- end,
             "snippet_forward",
             "select_next",
             "fallback",
@@ -122,11 +122,10 @@ return {
             } or "none",
             draw = {
               columns = {
-                { "kind_icon", "label", gap = 1 },
-                { "kind" },
+                { "kind_icon", gap = 1, "label", "label_description" },
+                { gap = 1, "kind" },
               },
               treesitter = { "lsp" },
-
               components = {
                 kind_icon = {
                   text = function(ctx)
@@ -134,15 +133,6 @@ return {
                   end,
                   highlight = function(ctx)
                     return cmpUtil.get_kind_icon(ctx).highlight
-                  end,
-                },
-                label = {
-                  width = { fill = true, max = 50 },
-                  text = function(ctx)
-                    if ctx.label_detail and ctx.label_detail ~= "" then
-                      return ctx.label .. "(" .. ctx.label_detail .. ")"
-                    end
-                    return ctx.label
                   end,
                 },
                 kind = {
@@ -184,7 +174,7 @@ return {
         },
         snippets = { preset = "luasnip" },
         sources = {
-          default = { "lazydev", "lsp", "path", "snippets", "buffer", "copilot" },
+          default = { "lazydev", "snippets", "lsp", "path", "buffer", "copilot" },
           providers = {
             copilot = {
               name = "copilot",

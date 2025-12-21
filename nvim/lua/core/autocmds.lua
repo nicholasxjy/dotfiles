@@ -2,6 +2,13 @@ local function augroup(name)
   return vim.api.nvim_create_augroup("sjvim_" .. name, { clear = true })
 end
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "avante",
+  callback = function()
+    vim.opt_local.statuscolumn = ""
+  end,
+})
+
 -- Restore cursor to file position in previous editing session
 vim.api.nvim_create_autocmd("BufReadPost", {
   callback = function(args)

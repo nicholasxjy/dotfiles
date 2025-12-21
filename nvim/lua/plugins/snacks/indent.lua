@@ -3,7 +3,7 @@ return {
     "folke/snacks.nvim",
     opts = {
       indent = {
-        enabled = false,
+        enabled = true,
         indent = {
           enabled = false,
           only_current = true,
@@ -38,7 +38,7 @@ return {
           },
         },
         chunk = {
-          enabled = false,
+          enabled = true,
           char = {
             -- corner_top = "┌",
             -- corner_bottom = "└",
@@ -51,12 +51,12 @@ return {
           only_current = true,
           hl = {
             "SnacksIndentChunkRed",
-            "SnacksIndentChunkYellow",
-            "SnacksIndentChunkBlue",
             "SnacksIndentChunkOrange",
+            "SnacksIndentChunkYellow",
             "SnacksIndentChunkGreen",
-            "SnacksIndentChunkViolet",
+            "SnacksIndentChunkBlue",
             "SnacksIndentChunkCyan",
+            "SnacksIndentChunkViolet",
           },
         },
       },
