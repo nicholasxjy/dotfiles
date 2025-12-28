@@ -103,13 +103,13 @@ return {
 
         Type = { fg = palette.gold[500], bold = true },
         Function = { fg = palette.cyan[600] },
-        Keyword = { fg = palette.sapphire[800], bold = false, italic = true },
+        Keyword = { fg = palette.lavender[500], bold = false, italic = true },
         ["@module"] = { fg = palette.grey[700], bold = false, italic = false },
         ["@keyword"] = "Keyword",
         ["@parameter"] = { fg = palette.lavender[300] },
         ["@variable.parameter"] = "@parameter",
         ["@type.builtin"] = { fg = palette.sunset[400] },
-        ["@keyword.import"] = { fg = palette.cyan[500], bold = true },
+        ["@keyword.import"] = { fg = palette.horizon[400], bold = true },
         ["@keyword.export"] = "@keyword.import",
         ["@keyword.modifier"] = { fg = palette.cactus[600], bold = true },
 
