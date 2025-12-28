@@ -25,28 +25,4 @@ return {
       { "=P", "<Plug>(YankyPutBeforeFilter)", desc = "Put Before Applying a Filter" },
     },
   },
-  {
-    "nicholasxjy/lazyclip",
-    keys = {
-      {
-        "<leader>cw",
-        function()
-          require("lazyclip").show_clipboard()
-        end,
-        desc = "Open Lazyclip",
-      },
-    },
-    event = { "VeryLazy" },
-    config = function()
-      require("lazyclip").setup({
-        -- Window appearance
-        window = {
-          relative = "editor",
-          width = 70, -- Width of the floating window
-          height = 12, -- Height of the floating window
-          border = "single", -- Border style
-        },
-      })
-    end,
-  },
 }

@@ -5,12 +5,13 @@ return {
       indent = {
         enabled = true,
         indent = {
-          enabled = false,
+          enabled = true,
           only_current = true,
           only_scope = true,
           -- char = "⋮",
           char = "",
           -- char = "┊",
+          -- char = "║",
           hl = {
             "SnacksIndentRed",
             "SnacksIndentYellow",
@@ -22,8 +23,9 @@ return {
           },
         },
         scope = {
-          enabled = false,
-          char = "║",
+          enabled = true,
+          char = "",
+          -- char = "║",
           -- char = "┊",
           underline = true,
           only_current = true,
@@ -38,7 +40,7 @@ return {
           },
         },
         chunk = {
-          enabled = true,
+          enabled = false,
           char = {
             -- corner_top = "┌",
             -- corner_bottom = "└",

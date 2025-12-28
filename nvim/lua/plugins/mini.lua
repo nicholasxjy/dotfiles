@@ -111,18 +111,6 @@ return {
       require("mini.surround").setup(opts)
     end,
   },
-  -- Split & join
-  -- {
-  --   "nvim-mini/mini.splitjoin",
-  --   version = false,
-  --   event = "VeryLazy",
-  --   config = function()
-  --     local miniSplitJoin = require("mini.splitjoin")
-  --     miniSplitJoin.setup({
-  --       mappings = { toggle = "gS" },
-  --     })
-  --   end,
-  -- },
   {
     "nvim-mini/mini.trailspace",
     version = false,
@@ -359,5 +347,17 @@ return {
         end,
       })
     end,
+  },
+  {
+    "nvim-mini/mini.pairs",
+    version = false,
+    event = "VeryLazy",
+    opts = {
+      modes = {
+        insert = true,
+        command = true,
+        terminal = true,
+      },
+    },
   },
 }

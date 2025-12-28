@@ -86,27 +86,29 @@ return {
     },
   },
   config = function(_, opts)
-    -- local icons = {
-    --   Error = { " ", "DiagnosticError" },
-    --   Inactive = { " ", "MsgArea" },
-    --   Warning = { " ", "DiagnosticWarn" },
-    --   Normal = { " ", "Special" },
-    -- }
+    local icons = {
+      Error = { " ", "DiagnosticError" },
+      Inactive = { " ", "MsgArea" },
+      Warning = { " ", "DiagnosticWarn" },
+      Normal = { " ", "Special" },
+    }
+    -- opencode
     table.insert(opts.sections.lualine_c, { require("opencode").statusline })
-    -- table.insert(opts.sections.lualine_c, {
-    --   function()
-    --     local status = require("sidekick.status").get()
-    --     return status and vim.tbl_get(icons, status.kind, 1)
-    --   end,
-    --   cond = function()
-    --     return require("sidekick.status").get() ~= nil
-    --   end,
-    --   color = function()
-    --     local status = require("sidekick.status").get()
-    --     local hl = status and (status.busy and "DiagnosticWarn" or vim.tbl_get(icons, status.kind, 2))
-    --     return { fg = Snacks.util.color(hl) }
-    --   end,
-    -- })
+    -- sidekick
+    table.insert(opts.sections.lualine_c, {
+      function()
+        local status = require("sidekick.status").get()
+        return status and vim.tbl_get(icons, status.kind, 1)
+      end,
+      cond = function()
+        return require("sidekick.status").get() ~= nil
+      end,
+      color = function()
+        local status = require("sidekick.status").get()
+        local hl = status and (status.busy and "DiagnosticWarn" or vim.tbl_get(icons, status.kind, 2))
+        return { fg = Snacks.util.color(hl) }
+      end,
+    })
     --
     -- -- CLI session status
     -- table.insert(opts.sections.lualine_x, 2, {

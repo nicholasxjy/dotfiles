@@ -46,7 +46,7 @@ return {
           },
         },
       },
-      icons = { kinds = ui.icons.lazy_kind_icons },
+      icons = { kinds = ui.icons.mini_kind_icons },
       actions = {
         sidekick_send = function(...)
           return require("sidekick.cli.snacks").send(...)
@@ -89,6 +89,7 @@ return {
       "nn",
       function()
         Snacks.picker.buffers({
+          focus = "list",
           sort_lastused = true,
           current = false,
           layout = ui.layout.vscode,

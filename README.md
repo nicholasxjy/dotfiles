@@ -8,9 +8,10 @@ My DEV Config
 
 ## neovim
 
+![s1](./assets/a.png)
 
-![s1](./assets/1.png)
-
-![s2](./assets/2.png)
-![s3](./assets/3.png)
-![s4](./assets/4.png)
+![s2](./assets/b.png)
+![s3](./assets/c.png)
+![s4](./assets/d.png)
+![s5](./assets/e.png)
+![s6](./assets/f.png)

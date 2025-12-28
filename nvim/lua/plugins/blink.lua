@@ -3,34 +3,11 @@ local ui = require("core.ui")
 
 return {
   {
-    "L3MON4D3/LuaSnip",
-    build = "make install_jsregexp",
-    lazy = true,
-    dependencies = { { "rafamadriz/friendly-snippets", lazy = true } },
-    config = function()
-      local ls = require("luasnip")
-      ls.config.setup({
-        enable_autosnippets = true,
-        history = true,
-        updateevents = "TextChanged,TextChangedI",
-        delete_check_events = "TextChanged",
-        region_check_events = "CursorMoved",
-      })
-      ls.filetype_extend("typescript", { "javascript" })
-      ls.filetype_extend("javascriptreact", { "javascript" })
-      ls.filetype_extend("typescriptreact", { "javascript" })
-
-      vim.tbl_map(function(type)
-        require("luasnip.loaders.from_" .. type).lazy_load()
-      end, { "vscode", "snipmate", "lua" })
-    end,
-  },
-  {
     "Saghen/blink.cmp",
     dependencies = {
+      { "rafamadriz/friendly-snippets" },
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
-      { "folke/sidekick.nvim" },
       {
         "onsails/lspkind.nvim",
         config = function()
@@ -52,12 +29,6 @@ return {
         end,
         fuzzy = {
           implementation = "prefer_rust",
-          -- sorts = {
-          --   "exact",
-          --   "score",
-          --   "sort_text",
-          --   "label",
-          -- },
         },
         keymap = {
           preset = "enter",
@@ -66,9 +37,9 @@ return {
           ["<C-u>"] = { "scroll_documentation_up", "fallback" },
           ["<C-d>"] = { "scroll_documentation_down", "fallback" },
           ["<Tab>"] = {
-            -- function()
-            --   return require("sidekick").nes_jump_or_apply()
-            -- end,
+            function()
+              return require("sidekick").nes_jump_or_apply()
+            end,
             "snippet_forward",
             "select_next",
             "fallback",
@@ -83,7 +54,7 @@ return {
           enabled = true,
           window = {
             show_documentation = true,
-            border = "rounded",
+            border = vim.g.bordered and "rounded" or "none",
           },
         },
         completion = {
@@ -121,11 +92,12 @@ return {
               "│",
             } or "none",
             draw = {
+              gap = 2,
               columns = {
-                { "kind_icon", gap = 1, "label", "label_description" },
-                { gap = 1, "kind" },
+                { "label", "label_description", gap = 1 },
+                { "kind_icon", "kind", gap = 2 },
               },
-              treesitter = { "lsp" },
+              -- treesitter = { "lsp" },
               components = {
                 kind_icon = {
                   text = function(ctx)
@@ -136,20 +108,28 @@ return {
                   end,
                 },
                 kind = {
-                  text = function(ctx)
-                    return "[" .. ctx.kind .. "]"
-                  end,
                   highlight = function(ctx)
                     return cmpUtil.get_kind_icon(ctx).highlight
                   end,
                 },
                 source_name = {
                   text = function(ctx)
-                    return "[" .. ctx.source_name .. "]"
+                    if ctx.source_name == "LSP" then
+                      return "[LSP]"
+                    end
+                    if ctx.source_name == "Snippets" then
+                      return "[SNIP]"
+                    end
+                    if ctx.source_name == "Buffer" then
+                      return "[BUF]"
+                    end
+                    if ctx.source_name == "Path" then
+                      return "[PATH]"
+                    end
                   end,
-                  highlight = function(ctx)
-                    return cmpUtil.get_kind_icon(ctx).highlight
-                  end,
+                  -- highlight = function(ctx)
+                  --   return cmpUtil.get_kind_icon(ctx).highlight
+                  -- end,
                 },
               },
             },
@@ -172,7 +152,6 @@ return {
             },
           },
         },
-        snippets = { preset = "luasnip" },
         sources = {
           default = { "lazydev", "snippets", "lsp", "path", "buffer", "copilot" },
           providers = {
@@ -201,28 +180,6 @@ return {
     end,
     config = function(_, opts)
       require("blink.cmp").setup(opts)
-
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      vim.tbl_deep_extend("force", capabilities, {
-        workspace = {
-          fileOperations = {
-            didRename = true,
-            willRename = true,
-          },
-        },
-        textDocument = {
-          foldingRange = {
-            dynamicRegistration = false,
-            lineFoldingOnly = true,
-          },
-        },
-      })
-      capabilities =
-        vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities(capabilities, true))
-
-      vim.lsp.config("*", {
-        capabilities = capabilities,
-      })
     end,
   },
 }

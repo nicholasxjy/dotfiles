@@ -204,24 +204,23 @@ end
 M.methods_setup = function(client, bufnr)
   local Methods = vim.lsp.protocol.Methods
 
-  -- NOTE: disalbe semantic tokens
   -- if client.server_capabilities.semanticTokensProvider and vim.tbl_contains(disable_semantic_ls, client.name) then
   --   client.server_capabilities.semanticTokensProvider = nil
   -- end
 
-  if client:supports_method(Methods.textDocument_linkedEditingRange) and vim.fn.has("nvim-0.12") == 1 then
-    vim.lsp.linked_editing_range.enable(true, {
-      client_id = client.id,
-    })
-  end
+  -- if client:supports_method(Methods.textDocument_linkedEditingRange) and vim.fn.has("nvim-0.12") == 1 then
+  --   vim.lsp.linked_editing_range.enable(true, {
+  --     client_id = client.id,
+  --   })
+  -- end
+  --
   -- Handle textDocument/onTypeFormatting support
-  if client:supports_method(Methods.textDocument_onTypeFormatting) and vim.fn.has("nvim-0.12") == 1 then
-    vim.lsp.on_type_formatting.enable(true, {
-      client_id = client.id,
-    })
-  end
+  -- if client:supports_method(Methods.textDocument_onTypeFormatting) and vim.fn.has("nvim-0.12") == 1 then
+  --   vim.lsp.on_type_formatting.enable(true, {
+  --     client_id = client.id,
+  --   })
+  -- end
 
-  -- NOTE: use ccc instead
   -- Handle textDocument/documentColor support
   -- if client:supports_method(Methods.textDocument_documentColor) and vim.fn.has("nvim-0.12") == 1 then
   --   vim.lsp.document_color.enable(true, bufnr, { style = "background" }) --background, foreground, virtual
@@ -229,7 +228,7 @@ M.methods_setup = function(client, bufnr)
 
   -- enable inlay hints by default
   if client:supports_method(Methods.textDocument_inlayHints) then
-    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
   end
 
   if client:supports_method(Methods.textDocument_documentHighlight) then
