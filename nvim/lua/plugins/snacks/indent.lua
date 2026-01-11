@@ -5,7 +5,7 @@ return {
       indent = {
         enabled = true,
         indent = {
-          enabled = true,
+          enabled = false,
           only_current = true,
           only_scope = true,
           -- char = "⋮",
@@ -23,9 +23,9 @@ return {
           },
         },
         scope = {
-          enabled = true,
-          char = "",
-          -- char = "║",
+          enabled = false,
+          -- char = "",
+          char = "║",
           -- char = "┊",
           underline = true,
           only_current = true,
@@ -40,7 +40,7 @@ return {
           },
         },
         chunk = {
-          enabled = false,
+          enabled = true,
           char = {
             -- corner_top = "┌",
             -- corner_bottom = "└",

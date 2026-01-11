@@ -57,46 +57,6 @@ return {
     end,
   },
   {
-    "nvim-mini/mini.ai",
-    version = false,
-    event = "VeryLazy",
-    opts = function()
-      local ai = require("mini.ai")
-      return {
-        custom_textobjects = {
-          ["?"] = false,
-          ["/"] = ai.gen_spec.user_prompt(),
-          ["%"] = function() -- Entire file
-            local from = { line = 1, col = 1 }
-            local to = {
-              line = vim.fn.line("$"),
-              col = math.max(vim.fn.getline("$"):len(), 1),
-            }
-            return { from = from, to = to }
-          end,
-          a = ai.gen_spec.treesitter({ a = "@parameter.outer", i = "@parameter.inner" }),
-          c = ai.gen_spec.treesitter({ a = "@comment.outer", i = "@comment.inner" }),
-          f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
-          s = { -- Single words in different cases (camelCase, snake_case, etc.)
-            {
-              "%u[%l%d]+%f[^%l%d]",
-              "%f[^%s%p][%l%d]+%f[^%l%d]",
-              "^[%l%d]+%f[^%l%d]",
-              "%f[^%s%p][%a%d]+%f[^%a%d]",
-              "^[%a%d]+%f[^%a%d]",
-            },
-            "^().*()$",
-          },
-        },
-        mappings = {
-          around = "a",
-          inside = "i",
-        },
-        n_lines = 500,
-      }
-    end,
-  },
-  {
     "nvim-mini/mini.surround",
     version = false,
     event = "VeryLazy",
@@ -127,70 +87,6 @@ return {
     config = function()
       require("mini.trailspace").setup({
         only_in_normal_buffers = true,
-      })
-    end,
-  },
-  {
-    "nvim-mini/mini.clue",
-    version = false,
-    event = "VeryLazy",
-    keys = {
-      { "<leader>a", "", desc = "+ai" },
-      { "<leader>c", "", desc = "+codes" },
-      { "<leader>f", "", desc = "+find" },
-      { "<leader>s", "", desc = "+search" },
-      { "<leader>x", "", desc = "+diagnostics" },
-      { "<leader>g", "", desc = "+git" },
-      { "<leader>u", "", desc = "+ui" },
-      { "<leader>b", "", desc = "+buffers" },
-      { "<leader>d", "", desc = "+debug" },
-    },
-    config = function()
-      local miniclue = require("mini.clue")
-      miniclue.setup({
-        triggers = {
-          -- Leader triggers
-          { mode = "n", keys = "<Leader>" },
-          { mode = "x", keys = "<Leader>" },
-
-          -- Built-in completion
-          { mode = "i", keys = "<C-x>" },
-
-          -- `g` key
-          { mode = "n", keys = "g" },
-          { mode = "x", keys = "g" },
-
-          -- Marks
-          { mode = "n", keys = "'" },
-          { mode = "n", keys = "`" },
-          { mode = "x", keys = "'" },
-          { mode = "x", keys = "`" },
-
-          -- Registers
-          { mode = "n", keys = '"' },
-          { mode = "x", keys = '"' },
-          { mode = "i", keys = "<C-r>" },
-          { mode = "c", keys = "<C-r>" },
-
-          -- Window commands
-          { mode = "n", keys = "<C-w>" },
-
-          -- `z` key
-          { mode = "n", keys = "z" },
-          { mode = "x", keys = "z" },
-        },
-        clues = {
-          miniclue.gen_clues.builtin_completion(),
-          miniclue.gen_clues.g(),
-          miniclue.gen_clues.marks(),
-          miniclue.gen_clues.registers(),
-          miniclue.gen_clues.windows(),
-          miniclue.gen_clues.z(),
-        },
-        window = {
-          delay = 200,
-          config = { border = "single" },
-        },
       })
     end,
   },
@@ -269,7 +165,8 @@ return {
 
         win_config.height = depth_offset == 0 and 25 or 20
         win_config.row = math.floor(0.5 * (vim.o.lines - win_config.height))
-        win_config.border = { "🭽", "▔", "🭾", "▕", "🭿", "▁", "🭼", "▏" }
+        -- win_config.border = { "🭽", "▔", "🭾", "▕", "🭿", "▁", "🭼", "▏" }
+        win_config.border = "rounded"
         vim.api.nvim_win_set_config(ev.data.win_id, win_config)
       end
 
@@ -347,17 +244,5 @@ return {
         end,
       })
     end,
-  },
-  {
-    "nvim-mini/mini.pairs",
-    version = false,
-    event = "VeryLazy",
-    opts = {
-      modes = {
-        insert = true,
-        command = true,
-        terminal = true,
-      },
-    },
   },
 }

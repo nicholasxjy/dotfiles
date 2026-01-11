@@ -82,24 +82,11 @@ return {
 
       local group = vim.api.nvim_create_augroup("TreesitterSetup", { clear = true })
 
-      local ignore_filetypes = {
-        "checkhealth",
-        "lazy",
-        "mason",
-        "snacks_dashboard",
-        "snacks_notif",
-        "snacks_win",
-      }
-
       -- Auto-install parsers and enable highlighting on FileType
       vim.api.nvim_create_autocmd("FileType", {
         group = group,
         desc = "Enable treesitter highlighting and indentation",
         callback = function(event)
-          if vim.tbl_contains(ignore_filetypes, event.match) then
-            return
-          end
-
           local lang = vim.treesitter.language.get_lang(event.match) or event.match
           local buf = event.buf
 
@@ -110,7 +97,7 @@ return {
           vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
           -- Install missing parsers (async, no-op if already installed)
-          ts.install({ lang })
+          -- ts.install({ lang })
         end,
       })
     end,
@@ -128,13 +115,7 @@ return {
             move.goto_next_start("@parameter.inner", "textobjects")
           end,
           mode = { "n", "x", "o" },
-        },
-        {
-          "]A",
-          function()
-            move.goto_next_end("@parameter.inner", "textobjects")
-          end,
-          mode = { "n", "x", "o" },
+          desc = "next args(start)",
         },
         {
           "[a",
@@ -142,6 +123,15 @@ return {
             move.goto_previous_start("@parameter.inner", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "prev args(start)",
+        },
+        {
+          "]A",
+          function()
+            move.goto_next_end("@parameter.inner", "textobjects")
+          end,
+          mode = { "n", "x", "o" },
+          desc = "next args(end)",
         },
         {
           "[A",
@@ -149,6 +139,7 @@ return {
             move.goto_previous_end("@parameter.inner", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "prev args(end)",
         },
         {
           "]c",
@@ -156,6 +147,7 @@ return {
             move.goto_next_start("@class.outer", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "next class(start)",
         },
         {
           "]C",
@@ -163,6 +155,7 @@ return {
             move.goto_next_end("@class.outer", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "next class(end)",
         },
         {
           "[c",
@@ -170,6 +163,7 @@ return {
             move.goto_previous_start("@class.outer", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "prev class(start)",
         },
         {
           "[C",
@@ -177,6 +171,7 @@ return {
             move.goto_previous_end("@class.outer", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "prev class(end)",
         },
         {
           "]f",
@@ -184,6 +179,7 @@ return {
             move.goto_next_start("@function.outer", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "next func(start)",
         },
         {
           "]F",
@@ -191,6 +187,7 @@ return {
             move.goto_next_end("@function.outer", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "next func(end)",
         },
         {
           "[f",
@@ -198,6 +195,7 @@ return {
             move.goto_previous_start("@function.outer", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "prev func(start)",
         },
         {
           "[F",
@@ -205,6 +203,7 @@ return {
             move.goto_previous_end("@function.outer", "textobjects")
           end,
           mode = { "n", "x", "o" },
+          desc = "next func(end)",
         },
       }
     end,

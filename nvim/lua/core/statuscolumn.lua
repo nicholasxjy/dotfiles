@@ -15,8 +15,8 @@ end
 M.folds = function()
   local foldlevel = vim.fn.foldlevel(vim.v.lnum)
   local foldlevel_before = vim.fn.foldlevel((vim.v.lnum - 1) >= 1 and vim.v.lnum - 1 or 1)
-  local foldlevel_after =
-    vim.fn.foldlevel((vim.v.lnum + 1) <= vim.fn.line("$") and (vim.v.lnum + 1) or vim.fn.line("$"))
+  -- local foldlevel_after =
+  --   vim.fn.foldlevel((vim.v.lnum + 1) <= vim.fn.line("$") and (vim.v.lnum + 1) or vim.fn.line("$"))
 
   local foldclosed = vim.fn.foldclosed(vim.v.lnum)
 
@@ -24,30 +24,30 @@ M.folds = function()
     return "  "
   end
 
-  local rainbow_colors = {
-    "RainbowDelimiterRed",
-    "RainbowDelimiterOrange",
-    "RainbowDelimiterYellow",
-    "RainbowDelimiterGreen",
-    "RainbowDelimiterCyan",
-    "RainbowDelimiterBlue",
-    "RainbowDelimiterViolet",
-  }
-  local group = rainbow_colors[(foldlevel - 1) % #rainbow_colors + 1]
+  -- local rainbow_colors = {
+  --   "RainbowDelimiterRed",
+  --   "RainbowDelimiterOrange",
+  --   "RainbowDelimiterYellow",
+  --   "RainbowDelimiterGreen",
+  --   "RainbowDelimiterCyan",
+  --   "RainbowDelimiterBlue",
+  --   "RainbowDelimiterViolet",
+  -- }
+  -- local group = rainbow_colors[(foldlevel - 1) % #rainbow_colors + 1]
 
   if foldclosed ~= -1 and foldclosed == vim.v.lnum then
     return "%#" .. "String" .. "# "
   end
 
   if foldlevel > foldlevel_before then
-    return "%#" .. group .. "# "
+    return "%#" .. "LineNr" .. "# "
   end
 
-  if foldlevel > foldlevel_after then
-    return "%#" .. group .. "# "
-  end
+  -- if foldlevel > foldlevel_after then
+  --   return "%#" .. group .. "# "
+  -- end
 
-  return "%#" .. group .. "#╎ "
+  return "%#" .. "LineNr" .. "#╎ "
 end
 
 M.setup = function()
@@ -56,8 +56,8 @@ M.setup = function()
   text = table.concat({
     " %s",
     M.number(),
-    M.folds(),
     M.border(),
+    M.folds(),
   })
   return text
 end

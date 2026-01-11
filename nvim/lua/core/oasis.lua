@@ -4,19 +4,19 @@
 -- Terminal
 -- stylua: ignore start
 local terminal = {
-	black =               "#000000",
-	bright_black =        "#666666",
-	red =                 "#D06666",
+	black =               "#101010",
+	bright_black =        "#504641",
+	red =                 "#FF7979",
 	bright_red =          "#FFA0A0",
 	green =               "#53D390",
 	bright_green =        "#96EA7F",
 	yellow =              "#F0E68C",
-	bright_yellow =       "#FFA247",
-	blue =                "#519BFF",
+	bright_yellow =       "#F8B471",
+	blue =                "#81C0FF",
 	bright_blue =         "#87CEEB",
-	magenta =             "#C28EFF",
+	magenta =             "#C695FF",
 	bright_magenta =      "#D2ADFF",
-	cyan =                "#5ABAAE",
+	cyan =                "#68C0B6",
 	bright_cyan =         "#8FD1C7",
 	white =               "#DDDBD5",
 	bright_white =        "#FFF9F2",
@@ -60,115 +60,104 @@ map_ansi_colors(semantic_ansi_map, light_terminal)
 -- Visual BG
 local visual = {
   red = "#532E2E",
-  light_red = "#E8BABA",
   stone = "#2D251F",
-  light_stone = "#E5CEBD",
   orange = "#5A3824",
-  light_orange = "#EDCAB6",
   yellow = "#4D4528",
-  light_yellow = "#E9DFB9",
   green = "#1F3A2D",
-  light_green = "#BAE9D2",
+  palm = "#3B6732",
   teal = "#2B4A46",
-  light_teal = "#BBE7E2",
   blue = "#335668",
-  light_blue = "#9BC1E6",
+  sky = "#3D6980",
   indigo = "#3E2F4A",
-  light_indigo = "#D3BCE6",
-  violet = "#50325A",
-  light_violet = "#DDBAE8",
-  pink = "#47283B",
-  light_pink = "#E8BAD6",
-  grey = "#1B242B",
-  light_grey = "#BCD4E6",
+  violet = "#603C6C",
+  pink = "#5A324B",
+  grey = "#666666",
 }
 
--- Diagnoistics
+-- Diagnostics
 local diag = {
-  error = {
-    fg = "#FF0000",
-    fg_light = "#FFA0A0",
-    bg = "#322639",
-  },
-  warn = {
-    fg = "#EEEE00",
-    bg = "#38343D",
-  },
-  info = {
-    fg = "#75A0FF",
-    fg_light = "#87CEEB",
-    bg = "#203346",
-  },
-  hint = {
-    fg = "#62ABA0",
-    fg_light = "#8FD1C7",
-    bg = "#273644",
-  },
-  ok = {
-    fg = "#00FF7F",
-    bg = "#2F4F4F",
-  },
+  error = { fg = terminal.bright_red, bg = visual.red },
+  warn = { fg = terminal.yellow, bg = visual.yellow },
+  info = { fg = terminal.bright_blue, bg = visual.blue },
+  hint = { fg = terminal.bright_cyan, bg = visual.teal },
+  ok = { fg = terminal.bright_green, bg = visual.green },
+}
+
+-- Diff
+local diff = {
+  add = visual.green,
+  change = visual.yellow, -- Unused, prefer theme[name].bg.surface
+  delete = visual.red,
+  text = visual.orange,
+}
+
+-- Git
+local git = {
+  add = terminal.bright_green,
+  change = terminal.yellow,
+  delete = terminal.bright_red,
 }
 
 -- Theme specific
 local theme = {
   -- Dark themes
+  -- fg targets: dim = 4:0:1 (shadow), muted = 3:0:1 (core), comment = 4:5:1 (core)
   desert = {
     bg = { shadow = "#303030", core = "#333333", mantle = "#444444", surface = "#555555" },
-    fg = { core = "#F7EDE1", strong = "#E5D9CE", dim = "#857262", muted = "#566B76", comment = "#6D90A8" },
+    fg = { core = "#F7EDE1", strong = "#E5D9CE", dim = "#9E8B7C", muted = "#67808D", comment = "#77A4BD" },
   },
   abyss = {
-    bg = { shadow = "#050505", core = "#000000", mantle = "#080808", surface = "#1A1A1A" },
-    fg = { core = "#F0EBE6", strong = "#FFDACC", dim = "#5E5148", muted = "#39494F", comment = "#546D79" },
+    bg = { shadow = "#000000", core = "#000000", mantle = "#080808", surface = "#1A1A1A" },
+    fg = { core = "#F0EBE6", strong = "#FFDACC", dim = "#7A6A5E", muted = "#495D65", comment = "#5E7986" },
   },
   midnight = {
     bg = { shadow = "#0C1014", core = "#101418", mantle = "#14181C", surface = "#1C242C" },
-    fg = { core = "#F7F4F2", strong = "#FFE0CC", dim = "#635A51", muted = "#3F5160", comment = "#5F7390" },
+    fg = { core = "#F7F4F2", strong = "#FFE0CC", dim = "#7D7267", muted = "#4E6578", comment = "#69809D" },
   },
   night = {
     bg = { shadow = "#0C0C18", core = "#0D0D1A", mantle = "#06060E", surface = "#262633" },
-    fg = { core = "#F7F4E9", strong = "#F2E8D8", dim = "#60584D", muted = "#4B4A61", comment = "#6A6E8B" },
+    fg = { core = "#F7F4E9", strong = "#F2E8D8", dim = "#7B7063", muted = "#5E5D79", comment = "#757995" },
   },
   sol = {
     bg = { shadow = "#2C1512", core = "#2F1815", mantle = "#3A2521", surface = "#4F312B" },
-    fg = { core = "#FFE0DA", strong = "#FFD3CB", dim = "#636363", muted = "#6B4F4A", comment = "#987069" },
+    fg = { core = "#FFE0DA", strong = "#FFD3CB", dim = "#7B7B7B", muted = "#83615B", comment = "#A27D78" },
   },
   canyon = {
     bg = { shadow = "#2B1804", core = "#2F1A05", mantle = "#402412", surface = "#624020" },
-    fg = { core = "#F8E7D3", strong = "#FFD8BC", dim = "#636363", muted = "#714F37", comment = "#9F7051" },
+    fg = { core = "#F8E7D3", strong = "#FFD8BC", dim = "#7B7B7B", muted = "#8B6043", comment = "#AD7C5D" },
   },
   dune = {
     bg = { shadow = "#2B231E", core = "#2E2620", mantle = "#3C332C", surface = "#534A3F" },
-    fg = { core = "#E8E5DA", strong = "#EDE8AF", dim = "#636363", muted = "#6B5A4A", comment = "#8A7663" },
+    fg = { core = "#E8E5DA", strong = "#EDE8AF", dim = "#6E6E6E", muted = "#826D5A", comment = "#9F8B79" },
   },
   mirage = {
     bg = { shadow = "#172328", core = "#18252A", mantle = "#1A2D33", surface = "#2A3F46" },
-    fg = { core = "#DDEFEF", strong = "#C9EEE6", dim = "#736458", muted = "#475D5B", comment = "#387F74" },
+    fg = { core = "#DDEFEF", strong = "#C9EEE6", dim = "#907C6C", muted = "#587270", comment = "#439789" },
   },
   cactus = {
     bg = { shadow = "#19231B", core = "#1C261E", mantle = "#2C3A30", surface = "#3C4B3E" },
-    fg = { core = "#DDF0E5", strong = "#C7EDCF", dim = "#756456", muted = "#4B5F4F", comment = "#608864" },
+    fg = { core = "#DDF0E5", strong = "#C7EDCF", dim = "#907B6A", muted = "#5B7360", comment = "#69956D" },
   },
   lagoon = {
     bg = { shadow = "#0F1522", core = "#101825", mantle = "#1A283F", surface = "#22385C" },
-    fg = { core = "#D9E6FA", strong = "#D0E2F0", dim = "#665D55", muted = "#30556d", comment = "#467B99" },
+    fg = { core = "#D9E6FA", strong = "#D0E2F0", dim = "#877363", muted = "#3B6A87", comment = "#4D88A7" },
   },
   twilight = {
     bg = { shadow = "#201C2B", core = "#221B2F", mantle = "#2B243B", surface = "#352D47" },
-    fg = { core = "#E6E0F8", strong = "#E1D2FF", dim = "#6F6055", muted = "#5D4E7E", comment = "#8073A1" },
+    fg = { core = "#E6E0F8", strong = "#E1D2FF", dim = "#76665A", muted = "#71609A", comment = "#8B80AA" },
   },
   rose = {
     bg = { shadow = "#2B1523", core = "#301828", mantle = "#3E2636", surface = "#523A4B" },
-    fg = { core = "#EDD5E7", strong = "#EBBEDF", dim = "#706156", muted = "#6A4F60", comment = "#9F6C85" },
+    fg = { core = "#EDD5E7", strong = "#EBBEDF", dim = "#8A786C", muted = "#816175", comment = "#A87A91" },
   },
   starlight = {
-    bg = { shadow = "#050505", core = "#000000", mantle = "#080808", surface = "#1A1A1A" },
-    fg = { core = "#FAF7F0", strong = "#DCD9D2", dim = "#6A5448", muted = "#4E5A6A", comment = "#7FA5CC" },
+    bg = { shadow = "#000000", core = "#000000", mantle = "#080808", surface = "#1A1A1A" },
+    fg = { core = "#FAF7F0", strong = "#DCD9D2", dim = "#85665B", muted = "#4F5B6B", comment = "#5E7C9A" },
   },
   -- Light themes
   dawn = {
     bg = { shadow = "#E9E0AE", core = "#EFE5B6", mantle = "#E3D8A4", surface = "#D7CC97" },
-    fg = { core = "#443725", strong = "#261E12", dim = "#54523A", muted = "#4E4D39", comment = "#456B80" }, -- #F0E7CE or #F2ECD3
+    fg = { core = "#443725", strong = "#261E12", dim = "#54523A", muted = "#4E4D39", comment = "#456B80" },
   },
   dawnlight = {
     bg = { shadow = "#E3D396", core = "#ECDFA3", mantle = "#DDD091", surface = "#D1C085" },
@@ -180,7 +169,7 @@ local theme = {
   },
   dusk = {
     bg = { shadow = "#E0C480", core = "#DCBA75", mantle = "#D5B36A", surface = "#CEAC5F" },
-    fg = { core = "#251C10", strong = "#2A1F0C", dim = "#3D3929", muted = "#373425", comment = "#3e5060" },
+    fg = { core = "#251C10", strong = "#2A1F0C", dim = "#3D3929", muted = "#373425", comment = "#3E5060" },
   },
   dust = {
     bg = { shadow = "#CFA955", core = "#D4B165", mantle = "#C9A55A", surface = "#C39E4F" },
@@ -194,6 +183,8 @@ local colors = {
   light_terminal = light_terminal,
   visual = visual,
   diag = diag,
+  diff = diff,
+  git = git,
   theme = theme,
 
   -- Neutrals
@@ -242,9 +233,9 @@ local colors = {
     [800] = "#D06666",
     [700] = "#E26E6E",
     [600] = "#E87272",
-    [500] = "#ED7777",
-    [400] = "#F58888",
-    [300] = "#F28D8D",
+    [500] = "#FF7979",
+    [400] = "#F78181",
+    [300] = "#F58B8B",
     [200] = "#F39493",
     [100] = "#F29B9B",
     [50] = "#FFACA5",
@@ -362,11 +353,11 @@ local colors = {
     [700] = "#BDB76B",
     [600] = "#CDC673",
     [500] = "#F0E68C",
-    [400] = "#F3EA9F",
-    [300] = "#F6EEB2",
-    [200] = "#F9F2C5",
-    [100] = "#FBF6D8",
-    [50] = "#FEFBEB",
+    [400] = "#F2E898",
+    [300] = "#F3EA9F",
+    [200] = "#F6EEB2",
+    [100] = "#F9F2C5",
+    [50] = "#FBF6D8",
   },
 
   dune = {
@@ -396,16 +387,16 @@ local colors = {
   },
 
   soil = {
-    [900] = "#58503E",
-    [800] = "#97886A",
-    [700] = "#BBA593",
-    [600] = "#CCB7A4",
-    [500] = "#DDC8B4",
-    [400] = "#E3D1C1",
-    [300] = "#E9DACE",
-    [200] = "#EFE3DB",
-    [100] = "#F5ECE8",
-    [50] = "#FAF5F3",
+    [900] = "#504641",
+    [800] = "#877A6F",
+    [700] = "#AFA296",
+    [600] = "#C4B6AA",
+    [500] = "#D5CAB9",
+    [400] = "#E0D7C9",
+    [300] = "#E8E2D7",
+    [200] = "#EFE9E2",
+    [100] = "#F5F1ED",
+    [50] = "#FAF8F5",
   },
 
   -- Greens
@@ -465,8 +456,8 @@ local colors = {
   teal = {
     [900] = "#2A5E56",
     [800] = "#47A99B",
-    [700] = "#5ABAAE",
-    [600] = "#81C0B6",
+    [700] = "#68C0B6",
+    [600] = "#79C7BE",
     [500] = "#8FD1C7",
     [400] = "#96D4CB",
     [300] = "#A8DDD5",
@@ -502,17 +493,17 @@ local colors = {
     [50] = "#DEF6FC",
   },
 
-  horizon = {
-    [900] = "#0D4266",
-    [800] = "#1870AD",
-    [700] = "#2A9FE6",
-    [600] = "#3DB5FF",
-    [500] = "#4AC8FF",
-    [400] = "#5CCEFF",
-    [300] = "#7DD8FF",
-    [200] = "#9EE2FF",
-    [100] = "#BFECFF",
-    [50] = "#DFF6FF",
+  iris = {
+    [900] = "#271B5C",
+    [800] = "#3E3094",
+    [700] = "#5F51CE",
+    [600] = "#736FDF",
+    [500] = "#8D8DE7",
+    [400] = "#9797E9",
+    [300] = "#A9A9ED",
+    [200] = "#BCBDF5",
+    [100] = "#CFD1F9",
+    [50] = "#E2E4FC",
   },
 
   lagoon = {
@@ -529,12 +520,12 @@ local colors = {
   },
 
   sapphire = {
-    [900] = "#1A3966",
-    [800] = "#2D62AD",
-    [700] = "#408BF4",
-    [600] = "#519BFF",
-    [500] = "#61AEFF",
-    [400] = "#7ABBFF",
+    [900] = "#2877C6",
+    [800] = "#3787D7",
+    [700] = "#47A3FF",
+    [600] = "#5BADFF",
+    [500] = "#71B8FF",
+    [400] = "#81C0FF",
     [300] = "#93C8FF",
     [200] = "#ACD5FF",
     [100] = "#C5E2FF",
@@ -549,7 +540,7 @@ local colors = {
     [600] = "#A870F0",
     [500] = "#C28EFF",
     [400] = "#C695FF",
-    [300] = "#D8B7FF",
+    [300] = "#D2ADFF",
     [200] = "#DEC2FF",
     [100] = "#EEDDFF",
     [50] = "#F4EEFF",

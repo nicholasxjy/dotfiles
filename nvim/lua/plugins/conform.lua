@@ -46,6 +46,16 @@ return {
       },
     },
     opts = {
+      formatters = {
+        prettier = {
+          condition = function(_, ctx)
+            return not require("conform.util").root_file({
+              "biome.json",
+              "biome.jsonc",
+            })(ctx.filename)
+          end,
+        },
+      },
       format_on_save = function(bufnr)
         if vim.g.autoformat == false or vim.b[bufnr].autoformat == false then
           return
@@ -81,7 +91,7 @@ return {
       end
 
       for _, ft in ipairs(fe_supported) do
-        opts.formatters_by_ft[ft] = { "prettier", "biome", stop_after_first = true }
+        opts.formatters_by_ft[ft] = { "biome", "prettier", stop_after_first = true }
       end
 
       require("conform").setup(opts)

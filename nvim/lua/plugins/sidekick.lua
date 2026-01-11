@@ -13,6 +13,66 @@ return {
       expr = true,
       desc = "Goto/Apply Next Edit Suggestion",
     },
+    {
+      "<c-.>",
+      function()
+        require("sidekick.cli").toggle()
+      end,
+      desc = "Sidekick Toggle",
+      mode = { "n", "t", "i", "x" },
+    },
+    {
+      "<leader>aa",
+      function()
+        require("sidekick.cli").toggle()
+      end,
+      desc = "Sidekick Toggle CLI",
+    },
+    {
+      "<leader>as",
+      function()
+        require("sidekick.cli").select({ filter = { installed = true } })
+      end,
+      desc = "Select CLI",
+    },
+    {
+      "<leader>ad",
+      function()
+        require("sidekick.cli").close()
+      end,
+      desc = "Detach a CLI Session",
+    },
+    {
+      "<leader>at",
+      function()
+        require("sidekick.cli").send({ msg = "{this}" })
+      end,
+      mode = { "x", "n" },
+      desc = "Send This",
+    },
+    {
+      "<leader>af",
+      function()
+        require("sidekick.cli").send({ msg = "{file}" })
+      end,
+      desc = "Send File",
+    },
+    {
+      "<leader>av",
+      function()
+        require("sidekick.cli").send({ msg = "{selection}" })
+      end,
+      mode = { "x" },
+      desc = "Send Visual Selection",
+    },
+    {
+      "<leader>ap",
+      function()
+        require("sidekick.cli").prompt()
+      end,
+      mode = { "n", "x" },
+      desc = "Sidekick Select Prompt",
+    },
   },
   opts = {
     nes = {
@@ -20,22 +80,6 @@ return {
     },
     cli = {
       watch = true,
-      win = {
-        layout = "float",
-        float = {
-          width = 0.8,
-          height = 0.6,
-        },
-        split = {
-          width = 80,
-        },
-        keys = {
-          hide_n = { "q", "hide", mode = "n" }, -- hide the terminal window in normal mode
-          hide_t = { "<c-q>", "hide" }, -- hide the terminal window in terminal mode
-          win_p = { "<c-w>p", "blur" }, -- leave the cli window
-          prompt = { "<c-p>", "prompt" }, -- insert prompt or context
-        },
-      },
       mux = {
         backend = vim.env.ZELLIJ and "zellij" or "tmux",
         enabled = true,
@@ -43,18 +87,7 @@ return {
         -- window: when run inside a terminal multiplexer, new sessions will be created in a new tab
         -- split: when run inside a terminal multiplexer, new sessions will be created in a new split
         -- NOTE: zellij only supports `terminal`
-        create = "terminal",
-        split = {
-          -- vertical = true, -- vertical or horizontal split
-          horizontal = true,
-          size = 0.4, -- size of the split (0-1 for percentage)
-        },
-      },
-      tools = {
-        copilot = {
-          cmd = { "copilot", "--banner" },
-          url = "https://github.com/github/copilot-cli",
-        },
+        create = "window",
       },
     },
   },

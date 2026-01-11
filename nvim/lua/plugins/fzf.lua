@@ -6,7 +6,7 @@ return {
     cmd = "FzfLua",
     dependencies = { "nvim-mini/mini.icons" },
     opts = {
-      "border-fused",
+      "borderless",
       "hide",
       fzf_colors = true,
       fzf_opts = {
@@ -14,17 +14,17 @@ return {
       },
       winopts = {
         height = 0.9, -- window height
-        width = 1, -- window width
+        -- width = 0.8, -- window width
         row = 1, -- window row position (0=top, 1=bottom)
-        col = 0,
-        border = "rounded",
+        -- col = 0.2,
+        border = "none",
         backdrop = 100,
         preview = {
-          border = "rounded",
+          border = "none",
           wrap = true,
           hidden = false,
           layout = "vertical",
-          vertical = "up:55%",
+          vertical = "up:50%",
         },
       },
       files = {
@@ -50,8 +50,60 @@ return {
         file_icons = true,
         git_icons = true,
       },
+      debug = true,
     },
     keys = {
+      -- {
+      --   "<leader>h",
+      --   function()
+      --     require("fzf-lua").buffers({
+      --       winopts = ui.fzf.mini_pick.winopts,
+      --       sort_lastused = true,
+      --       current = false,
+      --       previewer = false,
+      --     })
+      --   end,
+      --   desc = "Fzf buffers",
+      --   silent = true,
+      -- },
+      -- {
+      --   "<leader>m",
+      --   function()
+      --     require("fzf-lua").marks()
+      --   end,
+      --   desc = "Fzf marks",
+      -- },
+      -- {
+      --   "<leader>sw",
+      --   function()
+      --     require("fzf-lua").grep_cword()
+      --   end,
+      --   desc = "Fzf grep cword",
+      --   silent = true,
+      -- },
+      -- {
+      --   "<leader>sv",
+      --   function()
+      --     require("fzf-lua").grep_visual()
+      --   end,
+      --   desc = "Fzf grep visual",
+      --   silent = true,
+      --   mode = { "n", "v", "x" },
+      -- },
+      {
+        "<leader>sp",
+        function()
+          require("fzf-lua").grep_project()
+        end,
+        desc = "Fzf grep project",
+      },
+      -- {
+      --   "<leader>sg",
+      --   function()
+      --     require("fzf-lua").live_grep_native()
+      --   end,
+      --   desc = "Fzf grep",
+      -- },
       {
         "<leader>:",
         function()
@@ -59,13 +111,20 @@ return {
         end,
         desc = "Fzf commands",
       },
-      {
-        "<leader>/",
-        function()
-          require("fzf-lua").blines()
-        end,
-        desc = "Fzf blines",
-      },
+      -- {
+      --   "<leader>r",
+      --   function()
+      --     require("fzf-lua").resume()
+      --   end,
+      --   desc = "Fzf resume",
+      -- },
+      -- {
+      --   "<leader>/",
+      --   function()
+      --     require("fzf-lua").blines()
+      --   end,
+      --   desc = "Fzf blines",
+      -- },
       {
         "<leader>fb",
         function()
@@ -215,5 +274,18 @@ return {
     config = function(_, opts)
       require("fzf-lua").setup(opts)
     end,
+  },
+  {
+    "stephansama/fzf-nerdfont.nvim",
+    lazy = true,
+    build = ":FzfNerdfont generate",
+    dependencies = { "ibhagwan/fzf-lua" },
+    cmd = "FzfNerdfont",
+    keys = {
+      { "<leader>fi", "<CMD>FzfNerdfont<CR>", desc = "Open fzf nerd font picker" },
+    },
+    ---@module 'fzf-nerdfont'
+    ---@type FzfNerdFontOpts
+    opts = {},
   },
 }

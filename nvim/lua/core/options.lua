@@ -3,13 +3,13 @@ vim.g.maplocalleader = " "
 vim.g.autoformat = true
 vim.g.inlay_hints = true
 vim.g.codelens = true
-vim.g.copilot_enabled = true
+vim.g.copilot_enabled = false
 
 vim.g.kind_icons = "mini"
-vim.g.picker = "fzf"
+vim.g.picker = "snacks"
 
 vim.g.transparent = false
-vim.g.bordered = false
+vim.g.bordered = true
 vim.o.winborder = "rounded"
 vim.o.background = "dark"
 

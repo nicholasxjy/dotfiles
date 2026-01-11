@@ -45,7 +45,8 @@ return {
       lualine_c = {
         { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
         { "filename", path = 4 },
-        { "diagnostics", sources = { "nvim_workspace_diagnostic" } },
+        -- { "diagnostics", sources = { "nvim_workspace_diagnostic" } },
+        { "diagnostics" },
       },
       lualine_x = {
         { "macro" },
@@ -92,9 +93,6 @@ return {
       Warning = { " ", "DiagnosticWarn" },
       Normal = { " ", "Special" },
     }
-    -- opencode
-    table.insert(opts.sections.lualine_c, { require("opencode").statusline })
-    -- sidekick
     table.insert(opts.sections.lualine_c, {
       function()
         local status = require("sidekick.status").get()
@@ -109,21 +107,20 @@ return {
         return { fg = Snacks.util.color(hl) }
       end,
     })
-    --
-    -- -- CLI session status
-    -- table.insert(opts.sections.lualine_x, 2, {
-    --   function()
-    --     local status = require("sidekick.status").cli()
-    --     return " " .. (#status > 1 and #status or "")
-    --   end,
-    --   cond = function()
-    --     return #require("sidekick.status").cli() > 0
-    --   end,
-    --   color = function()
-    --     return "Special"
-    --   end,
-    -- })
 
+    -- CLI session status
+    table.insert(opts.sections.lualine_x, 2, {
+      function()
+        local status = require("sidekick.status").cli()
+        return " " .. (#status > 1 and #status or "")
+      end,
+      cond = function()
+        return #require("sidekick.status").cli() > 0
+      end,
+      color = function()
+        return "Special"
+      end,
+    })
     require("lualine").setup(opts)
   end,
 }

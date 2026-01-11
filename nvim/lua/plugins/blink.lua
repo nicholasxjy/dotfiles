@@ -12,7 +12,7 @@ return {
         "onsails/lspkind.nvim",
         config = function()
           require("lspkind").init({
-            symbol_map = ui.icons.lazy_kind_icons,
+            symbol_map = ui.icons.codicons,
           })
         end,
       },
@@ -37,7 +37,8 @@ return {
           ["<C-u>"] = { "scroll_documentation_up", "fallback" },
           ["<C-d>"] = { "scroll_documentation_down", "fallback" },
           ["<Tab>"] = {
-            function()
+            -- nes
+            function() -- sidekick next edit suggestion
               return require("sidekick").nes_jump_or_apply()
             end,
             "snippet_forward",
@@ -94,10 +95,10 @@ return {
             draw = {
               gap = 2,
               columns = {
-                { "label", "label_description", gap = 1 },
-                { "kind_icon", "kind", gap = 2 },
+                { "kind_icon", "label", gap = 1 },
+                { "kind", "source_name", gap = 2 },
               },
-              -- treesitter = { "lsp" },
+              treesitter = { "lsp" },
               components = {
                 kind_icon = {
                   text = function(ctx)
@@ -108,6 +109,9 @@ return {
                   end,
                 },
                 kind = {
+                  text = function(ctx)
+                    return ctx.kind
+                  end,
                   highlight = function(ctx)
                     return cmpUtil.get_kind_icon(ctx).highlight
                   end,
@@ -127,9 +131,9 @@ return {
                       return "[PATH]"
                     end
                   end,
-                  -- highlight = function(ctx)
-                  --   return cmpUtil.get_kind_icon(ctx).highlight
-                  -- end,
+                  highlight = function()
+                    return "BlinkCmpSource"
+                  end,
                 },
               },
             },

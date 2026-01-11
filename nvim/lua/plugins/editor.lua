@@ -69,6 +69,7 @@ return {
   {
     "lukas-reineke/virt-column.nvim",
     event = "VeryLazy",
+    enabled = false,
     opts = {
       -- char = "|",
       -- char = "",

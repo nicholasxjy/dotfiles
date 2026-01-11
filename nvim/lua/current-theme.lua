@@ -1,1 +1,1 @@
-vim.cmd("colorscheme oasis")
+vim.cmd("colorscheme ef-theme")

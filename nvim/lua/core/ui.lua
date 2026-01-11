@@ -37,7 +37,7 @@ M.layout = {
       row = -1,
       min_width = 80,
       height = 0.9,
-      width = 0.88,
+      -- width = 1.0,
       border = "none",
       box = "vertical",
       { win = "preview", title = "{preview}", height = 0.5, border = "rounded" },
@@ -84,6 +84,25 @@ M.layout = {
       { win = "input", height = 1, border = "bottom", title = "{title} {live} {flags}", title_pos = "left" },
       { win = "list", border = "hpad" },
       { win = "preview", title = "{preview}", border = "rounded" },
+    },
+  },
+  mini_pick = {
+    layout = {
+      box = "vertical",
+      backdrop = false,
+      row = -1,
+      col = 0.2,
+      -- width = 1,
+      height = 0.4,
+      width = 0.6,
+      border = "none",
+      title = " {title} {live} {flags}",
+      title_pos = "left",
+      { win = "input", height = 1, border = "bottom" },
+      {
+        box = "horizontal",
+        { win = "list", border = "none" },
+      },
     },
   },
   ivy = {
@@ -180,16 +199,26 @@ M.layout = {
 }
 
 M.fzf = {
+  mini_pick = {
+    winopts = {
+      height = 0.4, -- window height
+      width = 0.6, -- window width
+      row = 1, -- window row position (0=top, 1=bottom)
+      -- col = 0.50, -- window col position (0=left, 1=right)
+      border = "none",
+      backdrop = 100,
+    },
+  },
   dropdown = {
     winopts = {
-      height = 0.88, -- window height
-      width = 0.80, -- window width
+      height = 0.9, -- window height
+      -- width = 1, -- window width
       row = 1, -- window row position (0=top, 1=bottom)
-      col = 0.50, -- window col position (0=left, 1=right)
+      -- col = 0.50, -- window col position (0=left, 1=right)
       border = "none",
       backdrop = 100,
       preview = {
-        border = "rounded",
+        border = "none",
         wrap = true,
         hidden = false,
         layout = "vertical",

@@ -9,7 +9,6 @@ return {
       ui_select = true,
       layout = {
         cycle = false,
-        -- layout = ui.layout.dropdown.layout,
       },
       matcher = {
         cwd_bonus = true,
@@ -26,6 +25,11 @@ return {
           level = true, -- show severity level
           pos = "left", -- position of the diagnostics
         },
+      },
+      actions = {
+        sidekick_send = function(...)
+          return require("sidekick.cli.picker.snacks").send(...)
+        end,
       },
       win = {
         input = {
@@ -47,11 +51,6 @@ return {
         },
       },
       icons = { kinds = ui.icons.mini_kind_icons },
-      actions = {
-        sidekick_send = function(...)
-          return require("sidekick.cli.snacks").send(...)
-        end,
-      },
       debug = {
         scores = false,
       },
@@ -64,6 +63,14 @@ return {
         Snacks.explorer({ layout = ui.layout.right })
       end,
       desc = "Snacks explorer",
+    },
+    {
+      "<leader>/",
+      function()
+        Snacks.picker.lines()
+      end,
+      desc = "Snacks blines",
+      silent = true,
     },
     {
       "<leader>m",
@@ -79,7 +86,7 @@ return {
         Snacks.picker.smart({
           hidden = true,
           filter = { cwd = true },
-          layout = ui.layout.vscode,
+          layout = ui.layout.ivy_pick,
         })
       end,
       desc = "Snacks smart",
@@ -92,7 +99,15 @@ return {
           focus = "list",
           sort_lastused = true,
           current = false,
-          layout = ui.layout.vscode,
+          layout = ui.layout.ivy_pick,
+          win = {
+            input = {
+              keys = {
+                ["<c-x>"] = { "bufdelete", mode = { "n", "i" } },
+              },
+            },
+            list = { keys = { ["dd"] = "bufdelete" } },
+          },
         })
       end,
       desc = "Snacks buffers",
@@ -167,17 +182,6 @@ return {
         Snacks.picker.notifications()
       end,
       desc = "Notifications",
-    },
-    {
-      "<leader>xt",
-      function()
-        ---@diagnostic disable-next-line: undefined-field
-        Snacks.picker.todo_comments({
-          layout = ui.layout.dropdown,
-          keywords = { "TODO", "FIX", "FIXME", "NOTE", "PERF", "HACK" },
-        })
-      end,
-      desc = "Todo/Fix/Fixme etc",
     },
   },
 }
