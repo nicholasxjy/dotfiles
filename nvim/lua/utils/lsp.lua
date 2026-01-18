@@ -195,18 +195,8 @@ M.keymap_setup = function()
   vim.keymap.set("n", "<leader>xe", diagnostics_workspace_errors, { desc = "Workspace Diagnostics(Errors)" })
 end
 
--- local disable_semantic_ls = {
---   "jdtls",
---   "gopls",
---   "lua_ls",
--- }
-
 M.methods_setup = function(client, bufnr)
   local Methods = vim.lsp.protocol.Methods
-
-  -- if client.server_capabilities.semanticTokensProvider and vim.tbl_contains(disable_semantic_ls, client.name) then
-  --   client.server_capabilities.semanticTokensProvider = nil
-  -- end
 
   if client:supports_method(Methods.textDocument_linkedEditingRange) and vim.fn.has("nvim-0.12") == 1 then
     vim.lsp.linked_editing_range.enable(true, {
@@ -222,9 +212,9 @@ M.methods_setup = function(client, bufnr)
   end
 
   -- Handle textDocument/documentColor support
-  -- if client:supports_method(Methods.textDocument_documentColor) and vim.fn.has("nvim-0.12") == 1 then
-  --   vim.lsp.document_color.enable(true, bufnr, { style = "background" }) --background, foreground, virtual
-  -- end
+  if client:supports_method(Methods.textDocument_documentColor) and vim.fn.has("nvim-0.12") == 1 then
+    vim.lsp.document_color.enable(true, bufnr, { style = "background" }) --background, foreground, virtual
+  end
 
   -- enable inlay hints by default
   if client:supports_method(Methods.textDocument_inlayHints) then

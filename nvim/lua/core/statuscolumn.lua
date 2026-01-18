@@ -3,7 +3,7 @@ local M = {}
 -- ┃, ┆, ┇, ┊, ┋, ╎, ╏, ║, ╽, ╿
 
 M.border = function()
-  return "%#StatusBorder#┃ " -- ┃, ┆, ┇, ┊, ┋, ╎, ╏, ║, ╽, ╿
+  return "%#StatusBorder#║ " -- ┃, ┆, ┇, ┊, ┋, ╎, ╏, ║, ╽, ╿
 end
 
 M.number = function()

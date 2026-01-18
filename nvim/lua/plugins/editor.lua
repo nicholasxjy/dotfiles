@@ -1,3 +1,4 @@
+local ui = require("core.ui")
 return {
   {
     "folke/persistence.nvim",
@@ -5,7 +6,7 @@ return {
     opts = {
       dir = vim.fn.stdpath("state") .. "/sessions/", -- directory where session files are saved
       need = 0,
-      branch = true, -- use git branch to save session
+      branch = true,                                 -- use git branch to save session
     },
   },
   {
@@ -122,20 +123,10 @@ return {
     event = "VeryLazy",
     config = function()
       require("modes").setup({
-        -- colors = {
-        --   bg = "#0D0D1A", -- Optional bg param, defaults to Normal hl group
-        --   copy = "#f5c359",
-        --   delete = "#c75c6a",
-        --   change = "#c75c6a", -- Optional param, defaults to delete
-        --   format = "#c79585",
-        --   insert = "#78ccc5",
-        --   replace = "#245361",
-        --   select = "#9745be", -- Optional param, defaults to visual
-        --   visual = "#9745be",
-        -- },
+        colors = ui.mode_colors,
 
         -- Set opacity for cursorline and number background
-        line_opacity = 0.15,
+        line_opacity = 0.1,
 
         -- Enable cursor highlights
         set_cursor = true,
@@ -156,11 +147,6 @@ return {
         ignore = { "NvimTree", "TelescopePrompt", "!minifiles" },
       })
     end,
-  },
-  {
-    "brenoprata10/nvim-highlight-colors",
-    event = "VeryLazy",
-    opts = {},
   },
   {
     "tummetott/reticle.nvim",

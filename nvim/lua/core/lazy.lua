@@ -18,7 +18,7 @@ require("lazy").setup({
   },
   install = {
     missing = true,
-    colorscheme = { "ef-theme", "oasis" },
+    colorscheme = { "lemons", "ef-theme" },
   },
   checker = { enabled = true },
   ui = {

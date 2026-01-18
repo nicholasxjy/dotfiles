@@ -57,6 +57,16 @@ return {
     end,
   },
   {
+    "nvim-mini/mini.tabline",
+    version = false,
+    event = "VeryLazy",
+    opts = {
+      show_icons = true,
+      format = nil,
+      tabpage_section = "left",
+    },
+  },
+  {
     "nvim-mini/mini.surround",
     version = false,
     event = "VeryLazy",

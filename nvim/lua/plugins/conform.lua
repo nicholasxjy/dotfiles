@@ -5,17 +5,17 @@ local supported = {
   "markdown.mdx",
   "yaml",
   "yaml.docker-compose",
+  "less",
+  "scss",
+  "css",
+  "html",
 }
 
 local fe_supported = {
-  "css",
-  "html",
   "javascript",
   "javascriptreact",
   "json",
   "jsonc",
-  "less",
-  "scss",
   "typescript",
   "typescriptreact",
   "vue",
@@ -46,16 +46,6 @@ return {
       },
     },
     opts = {
-      formatters = {
-        prettier = {
-          condition = function(_, ctx)
-            return not require("conform.util").root_file({
-              "biome.json",
-              "biome.jsonc",
-            })(ctx.filename)
-          end,
-        },
-      },
       format_on_save = function(bufnr)
         if vim.g.autoformat == false or vim.b[bufnr].autoformat == false then
           return
@@ -69,7 +59,7 @@ return {
         query = { "format-queries" },
         sh = { "shfmt" },
         go = { "goimports", "gofmt" }, -- golines
-        lua = { "stylua" },
+        -- lua = { "stylua" },
         nix = { "nixfmt" },
         rust = { "rustfmt" },
         templ = { "templ" },
@@ -86,6 +76,34 @@ return {
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
     end,
     config = function(_, opts)
+      local function has_config(ctx, files)
+        return not vim.tbl_isempty(vim.fs.find(files, { path = ctx.dirname, upward = true }))
+      end
+
+      opts.formatters = opts.formatters or {}
+      opts.formatters.prettier = {
+        condition = function(_, ctx)
+          return has_config(ctx, {
+            ".prettierrc",
+            ".prettierrc.json",
+            ".prettierrc.yml",
+            ".prettierrc.yaml",
+            ".prettierrc.js",
+            ".prettierrc.cjs",
+            ".prettierrc.mjs",
+            ".prettierrc.toml",
+            "prettier.config.js",
+            "prettier.config.cjs",
+            "prettier.config.mjs",
+          })
+        end,
+      }
+      opts.formatters.biome = {
+        condition = function(_, ctx)
+          return has_config(ctx, { "biome.json", "biome.jsonc" })
+        end,
+      }
+
       for _, ft in ipairs(supported) do
         opts.formatters_by_ft[ft] = { "prettier" }
       end

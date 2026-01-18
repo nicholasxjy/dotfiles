@@ -6,7 +6,7 @@ vim.g.codelens = true
 vim.g.copilot_enabled = false
 
 vim.g.kind_icons = "mini"
-vim.g.picker = "snacks"
+vim.g.picker = "fzf"
 
 vim.g.transparent = false
 vim.g.bordered = true

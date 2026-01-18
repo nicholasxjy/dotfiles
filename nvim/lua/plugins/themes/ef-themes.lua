@@ -1,8 +1,8 @@
 return {
   "oonamo/ef-themes.nvim",
   opts = {
-    light = "ef-spring", -- Ef-theme to select for light backgrounds
-    dark = "ef-night", -- Ef-theme to select for dark backgrounds
+    light = "ef-trio-light",
+    dark = "ef-trio-dark",
     transparent = vim.g.transparent,
     styles = {
       comments = { italic = true },
@@ -29,74 +29,88 @@ return {
     },
 
     on_colors = function(colors)
-      -- colors.bg_main = "#18252A" -- "#101825"
-      -- colors.bg_dim = "#1A2D33" -- "#1A283F"
+      colors.bg_main = "#101825"
+      -- colors.bg_dim = "#0F1522"
+      colors.bg_dim = "#1A283F"
+
       -- colors.bg_alt = "#172328" -- "#0F1522"
       -- -- colors.bg_active = "#534A3F"
       -- colors.bg_inactive = "#2A3F46" --"#22385C"
 
-      colors.fg_main = "#E8E5DA"
-      colors.fg_dim = "#636363"
-      colors.fg_alt = "#EDE8AF"
+      -- colors.fg_main = "#E8E5DA"
+      -- colors.fg_dim = "#B3BAC7"
+      colors.fg_dim = "#4D5566"
+      -- colors.fg_alt = "#EDE8AF"
     end,
 
     on_highlights = function(_, colors, _)
       return {
-        NormalFloat = { bg = colors.bg_main },
+
+        PmenuMatchSel = { fg = colors.accent_0, bold = true },
+        PmenuSel = { fg = "#2D2D3D", bg = "#EDE8AF" },
+
+        NormalFloat = { bg = vim.g.bordered and colors.bg_main or colors.bg_dim },
         -- PmenuSel = { bg = "#335668" }, --#2B4A46 --#5A3824 --#5A324B --#335668
-        Comment = { fg = "#8A7663", italic = true },
-        MatchParenCur = { fg = "#F4E36B", bg = "#5A3824", bold = true },
-        MatchParen = { fg = "#F17D62", bg = "#5A3824", bold = true },
+        Comment = { fg = "#4D5566", italic = true },
+        MatchParenCur = { fg = "#4FA035", bg = "#5A3824", bold = true },
+        MatchParen = { fg = "#CC5959", bg = "#5A3824", bold = true },
         BlinkPairsMatchParen = { link = "MatchParen" },
 
         DiagnosticDeprecated = { bg = colors.bg_info, sp = colors.info, strikethrough = true },
         WhichKeyNormal = { bg = colors.bg_main },
-
+        WhichKeyGroup = { fg = colors.blue, bold = true },
         DartVisible = { fg = colors.fg_dim },
         DartVisibleLabel = { fg = colors.fg_dim },
+
+        MiniFilesNormal = { bg = colors.bg_main },
         MiniTablineFill = { bg = colors.bg_main },
         MiniTablineCurrent = { fg = colors.fg_alt, bg = colors.bg_info, bold = true },
         MiniTablineHidden = { fg = colors.fg_dim, bg = colors.bg_main },
         MiniTablineModifiedCurrent = { fg = colors.warning, bg = colors.bg_warning, bold = true },
 
+        NoiceCmdlinePopupBorder = { link = "FloatBorder" },
+        NoiceCmdlinePopupBorderSearch = { link = "FloatBorder" },
+
         lessClass = { fg = colors.accent_0 },
-        ["@operator"] = { fg = "#4D4D66", bold = false },
-        ["@punctuation.delimiter"] = { fg = "#4D5566", bold = false },
-        -- Include = { fg = "#1CA0FD" }, --"#7FBB82"
-        ["@keyword.import"] = { fg = "#34CB7D", bold = true },
-        ["@keyword.export"] = { fg = "#34CB7D", bold = true },
-        -- ["@lsp.type.namespace"] = { link = "@module" },
+        ["@operator"] = { fg = "#807C37", bold = true },
+        ["@punctuation.delimiter"] = { fg = "#807C37", bold = false },
+
+        ["@property"] = { link = "@variable.member" },
+        ["@keyword.import"] = { fg = "#6AECE1", bold = true },
+        -- ["@keyword.export"] = { fg = "#34CB7D", bold = true },
+        ["@keyword.export"] = { fg = "#6AECE1", bold = true },
         ["@lsp.type.interface"] = { fg = "#B37800", bold = true },
         ["@lsp.type.enum"] = { fg = "#33CCCC", bold = true, italic = false },
         ["@lsp.type.enumMember"] = { fg = "#61BB4D", bold = true, italic = false },
         ["@lsp.typemod.enum"] = { fg = "#33CCCC", bold = true, italic = false },
         ["@lsp.typemod.enumMember"] = { fg = "#61BB4D", bold = true, italic = false },
-        FloatTitle = { fg = "#ED7777", bold = true },
+
+        FloatTitle = { fg = "#3AACFD", bold = true },
         FloatBorder = { fg = colors.accent_0, bg = colors.bg_main },
 
         SnacksPickerTitle = { link = "FloatTitle" },
-        SnacksPickerInputTitle = { fg = "#94E97C", bold = true },
+        SnacksPickerInputTitle = { fg = "#68C0B6", bold = true },
         SnacksPickerPreviewTitle = { fg = "#3AACFD", bold = true },
         SnacksPickerPreview = { bg = colors.bg_main },
-        SnacksPickerInputBorder = { fg = colors.accent_2, bg = colors.bg_main },
+        SnacksPickerInputBorder = { fg = colors.accent_0, bg = colors.bg_main },
+        SnacksPickerInput = { fg = colors.yellow, bg = colors.bg_main, bold = true },
+        SnacksPickerMatch = { fg = colors.accent_0, bold = true, reverse = true },
+        SnacksPickerListCursorLine = { bg = "#4D4528", bold = true },
 
         FzfLuaTitle = { link = "FloatTitle" },
         FzfLuaPreviewTitle = { link = "SnacksPickerPreviewTitle" },
-        SnacksPickerMatch = { fg = colors.accent_0, bold = true, reverse = true },
 
         BlinkCmpSource = { fg = colors.fg_dim, bold = true },
-        BlinkCmpMenu = { bg = colors.bg_main },
+        BlinkCmpMenu = { bg = vim.g.bordered and colors.bg_main or colors.bg_dim },
+        BlinkCmpLabelMatch = { fg = colors.accent_0, bg = "NONE", bold = true },
         BlinkCmpMenuBorder = { fg = colors.accent_0, bg = colors.bg_main },
         BlinkCmpDoc = { link = "BlinkCmpMenu" },
         BlinkCmpDocBorder = { link = "BlinkCmpMenuBorder" },
         BlinkCmpSignatureHelp = { link = "BlinkCmpMenu" },
         BlinkCmpSignatureHelpBorder = { link = "BlinkCmpMenuBorder" },
-        BlinkCmpKindProperty = { fg = "#D5CAB9" },
+        BlinkCmpKindProperty = { fg = "#7FBB82" },
         BlinkCmpKindText = { fg = "#8890A5" },
         BlinkCmpKindSnippet = { fg = "#736FDF", italic = true },
-
-        NoiceCmdlinePopupBorder = { link = "FloatBorder" },
-        NoiceCmdlinePopupBorderSearch = { link = "FloatBorder" },
 
         BlinkPairsRed = { link = "RainbowDelimiterRed" },
         BlinkPairsOrange = { link = "RainbowDelimiterOrange" },

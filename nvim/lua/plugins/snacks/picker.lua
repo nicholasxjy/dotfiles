@@ -20,6 +20,7 @@ return {
           filename_first = true,
           truncate = 60,
         },
+
         severity = {
           icons = true, -- show severity icons
           level = true, -- show severity level
@@ -50,7 +51,7 @@ return {
           },
         },
       },
-      icons = { kinds = ui.icons.mini_kind_icons },
+      icons = { kinds = ui.icons.codicons },
       debug = {
         scores = false,
       },
@@ -64,104 +65,105 @@ return {
       end,
       desc = "Snacks explorer",
     },
-    {
-      "<leader>/",
-      function()
-        Snacks.picker.lines()
-      end,
-      desc = "Snacks blines",
-      silent = true,
-    },
-    {
-      "<leader>m",
-      function()
-        Snacks.picker.marks({ layout = ui.layout.dropdown })
-      end,
-      desc = "Snacks marks",
-      silent = true,
-    },
+    -- {
+    --   "<leader>/",
+    --   function()
+    --     Snacks.picker.lines()
+    --   end,
+    --   desc = "Snacks blines",
+    --   silent = true,
+    -- },
+    -- {
+    --   "<leader>m",
+    --   function()
+    --     Snacks.picker.marks({ layout = ui.layout.dropdown })
+    --   end,
+    --   desc = "Snacks marks",
+    --   silent = true,
+    -- },
     {
       "ff",
       function()
         Snacks.picker.smart({
+          prompt = "Smart> ",
           hidden = true,
           filter = { cwd = true },
-          layout = ui.layout.ivy_pick,
+          layout = ui.layout.vscode,
         })
       end,
       desc = "Snacks smart",
       silent = true,
     },
-    {
-      "nn",
-      function()
-        Snacks.picker.buffers({
-          focus = "list",
-          sort_lastused = true,
-          current = false,
-          layout = ui.layout.ivy_pick,
-          win = {
-            input = {
-              keys = {
-                ["<c-x>"] = { "bufdelete", mode = { "n", "i" } },
-              },
-            },
-            list = { keys = { ["dd"] = "bufdelete" } },
-          },
-        })
-      end,
-      desc = "Snacks buffers",
-      silent = true,
-    },
-    {
-      "<leader>r",
-      function()
-        Snacks.picker.resume({ layout = ui.layout.dropdown })
-      end,
-      desc = "Snacks resume",
-    },
+    -- {
+    --   "nn",
+    --   function()
+    --     Snacks.picker.buffers({
+    --       focus = "list",
+    --       sort_lastused = true,
+    --       current = false,
+    --       layout = ui.layout.vscode,
+    --       win = {
+    --         input = {
+    --           keys = {
+    --             ["<c-x>"] = { "bufdelete", mode = { "n", "i" } },
+    --           },
+    --         },
+    --         list = { keys = { ["dd"] = "bufdelete" } },
+    --       },
+    --     })
+    --   end,
+    --   desc = "Snacks buffers",
+    --   silent = true,
+    -- },
+    -- {
+    --   "<leader>r",
+    --   function()
+    --     Snacks.picker.resume({ layout = ui.layout.dropdown })
+    --   end,
+    --   desc = "Snacks resume",
+    -- },
     --search
-    {
-      "<leader>sw",
-      function()
-        Snacks.picker.grep_word({
-          layout = ui.layout.dropdown,
-          filter = { cwd = true },
-        })
-      end,
-      desc = "Snacks search word under cursor",
-      mode = { "n", "x", "v" },
-    },
-    {
-      "<leader>sW",
-      function()
-        Snacks.picker.grep_word({
-          layout = ui.layout.dropdown,
-          filter = { cwd = true },
-          buffers = true,
-          dirs = { vim.fn.expand("%:p") }, -- current buffer
-        })
-      end,
-      desc = "Snacks search word under cursor",
-      mode = { "n", "x", "v" },
-    },
-    {
-      "<leader>sg",
-      function()
-        Snacks.picker.grep({
-          layout = ui.layout.dropdown,
-          filter = { cwd = true },
-        })
-      end,
-      desc = "Snacks live grep",
-    },
-    {
-      "<leader>sG",
-      function()
-        Snacks.picker.grep({ layout = ui.layout.dropdown })
-      end,
-      desc = "Snacks live grep",
-    },
+    -- {
+    --   "<leader>sw",
+    --   function()
+    --     Snacks.picker.grep_word({
+    --       layout = ui.layout.dropdown,
+    --       filter = { cwd = true },
+    --     })
+    --   end,
+    --   desc = "Snacks search word under cursor",
+    --   mode = { "n", "x", "v" },
+    -- },
+    -- {
+    --   "<leader>sW",
+    --   function()
+    --     Snacks.picker.grep_word({
+    --       layout = ui.layout.dropdown,
+    --       filter = { cwd = true },
+    --       buffers = true,
+    --       dirs = { vim.fn.expand("%:p") }, -- current buffer
+    --     })
+    --   end,
+    --   desc = "Snacks search word under cursor",
+    --   mode = { "n", "x", "v" },
+    -- },
+    -- {
+    --   "<leader>sg",
+    --   function()
+    --     Snacks.picker.grep({
+    --       layout = ui.layout.dropdown,
+    --       filter = { cwd = true },
+    --     })
+    --   end,
+    --   desc = "Snacks live grep",
+    -- },
+    -- {
+    --   "<leader>sG",
+    --   function()
+    --     Snacks.picker.grep({ layout = ui.layout.dropdown })
+    --   end,
+    --   desc = "Snacks live grep",
+    -- },
     {
       "<leader>z",
       function()
