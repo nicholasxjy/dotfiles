@@ -35,7 +35,7 @@ return {
         html = "rainbow-delimiters",
         lua = "rainbow-delimiters",
         go = "rainbow-delimiters",
-        rust = "rainbow-delimiters",
+        rust = "",
       },
     })
   end,

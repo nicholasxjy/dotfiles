@@ -18,6 +18,8 @@ return {
     ensure_installed = {
 
       "lua-language-server",
+      "copilot-language-server",
+
       "emmylua_ls",
       "stylua",
       "marksman",

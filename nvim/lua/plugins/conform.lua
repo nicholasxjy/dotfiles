@@ -59,7 +59,7 @@ return {
         query = { "format-queries" },
         sh = { "shfmt" },
         go = { "goimports", "gofmt" }, -- golines
-        -- lua = { "stylua" },
+        lua = { "stylua" },
         nix = { "nixfmt" },
         rust = { "rustfmt" },
         templ = { "templ" },

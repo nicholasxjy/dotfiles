@@ -36,9 +36,9 @@ M.layout = {
       border = "rounded",
       title = "{title}",
       title_pos = "center",
-      { win = "input",   height = 1,          border = "bottom" },
-      { win = "list",    border = "none" },
-      { win = "preview", title = "{preview}", height = 0.4,     border = "top" },
+      { win = "input", height = 1, border = "bottom" },
+      { win = "list", border = "none" },
+      { win = "preview", title = "{preview}", height = 0.4, border = "top" },
     },
   },
   dropdown = {
@@ -46,7 +46,7 @@ M.layout = {
       backdrop = false,
       row = -1,
       min_width = 80,
-      height = 0.9,
+      height = 0.95,
       -- width = 1.0,
       border = "none",
       box = "vertical",
@@ -56,8 +56,8 @@ M.layout = {
         border = "none",
         title = "{title} {live} {flags}",
         title_pos = "center",
-        { win = "input", height = 1,     border = "bottom" },
-        { win = "list",  border = "none" },
+        { win = "input", height = 1, border = "hpad" },
+        { win = "list", border = "none" },
       },
     },
   },
@@ -76,8 +76,8 @@ M.layout = {
         border = "none",
         title = "{title} {live} {flags}",
         title_pos = "center",
-        { win = "input", height = 1,     border = "bottom" },
-        { win = "list",  border = "none" },
+        { win = "input", height = 1, border = "bottom" },
+        { win = "list", border = "none" },
       },
     },
   },
@@ -85,14 +85,14 @@ M.layout = {
     preview = false,
     layout = {
       backdrop = false,
-      row = 0.5,
-      width = 0.7,
+      row = 0.55,
+      width = 0.6,
       min_width = 80,
       height = 0.4,
       border = "none",
       box = "vertical",
-      { win = "input",   height = 1,          border = "bottom", title = "{title} {live} {flags}", title_pos = "left" },
-      { win = "list",    border = "hpad" },
+      { win = "input", height = 1, border = "bottom", title = "{title} {live} {flags}", title_pos = "left" },
+      { win = "list", border = "hpad" },
       { win = "preview", title = "{preview}", border = "rounded" },
     },
   },
@@ -162,7 +162,7 @@ M.layout = {
       { win = "input", height = 1, border = "bottom" },
       {
         box = "horizontal",
-        { win = "list",    border = "none" },
+        { win = "list", border = "none" },
         { win = "preview", title = "{preview}", width = 0.5, border = "left" },
       },
     },
@@ -179,8 +179,8 @@ M.layout = {
         box = "vertical",
         border = "none",
         title = "{title} {live} {flags}",
-        { win = "input", height = 1,    border = "bottom" },
-        { win = "list",  border = false },
+        { win = "input", height = 1, border = "bottom" },
+        { win = "list", border = false },
       },
       { win = "preview", title = "{preview}", border = "rounded", width = 0.5 },
     },
@@ -202,7 +202,7 @@ M.layout = {
         title = "{title} {live} {flags}",
         title_pos = "center",
       },
-      { win = "list",    border = "none" },
+      { win = "list", border = "none" },
       { win = "preview", title = "{preview}", height = 0.4, border = "top" },
     },
   },
@@ -211,9 +211,9 @@ M.layout = {
 M.fzf = {
   mini_pick = {
     winopts = {
-      height = 0.4, -- window height
-      width = 0.6,  -- window width
-      row = 0.8,    -- window row position (0=top, 1=bottom)
+      height = 0.5, -- window height
+      width = 0.6, -- window width
+      row = 0.9, -- window row position (0=top, 1=bottom)
       -- col = 0.50, -- window col position (0=left, 1=right)
       border = "none",
       backdrop = 100,
@@ -223,7 +223,7 @@ M.fzf = {
     winopts = {
       height = 0.9, -- window height
       -- width = 1, -- window width
-      row = 1,      -- window row position (0=top, 1=bottom)
+      row = 1, -- window row position (0=top, 1=bottom)
       -- col = 0.50, -- window col position (0=left, 1=right)
       border = "none",
       backdrop = 100,
@@ -239,8 +239,8 @@ M.fzf = {
   dropdown_pick = {
     winopts = {
       height = 0.65, -- window height
-      width = 0.7,   -- window width
-      row = 1,       -- window row position (0=top, 1=bottom)
+      width = 0.7, -- window width
+      row = 1, -- window row position (0=top, 1=bottom)
       -- col = 0, -- window col position (0=left, 1=right)
       border = "none",
       backdrop = 100,
@@ -256,9 +256,9 @@ M.fzf = {
   ivy = {
     winopts = {
       height = 0.35, -- window height
-      width = 1,     -- window width
-      row = 1,       -- window row position (0=top, 1=bottom)
-      col = 0,       -- window col position (0=left, 1=right)
+      width = 1, -- window width
+      row = 1, -- window row position (0=top, 1=bottom)
+      col = 0, -- window col position (0=left, 1=right)
       border = vim.g.bordered and "rounded" or "none",
       backdrop = 100,
       preview = {
@@ -274,7 +274,7 @@ M.fzf = {
     winopts = {
       height = 0.4, -- window height
       -- width = 0.7, -- window width
-      row = 1,      -- window row position (0=top, 1=bottom)
+      row = 1, -- window row position (0=top, 1=bottom)
       -- col = 0, -- window col position (0=left, 1=right)
       border = vim.g.bordered and "rounded" or "none",
       backdrop = 100,

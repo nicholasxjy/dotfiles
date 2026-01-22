@@ -61,7 +61,7 @@ return {
       },
     })
     capabilities =
-      vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities(capabilities, true))
+        vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities(capabilities, true))
 
     vim.lsp.config("*", {
       capabilities = capabilities,
@@ -70,7 +70,7 @@ return {
     vim.lsp.enable({
       "lua_ls",
       -- "emmylua_ls",
-
+      "copilot",
       "bashls",
 
       "dockerls",

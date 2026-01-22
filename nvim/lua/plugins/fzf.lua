@@ -58,78 +58,92 @@ return {
       debug = true,
     },
     keys = {
-      {
-        "nn",
-        function()
-          require("fzf-lua").buffers({
-            winopts = ui.fzf.mini_pick.winopts,
-            sort_lastused = true,
-            current = false,
-            previewer = false,
-          })
-        end,
-        desc = "Fzf buffers",
-        silent = true,
-      },
-      {
-        "<leader>m",
-        function()
-          require("fzf-lua").marks()
-        end,
-        desc = "Fzf marks",
-      },
-      {
-        "<leader>sw",
-        function()
-          require("fzf-lua").grep_cword()
-        end,
-        desc = "Fzf grep cword",
-        silent = true,
-      },
-      {
-        "<leader>sv",
-        function()
-          require("fzf-lua").grep_visual()
-        end,
-        desc = "Fzf grep visual",
-        silent = true,
-        mode = { "n", "v", "x" },
-      },
-      {
-        "<leader>sp",
-        function()
-          require("fzf-lua").grep_project()
-        end,
-        desc = "Fzf grep project",
-      },
-      {
-        "<leader>sg",
-        function()
-          require("fzf-lua").live_grep()
-        end,
-        desc = "Fzf grep",
-      },
-      {
-        "<leader>:",
-        function()
-          require("fzf-lua").commands()
-        end,
-        desc = "Fzf commands",
-      },
-      {
-        "<leader>r",
-        function()
-          require("fzf-lua").resume()
-        end,
-        desc = "Fzf resume",
-      },
-      {
-        "<leader>/",
-        function()
-          require("fzf-lua").blines()
-        end,
-        desc = "Fzf blines",
-      },
+      -- {
+      --   "ff",
+      --   function()
+      --     require("fzf-lua").global({
+      --       git_icons = true,
+      --       file_icons = true,
+      --       color_icons = true,
+      --       winopts = ui.fzf.mini_pick.winopts,
+      --       previewer = false,
+      --     })
+      --   end,
+      --   desc = "Fzf global",
+      --   silent = true
+      -- },
+      -- {
+      --   "nn",
+      --   function()
+      --     require("fzf-lua").buffers({
+      --       winopts = ui.fzf.mini_pick.winopts,
+      --       sort_lastused = true,
+      --       current = false,
+      --       previewer = false,
+      --     })
+      --   end,
+      --   desc = "Fzf buffers",
+      --   silent = true,
+      -- },
+      -- {
+      --   "<leader>m",
+      --   function()
+      --     require("fzf-lua").marks()
+      --   end,
+      --   desc = "Fzf marks",
+      -- },
+      -- {
+      --   "<leader>sw",
+      --   function()
+      --     require("fzf-lua").grep_cword()
+      --   end,
+      --   desc = "Fzf grep cword",
+      --   silent = true,
+      -- },
+      -- {
+      --   "<leader>sv",
+      --   function()
+      --     require("fzf-lua").grep_visual()
+      --   end,
+      --   desc = "Fzf grep visual",
+      --   silent = true,
+      --   mode = { "n", "v", "x" },
+      -- },
+      -- {
+      --   "<leader>sp",
+      --   function()
+      --     require("fzf-lua").grep_project()
+      --   end,
+      --   desc = "Fzf grep project",
+      -- },
+      -- {
+      --   "<leader>sg",
+      --   function()
+      --     require("fzf-lua").live_grep()
+      --   end,
+      --   desc = "Fzf grep",
+      -- },
+      -- {
+      --   "<leader>:",
+      --   function()
+      --     require("fzf-lua").commands()
+      --   end,
+      --   desc = "Fzf commands",
+      -- },
+      -- {
+      --   "<leader>r",
+      --   function()
+      --     require("fzf-lua").resume()
+      --   end,
+      --   desc = "Fzf resume",
+      -- },
+      -- {
+      --   "<leader>/",
+      --   function()
+      --     require("fzf-lua").blines()
+      --   end,
+      --   desc = "Fzf blines",
+      -- },
       {
         "<leader>fb",
         function()

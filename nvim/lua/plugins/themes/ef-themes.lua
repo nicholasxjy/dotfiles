@@ -2,7 +2,7 @@ return {
   "oonamo/ef-themes.nvim",
   opts = {
     light = "ef-trio-light",
-    dark = "ef-trio-dark",
+    dark = "ef-tint",
     transparent = vim.g.transparent,
     styles = {
       comments = { italic = true },
@@ -29,14 +29,13 @@ return {
     },
 
     on_colors = function(colors)
-      colors.bg_main = "#101825"
-      -- colors.bg_dim = "#0F1522"
-      colors.bg_dim = "#1A283F"
+      -- colors.bg_main = "#24283b"
+      -- colors.bg_dim = "#292e42"
+      -- colors.bg_alt = "#1f2335"
 
-      -- colors.bg_alt = "#172328" -- "#0F1522"
-      -- -- colors.bg_active = "#534A3F"
-      -- colors.bg_inactive = "#2A3F46" --"#22385C"
-
+      colors.bg_main = "#222436"
+      colors.bg_dim = "#2f334d"
+      colors.bg_alt = "#1e2030"
       -- colors.fg_main = "#E8E5DA"
       -- colors.fg_dim = "#B3BAC7"
       colors.fg_dim = "#4D5566"
@@ -47,13 +46,15 @@ return {
       return {
 
         PmenuMatchSel = { fg = colors.accent_0, bold = true },
-        PmenuSel = { fg = "#2D2D3D", bg = "#EDE8AF" },
+        PmenuSel = { fg = "#2D2D3D", bg = "#00F7FF" },
 
+        FloatTitle = { fg = "#3AACFD", bold = true },
+        FloatBorder = { fg = "#3338A0", bg = colors.bg_main },
         NormalFloat = { bg = vim.g.bordered and colors.bg_main or colors.bg_dim },
         -- PmenuSel = { bg = "#335668" }, --#2B4A46 --#5A3824 --#5A324B --#335668
         Comment = { fg = "#4D5566", italic = true },
-        MatchParenCur = { fg = "#4FA035", bg = "#5A3824", bold = true },
-        MatchParen = { fg = "#CC5959", bg = "#5A3824", bold = true },
+        MatchParenCur = { bg = "#5A3824", bold = true },
+        MatchParen = { bg = "#5A3824", bold = true },
         BlinkPairsMatchParen = { link = "MatchParen" },
 
         DiagnosticDeprecated = { bg = colors.bg_info, sp = colors.info, strikethrough = true },
@@ -73,29 +74,31 @@ return {
 
         lessClass = { fg = colors.accent_0 },
         ["@operator"] = { fg = "#807C37", bold = true },
-        ["@punctuation.delimiter"] = { fg = "#807C37", bold = false },
+        ["@punctuation.delimiter"] = { fg = "#A39B8E", bold = false },
 
-        ["@property"] = { link = "@variable.member" },
-        ["@keyword.import"] = { fg = "#6AECE1", bold = true },
+        -- ["@property"] = { link = "@variable.member" },
+        -- ["@keyword.import"] = { fg = "#56DFCF", bold = true, italic = true },
+        ["@keyword.import"] = { fg = "#00CAFF", bold = true, italic = true },
+        ["@keyword.export"] = { link = "@keyword.import" },
+
         -- ["@keyword.export"] = { fg = "#34CB7D", bold = true },
-        ["@keyword.export"] = { fg = "#6AECE1", bold = true },
+        -- ["@keyword.export"] = { fg = "#6AECE1", bold = true },
         ["@lsp.type.interface"] = { fg = "#B37800", bold = true },
         ["@lsp.type.enum"] = { fg = "#33CCCC", bold = true, italic = false },
         ["@lsp.type.enumMember"] = { fg = "#61BB4D", bold = true, italic = false },
         ["@lsp.typemod.enum"] = { fg = "#33CCCC", bold = true, italic = false },
         ["@lsp.typemod.enumMember"] = { fg = "#61BB4D", bold = true, italic = false },
 
-        FloatTitle = { fg = "#3AACFD", bold = true },
-        FloatBorder = { fg = colors.accent_0, bg = colors.bg_main },
-
+        SnacksPicker = { bg = colors.bg_dim },
+        SnacksPickerPrompt = { fg = colors.cyan_cooler, bold = true },
         SnacksPickerTitle = { link = "FloatTitle" },
         SnacksPickerInputTitle = { fg = "#68C0B6", bold = true },
         SnacksPickerPreviewTitle = { fg = "#3AACFD", bold = true },
         SnacksPickerPreview = { bg = colors.bg_main },
-        SnacksPickerInputBorder = { fg = colors.accent_0, bg = colors.bg_main },
-        SnacksPickerInput = { fg = colors.yellow, bg = colors.bg_main, bold = true },
-        SnacksPickerMatch = { fg = colors.accent_0, bold = true, reverse = true },
-        SnacksPickerListCursorLine = { bg = "#4D4528", bold = true },
+        SnacksPickerInputBorder = { fg = colors.accent_0, bg = colors.bg_dim },
+        SnacksPickerInput = { fg = colors.yellow, bg = colors.bg_dim, bold = true },
+        SnacksPickerMatch = { fg = colors.accent_1, bold = true, reverse = true },
+        -- SnacksPickerListCursorLine = { bg = "#4D4528", bold = true },
 
         FzfLuaTitle = { link = "FloatTitle" },
         FzfLuaPreviewTitle = { link = "SnacksPickerPreviewTitle" },
