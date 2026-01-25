@@ -3,27 +3,45 @@ return {
   {
     "folke/persistence.nvim",
     event = "BufReadPre",
-    opts = {
-      dir = vim.fn.stdpath("state") .. "/sessions/", -- directory where session files are saved
-      need = 0,
-      branch = true,                                 -- use git branch to save session
+    keys = {
+      {
+        "<leader>S",
+        function()
+          require("persistence").select()
+        end,
+        desc = "Select Session",
+      },
     },
+    opts = {
+      dir = vim.fn.stdpath("state") .. "/sessions/",
+      need = 1,
+      branch = true,
+    },
+    config = function(_, opts)
+      local ps = require("persistence")
+      ps.setup(opts)
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "PersistenceSavePost",
+        callback = function()
+          local session = vim.fn.sha256(ps.current(opts)):sub(1, 10)
+          Dart.write_session(session)
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "PersistenceLoadPost",
+        callback = function()
+          local session = vim.fn.sha256(ps.current(opts)):sub(1, 10)
+          Dart.read_session(session)
+        end,
+      })
+    end,
   },
   {
     "folke/ts-comments.nvim",
     opts = {},
     event = "VeryLazy",
-  },
-  {
-    "max397574/better-escape.nvim",
-    event = "VeryLazy",
-    opts = {
-      timeout = 300,
-      default_mappings = false,
-      mappings = {
-        i = { j = { k = "<Esc>", j = "<Esc>" } },
-      },
-    },
   },
   {
     "gen740/SmoothCursor.nvim",
@@ -65,25 +83,6 @@ return {
     config = true,
     opts = {
       highlight = { link = "LineNr" },
-    },
-  },
-  {
-    "lukas-reineke/virt-column.nvim",
-    event = "VeryLazy",
-    enabled = false,
-    opts = {
-      -- char = "|",
-      -- char = "",
-      -- char = "┇",
-      -- char = "∶",
-      -- char = "∷",
-      -- char = "║",
-      -- char = "⋮",
-      -- char = "",
-      char = "╿",
-      -- char = "󰮾",
-      virtcolumn = "80",
-      highlight = "LineNr",
     },
   },
   {

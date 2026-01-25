@@ -29,48 +29,66 @@ return {
     },
 
     on_colors = function(colors)
-      -- colors.bg_main = "#24283b"
-      -- colors.bg_dim = "#292e42"
-      -- colors.bg_alt = "#1f2335"
-
-      colors.bg_main = "#222436"
-      colors.bg_dim = "#2f334d"
-      colors.bg_alt = "#1e2030"
-      -- colors.fg_main = "#E8E5DA"
-      -- colors.fg_dim = "#B3BAC7"
-      colors.fg_dim = "#4D5566"
-      -- colors.fg_alt = "#EDE8AF"
+      -- colors.bg_main = "#333c43"
+      -- colors.bg_alt = "#3a464c"
+      -- colors.bg_dim = "#434f55"
+      -- colors.bg_inactive = "#293136"
+      -- colors.fg_main = "#d3c6aa"
+      -- colors.fg_dim = "#7a8478"
+      -- colors.fg_comment = "#A39B8E"
+      -- colors.bg_hl_line = "#4e4953"
+      -- colors.bg_completion = "#55544a"
+      --
+      colors.bg_main = "#32302f"
+      colors.bg_dim = "#3c3836"
+      colors.bg_alt = "#252423"
+      colors.bg_inactive = "#504945"
+      colors.fg_main = "#d4be98"
+      colors.fg_dim = "#928374"
+      colors.fg_comment = "#7c6f64"
+      colors.bg_hl_line = "#543937"
+      colors.bg_completion = "#574833"
+      colors.cursor = "#6AECE1"
     end,
 
     on_highlights = function(_, colors, _)
       return {
-
         PmenuMatchSel = { fg = colors.accent_0, bold = true },
-        PmenuSel = { fg = "#2D2D3D", bg = "#00F7FF" },
+        -- PmenuSel = { fg = colors.bg_alt, bg = "#00F7FF" },
+        PmenuSel = { fg = colors.bg_inactive, bg = colors.fg_main },
 
         FloatTitle = { fg = "#3AACFD", bold = true },
-        FloatBorder = { fg = "#3338A0", bg = colors.bg_main },
+        FloatBorder = { fg = colors.accent_0, bg = colors.bg_main },
         NormalFloat = { bg = vim.g.bordered and colors.bg_main or colors.bg_dim },
-        -- PmenuSel = { bg = "#335668" }, --#2B4A46 --#5A3824 --#5A324B --#335668
-        Comment = { fg = "#4D5566", italic = true },
-        MatchParenCur = { bg = "#5A3824", bold = true },
-        MatchParen = { bg = "#5A3824", bold = true },
+        Comment = { fg = colors.fg_comment, italic = true },
+        MatchParenCur = { bg = "#5A3824", bold = true, underline = true },
+        MatchParen = { bg = "#5A3824", bold = true, underline = true },
         BlinkPairsMatchParen = { link = "MatchParen" },
+
+        LspReferenceRead = { bg = colors.bg_dim, bold = true }, -- used for highlighting "read" references
+        LspReferenceText = { bg = colors.bg_dim, bold = true }, -- used for highlighting "text" references
+        LspReferenceWrite = { bg = colors.bg_dim, bold = true }, -- used for highlighting "write" references
 
         DiagnosticDeprecated = { bg = colors.bg_info, sp = colors.info, strikethrough = true },
         WhichKeyNormal = { bg = colors.bg_main },
         WhichKeyGroup = { fg = colors.blue, bold = true },
-        DartVisible = { fg = colors.fg_dim },
-        DartVisibleLabel = { fg = colors.fg_dim },
+
+        DartMarked = { fg = colors.fg_dim, bg = colors.bg_main },
+        DartMarkedLabel = { fg = colors.accent_2, bg = "NONE" },
+        DartVisible = { fg = colors.fg_dim, bg = colors.bg_main },
+        DartMarkedModified = { fg = colors.fg_changed, bg = colors.bg_changed, bold = true },
+        DartMarkedLabelModified = { link = "DartMarkedLabel" },
 
         MiniFilesNormal = { bg = colors.bg_main },
         MiniTablineFill = { bg = colors.bg_main },
-        MiniTablineCurrent = { fg = colors.fg_alt, bg = colors.bg_info, bold = true },
-        MiniTablineHidden = { fg = colors.fg_dim, bg = colors.bg_main },
-        MiniTablineModifiedCurrent = { fg = colors.warning, bg = colors.bg_warning, bold = true },
+        MiniTablineCurrent = { fg = colors.fg_alt, bg = colors.bg_hover, bold = true },
+        MiniTablineModifiedCurrent = { fg = colors.fg_changed, bg = colors.bg_changed, bold = true },
+        MiniTablineModifiedVisible = { link = "MiniTablineModifiedCurrent" },
 
         NoiceCmdlinePopupBorder = { link = "FloatBorder" },
         NoiceCmdlinePopupBorderSearch = { link = "FloatBorder" },
+
+        RenderMarkdownCode = { bg = colors.bg_alt },
 
         lessClass = { fg = colors.accent_0 },
         ["@operator"] = { fg = "#807C37", bold = true },
@@ -78,7 +96,8 @@ return {
 
         -- ["@property"] = { link = "@variable.member" },
         -- ["@keyword.import"] = { fg = "#56DFCF", bold = true, italic = true },
-        ["@keyword.import"] = { fg = "#00CAFF", bold = true, italic = true },
+        -- ["@keyword.import"] = { fg = "#00CAFF", bold = true, italic = true },
+        ["@keyword.import"] = { fg = "#34CB7D", bold = true, italic = true },
         ["@keyword.export"] = { link = "@keyword.import" },
 
         -- ["@keyword.export"] = { fg = "#34CB7D", bold = true },
@@ -97,11 +116,12 @@ return {
         SnacksPickerPreview = { bg = colors.bg_main },
         SnacksPickerInputBorder = { fg = colors.accent_0, bg = colors.bg_dim },
         SnacksPickerInput = { fg = colors.yellow, bg = colors.bg_dim, bold = true },
-        SnacksPickerMatch = { fg = colors.accent_1, bold = true, reverse = true },
-        -- SnacksPickerListCursorLine = { bg = "#4D4528", bold = true },
+        SnacksPickerMatch = { fg = colors.accent_2, bold = true, reverse = true },
+        SnacksPickerListCursorLine = { bg = colors.bg_hl_line, bold = true },
 
         FzfLuaTitle = { link = "FloatTitle" },
         FzfLuaPreviewTitle = { link = "SnacksPickerPreviewTitle" },
+        FzfLuaMatch = { link = "SnacksPickerMatch" },
 
         BlinkCmpSource = { fg = colors.fg_dim, bold = true },
         BlinkCmpMenu = { bg = vim.g.bordered and colors.bg_main or colors.bg_dim },
@@ -111,9 +131,9 @@ return {
         BlinkCmpDocBorder = { link = "BlinkCmpMenuBorder" },
         BlinkCmpSignatureHelp = { link = "BlinkCmpMenu" },
         BlinkCmpSignatureHelpBorder = { link = "BlinkCmpMenuBorder" },
-        BlinkCmpKindProperty = { fg = "#7FBB82" },
-        BlinkCmpKindText = { fg = "#8890A5" },
-        BlinkCmpKindSnippet = { fg = "#736FDF", italic = true },
+        BlinkCmpKindProperty = { fg = colors.green_cooler },
+        BlinkCmpKindText = { fg = colors.fg_dim },
+        BlinkCmpKindSnippet = { fg = colors.magenta_cooler },
 
         BlinkPairsRed = { link = "RainbowDelimiterRed" },
         BlinkPairsOrange = { link = "RainbowDelimiterOrange" },

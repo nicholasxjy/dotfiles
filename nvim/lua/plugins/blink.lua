@@ -1,3 +1,5 @@
+local ui = require("core.ui")
+
 return {
   {
     "L3MON4D3/LuaSnip",
@@ -29,10 +31,11 @@ return {
         config = function()
           require("lspkind").init({
             preset = "codicons",
+            symbol_map = ui.icons.codicons,
           })
         end,
       },
-      { "xzbdmw/colorful-menu.nvim", opts = { max_width = 40 } },
+      -- { "xzbdmw/colorful-menu.nvim", opts = { max_width = 40 } },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -97,18 +100,18 @@ return {
               columns = {
                 { "label", gap = 1 },
                 { "kind_icon", "kind", gap = 1 },
-                { "source_name", gap = 2 },
+                -- { "source_name", gap = 2 },
               },
-              -- treesitter = { "lsp" },
+              treesitter = { "lsp" },
               components = {
-                label = {
-                  text = function(ctx)
-                    return require("colorful-menu").blink_components_text(ctx)
-                  end,
-                  highlight = function(ctx)
-                    return require("colorful-menu").blink_components_highlight(ctx)
-                  end,
-                },
+                -- label = {
+                --   text = function(ctx)
+                --     return require("colorful-menu").blink_components_text(ctx)
+                --   end,
+                --   highlight = function(ctx)
+                --     return require("colorful-menu").blink_components_highlight(ctx)
+                --   end,
+                -- },
                 kind_icon = {
                   text = function(ctx)
                     if ctx.source_name ~= "Path" then

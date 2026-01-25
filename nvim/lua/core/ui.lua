@@ -1,6 +1,6 @@
 local M = {}
 M.mode_colors = {
-  bg = "#000000",
+  bg = "#3c3836", -- "#000000",
   copy = "#f1ff5e",
   delete = "#ff6e5e",
   change = "#ff6e5e", -- Optional param, defaults to delete
@@ -56,7 +56,7 @@ M.layout = {
         border = "none",
         title = "{title} {live} {flags}",
         title_pos = "center",
-        { win = "input", height = 1, border = "hpad" },
+        { win = "input", height = 2, border = "hpad" },
         { win = "list", border = "none" },
       },
     },
@@ -211,9 +211,9 @@ M.layout = {
 M.fzf = {
   mini_pick = {
     winopts = {
-      height = 0.5, -- window height
-      width = 0.6, -- window width
-      row = 0.9, -- window row position (0=top, 1=bottom)
+      height = 0.4, -- window height
+      width = 0.65, -- window width
+      row = 0.95, -- window row position (0=top, 1=bottom)
       -- col = 0.50, -- window col position (0=left, 1=right)
       border = "none",
       backdrop = 100,

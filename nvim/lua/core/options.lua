@@ -5,11 +5,10 @@ vim.g.inlay_hints = true
 vim.g.codelens = true
 vim.g.copilot_enabled = true
 
-vim.g.kind_icons = "mini"
 vim.g.picker = "snacks"
 
 vim.g.transparent = false
-vim.g.bordered = true
+vim.g.bordered = false
 vim.o.winborder = "rounded"
 vim.o.background = "dark"
 

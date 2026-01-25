@@ -14,8 +14,8 @@ return {
       },
       winopts = {
         height = 1, -- window height
-        width = 1,  -- window width
-        row = 1,    -- window row position (0=top, 1=bottom)
+        width = 1, -- window width
+        row = 1, -- window row position (0=top, 1=bottom)
         -- col = 0.2,
         border = "none",
         backdrop = 90,
@@ -35,11 +35,16 @@ return {
         formatter = "path.filename_first",
       },
       oldfiles = {
+        git_icons = true,
+        file_icons = true,
+        color_icons = true,
         formatter = "path.filename_first",
       },
       buffers = {
         formatter = "path.filename_first",
+        git_icons = true,
         file_icons = true,
+        color_icons = true,
       },
       lsp = {
         symbols = {
@@ -52,12 +57,27 @@ return {
         git_icons = true,
       },
       grep = {
-        file_icons = true,
         git_icons = true,
+        file_icons = true,
+        color_icons = true,
       },
       debug = true,
     },
     keys = {
+      -- {
+      --   "<leader>r",
+      --   function()
+      --     require("fzf-lua").resume()
+      --   end,
+      --   desc = "Fzf resume",
+      -- },
+      -- {
+      --   "<leader>/",
+      --   function()
+      --     require("fzf-lua").blines()
+      --   end,
+      --   desc = "Fzf blines",
+      -- },
       -- {
       --   "ff",
       --   function()
@@ -70,7 +90,7 @@ return {
       --     })
       --   end,
       --   desc = "Fzf global",
-      --   silent = true
+      --   silent = true,
       -- },
       -- {
       --   "nn",
@@ -123,27 +143,13 @@ return {
       --   end,
       --   desc = "Fzf grep",
       -- },
-      -- {
-      --   "<leader>:",
-      --   function()
-      --     require("fzf-lua").commands()
-      --   end,
-      --   desc = "Fzf commands",
-      -- },
-      -- {
-      --   "<leader>r",
-      --   function()
-      --     require("fzf-lua").resume()
-      --   end,
-      --   desc = "Fzf resume",
-      -- },
-      -- {
-      --   "<leader>/",
-      --   function()
-      --     require("fzf-lua").blines()
-      --   end,
-      --   desc = "Fzf blines",
-      -- },
+      {
+        "<leader>:",
+        function()
+          require("fzf-lua").commands()
+        end,
+        desc = "Fzf commands",
+      },
       {
         "<leader>fb",
         function()

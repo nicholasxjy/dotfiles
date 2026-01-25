@@ -93,7 +93,7 @@ end
 
 local function diagnostics_buffer()
   if is_fzf_picker then
-    fzflua.diagnostics_document()
+    fzflua.diagnostics_document({ sort = true })
   else
     Snacks.picker.diagnostics_buffer({
       prompt = "diagnostics_buffer> ",
@@ -104,7 +104,7 @@ end
 
 local function diagnostics_workspace()
   if is_fzf_picker then
-    fzflua.diagnostics_workspace()
+    fzflua.diagnostics_workspace({ sort = true })
   else
     Snacks.picker.diagnostics({
       prompt = "diagnostics_workspace> ",

@@ -42,8 +42,8 @@ return {
     },
     preset = "helix",
     win = {
-      width = { min = 30, max = 30 },
-      height = { min = 4, max = 0.85 },
+      width = { min = 20, max = 25 },
+      height = { min = 4, max = 0.8 },
       col = 0,
       -- border = "none",
       title = true,

@@ -123,7 +123,9 @@ return {
       end,
       desc = "Snacks resume",
     },
+    --
     -- search
+    --
     {
       "<leader>sw",
       function()
@@ -188,7 +190,9 @@ return {
     {
       "<leader>N",
       function()
-        Snacks.picker.notifications()
+        Snacks.picker.notifications({
+          layout = ui.layout.dropdown,
+        })
       end,
       desc = "Notifications",
     },
