@@ -176,7 +176,7 @@ M.keymap_setup = function()
 
   vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-  vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+  -- vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
   --
   vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })
   vim.keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, { desc = "Codelens Refresh" })
@@ -239,9 +239,9 @@ M.methods_setup = function(client, bufnr)
   end
 
   -- Handle textDocument/documentColor support
-  if client:supports_method(Methods.textDocument_documentColor) and vim.fn.has("nvim-0.12") == 1 then
-    vim.lsp.document_color.enable(true, bufnr, { style = "background" }) --background, foreground, virtual
-  end
+  -- if client:supports_method(Methods.textDocument_documentColor) and vim.fn.has("nvim-0.12") == 1 then
+  --   vim.lsp.document_color.enable(true, bufnr, { style = "background" }) --background, foreground, virtual
+  -- end
 
   -- enable inlay hints by default
   if client:supports_method(Methods.textDocument_inlayHints) then

@@ -20,22 +20,6 @@ return {
     config = function(_, opts)
       local ps = require("persistence")
       ps.setup(opts)
-
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "PersistenceSavePost",
-        callback = function()
-          local session = vim.fn.sha256(ps.current(opts)):sub(1, 10)
-          Dart.write_session(session)
-        end,
-      })
-
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "PersistenceLoadPost",
-        callback = function()
-          local session = vim.fn.sha256(ps.current(opts)):sub(1, 10)
-          Dart.read_session(session)
-        end,
-      })
     end,
   },
   {
@@ -148,67 +132,6 @@ return {
     end,
   },
   {
-    "tummetott/reticle.nvim",
-    event = "VeryLazy",
-    opts = {
-      on_startup = {
-        cursorline = true,
-        cursorcolumn = false,
-      },
-      disable_in_insert = true,
-      disable_in_diff = true,
-      always_highlight_number = true,
-      ignore = {
-        cursorline = {
-          "DressingInput",
-          "FTerm",
-          "NvimSeparator",
-          "NvimTree",
-          "TelescopePrompt",
-          "Trouble",
-          "snacks_picker_input",
-          "snacks_picker_list",
-          "snacks_picker_preview",
-          "snacks_dashboard",
-          "oil",
-          "lazygit",
-          "lazy",
-        },
-        cursorcolumn = {
-          "DressingInput",
-          "FTerm",
-          "NvimSeparator",
-          "NvimTree",
-          "TelescopePrompt",
-          "Trouble",
-          "snacks_picker_input",
-          "snacks_picker_list",
-          "snacks_picker_preview",
-          "snacks_dashboard",
-          "fyler",
-          "minifiles",
-          "mason",
-          "lazy",
-          "oil",
-          "lazygit",
-        },
-      },
-
-      -- Specify filetypes where the cursorline and/or cursorcolumn should be
-      -- explicitly disabled. Typically, you would include these filetypes in
-      -- the 'ignored' table. However, there are situations where plugins enable
-      -- cursorline/cursorcolumn without offering a configuration option for
-      -- disabling them. By adding these filetypes to the 'never' table, you
-      -- can override the plugin's settings and turn off these features.
-      never = {
-        cursorline = {},
-        cursorcolumn = {
-          "fyler",
-        },
-      },
-    },
-  },
-  {
     "Wansmer/treesj",
     keys = {
       {
@@ -221,5 +144,17 @@ return {
       },
     },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
+  },
+  {
+    "brenoprata10/nvim-highlight-colors",
+    event = "VeryLazy",
+    opts = {
+      render = "background",
+      -- Exclude filetypes or buftypes from highlighting e.g. 'exclude_buftypes = {'text'}'
+      exclude_filetypes = {},
+      exclude_buftypes = {},
+      -- Exclude buffer from highlighting e.g. 'exclude_buffer = function(bufnr) return vim.fn.getfsize(vim.api.nvim_buf_get_name(bufnr)) > 1000000 end'
+      exclude_buffer = function(bufnr) end,
+    },
   },
 }

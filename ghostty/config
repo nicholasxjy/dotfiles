@@ -1,7 +1,7 @@
 
 theme = glacier
 shell-integration = zsh
-shell-integration-features = no-cursor 
+shell-integration-features = no-cursor
 
 font-family = "Monolisa"
 font-family-bold = "Monolisa"

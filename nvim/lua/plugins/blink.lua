@@ -26,16 +26,7 @@ return {
       { "L3MON4D3/LuaSnip" },
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
-      {
-        "onsails/lspkind.nvim",
-        config = function()
-          require("lspkind").init({
-            preset = "codicons",
-            symbol_map = ui.icons.codicons,
-          })
-        end,
-      },
-      -- { "xzbdmw/colorful-menu.nvim", opts = { max_width = 40 } },
+      { "xzbdmw/colorful-menu.nvim", opts = { max_width = 40 } },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -79,6 +70,10 @@ return {
             border = vim.g.bordered and "rounded" or "none",
           },
         },
+        appearance = {
+          nerd_font_variant = "mono",
+          kind_icons = ui.icons.lazy_kind_icons,
+        },
         completion = {
           ghost_text = { enabled = true },
           documentation = {
@@ -96,50 +91,20 @@ return {
             scrollbar = false,
             border = vim.g.bordered and "rounded" or "none",
             draw = {
-              gap = 2,
+              -- gap = 2,
               columns = {
-                { "label", gap = 1 },
-                { "kind_icon", "kind", gap = 1 },
-                -- { "source_name", gap = 2 },
+                { "label" },
+                { "kind_icon", "kind" },
+                { "source_name" },
               },
               treesitter = { "lsp" },
               components = {
-                -- label = {
-                --   text = function(ctx)
-                --     return require("colorful-menu").blink_components_text(ctx)
-                --   end,
-                --   highlight = function(ctx)
-                --     return require("colorful-menu").blink_components_highlight(ctx)
-                --   end,
-                -- },
-                kind_icon = {
+                label = {
                   text = function(ctx)
-                    if ctx.source_name ~= "Path" then
-                      return (require("lspkind").symbol_map[ctx.kind] or "") .. ctx.icon_gap
-                    end
-
-                    local is_unknown_type =
-                      vim.tbl_contains({ "link", "socket", "fifo", "char", "block", "unknown" }, ctx.item.data.type)
-                    local mini_icon, _ = require("mini.icons").get(
-                      is_unknown_type and "os" or ctx.item.data.type,
-                      is_unknown_type and "" or ctx.label
-                    )
-
-                    return (mini_icon or ctx.kind_icon) .. ctx.icon_gap
+                    return require("colorful-menu").blink_components_text(ctx)
                   end,
-
                   highlight = function(ctx)
-                    if ctx.source_name ~= "Path" then
-                      return ctx.kind_hl
-                    end
-
-                    local is_unknown_type =
-                      vim.tbl_contains({ "link", "socket", "fifo", "char", "block", "unknown" }, ctx.item.data.type)
-                    local mini_icon, mini_hl = require("mini.icons").get(
-                      is_unknown_type and "os" or ctx.item.data.type,
-                      is_unknown_type and "" or ctx.label
-                    )
-                    return mini_icon ~= nil and mini_hl or ctx.kind_hl
+                    return require("colorful-menu").blink_components_highlight(ctx)
                   end,
                 },
                 source_name = {

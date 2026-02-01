@@ -20,6 +20,8 @@ return {
       end,
       desc = "Sidekick Toggle",
       mode = { "n", "t", "i", "x" },
+      noremap = true,
+      silent = true,
     },
     {
       "<leader>aa",
@@ -80,9 +82,16 @@ return {
     },
     cli = {
       watch = true,
+      win = {
+        layout = "float",
+        float = {
+          width = 0.8,
+          height = 0.7,
+        },
+      },
       mux = {
         backend = vim.env.ZELLIJ and "zellij" or "tmux",
-        enabled = true,
+        enabled = false,
         -- terminal: new sessions will be created for each CLI tool and shown in a Neovim terminal
         -- window: when run inside a terminal multiplexer, new sessions will be created in a new tab
         -- split: when run inside a terminal multiplexer, new sessions will be created in a new split

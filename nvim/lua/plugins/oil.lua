@@ -18,7 +18,7 @@ return {
       -- end,
     },
     confirmation = {
-      border = "single",
+      border = "rounded",
     },
     keymaps = {
       ["<Tab>"] = {

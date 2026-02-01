@@ -20,10 +20,11 @@ return {
     require("rainbow-delimiters.setup").setup({
       query = {
         [""] = "rainbow-delimiters",
-        javascript = "rainbow-delimiters",
-        typescript = "rainbow-delimiters",
-        tsx = "rainbow-delimiters",
-        typescriptreact = "rainbow-delimiters",
+        javascript = "rainbow-tags-react",
+        typescript = "rainbow-tags-react",
+        tsx = "rainbow-tags-react",
+        typescriptreact = "rainbow-tags-react",
+
         commonlisp = "rainbow-delimiters",
         scheme = "rainbow-delimiters",
         query = function(bufnr)
@@ -33,8 +34,8 @@ return {
         end,
         clojure = "rainbow-delimiters",
         html = "rainbow-delimiters",
-        lua = "rainbow-delimiters",
-        go = "rainbow-delimiters",
+        lua = "",
+        go = "",
         rust = "",
       },
     })

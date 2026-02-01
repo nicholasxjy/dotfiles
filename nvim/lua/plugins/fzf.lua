@@ -48,7 +48,7 @@ return {
       },
       lsp = {
         symbols = {
-          symbol_icons = ui.icons.codicons,
+          symbol_icons = ui.icons.lazy_kind_icons,
         },
       },
       diagnostics = {

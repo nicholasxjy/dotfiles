@@ -2,7 +2,7 @@ return {
   "oonamo/ef-themes.nvim",
   opts = {
     light = "ef-trio-light",
-    dark = "ef-tint",
+    dark = "ef-autumn",
     transparent = vim.g.transparent,
     styles = {
       comments = { italic = true },
@@ -32,33 +32,50 @@ return {
       -- colors.bg_main = "#333c43"
       -- colors.bg_alt = "#3a464c"
       -- colors.bg_dim = "#434f55"
-      -- colors.bg_inactive = "#293136"
+      -- colors.bg_inactive = "#555f66"
       -- colors.fg_main = "#d3c6aa"
       -- colors.fg_dim = "#7a8478"
       -- colors.fg_comment = "#A39B8E"
-      -- colors.bg_hl_line = "#4e4953"
+      -- colors.bg_hl_line = "#48584e" --"#59464c" "#48584e" "#3f5865" "#55544a" "#4e4953"
       -- colors.bg_completion = "#55544a"
+      -- colors.bg_match = "#3c4841" --"#493b40" "#3c4841" "#384b55"  "#45443c" "#463f48"
+      -- colors.rm_code = "#293136"
+
+      -- colors.bg_main = "#272e33"
+      -- colors.bg_alt = "#2e383c"
+      -- colors.bg_dim = "#374145"
+      -- colors.bg_inactive = "#4f5b58"
+      -- colors.fg_main = "#d3c6aa"
+      -- colors.fg_dim = "#7a8478"
+      -- colors.fg_comment = "#A39B8E"
+      -- colors.bg_hl_line = "#3c4841" --"#493b40" "#3c4841" "#384b55"  "#45443c" "#463f48"
+      -- colors.bg_completion = "#4c3743"
+      -- colors.bg_match = "#425047" --"#514045" "#425047" "#3a515d" "#4d4c43" "#4a444e"
+      -- colors.rm_code = "#1e2326"
       --
       colors.bg_main = "#32302f"
-      colors.bg_dim = "#3c3836"
-      colors.bg_alt = "#252423"
-      colors.bg_inactive = "#504945"
+      colors.bg_alt = "#3c3836"
+      colors.bg_dim = "#504945"
+      colors.bg_inactive = "#665c54"
       colors.fg_main = "#d4be98"
       colors.fg_dim = "#928374"
       colors.fg_comment = "#7c6f64"
-      colors.bg_hl_line = "#543937"
+      -- colors.bg_hl_line = "#543937"
+      colors.bg_hl_line = "#3c4841"
       colors.bg_completion = "#574833"
-      colors.cursor = "#6AECE1"
+      colors.bg_match = "#333e34" --"#333e34" --#442e2d --#473c29 --#2e3b3b --#3c333b
+      colors.rm_code = "#252423"
     end,
 
     on_highlights = function(_, colors, _)
       return {
+        CursorLine = { bg = colors.bg_hl_line, underline = true },
         PmenuMatchSel = { fg = colors.accent_0, bold = true },
         -- PmenuSel = { fg = colors.bg_alt, bg = "#00F7FF" },
         PmenuSel = { fg = colors.bg_inactive, bg = colors.fg_main },
 
         FloatTitle = { fg = "#3AACFD", bold = true },
-        FloatBorder = { fg = colors.accent_0, bg = colors.bg_main },
+        FloatBorder = { fg = colors.accent_2, bg = colors.bg_main },
         NormalFloat = { bg = vim.g.bordered and colors.bg_main or colors.bg_dim },
         Comment = { fg = colors.fg_comment, italic = true },
         MatchParenCur = { bg = "#5A3824", bold = true, underline = true },
@@ -82,13 +99,16 @@ return {
         MiniFilesNormal = { bg = colors.bg_main },
         MiniTablineFill = { bg = colors.bg_main },
         MiniTablineCurrent = { fg = colors.fg_alt, bg = colors.bg_hover, bold = true },
+        MiniTablineVisible = { fg = colors.fg_dim, bg = colors.bg_main },
+        MiniTablineHidden = { fg = colors.fg_dim, bg = colors.bg_main },
         MiniTablineModifiedCurrent = { fg = colors.fg_changed, bg = colors.bg_changed, bold = true },
         MiniTablineModifiedVisible = { link = "MiniTablineModifiedCurrent" },
+        MiniTablineModifiedHidden = { link = "MiniTablineModifiedCurrent" },
 
         NoiceCmdlinePopupBorder = { link = "FloatBorder" },
         NoiceCmdlinePopupBorderSearch = { link = "FloatBorder" },
 
-        RenderMarkdownCode = { bg = colors.bg_alt },
+        RenderMarkdownCode = { bg = colors.rm_code },
 
         lessClass = { fg = colors.accent_0 },
         ["@operator"] = { fg = "#807C37", bold = true },
@@ -96,8 +116,9 @@ return {
 
         -- ["@property"] = { link = "@variable.member" },
         -- ["@keyword.import"] = { fg = "#56DFCF", bold = true, italic = true },
-        -- ["@keyword.import"] = { fg = "#00CAFF", bold = true, italic = true },
-        ["@keyword.import"] = { fg = "#34CB7D", bold = true, italic = true },
+        ["@keyword.import"] = { fg = "#00CAFF", bold = true, italic = true },
+        -- ["@keyword.import"] = { fg = "#34CB7D", bold = true, italic = true },
+        -- ["@keyword.import"] = { fg = "#71B8FF", bold = true, italic = true },
         ["@keyword.export"] = { link = "@keyword.import" },
 
         -- ["@keyword.export"] = { fg = "#34CB7D", bold = true },
@@ -114,9 +135,11 @@ return {
         SnacksPickerInputTitle = { fg = "#68C0B6", bold = true },
         SnacksPickerPreviewTitle = { fg = "#3AACFD", bold = true },
         SnacksPickerPreview = { bg = colors.bg_main },
-        SnacksPickerInputBorder = { fg = colors.accent_0, bg = colors.bg_dim },
-        SnacksPickerInput = { fg = colors.yellow, bg = colors.bg_dim, bold = true },
-        SnacksPickerMatch = { fg = colors.accent_2, bold = true, reverse = true },
+
+        SnacksPickerInput = { fg = colors.accent_3, bg = colors.bg_dim, bold = true },
+        SnacksPickerInputBorder = { fg = colors.accent_2, bg = colors.bg_dim },
+
+        SnacksPickerMatch = { fg = colors.accent_2, bg = colors.bg_match, bold = true },
         SnacksPickerListCursorLine = { bg = colors.bg_hl_line, bold = true },
 
         FzfLuaTitle = { link = "FloatTitle" },
@@ -125,8 +148,8 @@ return {
 
         BlinkCmpSource = { fg = colors.fg_dim, bold = true },
         BlinkCmpMenu = { bg = vim.g.bordered and colors.bg_main or colors.bg_dim },
-        BlinkCmpLabelMatch = { fg = colors.accent_0, bg = "NONE", bold = true },
-        BlinkCmpMenuBorder = { fg = colors.accent_0, bg = colors.bg_main },
+        BlinkCmpLabelMatch = { fg = colors.accent_2, bg = "NONE", bold = true },
+        BlinkCmpMenuBorder = { fg = colors.accent_2, bg = colors.bg_main },
         BlinkCmpDoc = { link = "BlinkCmpMenu" },
         BlinkCmpDocBorder = { link = "BlinkCmpMenuBorder" },
         BlinkCmpSignatureHelp = { link = "BlinkCmpMenu" },

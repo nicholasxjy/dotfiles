@@ -17,7 +17,7 @@ return {
       },
       formatters = {
         file = {
-          filename_first = false,
+          filename_first = true,
           truncate = "center",
           git_status_hl = true,
         },
@@ -51,7 +51,7 @@ return {
           },
         },
       },
-      icons = { kinds = ui.icons.codicons },
+      icons = { kinds = ui.icons.lazy_kind_icons },
       debug = {
         scores = false,
       },

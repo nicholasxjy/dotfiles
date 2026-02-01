@@ -23,7 +23,7 @@ return {
           },
         },
         scope = {
-          enabled = false,
+          enabled = true,
           -- char = "",
           char = "║",
           -- char = "┊",
@@ -40,7 +40,7 @@ return {
           },
         },
         chunk = {
-          enabled = true,
+          enabled = false,
           char = {
             -- corner_top = "┌",
             -- corner_bottom = "└",
@@ -48,7 +48,8 @@ return {
             corner_bottom = "╰",
             horizontal = "─",
             vertical = "│",
-            arrow = "",
+            arrow = ">",
+            -- arrow = "",
           },
           only_current = true,
           hl = {
