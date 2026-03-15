@@ -18,7 +18,7 @@ return {
   },
   {
     "mrcjkb/rustaceanvim",
-    version = "^7",
+    version = "^8",
     ft = { "rust" },
     opts = {
       tools = {

@@ -45,8 +45,8 @@ return {
       lualine_c = {
         { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
         { "filename", path = 4 },
-        -- { "diagnostics", sources = { "nvim_workspace_diagnostic" } },
-        { "diagnostics" },
+        { "diagnostics", sources = { "nvim_workspace_diagnostic" } },
+        -- { "diagnostics" },
       },
       lualine_x = {
         { "macro" },

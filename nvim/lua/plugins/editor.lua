@@ -28,40 +28,6 @@ return {
     event = "VeryLazy",
   },
   {
-    "gen740/SmoothCursor.nvim",
-    lazy = false,
-    opts = {
-      type = "default",
-      autostart = true,
-      fancy = {
-        enable = true,
-        head = { cursor = "▷", texthl = "SmoothCursor", linehl = nil }, -- ▷
-        body = {
-          { cursor = "󰝥", texthl = "SmoothCursorRed" },
-          { cursor = "󰝥", texthl = "SmoothCursorOrange" },
-          { cursor = "●", texthl = "SmoothCursorYellow" },
-          { cursor = "●", texthl = "SmoothCursorGreen" },
-          { cursor = "•", texthl = "SmoothCursorAqua" },
-          { cursor = ".", texthl = "SmoothCursorBlue" },
-          { cursor = ".", texthl = "SmoothCursorPurple" },
-        },
-        tail = { cursor = nil, texthl = "SmoothCursor" },
-      },
-      enabled_filetypes = nil,
-      disabled_filetypes = {
-        "render-markdown",
-        "CodeCompanion",
-        "oil",
-        "snacks_picker_input",
-        "snacks_picker_list",
-        "fzf",
-      },
-    },
-    config = function(_, opts)
-      require("smoothcursor").setup(opts)
-    end,
-  },
-  {
     "mcauley-penney/visual-whitespace.nvim",
     event = "VeryLazy",
     config = true,
@@ -95,13 +61,6 @@ return {
     },
   },
   {
-    "arnamak/stay-centered.nvim",
-    lazy = false,
-    opts = {
-      skip_filetypes = {},
-    },
-  },
-  {
     "mvllow/modes.nvim",
     event = "VeryLazy",
     config = function()
@@ -116,7 +75,7 @@ return {
 
         -- Enable cursorline initially, and disable cursorline for inactive windows
         -- or ignored filetypes
-        set_cursorline = true,
+        set_cursorline = false,
 
         -- Enable line number highlights to match cursorline
         set_number = true,
@@ -144,17 +103,5 @@ return {
       },
     },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
-  },
-  {
-    "brenoprata10/nvim-highlight-colors",
-    event = "VeryLazy",
-    opts = {
-      render = "background",
-      -- Exclude filetypes or buftypes from highlighting e.g. 'exclude_buftypes = {'text'}'
-      exclude_filetypes = {},
-      exclude_buftypes = {},
-      -- Exclude buffer from highlighting e.g. 'exclude_buffer = function(bufnr) return vim.fn.getfsize(vim.api.nvim_buf_get_name(bufnr)) > 1000000 end'
-      exclude_buffer = function(bufnr) end,
-    },
   },
 }

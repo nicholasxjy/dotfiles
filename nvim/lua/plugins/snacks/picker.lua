@@ -9,6 +9,7 @@ return {
       ui_select = true,
       layout = {
         cycle = false,
+        preset = "ivy_split",
       },
       matcher = {
         cwd_bonus = true,
@@ -51,7 +52,7 @@ return {
           },
         },
       },
-      icons = { kinds = ui.icons.lazy_kind_icons },
+      icons = { kinds = ui.icons.mini_kind_icons },
       debug = {
         scores = false,
       },
@@ -61,34 +62,35 @@ return {
     {
       "<leader>E",
       function()
-        Snacks.explorer({ layout = ui.layout.right })
+        Snacks.explorer()
       end,
       desc = "Snacks explorer",
     },
     {
-      "<leader>/",
+      "<leader>r",
       function()
-        Snacks.picker.lines()
+        Snacks.picker.resume()
       end,
-      desc = "Snacks blines",
-      silent = true,
+      desc = "Snacks resume",
     },
     {
-      "<leader>m",
+      "<leader><space>",
       function()
-        Snacks.picker.marks({ layout = ui.layout.dropdown })
+        Snacks.picker.smart({
+          hidden = true,
+          filter = { cwd = true },
+        })
       end,
-      desc = "Snacks marks",
+      desc = "Snacks smart",
       silent = true,
     },
     {
       "ff",
       function()
         Snacks.picker.smart({
-          prompt = "Smart> ",
           hidden = true,
           filter = { cwd = true },
-          layout = ui.layout.vscode,
+          layout = { preset = "vscode" },
         })
       end,
       desc = "Snacks smart",
@@ -98,11 +100,9 @@ return {
       "nn",
       function()
         Snacks.picker.buffers({
-          prompt = "Buffers> ",
-          -- focus = "list",
           sort_lastused = true,
           current = false,
-          layout = ui.layout.vscode,
+          layout = { preset = "vscode" },
           win = {
             input = {
               keys = {
@@ -117,21 +117,9 @@ return {
       silent = true,
     },
     {
-      "<leader>r",
-      function()
-        Snacks.picker.resume({ layout = ui.layout.dropdown })
-      end,
-      desc = "Snacks resume",
-    },
-    --
-    -- search
-    --
-    {
       "<leader>sw",
       function()
         Snacks.picker.grep_word({
-          prompt = "| Grep word> ",
-          layout = ui.layout.dropdown,
           filter = { cwd = true },
         })
       end,
@@ -142,8 +130,6 @@ return {
       "<leader>sW",
       function()
         Snacks.picker.grep_word({
-          prompt = "| Grep word> ",
-          layout = ui.layout.dropdown,
           filter = { cwd = true },
           buffers = true,
           dirs = { vim.fn.expand("%:p") }, -- current buffer
@@ -156,8 +142,6 @@ return {
       "<leader>sg",
       function()
         Snacks.picker.grep({
-          prompt = "Grep> ",
-          layout = ui.layout.dropdown,
           filter = { cwd = true },
         })
       end,
@@ -166,10 +150,7 @@ return {
     {
       "<leader>sG",
       function()
-        Snacks.picker.grep({
-          prompt = "Grep glob> ",
-          layout = ui.layout.dropdown,
-        })
+        Snacks.picker.grep()
       end,
       desc = "Snacks live grep",
     },
@@ -190,9 +171,7 @@ return {
     {
       "<leader>N",
       function()
-        Snacks.picker.notifications({
-          layout = ui.layout.dropdown,
-        })
+        Snacks.picker.notifications()
       end,
       desc = "Notifications",
     },

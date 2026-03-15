@@ -1,10 +1,17 @@
 return {
   "stevearc/oil.nvim",
+  cmd = "Oil",
+  dependencies = { { "nvim-mini/mini.icons", opts = {} } },
+  lazy = false,
+  keys = {
+    { "<leader>o", "<cmd>Oil<cr>", desc = "Open Oil File Explorer" },
+  },
   ---@module 'oil'
   ---@type oil.SetupOpts
   opts = {
     default_file_explorer = true,
     watch_for_changes = true,
+    skip_confirm_for_simple_edits = true,
     view_options = {
       show_hidden = true,
       -- is_always_hidden = function(name)
@@ -18,22 +25,11 @@ return {
       -- end,
     },
     confirmation = {
-      border = "rounded",
+      border = "single",
     },
     keymaps = {
-      ["<Tab>"] = {
-        "actions.select",
-        opts = { tab = true },
-        desc = "Open the entry in new tab",
-      },
       ["q"] = "actions.close",
       ["<Esc>"] = "actions.parent",
     },
-  },
-  cmd = "Oil",
-  dependencies = { { "nvim-mini/mini.icons", opts = {} } },
-  lazy = false,
-  keys = {
-    { "<leader>o", "<cmd>Oil<cr>", desc = "Open Oil File Explorer" },
   },
 }

@@ -1,5 +1,4 @@
 local ui = require("core.ui")
-
 return {
   {
     "L3MON4D3/LuaSnip",
@@ -26,7 +25,6 @@ return {
       { "L3MON4D3/LuaSnip" },
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
-      { "xzbdmw/colorful-menu.nvim", opts = { max_width = 40 } },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -71,8 +69,9 @@ return {
           },
         },
         appearance = {
+          use_nvim_cmp_as_default = false,
           nerd_font_variant = "mono",
-          kind_icons = ui.icons.lazy_kind_icons,
+          kind_icons = ui.icons.lspkind_kind_icons,
         },
         completion = {
           ghost_text = { enabled = true },
@@ -88,25 +87,24 @@ return {
           accept = { auto_brackets = { enabled = true } },
           list = { selection = { preselect = true, auto_insert = true } },
           menu = {
-            scrollbar = false,
+            scrollbar = true,
             border = vim.g.bordered and "rounded" or "none",
             draw = {
-              -- gap = 2,
-              columns = {
-                { "label" },
-                { "kind_icon", "kind" },
-                { "source_name" },
-              },
+              columns = { { "kind_icon", "label", gap = 1 }, { "kind" } },
               treesitter = { "lsp" },
               components = {
-                label = {
-                  text = function(ctx)
-                    return require("colorful-menu").blink_components_text(ctx)
-                  end,
-                  highlight = function(ctx)
-                    return require("colorful-menu").blink_components_highlight(ctx)
-                  end,
-                },
+                -- kind_icon = {
+                --   highlight = function(ctx)
+                --     local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+                --     return hl
+                --   end,
+                -- },
+                -- kind = {
+                --   highlight = function(ctx)
+                --     local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+                --     return hl
+                --   end,
+                -- },
                 source_name = {
                   text = function(ctx)
                     if ctx.source_name == "LSP" then

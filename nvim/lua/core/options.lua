@@ -3,12 +3,12 @@ vim.g.maplocalleader = " "
 vim.g.autoformat = true
 vim.g.inlay_hints = true
 vim.g.codelens = true
-vim.g.copilot_enabled = false
+vim.g.copilot_enabled = true
 
 vim.g.picker = "snacks"
 
 vim.g.transparent = false
-vim.g.bordered = true
+vim.g.bordered = false
 vim.o.winborder = "rounded"
 vim.o.background = "dark"
 
@@ -26,7 +26,7 @@ opt.mouse = "a"
 opt.undofile = true
 opt.swapfile = false
 opt.conceallevel = 1
-opt.scrolloff = 8
+opt.scrolloff = 1000
 opt.linebreak = true
 opt.showtabline = 0
 
@@ -59,4 +59,4 @@ opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
 -- views can only be fully collapsed with the global statusline
 vim.opt.laststatus = 3
 
-vim.o.statuscolumn = "%!v:lua.require('core.statuscolumn').setup()"
+-- vim.o.statuscolumn = "%!v:lua.require('core.statuscolumn').setup()"

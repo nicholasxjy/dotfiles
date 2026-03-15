@@ -1,5 +1,6 @@
 return {
   "HiPhish/rainbow-delimiters.nvim",
+  enabled = false,
   ft = {
     "html",
     "clojure",
@@ -20,10 +21,10 @@ return {
     require("rainbow-delimiters.setup").setup({
       query = {
         [""] = "rainbow-delimiters",
-        javascript = "rainbow-tags-react",
-        typescript = "rainbow-tags-react",
-        tsx = "rainbow-tags-react",
-        typescriptreact = "rainbow-tags-react",
+        javascript = "rainbow-delimiters",
+        typescript = "rainbow-delimiters",
+        tsx = "rainbow-delimiters",
+        typescriptreact = "rainbow-delimiters",
 
         commonlisp = "rainbow-delimiters",
         scheme = "rainbow-delimiters",
@@ -34,9 +35,9 @@ return {
         end,
         clojure = "rainbow-delimiters",
         html = "rainbow-delimiters",
-        lua = "",
-        go = "",
-        rust = "",
+        lua = "rainbow-delimiters",
+        go = "rainbow-delimiters",
+        rust = "rainbow-delimiters",
       },
     })
   end,

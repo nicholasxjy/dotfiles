@@ -1,4 +1,3 @@
-local ui = require("core.ui")
 local M = {}
 
 local is_fzf_picker = vim.g.picker == "fzf"
@@ -8,10 +7,7 @@ local function lsp_definitions()
   if is_fzf_picker then
     fzflua.lsp_definitions()
   else
-    Snacks.picker.lsp_definitions({
-      prompt = "lsp_definitions> ",
-      layout = ui.layout.dropdown,
-    })
+    Snacks.picker.lsp_definitions()
   end
 end
 
@@ -19,10 +15,7 @@ local function lsp_declarations()
   if is_fzf_picker then
     fzflua.lsp_declarations()
   else
-    Snacks.picker.lsp_declarations({
-      prompt = "lsp_declarations> ",
-      layout = ui.layout.dropdown,
-    })
+    Snacks.picker.lsp_declarations()
   end
 end
 
@@ -30,75 +23,59 @@ local function lsp_implementations()
   if is_fzf_picker then
     fzflua.lsp_implementations()
   else
-    Snacks.picker.lsp_implementations({
-      prompt = "lsp_implementations> ",
-      layout = ui.layout.dropdown,
-    })
+    Snacks.picker.lsp_implementations()
   end
 end
 local function lsp_references()
   if is_fzf_picker then
     fzflua.lsp_references()
   else
-    Snacks.picker.lsp_references({
-      prompt = "lsp_references> ",
-      layout = ui.layout.dropdown,
-    })
+    Snacks.picker.lsp_references()
   end
 end
 local function lsp_type_definitions()
   if is_fzf_picker then
     fzflua.lsp_typedefs()
   else
-    Snacks.picker.lsp_type_definitions({
-      prompt = "lsp_type_definitions> ",
-      layout = ui.layout.dropdown,
-    })
+    Snacks.picker.lsp_type_definitions()
   end
 end
 local function lsp_incoming_calls()
   if is_fzf_picker then
     fzflua.lsp_incoming_calls()
   else
-    Snacks.picker.lsp_incoming_calls({ layout = ui.layout.dropdown })
+    Snacks.picker.lsp_incoming_calls()
   end
 end
 local function lsp_outgoing_calls()
   if is_fzf_picker then
     fzflua.lsp_outgoing_calls()
   else
-    Snacks.picker.lsp_outgoing_calls({ layout = ui.layout.dropdown })
+    Snacks.picker.lsp_outgoing_calls()
   end
 end
 local function lsp_symbols()
-  if is_fzf_picker then
-    fzflua.lsp_document_symbols()
-  else
-    Snacks.picker.lsp_symbols({
-      prompt = "lsp_symbols> ",
-      layout = ui.layout.dropdown,
-    })
-  end
+  fzflua.lsp_document_symbols()
+  -- if is_fzf_picker then
+  --   fzflua.lsp_document_symbols()
+  -- else
+  --   Snacks.picker.lsp_symbols()
+  -- end
 end
 local function lsp_workspace_symbols()
-  if is_fzf_picker then
-    fzflua.lsp_workspace_symbols()
-  else
-    Snacks.picker.lsp_workspace_symbols({
-      prompt = "lsp_workspace_symbols> ",
-      layout = ui.layout.dropdown,
-    })
-  end
+  fzflua.lsp_workspace_symbols()
+  -- if is_fzf_picker then
+  --   fzflua.lsp_workspace_symbols()
+  -- else
+  --   Snacks.picker.lsp_workspace_symbols()
+  -- end
 end
 
 local function diagnostics_buffer()
   if is_fzf_picker then
     fzflua.diagnostics_document({ sort = true })
   else
-    Snacks.picker.diagnostics_buffer({
-      prompt = "diagnostics_buffer> ",
-      layout = ui.layout.dropdown,
-    })
+    Snacks.picker.diagnostics_buffer()
   end
 end
 
@@ -107,8 +84,6 @@ local function diagnostics_workspace()
     fzflua.diagnostics_workspace({ sort = true })
   else
     Snacks.picker.diagnostics({
-      prompt = "diagnostics_workspace> ",
-      layout = ui.layout.dropdown,
       sort = {
         fields = {
           "severity",
@@ -130,8 +105,6 @@ local function diagnostics_workspace_warns()
     })
   else
     Snacks.picker.diagnostics({
-      prompt = "diagnostics_workspace_warns> ",
-      layout = ui.layout.dropdown,
       sort = {
         fields = {
           "severity",
@@ -153,8 +126,6 @@ local function diagnostics_workspace_errors()
     })
   else
     Snacks.picker.diagnostics({
-      prompt = "lsp_workspace_errors> ",
-      layout = ui.layout.dropdown,
       sort = {
         fields = {
           "severity",
@@ -176,10 +147,10 @@ M.keymap_setup = function()
 
   vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-  -- vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+  vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
   --
   vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })
-  vim.keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, { desc = "Codelens Refresh" })
+  -- vim.keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, { desc = "Codelens Refresh" })
 
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
   vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
@@ -268,21 +239,21 @@ M.methods_setup = function(client, bufnr)
   end
 
   -- Handle textDocument/codeLens support
-  if client:supports_method(Methods.textDocument_codeLens) then
-    if vim.g.codelens then
-      vim.lsp.codelens.refresh({ bufnr = bufnr })
-    end
-    vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
-      buffer = bufnr,
-      callback = function()
-        if vim.g.codelens then
-          vim.lsp.codelens.refresh({ bufnr = bufnr })
-        else
-          vim.lsp.codelens.clear(nil, bufnr)
-        end
-      end,
-    })
-  end
+  -- if client:supports_method(Methods.textDocument_codeLens) then
+  --   if vim.g.codelens then
+  --     vim.lsp.codelens.refresh({ bufnr = bufnr })
+  --   end
+  --   vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
+  --     buffer = bufnr,
+  --     callback = function()
+  --       if vim.g.codelens then
+  --         vim.lsp.codelens.refresh({ bufnr = bufnr })
+  --       else
+  --         vim.lsp.codelens.clear(nil, bufnr)
+  --       end
+  --     end,
+  --   })
+  -- end
 
   if client and client.name == "eslint" then
     vim.api.nvim_create_autocmd("BufWritePre", {
