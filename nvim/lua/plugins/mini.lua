@@ -1,3 +1,5 @@
+local miniUtil = require("utils.mini")
+
 local function open_buf_in_split(buf_id, key_map, direction)
   local MiniFiles = require("mini.files")
 
@@ -126,8 +128,11 @@ return {
     config = function(_, opts)
       require("mini.files").setup(opts)
 
-      -- vim.api.nvim_create_autocmd("User", { pattern = "MiniFilesWindowUpdate", callback = ensure_center_layout })
-      --
+      vim.api.nvim_create_autocmd(
+        "User",
+        { pattern = "MiniFilesWindowUpdate", callback = miniUtil.ensure_center_layout }
+      )
+
       vim.api.nvim_create_autocmd("User", {
         pattern = "MiniFilesWindowOpen",
         callback = function(args)
@@ -211,30 +216,32 @@ return {
     },
   },
   {
-    "nvim-mini/mini.hues",
+    "nicholasxjy/mini.hues",
     version = false,
-    lazy = false,
-    opts = {
-      -- **Required** base colors as '#rrggbb' hex strings
-      background = "#171614",
-      foreground = "#AEA09F",
+    config = function()
+      require("mini.hues").setup({
 
-      -- Number of hues used for non-base colors
-      n_hues = 8,
+        -- **Required** base colors as '#rrggbb' hex strings
+        background = "#171614",
+        foreground = "#AEA09F",
 
-      -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
-      saturation = "lowmedium",
+        -- Number of hues used for non-base colors
+        n_hues = 8,
 
-      -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'green',
-      -- 'cyan', 'azure', 'blue', 'purple'
-      accent = "cyan",
+        -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
+        saturation = "high",
 
-      -- Plugin integrations. Use `default = false` to disable all integrations.
-      -- Also can be set per plugin (see |MiniHues.config|).
-      plugins = { default = true },
+        -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'green',
+        -- 'cyan', 'azure', 'blue', 'purple'
+        accent = "blue",
 
-      -- Whether to auto adjust highlight groups based on certain events
-      autoadjust = true,
-    },
+        -- Plugin integrations. Use `default = false` to disable all integrations.
+        -- Also can be set per plugin (see |MiniHues.config|).
+        plugins = { default = true },
+
+        -- Whether to auto adjust highlight groups based on certain events
+        autoadjust = true,
+      })
+    end,
   },
 }

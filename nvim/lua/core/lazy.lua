@@ -8,7 +8,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
-    { import = "plugins.themes" },
     { import = "plugins.snacks" },
     { import = "plugins" },
   },
@@ -18,7 +17,7 @@ require("lazy").setup({
   },
   install = {
     missing = true,
-    colorscheme = { "randomhue", "ef-theme" },
+    colorscheme = { "randomhue" },
   },
   checker = { enabled = true },
   ui = {

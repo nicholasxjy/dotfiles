@@ -4,7 +4,7 @@ return {
   opts = {
     matchparen = {
       enabled = 1,
-      hi_background = 1,
+      hi_background = 0,
       hi_surround_always = 1,
       offscreen = {
         method = "status",

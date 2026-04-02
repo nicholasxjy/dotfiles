@@ -19,6 +19,7 @@ unmap("n", "grr")
 unmap("n", "gra")
 unmap("n", "grn")
 unmap("n", "grt")
+unmap("n", "grx")
 
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true })

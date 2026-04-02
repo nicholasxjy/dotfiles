@@ -18,21 +18,21 @@ return {
         file_icons = true,
         color_icons = true,
       },
-      -- winopts = {
-      --   height = 1, -- window height
-      --   width = 1, -- window width
-      --   row = 1, -- window row position (0=top, 1=bottom)
-      --   -- col = 0.2,
-      --   border = "none",
-      --   backdrop = 70,
-      --   preview = {
-      --     border = "none",
-      --     wrap = true,
-      --     hidden = false,
-      --     layout = "vertical",
-      --     vertical = "up:50%",
-      --   },
-      -- },
+      winopts = {
+        height = 1, -- window height
+        width = 0.9, -- window width
+        row = 1, -- window row position (0=top, 1=bottom)
+        -- col = 0.2,
+        border = "none",
+        backdrop = 50,
+        preview = {
+          border = "none",
+          wrap = true,
+          hidden = false,
+          layout = "vertical",
+          vertical = "up:50%",
+        },
+      },
       files = {
         multiprocess = true,
       },
@@ -64,7 +64,10 @@ return {
       {
         "<leader>m",
         function()
-          require("fzf-lua").marks()
+          require("fzf-lua").marks({
+            winopts = ui.fzf.mini_pick.winopts,
+            previewer = false,
+          })
         end,
         desc = "Fzf marks",
       },

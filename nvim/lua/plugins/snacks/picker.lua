@@ -9,7 +9,7 @@ return {
       ui_select = true,
       layout = {
         cycle = false,
-        preset = "ivy_split",
+        layout = ui.layout.dropdown_pick.layout,
       },
       matcher = {
         cwd_bonus = true,
@@ -90,7 +90,7 @@ return {
         Snacks.picker.smart({
           hidden = true,
           filter = { cwd = true },
-          layout = { preset = "vscode" },
+          layout = ui.layout.select,
         })
       end,
       desc = "Snacks smart",
@@ -102,7 +102,7 @@ return {
         Snacks.picker.buffers({
           sort_lastused = true,
           current = false,
-          layout = { preset = "vscode" },
+          layout = ui.layout.select,
           win = {
             input = {
               keys = {

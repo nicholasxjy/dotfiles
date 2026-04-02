@@ -1,4 +1,5 @@
 local M = {}
+
 M.mode_colors = {
   bg = "#3c3836", -- "#000000",
   copy = "#f1ff5e",
@@ -9,138 +10,6 @@ M.mode_colors = {
   replace = "#ff5ea0",
   select = "#ff5ef1", -- Optional param, defaults to visual
   visual = "#ff5ef1",
-}
-M.rainbow_colors = {
-  blue = "#5ea1ff",
-  green = "#5eff6c",
-  cyan = "#5ef1ff",
-  red = "#ff6e5e",
-  yellow = "#f1ff5e",
-  magenta = "#ff5ef1",
-  pink = "#ff5ea0",
-  orange = "#ffbd5e",
-  purple = "#bd5eff",
-}
-
-M.theme_colors = {
-  everforest_soft = {
-    bg_main = "#333c43",
-    bg_alt = "#3a464c",
-    bg_dim = "#434f55",
-    bg_inactive = "#2e383c",
-    fg_main = "#d3c6aa",
-    fg_dim = "#7a8478",
-    fg_comment = "#A39B8E",
-    bg_hl_line = "#59464c", --"#59464c" "#48584e" "#3f5865" "#55544a" "#4e4953"
-    bg_completion = "#55544a",
-    bg_match = "#493b40", --"#493b40" "#3c4841" "#384b55"  "#45443c" "#463f48"
-    rm_code = "#293136",
-  },
-  everforest_dark = {
-    bg_main = "#272e33",
-    bg_alt = "#2e383c",
-    bg_dim = "#374145",
-    bg_inactive = "#4f5b58",
-    fg_main = "#d3c6aa",
-    fg_dim = "#7a8478",
-    fg_comment = "#A39B8E",
-    bg_hl_line = "#493b40", --"#493b40" "#3c4841" "#384b55"  "#45443c" "#463f48"
-    bg_completion = "#4c3743",
-    bg_match = "#514045", --"#514045" "#425047" "#3a515d" "#4d4c43" "#4a444e"
-    rm_code = "#1e2326",
-  },
-  gruvbox_soft = {
-    -- bg_main = "#32302f",
-    -- bg_alt = "#3c3836",
-    -- bg_dim = "#504945",
-    -- bg_inactive = "#665c54",
-    -- fg_main = "#d4be98",
-    -- fg_dim = "#928374",
-    fg_comment = "#7c6f64",
-    bg_hl_line = "#493b40",
-    bg_completion = "#473c29",
-    bg_match = "#442e2d", --"#333e34" --#442e2d --#473c29 --#2e3b3b --#3c333b
-    rm_code = "#252423",
-  },
-  gruvbox_dark = {
-    bg_main = "#1d2021",
-    bg_alt = "#282828",
-    bg_dim = "#3c3836",
-    bg_inactive = "#504945",
-    fg_main = "#e2cca9",
-    fg_dim = "#a89984",
-    fg_comment = "#928374",
-    bg_hl_line = "#333e34",
-    bg_completion = "#473c29",
-    bg_match = "#3b4439", --#442e2d #473c29 #333e34 #2e3b3b #3c333b
-    rm_code = "#141617",
-  },
-
-  tokyonight_night = {
-    -- bg_main = "#1a1b26",
-    -- bg_alt = "#16161e",
-    -- bg_dim = "#313244",
-    -- bg_inactive = "#0C0E14",
-    fg_comment = "#636da6",
-    -- fg_main = "#d3c6aa",
-    -- fg_dim = "#7a8478",
-    bg_hl_line = "#59464c", --"#59464c" "#48584e" "#3f5865" "#55544a" "#4e4953"
-    bg_completion = "#55544a",
-    bg_match = "#493b40", --"#493b40" "#3c4841" "#384b55"  "#45443c" "#463f48"
-    rm_code = "#293136",
-  },
-  tokyonight_moon = {
-    bg_main = "#1e1e2e",
-    bg_alt = "#181825",
-    bg_dim = "#313244",
-    bg_inactive = "#11111b",
-    fg_comment = "#636da6",
-    fg_main = "#d3c6aa",
-    fg_dim = "#7a8478",
-    bg_hl_line = "#59464c", --"#59464c" "#48584e" "#3f5865" "#55544a" "#4e4953"
-    bg_completion = "#55544a",
-    bg_match = "#493b40", --"#493b40" "#3c4841" "#384b55"  "#45443c" "#463f48"
-    rm_code = "#293136",
-  },
-  kanagawa_dragon = {
-    bg_main = "#181616",
-    bg_alt = "#12120f",
-    bg_dim = "#282727",
-    bg_inactive = "#393836",
-    fg_main = "#c5c9c5",
-    fg_dim = "#C8C093",
-    fg_comment = "#737c73",
-    bg_hl_line = "#59464c", --"#59464c" "#48584e" "#3f5865" "#55544a" "#4e4953"
-    bg_completion = "#55544a",
-    bg_match = "#493b40", --"#493b40" "#3c4841" "#384b55"  "#45443c" "#463f48"
-    rm_code = "#293136",
-  },
-  kanagawa_wave = {
-    bg_main = "#1F1F28",
-    bg_alt = "#181820",
-    bg_dim = "#2A2A37",
-    bg_inactive = "#363646",
-    fg_main = "#DCD7BA",
-    fg_dim = "#C8C093",
-    fg_comment = "#737c73",
-    bg_hl_line = "#59464c", --"#59464c" "#48584e" "#3f5865" "#55544a" "#4e4953"
-    bg_completion = "#55544a",
-    bg_match = "#493b40", --"#493b40" "#3c4841" "#384b55"  "#45443c" "#463f48"
-    rm_code = "#293136",
-  },
-  poimandres = {
-    bg_main = "#1B1E28",
-    bg_alt = "#171922",
-    bg_dim = "#303340",
-    bg_inactive = "#363646",
-    fg_main = "#DCD7BA",
-    fg_dim = "#C8C093",
-    fg_comment = "#737c73",
-    bg_hl_line = "#59464c", --"#59464c" "#48584e" "#3f5865" "#55544a" "#4e4953"
-    bg_completion = "#55544a",
-    bg_match = "#493b40", --"#493b40" "#3c4841" "#384b55"  "#45443c" "#463f48"
-    rm_code = "#293136",
-  },
 }
 
 M.layout = {
@@ -186,34 +55,34 @@ M.layout = {
     layout = {
       backdrop = true,
       row = -1,
-      width = 0.8,
+      width = 0.9,
       min_width = 80,
       border = "none",
       box = "vertical",
-      { win = "preview", title = "{preview}", height = 0.45, border = "none" },
+      { win = "preview", title = "{preview}", height = 0.45, border = "rounded" },
       {
         box = "vertical",
         border = "rounded",
         title = "{title} {live} {flags}",
-        title_pos = "center",
-        { win = "input", height = 1, border = "bottom" },
-        { win = "list", border = "none" },
+        title_pos = "left",
+        { win = "input", height = 1, border = "none" },
+        { win = "list", border = "rounded" },
       },
     },
   },
   vscode = {
-    preview = false,
+    hidden = { "preview" },
     layout = {
-      backdrop = true,
-      row = 0.6,
-      width = 0.6,
+      backdrop = false,
+      row = -1,
+      width = 0.7,
       min_width = 80,
-      height = 0.35,
+      height = 0.4,
       border = "none",
       box = "vertical",
-      { win = "input", height = 1, border = "bottom" },
-      { win = "list", border = "none" },
-      { win = "preview", title = "{preview}", border = "rounded" },
+      { win = "input", height = 1, border = true, title = "{title} {live} {flags}", title_pos = "center" },
+      { win = "list", border = "hpad" },
+      { win = "preview", title = "{preview}", border = true },
     },
   },
   mini_pick = {
@@ -332,8 +201,8 @@ M.fzf = {
   mini_pick = {
     winopts = {
       height = 0.4, -- window height
-      width = 0.65, -- window width
-      row = 0.95, -- window row position (0=top, 1=bottom)
+      width = 0.7, -- window width
+      row = 0.5, -- window row position (0=top, 1=bottom)
       -- col = 0.50, -- window col position (0=left, 1=right)
       border = "none",
       backdrop = 50,
@@ -410,51 +279,6 @@ M.fzf = {
 }
 
 M.icons = {
-  default_kind_icons = {
-    Array = "",
-    Boolean = "󰨙",
-    Class = "",
-    Collapsed = "",
-    Color = "",
-    Component = "󰅴",
-    Constant = "",
-    Constructor = "",
-    Control = "",
-    Copilot = "",
-    Enum = "",
-    EnumMember = "",
-    Event = "",
-    Field = "",
-    File = "",
-    Folder = "",
-    Fragment = "󰩦",
-    Function = "",
-    Interface = "",
-    Key = "",
-    Keyword = "",
-    Macro = "󰁥",
-    Method = "",
-    Module = "",
-    Namespace = "󰦮",
-    Null = "",
-    Number = "󰎠",
-    Object = "",
-    Operator = "",
-    Package = "",
-    Parameter = "",
-    Property = "",
-    Reference = "",
-    Snippet = "",
-    StaticMethod = "󰰑",
-    String = "",
-    Struct = "",
-    Text = "",
-    TypeAlias = "",
-    TypeParameter = "",
-    Unit = "",
-    Value = "󰎠",
-    Variable = "",
-  },
   mini_kind_icons = {
     Codeium = "󰚩",
     Copilot = "",
@@ -542,14 +366,15 @@ M.icons = {
     Boolean = "󰨙",
     Text = "󰉿",
     Number = "󰎠",
-    Method = "󰊕",
+    Method = "",
     Function = "󰊕",
     Constructor = "",
-    Field = "󰜢",
-    Variable = "󰀫",
+    -- Field = "󰜢",
+    Field = "",
+    Variable = "",
     Class = "󰠱",
     Interface = "",
-    Module = "",
+    Module = "",
     Namespace = "󰦮",
     Property = "󰜢",
     Unit = "󰑭",
@@ -566,46 +391,6 @@ M.icons = {
     Struct = "󰙅",
     Event = "",
     Operator = "󰆕",
-    TypeParameter = "",
-    Codeium = "󰚩",
-    Copilot = "",
-    Control = "",
-    Collapsed = "",
-    Component = "󰅴",
-    Fragment = "󰩦",
-    Key = "",
-    Macro = "󰁥",
-    Null = "",
-    Package = "",
-    Parameter = "",
-    StaticMethod = "󰰑",
-    TypeAlias = "",
-  },
-  codicons = {
-    Text = "",
-    Method = "",
-    Function = "",
-    Constructor = "",
-    Field = "",
-    Variable = "",
-    Class = "",
-    Interface = "",
-    Module = "",
-    Property = "",
-    Unit = "",
-    Value = "",
-    Enum = "",
-    Keyword = "",
-    Snippet = "",
-    Color = "",
-    File = "",
-    Reference = "",
-    Folder = "",
-    EnumMember = "",
-    Constant = "",
-    Struct = "",
-    Event = "",
-    Operator = "",
     TypeParameter = "",
     Codeium = "󰚩",
     Copilot = "",

@@ -1,6 +1,5 @@
 return {
-  "HiPhish/rainbow-delimiters.nvim",
-  enabled = false,
+  "hiphish/rainbow-delimiters.nvim",
   ft = {
     "html",
     "clojure",

@@ -42,12 +42,12 @@ return {
       -- view = "cmdline",
     },
     presets = {
-      bottom_search = true, -- use a classic bottom cmdline for search
+      bottom_search = false, -- use a classic bottom cmdline for search
       command_palette = {
         views = {
           cmdline_popup = {
             position = {
-              row = "85%",
+              row = "65%",
               col = "50%",
             },
           },

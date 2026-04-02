@@ -3,14 +3,14 @@ return {
     "folke/snacks.nvim",
     opts = {
       indent = {
-        enabled = false,
+        enabled = true,
         indent = {
           enabled = false,
-          only_current = true,
-          only_scope = true,
+          only_current = false,
+          only_scope = false,
           -- char = "⋮",
-          char = "",
-          -- char = "┊",
+          -- char = "",
+          char = "┊",
           -- char = "║",
           hl = {
             "SnacksIndentRed",
@@ -23,7 +23,7 @@ return {
           },
         },
         scope = {
-          enabled = false,
+          enabled = true,
           -- char = "",
           char = "║",
           -- char = "┊",
