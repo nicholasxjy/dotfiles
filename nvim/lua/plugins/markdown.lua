@@ -11,7 +11,7 @@ return {
         "<leader>cp",
         ft = "markdown",
         "<cmd>MarkdownPreviewToggle<cr>",
-        desc = "Markdown Preview",
+        desc = "Preview Markdown",
       },
     },
     config = function()
@@ -23,7 +23,7 @@ return {
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.icons" },
     opts = {
       file_types = { "markdown", "Avante" },
-      completions = { blink = { enabled = true } },
+      completions = { blink = { enabled = false } },
       code = {
         language_border = "",
         width = "block",

@@ -11,12 +11,12 @@ return {
       "<leader>y",
       mode = { "n", "v" },
       "<cmd>Yazi<cr>",
-      desc = "Open yazi at the current file",
+      desc = "Open Yazi",
     },
     {
       "<c-up>",
       "<cmd>Yazi toggle<cr>",
-      desc = "Resume the last yazi session",
+      desc = "Toggle Yazi",
     },
   },
   ---@type YaziConfig | {}

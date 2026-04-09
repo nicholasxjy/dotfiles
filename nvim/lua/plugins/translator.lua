@@ -18,7 +18,7 @@ return {
         require("translator").transVisualSel()
       end,
       mode = "v",
-      desc = "Translate to Chinese",
+      desc = "Translate Selection",
     },
     -- Translate word under cursor using default language
     {
@@ -27,7 +27,7 @@ return {
         require("translator").transCurWord()
       end,
       mode = "n",
-      desc = "Translate word",
+      desc = "Translate Word",
     },
   },
 }

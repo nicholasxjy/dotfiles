@@ -57,7 +57,7 @@ return {
         function()
           require("dap").continue()
         end,
-        desc = "Run/Continue",
+        desc = "Continue",
       },
       {
         "<leader>dC",
@@ -71,7 +71,7 @@ return {
         function()
           require("dap").goto_()
         end,
-        desc = "Go to Line (No Execute)",
+        desc = "Jump to Line",
       },
       {
         "<leader>di",
@@ -85,14 +85,14 @@ return {
         function()
           require("dap").down()
         end,
-        desc = "Down",
+        desc = "Stack Down",
       },
       {
         "<leader>dk",
         function()
           require("dap").up()
         end,
-        desc = "Up",
+        desc = "Stack Up",
       },
       {
         "<leader>dl",
@@ -127,28 +127,28 @@ return {
         function()
           require("dap").session()
         end,
-        desc = "Session",
+        desc = "Debug Session",
       },
       {
         "<leader>dt",
         function()
           require("dap").terminate()
         end,
-        desc = "Terminate",
+        desc = "Stop Debugger",
       },
       {
         "<leader>dw",
         function()
           require("dap.ui.widgets").hover()
         end,
-        desc = "Widgets",
+        desc = "Debug Hover",
       },
       {
         "<leader>dB",
         function()
           require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
         end,
-        desc = "Breakpoint Condition",
+        desc = "Conditional Breakpoint",
       },
     },
   },
@@ -161,14 +161,14 @@ return {
         function()
           require("dap-view").toggle()
         end,
-        desc = "Toggle nvim-dap-view",
+        desc = "Toggle Debug View",
       },
       {
         "<leader>de",
         function()
           require("dap-view").add_expr()
         end,
-        desc = "Watch Expression",
+        desc = "Add Watch",
         mode = { "n", "x" },
       },
     },

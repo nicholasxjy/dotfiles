@@ -1,5 +1,3 @@
-local miniUtil = require("utils.mini")
-
 local function open_buf_in_split(buf_id, key_map, direction)
   local MiniFiles = require("mini.files")
 
@@ -22,7 +20,7 @@ local function open_buf_in_split(buf_id, key_map, direction)
     MiniFiles.go_in({ close_on_file = true })
   end
 
-  vim.keymap.set("n", key_map, rhs, { buffer = buf_id, desc = "Split " .. string.sub(direction, 12) })
+  vim.keymap.set("n", key_map, rhs, { buffer = buf_id, desc = "Open in " .. string.sub(direction, 12) })
 end
 
 return {
@@ -59,6 +57,14 @@ return {
     end,
   },
   {
+    "nvim-mini/mini.ai",
+    version = false,
+    event = "VeryLazy",
+    config = function()
+      require("mini.ai").setup()
+    end,
+  },
+  {
     "nvim-mini/mini.surround",
     version = false,
     event = "VeryLazy",
@@ -83,7 +89,7 @@ return {
         function()
           require("mini.trailspace").trim()
         end,
-        desc = "Trailspace",
+        desc = "Trim Trailing Space",
       },
     },
     config = function()
@@ -109,7 +115,7 @@ return {
             require("mini.files").open()
           end
         end,
-        desc = "File explorer",
+        desc = "File Explorer",
       },
     },
     opts = {
@@ -128,10 +134,10 @@ return {
     config = function(_, opts)
       require("mini.files").setup(opts)
 
-      vim.api.nvim_create_autocmd(
-        "User",
-        { pattern = "MiniFilesWindowUpdate", callback = miniUtil.ensure_center_layout }
-      )
+      -- vim.api.nvim_create_autocmd(
+      --   "User",
+      --   { pattern = "MiniFilesWindowUpdate", callback = miniUtil.ensure_center_layout }
+      -- )
 
       vim.api.nvim_create_autocmd("User", {
         pattern = "MiniFilesWindowOpen",
@@ -157,7 +163,7 @@ return {
                 end,
               },
             })
-          end, { buffer = buf_id, desc = "Toggle `.`-files" })
+          end, { buffer = buf_id, desc = "Toggle Dotfiles" })
         end,
       })
 
@@ -219,12 +225,14 @@ return {
     "nicholasxjy/mini.hues",
     version = false,
     config = function()
-      require("mini.hues").setup({
-
+      local hues = require("mini.hues")
+      hues.setup({
         -- **Required** base colors as '#rrggbb' hex strings
-        background = "#171614",
-        foreground = "#AEA09F",
+        -- background = "#101010",
+        -- foreground = "#b0b0b0",
 
+        background = "#0e1415",
+        foreground = "#cecece",
         -- Number of hues used for non-base colors
         n_hues = 8,
 
@@ -233,7 +241,7 @@ return {
 
         -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'green',
         -- 'cyan', 'azure', 'blue', 'purple'
-        accent = "blue",
+        accent = "cyan",
 
         -- Plugin integrations. Use `default = false` to disable all integrations.
         -- Also can be set per plugin (see |MiniHues.config|).
@@ -241,6 +249,91 @@ return {
 
         -- Whether to auto adjust highlight groups based on certain events
         autoadjust = true,
+      })
+
+      -- local p = hues.get_palette()
+      -- vim.api.nvim_set_hl(0, "SnacksPickerPreview", { bg = p.bg_edge2 })
+      -- vim.api.nvim_set_hl(0, "Type", { fg = p.blue_bg })
+      -- vim.api.nvim_set_hl(0, "@type", { fg = p.blue_bg })
+      -- vim.api.nvim_set_hl(0, "FzfLuaNormal", { bg = p.bg_edge })
+      -- vim.api.nvim_set_hl(0, "FzfLuaBorder", { fg = p.accent })
+      -- vim.api.nvim_set_hl(0, "FzfLuaFzfMatch", { fg = p.accent, bg = p.bg, bold = true })
+      -- vim.api.nvim_set_hl(0, "FzfLuaDirPart", { fg = p.bg_mid2, bg = p.bg_edge2 })
+    end,
+  },
+  {
+    "nvim-mini/mini.statusline",
+    version = false,
+    enabled = false,
+    event = "VeryLazy",
+    config = function()
+      require("mini.statusline").setup()
+    end,
+  },
+  {
+    "nvim-mini/mini.clue",
+    version = false,
+    event = "VeryLazy",
+    config = function()
+      local miniclue = require("mini.clue")
+      miniclue.setup({
+        window = {
+          delay = 100,
+          config = {
+            width = "auto",
+            col = "auto",
+            anchor = "NW",
+            border = "single",
+          },
+        },
+        triggers = {
+          -- Leader triggers
+          { mode = { "n", "x" }, keys = "<Leader>" },
+
+          -- `[` and `]` keys
+          { mode = "n", keys = "[" },
+          { mode = "n", keys = "]" },
+
+          -- Built-in completion
+          { mode = "i", keys = "<C-x>" },
+
+          -- `g` key
+          { mode = { "n", "x" }, keys = "g" },
+
+          -- Marks
+          { mode = { "n", "x" }, keys = "'" },
+          { mode = { "n", "x" }, keys = "`" },
+
+          -- Registers
+          { mode = { "n", "x" }, keys = '"' },
+          { mode = { "i", "c" }, keys = "<C-r>" },
+
+          -- Window commands
+          { mode = "n", keys = "<C-w>" },
+
+          -- `z` key
+          { mode = { "n", "x" }, keys = "z" },
+        },
+
+        clues = {
+          { mode = "n", keys = "<leader>a", desc = "+AI" },
+          { mode = "n", keys = "<leader>b", desc = "+Buffer" },
+          { mode = "n", keys = "<leader>c", desc = "+Code" },
+          { mode = "n", keys = "<leader>d", desc = "+Debug" },
+          { mode = "n", keys = "<leader>f", desc = "+Files" },
+          { mode = "n", keys = "<leader>s", desc = "+Search" },
+          { mode = "n", keys = "<leader>g", desc = "+Git" },
+          { mode = "n", keys = "<leader>x", desc = "+Diagnostic" },
+          { mode = "n", keys = "<leader>u", desc = "+UI" },
+          -- Enhance this by adding descriptions for <Leader> mapping groups
+          miniclue.gen_clues.square_brackets(),
+          miniclue.gen_clues.builtin_completion(),
+          miniclue.gen_clues.g(),
+          miniclue.gen_clues.marks(),
+          miniclue.gen_clues.registers(),
+          miniclue.gen_clues.windows(),
+          miniclue.gen_clues.z(),
+        },
       })
     end,
   },

@@ -13,13 +13,17 @@ end
 
 local unmap = vim.keymap.del
 
+local function safe_unmap(mode, lhs)
+  pcall(unmap, mode, lhs)
+end
+
 -- remove default keybindings that cause `gr` delay
-unmap("n", "gri")
-unmap("n", "grr")
-unmap("n", "gra")
-unmap("n", "grn")
-unmap("n", "grt")
-unmap("n", "grx")
+safe_unmap("n", "gri")
+safe_unmap("n", "grr")
+safe_unmap("n", "gra")
+safe_unmap("n", "grn")
+safe_unmap("n", "grt")
+safe_unmap("n", "grx")
 
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true })
@@ -28,10 +32,10 @@ map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true }
 map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true })
 
 -- Resize window using <ctrl> arrow keys
-map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
-map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
-map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
-map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Taller Split" })
+map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Shorter Split" })
+map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Narrower Split" })
+map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Wider Split" })
 
 -- Move Lines
 map("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
@@ -41,16 +45,16 @@ map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
 map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
-map({ "n" }, "<leader>k", "<cmd>w<cr>", { desc = "Save buffer", nowait = true, silent = true })
+map({ "n" }, "<leader>k", "<cmd>w<cr>", { desc = "Save", nowait = true, silent = true })
 
 -- Buffers
 map("n", "<leader>j", function()
   Snacks.bufdelete({ wipe = true })
-end, { desc = "Delete buffer", nowait = true, silent = true })
+end, { desc = "Delete Buffer", nowait = true, silent = true })
 
 map("n", "<leader>bo", function()
   Snacks.bufdelete.other()
-end, { desc = "Delete other buffers" })
+end, { desc = "Delete Other Buffers" })
 
 map("n", "<leader>q", ":q<cr>", { desc = "Quit", nowait = true })
 map("n", "<leader>L", ":Lazy<cr>", { desc = "Lazy" })
@@ -63,44 +67,38 @@ map({ "n", "i", "s" }, "<esc>", function()
     vim.snippet.stop()
   end
   return "<esc>"
-end, { expr = true, desc = "Escape and clear hlsearch" })
+end, { expr = true, desc = "Clear Search" })
 
 -- Clear search, diff update and redraw
 -- taken from runtime/lua/_editor.lua
-map(
-  "n",
-  "<leader>ur",
-  "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
-  { desc = "Redraw / Clear hlsearch / Diff Update" }
-)
+map("n", "<leader>ur", "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>", { desc = "Redraw" })
 
 -- save file
-map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save" })
 
-map("n", "L", ":bnext<cr>", { desc = "Next buffer" })
-map("n", "H", ":bprevious<cr>", { desc = "Previous buffer" })
+map("n", "L", ":bnext<cr>", { desc = "Next Buffer" })
+map("n", "H", ":bprevious<cr>", { desc = "Prev Buffer" })
 
 -- windows
-map("n", "<leader>-", "<C-W>s", { desc = "Split window below", remap = true })
-map("n", "<leader>|", "<C-W>v", { desc = "Split window right", remap = true })
+map("n", "<leader>-", "<C-W>s", { desc = "Split Below", remap = true })
+map("n", "<leader>|", "<C-W>v", { desc = "Split Right", remap = true })
 
 -- Terminal/Run...
 map("n", "<c-/>", function()
   Snacks.terminal()
-end, { desc = "Terminal (cwd)" })
+end, { desc = "Terminal" })
 map("n", "<c-_>", function()
   Snacks.terminal()
 end, { desc = "which_key_ignore" })
 
 -- Terminal Mappings
-map("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
+map("t", "<C-/>", "<cmd>close<cr>", { desc = "Close Terminal" })
 map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
 
 map("n", "<leader>gg", function()
   Snacks.lazygit()
 end, { desc = "Lazygit" })
 
-map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 -- better indenting
 map("v", "<", "<gv", {})
 map("v", ">", ">gv", {})
@@ -110,12 +108,12 @@ map("n", "i", function()
 end, { expr = true, noremap = true })
 
 -- magic tricks
-map({ "n", "v" }, "gh", "^", { desc = "Go to start of line", nowait = true })
-map({ "n", "v" }, "gl", "$", { desc = "Go to end of line", nowait = true })
-map({ "n", "v" }, "gm", "%", { desc = "Go to matching bracket", nowait = true })
+map({ "n", "v" }, "gh", "^", { desc = "Line Start", nowait = true })
+map({ "n", "v" }, "gl", "$", { desc = "Line End", nowait = true })
+map({ "n", "v" }, "gm", "%", { desc = "Match Pair", nowait = true })
 
 -- Duplicate and comment first instance
-map("n", "ycc", "yygccp", { remap = true, desc = "Duplicate current line and comment the first one out" })
+map("n", "ycc", "yygccp", { remap = true, desc = "Duplicate and Comment" })
 
 -- Search only in visual area when in visual mode
-map("x", "/", "<Esc>/\\%V", { desc = "Search only in visual area" })
+map("x", "/", "<Esc>/\\%V", { desc = "Search Selection" })

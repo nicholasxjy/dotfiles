@@ -1,1 +1,1 @@
-vim.cmd("colorscheme minispring")
+vim.cmd("colorscheme randomhue")

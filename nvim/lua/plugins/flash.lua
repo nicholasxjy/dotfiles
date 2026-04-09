@@ -55,7 +55,7 @@ return {
         function()
           require("flash").jump()
         end,
-        desc = "Flash",
+        desc = "Jump",
         remap = false,
       },
       {
@@ -64,7 +64,7 @@ return {
         function()
           require("flash").treesitter()
         end,
-        desc = "Flash Treesitter",
+        desc = "Treesitter Jump",
       },
       {
         "r",
@@ -72,7 +72,7 @@ return {
         function()
           require("flash").remote()
         end,
-        desc = "Remote Flash",
+        desc = "Remote Jump",
       },
       {
         "R",
@@ -88,7 +88,7 @@ return {
         function()
           require("flash").toggle()
         end,
-        desc = "Toggle Flash Search",
+        desc = "Toggle Flash",
       },
     },
   },

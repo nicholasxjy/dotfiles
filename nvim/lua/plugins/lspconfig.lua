@@ -111,7 +111,10 @@ return {
         return
       end
 
-      lspUtil.on_attach(client, vim.api.nvim_get_current_buf())
+      for bufnr in pairs(client.attached_buffers) do
+        vim.b[bufnr].lsp_attached = nil
+        lspUtil.on_attach(client, bufnr)
+      end
       return register_capability(err, res, ctx)
     end
 

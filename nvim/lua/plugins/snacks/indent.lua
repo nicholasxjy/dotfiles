@@ -23,7 +23,7 @@ return {
           },
         },
         scope = {
-          enabled = true,
+          enabled = false,
           -- char = "",
           char = "║",
           -- char = "┊",

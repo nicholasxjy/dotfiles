@@ -64,14 +64,14 @@ return {
       function()
         Snacks.explorer()
       end,
-      desc = "Snacks explorer",
+      desc = "Explorer",
     },
     {
       "<leader>r",
       function()
         Snacks.picker.resume()
       end,
-      desc = "Snacks resume",
+      desc = "Resume Search",
     },
     {
       "<leader><space>",
@@ -81,7 +81,7 @@ return {
           filter = { cwd = true },
         })
       end,
-      desc = "Snacks smart",
+      desc = "Find Files",
       silent = true,
     },
     {
@@ -93,7 +93,7 @@ return {
           layout = ui.layout.select,
         })
       end,
-      desc = "Snacks smart",
+      desc = "Find Files",
       silent = true,
     },
     {
@@ -113,7 +113,7 @@ return {
           },
         })
       end,
-      desc = "Snacks buffers",
+      desc = "Find Buffers",
       silent = true,
     },
     {
@@ -123,19 +123,7 @@ return {
           filter = { cwd = true },
         })
       end,
-      desc = "Snacks search word under cursor",
-      mode = { "n", "x", "v" },
-    },
-    {
-      "<leader>sW",
-      function()
-        Snacks.picker.grep_word({
-          filter = { cwd = true },
-          buffers = true,
-          dirs = { vim.fn.expand("%:p") }, -- current buffer
-        })
-      end,
-      desc = "Snacks search word under cursor",
+      desc = "Grep Word",
       mode = { "n", "x", "v" },
     },
     {
@@ -145,28 +133,28 @@ return {
           filter = { cwd = true },
         })
       end,
-      desc = "Snacks live grep",
+      desc = "Live Grep",
     },
     {
       "<leader>sG",
       function()
         Snacks.picker.grep()
       end,
-      desc = "Snacks live grep",
+      desc = "Global Grep",
     },
     {
       "<leader>z",
       function()
         Snacks.zen()
       end,
-      desc = "Toggle Zen Mode",
+      desc = "Toggle Zen",
     },
     {
       "<leader>un",
       function()
         Snacks.notifier.hide()
       end,
-      desc = "Dismiss All Notifications",
+      desc = "Clear Notifications",
     },
     {
       "<leader>N",

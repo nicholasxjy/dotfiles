@@ -10,7 +10,7 @@ return {
       function()
         require("noice").cmd("history")
       end,
-      desc = "Noice History",
+      desc = "Message History",
     },
   },
   opts = {

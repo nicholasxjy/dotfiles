@@ -10,15 +10,15 @@ return {
 
       set({ "n", "x" }, "\\", function()
         mc.addCursor()
-      end, { desc = "Add cursor under current position" })
+      end, { desc = "Add Cursor" })
 
       -- Add or skip cursor above/below the main cursor.
       set({ "n", "x" }, "<up>", function()
         mc.lineAddCursor(-1)
-      end, { desc = "Del cursor at line" })
+      end, { desc = "Add Cursor Above" })
       set({ "n", "x" }, "<down>", function()
         mc.lineAddCursor(1)
-      end, { desc = "Add cursor at line" })
+      end, { desc = "Add Cursor Below" })
 
       set({ "n", "x" }, "<leader><up>", function()
         mc.lineSkipCursor(-1)
@@ -30,11 +30,11 @@ return {
       -- Add or skip adding a new cursor by matching word/selection
       set({ "n", "x" }, "<C-d>", function()
         mc.matchAddCursor(1)
-      end, { desc = "Add a new cursor by matching word/selection" })
+      end, { desc = "Match Next" })
 
       set({ "n", "x" }, "\\n", function()
         mc.matchAddCursor(-1)
-      end, { desc = "Skip adding a new cursor by matching word/selection" })
+      end, { desc = "Match Prev" })
 
       -- Add and remove cursors with control + left click.
       set("n", "<c-leftmouse>", mc.handleMouse)

@@ -1,152 +1,72 @@
 local M = {}
 
-local is_fzf_picker = vim.g.picker == "fzf"
-local fzflua = require("fzf-lua")
-
-local function lsp_definitions()
-  if is_fzf_picker then
-    fzflua.lsp_definitions()
-  else
-    Snacks.picker.lsp_definitions()
-  end
+local function using_fzf_picker()
+  return vim.g.picker == "fzf"
 end
 
-local function lsp_declarations()
-  if is_fzf_picker then
-    fzflua.lsp_declarations()
-  else
-    Snacks.picker.lsp_declarations()
+local function picker_call(fzf_name, snacks_name, fzf_opts, snacks_opts)
+  return function()
+    if using_fzf_picker() then
+      require("fzf-lua")[fzf_name](fzf_opts)
+    else
+      Snacks.picker[snacks_name](snacks_opts)
+    end
   end
 end
 
-local function lsp_implementations()
-  if is_fzf_picker then
-    fzflua.lsp_implementations()
-  else
-    Snacks.picker.lsp_implementations()
+local diagnostics_sort = {
+  sort = {
+    fields = {
+      "severity",
+      "is_current",
+      "is_cwd",
+      "file",
+      "lnum",
+    },
+  },
+}
+
+local function diagnostics_opts(min_severity)
+  local opts = vim.deepcopy(diagnostics_sort)
+  if min_severity then
+    opts.severity = { min = min_severity }
   end
-end
-local function lsp_references()
-  if is_fzf_picker then
-    fzflua.lsp_references()
-  else
-    Snacks.picker.lsp_references()
-  end
-end
-local function lsp_type_definitions()
-  if is_fzf_picker then
-    fzflua.lsp_typedefs()
-  else
-    Snacks.picker.lsp_type_definitions()
-  end
-end
-local function lsp_incoming_calls()
-  if is_fzf_picker then
-    fzflua.lsp_incoming_calls()
-  else
-    Snacks.picker.lsp_incoming_calls()
-  end
-end
-local function lsp_outgoing_calls()
-  if is_fzf_picker then
-    fzflua.lsp_outgoing_calls()
-  else
-    Snacks.picker.lsp_outgoing_calls()
-  end
-end
-local function lsp_symbols()
-  fzflua.lsp_document_symbols()
-  -- if is_fzf_picker then
-  --   fzflua.lsp_document_symbols()
-  -- else
-  --   Snacks.picker.lsp_symbols()
-  -- end
-end
-local function lsp_workspace_symbols()
-  fzflua.lsp_workspace_symbols()
-  -- if is_fzf_picker then
-  --   fzflua.lsp_workspace_symbols()
-  -- else
-  --   Snacks.picker.lsp_workspace_symbols()
-  -- end
+  return opts
 end
 
-local function diagnostics_buffer()
-  if is_fzf_picker then
-    fzflua.diagnostics_document({ sort = true })
-  else
-    Snacks.picker.diagnostics_buffer()
-  end
-end
+local lsp_definitions = picker_call("lsp_definitions", "lsp_definitions")
+local lsp_declarations = picker_call("lsp_declarations", "lsp_declarations")
+local lsp_implementations = picker_call("lsp_implementations", "lsp_implementations")
+local lsp_references = picker_call("lsp_references", "lsp_references")
+local lsp_type_definitions = picker_call("lsp_typedefs", "lsp_type_definitions")
+local lsp_incoming_calls = picker_call("lsp_incoming_calls", "lsp_incoming_calls")
+local lsp_outgoing_calls = picker_call("lsp_outgoing_calls", "lsp_outgoing_calls")
+local lsp_symbols = picker_call("lsp_document_symbols", "lsp_symbols")
+local lsp_workspace_symbols = picker_call("lsp_workspace_symbols", "lsp_workspace_symbols")
 
-local function diagnostics_workspace()
-  if is_fzf_picker then
-    fzflua.diagnostics_workspace({ sort = true })
-  else
-    Snacks.picker.diagnostics({
-      sort = {
-        fields = {
-          "severity",
-          "is_current",
-          "is_cwd",
-          "file",
-          "lnum",
-        },
-      },
-    })
-  end
-end
-
-local function diagnostics_workspace_warns()
-  if is_fzf_picker then
-    fzflua.diagnostics_workspace({
-      severity_limit = vim.diagnostic.severity.WARN,
-      sort = true,
-    })
-  else
-    Snacks.picker.diagnostics({
-      sort = {
-        fields = {
-          "severity",
-          "is_current",
-          "is_cwd",
-          "file",
-          "lnum",
-        },
-      },
-      severity = { min = vim.diagnostic.severity.WARN },
-    })
-  end
-end
-local function diagnostics_workspace_errors()
-  if is_fzf_picker then
-    fzflua.diagnostics_workspace({
-      sort = true,
-      severity_limit = vim.diagnostic.severity.ERROR,
-    })
-  else
-    Snacks.picker.diagnostics({
-      sort = {
-        fields = {
-          "severity",
-          "is_current",
-          "is_cwd",
-          "file",
-          "lnum",
-        },
-      },
-      severity = { min = vim.diagnostic.severity.ERROR },
-    })
-  end
-end
+local diagnostics_buffer = picker_call("diagnostics_document", "diagnostics_buffer", { sort = true })
+local diagnostics_workspace = picker_call("diagnostics_workspace", "diagnostics", { sort = true }, diagnostics_opts())
+local diagnostics_workspace_warns = picker_call("diagnostics_workspace", "diagnostics", {
+  severity_limit = vim.diagnostic.severity.WARN,
+  sort = true,
+}, diagnostics_opts(vim.diagnostic.severity.WARN))
+local diagnostics_workspace_errors = picker_call("diagnostics_workspace", "diagnostics", {
+  severity_limit = vim.diagnostic.severity.ERROR,
+  sort = true,
+}, diagnostics_opts(vim.diagnostic.severity.ERROR))
 M.keymap_setup = function()
+  if vim.g.lsp_keymaps_ready then
+    return
+  end
+  vim.g.lsp_keymaps_ready = true
+
   vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
   vim.keymap.set("n", "K", function()
     vim.lsp.buf.hover()
   end, { desc = "Hover", silent = true })
 
   vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-  vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+  -- vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
   --
   vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })
@@ -196,31 +116,13 @@ end
 M.methods_setup = function(client, bufnr)
   local Methods = vim.lsp.protocol.Methods
 
-  -- if client:supports_method(Methods.textDocument_linkedEditingRange) and vim.fn.has("nvim-0.12") == 1 then
-  --   vim.lsp.linked_editing_range.enable(true, {
-  --     client_id = client.id,
-  --   })
-  -- end
-
-  -- Handle textDocument/onTypeFormatting support
-  -- if client:supports_method(Methods.textDocument_onTypeFormatting) and vim.fn.has("nvim-0.12") == 1 then
-  --   vim.lsp.on_type_formatting.enable(true, {
-  --     client_id = client.id,
-  --   })
-  -- end
-
-  -- Handle textDocument/documentColor support
-  -- if client:supports_method(Methods.textDocument_documentColor) and vim.fn.has("nvim-0.12") == 1 then
-  --   vim.lsp.document_color.enable(true, bufnr, { style = "background" }) --background, foreground, virtual
-  -- end
-
-  -- enable inlay hints by default
-  if client:supports_method(Methods.textDocument_inlayHints) then
-    vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
-  end
+  vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+  vim.lsp.linked_editing_range.enable(true, { bufnr = bufnr })
+  vim.lsp.on_type_formatting.enable(true, { bufnr = bufnr })
 
   if client:supports_method(Methods.textDocument_documentHighlight) then
-    local under_cursor_highlights_group = vim.api.nvim_create_augroup("xue/cursor_highlights", { clear = false })
+    local under_cursor_highlights_group =
+      vim.api.nvim_create_augroup("xue_cursor_highlights_" .. bufnr, { clear = true })
     -- When cursor movement is paused or we jump to the normal mode, enable instance highlighting
     vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
       group = under_cursor_highlights_group,
@@ -238,27 +140,10 @@ M.methods_setup = function(client, bufnr)
     })
   end
 
-  -- Handle textDocument/codeLens support
-  -- if client:supports_method(Methods.textDocument_codeLens) then
-  --   if vim.g.codelens then
-  --     vim.lsp.codelens.refresh({ bufnr = bufnr })
-  --   end
-  --   vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
-  --     buffer = bufnr,
-  --     callback = function()
-  --       if vim.g.codelens then
-  --         vim.lsp.codelens.refresh({ bufnr = bufnr })
-  --       else
-  --         vim.lsp.codelens.clear(nil, bufnr)
-  --       end
-  --     end,
-  --   })
-  -- end
-
   if client and client.name == "eslint" then
     vim.api.nvim_create_autocmd("BufWritePre", {
       buffer = bufnr,
-      group = vim.api.nvim_create_augroup("eslintFix", { clear = true }),
+      group = vim.api.nvim_create_augroup("eslint_fix_" .. bufnr, { clear = true }),
       callback = function()
         if vim.fn.exists(":LspEslintFixAll") > 0 then
           Snacks.notifier("EslintFixAll", "info")
@@ -270,6 +155,10 @@ M.methods_setup = function(client, bufnr)
 end
 
 M.on_attach = function(client, bufnr)
+  if vim.b[bufnr].lsp_attached then
+    return
+  end
+  vim.b[bufnr].lsp_attached = true
   M.keymap_setup()
   M.methods_setup(client, bufnr)
 end

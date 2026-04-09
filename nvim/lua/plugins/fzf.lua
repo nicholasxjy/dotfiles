@@ -38,7 +38,7 @@ return {
       },
       lsp = {
         symbols = {
-          symbol_icons = ui.icons.lspkind_kind_icons,
+          symbol_icons = ui.icons.mini_kind_icons,
         },
       },
       diagnostics = {
@@ -52,14 +52,14 @@ return {
         function()
           require("fzf-lua").blines()
         end,
-        desc = "Fzf blines",
+        desc = "Search Buffer",
       },
       {
         "<leader>:",
         function()
           require("fzf-lua").commands()
         end,
-        desc = "Fzf commands",
+        desc = "Commands",
       },
       {
         "<leader>m",
@@ -69,7 +69,7 @@ return {
             previewer = false,
           })
         end,
-        desc = "Fzf marks",
+        desc = "Marks",
       },
       {
         "<leader>fb",
@@ -78,70 +78,70 @@ return {
             cwd_only = true,
           })
         end,
-        desc = "Fzf buffers",
+        desc = "Buffers",
       },
       {
         "<leader>fc",
         function()
           require("fzf-lua").colorschemes()
         end,
-        desc = "Fzf colorschemes",
+        desc = "Colorschemes",
       },
       {
         "<leader>fq",
         function()
           require("fzf-lua").quickfix()
         end,
-        desc = "Fzf quickfix",
+        desc = "Quickfix",
       },
       {
         "<leader>fl",
         function()
           require("fzf-lua").loclist()
         end,
-        desc = "Fzf loclist",
+        desc = "Location List",
       },
       {
         "<leader>fg",
         function()
           require("fzf-lua").global()
         end,
-        desc = "Global",
+        desc = "Global Search",
       },
       {
         "<leader>fa",
         function()
           require("fzf-lua").autocmds()
         end,
-        desc = "Fzf Autocmds",
+        desc = "Autocmds",
       },
       {
         "<leader>fl",
         function()
           require("fzf-lua").loclist()
         end,
-        desc = "Fzf location list",
+        desc = "Location List",
       },
       {
         "<leader>fk",
         function()
           require("fzf-lua").keymaps()
         end,
-        desc = "Fzf keymaps",
+        desc = "Keymaps",
       },
       {
         "<leader>fj",
         function()
           require("fzf-lua").jumps()
         end,
-        desc = "Fzf jumps",
+        desc = "Jumps",
       },
       {
         "<leader>fr",
         function()
           require("fzf-lua").registers()
         end,
-        desc = "Fzf registers",
+        desc = "Registers",
       },
       -- git
       {
@@ -149,70 +149,70 @@ return {
         function()
           require("fzf-lua").git_files()
         end,
-        desc = "Git files",
+        desc = "Git Files",
       },
       {
         "<leader>gb",
         function()
           require("fzf-lua").git_branches()
         end,
-        desc = "Git branches",
+        desc = "Git Branches",
       },
       {
         "<leader>gc",
         function()
           require("fzf-lua").git_commits()
         end,
-        desc = "Git commits",
+        desc = "Git Commits",
       },
       {
         "<leader>gC",
         function()
           require("fzf-lua").git_bcommits()
         end,
-        desc = "Git bcommits",
+        desc = "Buffer Commits",
       },
       {
         "<leader>gs",
         function()
           require("fzf-lua").git_status()
         end,
-        desc = "Git status",
+        desc = "Git Status",
       },
       {
         "<leader>gd",
         function()
           require("fzf-lua").git_diff()
         end,
-        desc = "Git diff",
+        desc = "Git Diff",
       },
       {
         "<leader>gB",
         function()
           require("fzf-lua").git_blame()
         end,
-        desc = "Git blame",
+        desc = "Git Blame",
       },
       {
         "<leader>gt",
         function()
           require("fzf-lua").git_tags()
         end,
-        desc = "Git tags",
+        desc = "Git Tags",
       },
       {
         "<leader>gh",
         function()
           require("fzf-lua").git_hunks()
         end,
-        desc = "Git hunks",
+        desc = "Git Hunks",
       },
       {
         "<leader>gw",
         function()
           require("fzf-lua").git_worktrees()
         end,
-        desc = "Git worktrees",
+        desc = "Git Worktrees",
       },
     },
     config = function(_, opts)
@@ -226,7 +226,7 @@ return {
     dependencies = { "ibhagwan/fzf-lua" },
     cmd = "FzfNerdfont",
     keys = {
-      { "<leader>fi", "<CMD>FzfNerdfont<CR>", desc = "Open fzf nerd font picker" },
+      { "<leader>fi", "<CMD>FzfNerdfont<CR>", desc = "Nerd Font Picker" },
     },
   },
 }

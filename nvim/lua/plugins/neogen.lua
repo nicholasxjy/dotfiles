@@ -7,7 +7,7 @@ return {
       function()
         require("neogen").generate()
       end,
-      desc = "Generate Annotations (Neogen)",
+      desc = "Generate Docs",
     },
   },
   opts = {

@@ -11,14 +11,14 @@ return {
         end
       end,
       expr = true,
-      desc = "Goto/Apply Next Edit Suggestion",
+      desc = "Next Suggestion",
     },
     {
       "<c-.>",
       function()
         require("sidekick.cli").toggle()
       end,
-      desc = "Sidekick Toggle",
+      desc = "Toggle Sidekick",
       mode = { "n", "t", "i", "x" },
       noremap = true,
       silent = true,
@@ -28,7 +28,7 @@ return {
       function()
         require("sidekick.cli").toggle()
       end,
-      desc = "Sidekick Toggle CLI",
+      desc = "Toggle CLI",
     },
     {
       "<leader>as",
@@ -42,7 +42,7 @@ return {
       function()
         require("sidekick.cli").close()
       end,
-      desc = "Detach a CLI Session",
+      desc = "Close CLI",
     },
     {
       "<leader>at",
@@ -50,7 +50,7 @@ return {
         require("sidekick.cli").send({ msg = "{this}" })
       end,
       mode = { "x", "n" },
-      desc = "Send This",
+      desc = "Send Current",
     },
     {
       "<leader>af",
@@ -65,7 +65,7 @@ return {
         require("sidekick.cli").send({ msg = "{selection}" })
       end,
       mode = { "x" },
-      desc = "Send Visual Selection",
+      desc = "Send Selection",
     },
     {
       "<leader>ap",
@@ -73,7 +73,7 @@ return {
         require("sidekick.cli").prompt()
       end,
       mode = { "n", "x" },
-      desc = "Sidekick Select Prompt",
+      desc = "Select Prompt",
     },
   },
   opts = {

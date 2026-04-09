@@ -2,14 +2,14 @@ local ui = require("core.ui")
 return {
   {
     "folke/persistence.nvim",
-    event = "BufReadPre",
+    event = "VeryLazy",
     keys = {
       {
         "<leader>S",
         function()
           require("persistence").select()
         end,
-        desc = "Select Session",
+        desc = "Sessions",
       },
     },
     opts = {
@@ -37,7 +37,7 @@ return {
   },
   {
     "NStefan002/screenkey.nvim",
-    lazy = false,
+    cmd = "Screenkey",
     opts = {
       win_opts = {
         row = vim.o.lines - vim.o.cmdheight - 1,
@@ -98,7 +98,7 @@ return {
         function()
           require("treesj").toggle()
         end,
-        desc = "Toggle split/join",
+        desc = "Toggle Split",
         silent = true,
       },
     },

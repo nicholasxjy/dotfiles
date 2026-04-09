@@ -1,4 +1,3 @@
--- local ui = require("core.ui")
 return {
   {
     "L3MON4D3/LuaSnip",
@@ -10,7 +9,7 @@ return {
       ls.config.set_config({
         enable_autosnippets = true,
         history = true,
-        updateevents = "TextChanged,TextChangedI",
+        updateevents = "TextChangedI,InsertLeave",
       })
       ls.filetype_extend("typescript", { "javascript" })
       ls.filetype_extend("javascriptreact", { "javascript" })
@@ -25,7 +24,6 @@ return {
       { "L3MON4D3/LuaSnip" },
       { "fang2hou/blink-copilot" },
       { "folke/lazydev.nvim" },
-      { "xzbdmw/colorful-menu.nvim", opts = { max_width = 40 } },
     },
     build = "cargo build --release",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -70,8 +68,8 @@ return {
           },
         },
         appearance = {
-          use_nvim_cmp_as_default = true,
-          nerd_font_variant = "mono",
+          -- use_nvim_cmp_as_default = true,
+          -- nerd_font_variant = "mono",
           -- kind_icons = ui.icons.lspkind_kind_icons,
         },
         completion = {
@@ -86,18 +84,18 @@ return {
             },
           },
           accept = { auto_brackets = { enabled = true } },
-          list = { selection = { preselect = true, auto_insert = false } },
+          list = { selection = { preselect = true, auto_insert = true } },
           menu = {
             scrollbar = true,
             border = vim.g.bordered and "rounded" or "none",
             draw = {
-              columns = { { "kind_icon" }, { "label", gap = 1 }, { "kind" } },
+              columns = { { "kind_icon" }, { "label", "label_description", gap = 1 }, { "kind" } },
               treesitter = { "lsp" },
               components = {
                 kind_icon = {
                   text = function(ctx)
                     local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-                    return kind_icon
+                    return kind_icon .. " "
                   end,
                   highlight = function(ctx)
                     local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)

@@ -1,6 +1,5 @@
 local function lsp_component()
   local buf_clients = vim.lsp.get_clients({ bufnr = 0 })
-  local conform_installed, conform = pcall(require, "conform")
   local buf_client_names = {}
 
   for _, client in pairs(buf_clients) do
@@ -9,7 +8,8 @@ local function lsp_component()
     end
   end
 
-  if conform_installed then
+  if package.loaded["conform"] then
+    local conform = require("conform")
     local formatters = conform.list_formatters(0)
     for _, source in ipairs(formatters) do
       table.insert(buf_client_names, source.name)
@@ -55,7 +55,8 @@ return {
             return "  " .. require("dap").status()
           end,
           cond = function()
-            return package.loaded["dap"] and require("dap").status() ~= ""
+            local dap = package.loaded["dap"]
+            return dap and dap.status() ~= ""
           end,
           color = function()
             return { fg = Snacks.util.color("Debug") }
@@ -87,6 +88,10 @@ return {
     },
   },
   config = function(_, opts)
+    local function sidekick_status()
+      return package.loaded["sidekick.status"] and require("sidekick.status") or nil
+    end
+
     local icons = {
       Error = { " ", "DiagnosticError" },
       Inactive = { " ", "MsgArea" },
@@ -95,14 +100,17 @@ return {
     }
     table.insert(opts.sections.lualine_x, {
       function()
-        local status = require("sidekick.status").get()
+        local sidekick = sidekick_status()
+        local status = sidekick and sidekick.get()
         return status and vim.tbl_get(icons, status.kind, 1)
       end,
       cond = function()
-        return require("sidekick.status").get() ~= nil
+        local sidekick = sidekick_status()
+        return sidekick and sidekick.get() ~= nil
       end,
       color = function()
-        local status = require("sidekick.status").get()
+        local sidekick = sidekick_status()
+        local status = sidekick and sidekick.get()
         local hl = status and (status.busy and "DiagnosticWarn" or vim.tbl_get(icons, status.kind, 2))
         return { fg = Snacks.util.color(hl) }
       end,
@@ -111,11 +119,13 @@ return {
     -- CLI session status
     table.insert(opts.sections.lualine_x, 2, {
       function()
-        local status = require("sidekick.status").cli()
+        local sidekick = sidekick_status()
+        local status = sidekick and sidekick.cli() or {}
         return " " .. (#status > 1 and #status or "")
       end,
       cond = function()
-        return #require("sidekick.status").cli() > 0
+        local sidekick = sidekick_status()
+        return sidekick and #sidekick.cli() > 0 or false
       end,
       color = function()
         return "Special"

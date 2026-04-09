@@ -41,7 +41,7 @@ return {
             formatters = { "injected" },
           })
         end,
-        desc = "Conform format injected langs",
+        desc = "Format Injections",
         mode = { "n", "v", "x" },
       },
     },

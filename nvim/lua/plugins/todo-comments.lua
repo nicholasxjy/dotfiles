@@ -8,14 +8,14 @@ return {
       function()
         require("todo-comments").jump_next()
       end,
-      desc = "Next Todo Comment",
+      desc = "Next Todo",
     },
     {
       "[t",
       function()
         require("todo-comments").jump_prev()
       end,
-      desc = "Previous Todo Comment",
+      desc = "Prev Todo",
     },
   },
 }

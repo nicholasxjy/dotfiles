@@ -35,35 +35,35 @@ return {
       function()
         require("ufo").openAllFolds()
       end,
-      desc = "Open all folds",
+      desc = "Open All Folds",
     },
     {
       "zM",
       function()
         require("ufo").closeAllFolds()
       end,
-      desc = "Close all folds",
+      desc = "Close All Folds",
     },
     {
       "zr",
       function()
         require("ufo").openFoldsExceptKinds()
       end,
-      desc = "Fold less",
+      desc = "Open More Folds",
     },
     {
       "zm",
       function()
         require("ufo").closeFoldsWith()
       end,
-      desc = "Fold more",
+      desc = "Close More Folds",
     },
     {
       "zp",
       function()
         require("ufo").peekFoldedLinesUnderCursor()
       end,
-      desc = "Peek fold",
+      desc = "Peek Fold",
     },
   },
   opts = {
