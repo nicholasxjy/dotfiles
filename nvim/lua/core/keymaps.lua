@@ -103,10 +103,6 @@ end, { desc = "Lazygit" })
 map("v", "<", "<gv", {})
 map("v", ">", ">gv", {})
 
-map("n", "i", function()
-  return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i"
-end, { expr = true, noremap = true })
-
 -- magic tricks
 map({ "n", "v" }, "gh", "^", { desc = "Line Start", nowait = true })
 map({ "n", "v" }, "gl", "$", { desc = "Line End", nowait = true })

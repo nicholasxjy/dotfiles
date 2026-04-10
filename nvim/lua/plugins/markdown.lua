@@ -20,6 +20,7 @@ return {
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
+    enabled = false,
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.icons" },
     opts = {
       file_types = { "markdown", "Avante" },
@@ -39,5 +40,20 @@ return {
         set = require("render-markdown").set,
       }):map("<leader>um")
     end,
+  },
+  -- For `plugins.lua` users.
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    dependencies = { "saghen/blink.cmp" },
+    cmd = "Markview",
+    keys = {
+      { "<leader>um", "<cmd>Markview toggle<cr>", desc = "Markview toggle" },
+    },
+    opts = {
+      preview = {
+        icon_provider = "mini",
+      },
+    },
   },
 }

@@ -16,11 +16,10 @@ return {
     {
       "<c-.>",
       function()
-        require("sidekick.cli").toggle()
+        require("sidekick.cli").focus()
       end,
-      desc = "Toggle Sidekick",
+      desc = "Focus Sidekick",
       mode = { "n", "t", "i", "x" },
-      noremap = true,
       silent = true,
     },
     {
@@ -96,7 +95,7 @@ return {
         -- window: when run inside a terminal multiplexer, new sessions will be created in a new tab
         -- split: when run inside a terminal multiplexer, new sessions will be created in a new split
         -- NOTE: zellij only supports `terminal`
-        create = "window",
+        create = vim.env.ZELLIJ and "terminal" or "window",
       },
     },
   },

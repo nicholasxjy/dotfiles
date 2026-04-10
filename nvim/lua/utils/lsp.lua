@@ -61,16 +61,15 @@ M.keymap_setup = function()
   vim.g.lsp_keymaps_ready = true
 
   vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
-  vim.keymap.set("n", "K", function()
-    vim.lsp.buf.hover()
-  end, { desc = "Hover", silent = true })
+
+  -- vim.keymap.set("n", "K", function()
+  --   vim.lsp.buf.hover()
+  -- end, { desc = "Hover", silent = true })
 
   vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-  -- vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
   --
   vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })
-  -- vim.keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, { desc = "Codelens Refresh" })
 
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
   vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
