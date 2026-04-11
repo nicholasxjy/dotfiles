@@ -262,15 +262,6 @@ return {
     end,
   },
   {
-    "nvim-mini/mini.statusline",
-    version = false,
-    enabled = false,
-    event = "VeryLazy",
-    config = function()
-      require("mini.statusline").setup()
-    end,
-  },
-  {
     "nvim-mini/mini.clue",
     version = false,
     event = "VeryLazy",

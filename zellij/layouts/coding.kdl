@@ -1,0 +1,58 @@
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=1 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+        floating_panes {
+            pane {
+                x "10%"
+                y "20%"
+                width "80%"
+                height "60%"
+            }
+        }
+        // pane size=1 borderless=true {
+        //     plugin location="file:$HOME/.config/zellij/plugins/zjstatus.wasm" {
+        //         format_left   "{mode}#[fg=#37C3B5,bold][{session}] {tabs}"
+        //         format_center ""
+        //         format_right  ""
+        //         format_space  ""
+        //
+        //         mode_locked      "#[fg=#f45ab4,bold]  LOCK "
+        //         mode_normal      "#[fg=#f45ab4,bold]  NORMAL "
+        //         mode_resize      "#[fg=#f45ab4,bold]  RESIZE "
+        //         mode_pane        "#[fg=#f45ab4,bold]  PANE"
+        //         mode_move        "#[fg=#f45ab4,bold]  MOVE "
+        //         mode_tab         "#[fg=#f45ab4,bold]  TAB "
+        //         mode_scroll      "#[fg=#f45ab4,bold]  SCROLL "
+        //         mode_search      "#[fg=#f45ab4,bold]  SEARCH "
+        //         mode_entersearch "#[fg=#f45ab4,bold]  ENTER SEARCH "
+        //         mode_renametab   "#[fg=#f45ab4,bold]  RENAME TAB "
+        //         mode_renamepane  "#[fg=#f45ab4,bold]  RENAME PANE "
+        //         mode_session     "#[fg=#f45ab4,bold]  SESSION "
+        //         mode_tmux        "#[fg=#f45ab4,bold]  TMUX "
+        //
+        //         tab_active              "#[fg=#d8a657,bold] #[fg=#d8a657,bold]{name}"
+        //
+        //         tab_normal              "#[fg=#83a598,bold] #[fg=#83a598,bold]{name}"
+        //
+        //         tab_separator " "
+        //
+        //         tab_sync_indicator       "󰓦"
+        //         tab_fullscreen_indicator "󰊓"
+        //         tab_floating_indicator   "⬚"
+        //
+        //         tab_display_count         "9"
+        //         tab_truncate_start_format "#[fg=#f9e2af]  +{count}  "
+        //         tab_truncate_end_format   "#[fg=#f9e2af]   +{count} "
+        //     }
+        // }
+    }
+    tab name="config" cwd="~/.config/nvim" {
+        pane
+    }
+}
