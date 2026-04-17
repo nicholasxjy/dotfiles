@@ -3,6 +3,4 @@ require("core.lazy")
 require("core.keymaps")
 require("core.autocmds")
 
-require("core.lsp_hover").setup()
-
-require("vim._core.ui2").enable({})
+-- require("vim._core.ui2").enable({})

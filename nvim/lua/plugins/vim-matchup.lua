@@ -7,7 +7,7 @@ return {
       hi_background = 1,
       hi_surround_always = 1,
       offscreen = {
-        method = "status",
+        method = "popup",
       },
     },
     surround = {

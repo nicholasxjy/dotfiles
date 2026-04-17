@@ -2,7 +2,6 @@ return {
   "nicholasxjy/translator.nvim",
   event = "VeryLazy",
   cmd = "Trans",
-  branch = "fix-first-selection",
   opts = {
     default_target_lang = "zh", -- Default target language
     default_source_lang = nil, -- Default source language (nil = auto-detect)

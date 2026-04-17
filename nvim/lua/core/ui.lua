@@ -1,56 +1,6 @@
 local M = {}
 
-M.mode_colors = {
-  bg = "#3c3836", -- "#000000",
-  copy = "#f1ff5e",
-  delete = "#ff6e5e",
-  change = "#ff6e5e", -- Optional param, defaults to delete
-  format = "#c79585",
-  insert = "#5eff6c",
-  replace = "#ff5ea0",
-  select = "#ff5ef1", -- Optional param, defaults to visual
-  visual = "#ff5ef1",
-}
-
 M.layout = {
-  select = {
-    preview = false,
-    layout = {
-      backdrop = false,
-      row = 0.4,
-      width = 0.7,
-      min_width = 80,
-      height = 0.4,
-      min_height = 3,
-      box = "vertical",
-      border = "rounded",
-      title = "{title}",
-      title_pos = "center",
-      { win = "input", height = 1, border = "bottom" },
-      { win = "list", border = "none" },
-      { win = "preview", title = "{preview}", height = 0.4, border = "top" },
-    },
-  },
-  dropdown = {
-    layout = {
-      backdrop = true,
-      row = -1,
-      min_width = 80,
-      -- height = 0.95,
-      -- width = 0.88,
-      border = "none",
-      box = "vertical",
-      { win = "preview", title = "{preview}", height = 0.5, border = "none" },
-      {
-        box = "vertical",
-        border = "none",
-        title = "{title} {live} {flags}",
-        title_pos = "center",
-        { win = "input", height = 1, border = "bottom" },
-        { win = "list", border = "none" },
-      },
-    },
-  },
   dropdown_pick = {
     layout = {
       backdrop = true,
@@ -75,7 +25,7 @@ M.layout = {
     layout = {
       backdrop = false,
       row = -1,
-      width = 0.7,
+      width = 0.5,
       min_width = 80,
       height = 0.4,
       border = "none",
@@ -83,95 +33,6 @@ M.layout = {
       { win = "input", height = 1, border = true, title = "{title} {live} {flags}", title_pos = "center" },
       { win = "list", border = "hpad" },
       { win = "preview", title = "{preview}", border = true },
-    },
-  },
-  mini_pick = {
-    layout = {
-      box = "vertical",
-      backdrop = false,
-      row = -1,
-      col = 0,
-      -- width = 1,
-      height = 0.4,
-      width = 0.5,
-      border = "rounded",
-      title = " {title} {live} {flags}",
-      title_pos = "left",
-      { win = "input", height = 1, border = "bottom" },
-      {
-        box = "horizontal",
-        { win = "list", border = "none" },
-      },
-    },
-  },
-  ivy = {
-    layout = {
-      box = "vertical",
-      backdrop = false,
-      row = -1,
-      -- width = 1,
-      height = 0.35,
-      border = "none",
-      title = " {title} {live} {flags}",
-      title_pos = "left",
-      { win = "input", height = 1, border = "bottom" },
-      {
-        box = "horizontal",
-        { win = "list", border = "none" },
-      },
-    },
-  },
-  ivy_pick = {
-    layout = {
-      box = "vertical",
-      backdrop = false,
-      row = 0.6,
-      width = 0.8,
-      height = 0.4,
-      border = "top",
-      title = " {title} {live} {flags}",
-      title_pos = "left",
-      { win = "input", height = 1, border = "bottom" },
-      {
-        box = "horizontal",
-        { win = "list", border = "none" },
-      },
-    },
-  },
-  ivy_preview = {
-    layout = {
-      box = "vertical",
-      backdrop = false,
-      row = -1,
-      width = 0,
-      height = 0.4,
-      border = "top",
-      title = " {title} {live} {flags}",
-      title_pos = "left",
-      { win = "input", height = 1, border = "bottom" },
-      {
-        box = "horizontal",
-        { win = "list", border = "none" },
-        { win = "preview", title = "{preview}", width = 0.5, border = "left" },
-      },
-    },
-  },
-  ivy_border = {
-    layout = {
-      box = "horizontal",
-      row = -1,
-      width = 0,
-      min_width = 120,
-      height = 0.4,
-      backdrop = false,
-      {
-        box = "vertical",
-        border = "none",
-        title = "{title} {live} {flags}",
-        { win = "input", height = 1, border = "bottom" },
-        { win = "list", border = false },
-      },
-      { win = "preview", title = "{preview}", border = "rounded", width = 0.5 },
     },
   },
   right = {
@@ -206,74 +67,6 @@ M.fzf = {
       -- col = 0.50, -- window col position (0=left, 1=right)
       border = "none",
       backdrop = 50,
-    },
-  },
-  dropdown = {
-    winopts = {
-      height = 0.9, -- window height
-      -- width = 1, -- window width
-      row = 1, -- window row position (0=top, 1=bottom)
-      -- col = 0.50, -- window col position (0=left, 1=right)
-      border = "none",
-      backdrop = 50,
-      preview = {
-        border = "none",
-        wrap = true,
-        hidden = false,
-        layout = "vertical",
-        vertical = "up:50%",
-      },
-    },
-  },
-  dropdown_pick = {
-    winopts = {
-      height = 0.65, -- window height
-      width = 0.7, -- window width
-      row = 1, -- window row position (0=top, 1=bottom)
-      -- col = 0, -- window col position (0=left, 1=right)
-      border = "none",
-      backdrop = 100,
-      preview = {
-        border = "rounded",
-        wrap = true,
-        hidden = false,
-        layout = "vertical",
-        vertical = "up:50%",
-      },
-    },
-  },
-  ivy = {
-    winopts = {
-      height = 0.35, -- window height
-      width = 1, -- window width
-      row = 1, -- window row position (0=top, 1=bottom)
-      col = 0, -- window col position (0=left, 1=right)
-      border = vim.g.bordered and "rounded" or "none",
-      backdrop = 100,
-      preview = {
-        border = "rounded",
-        wrap = true,
-        hidden = false,
-        layout = "horizontal",
-        horizontal = "right:45%",
-      },
-    },
-  },
-  ivy_pick = {
-    winopts = {
-      height = 0.4, -- window height
-      -- width = 0.7, -- window width
-      row = 1, -- window row position (0=top, 1=bottom)
-      -- col = 0, -- window col position (0=left, 1=right)
-      border = vim.g.bordered and "rounded" or "none",
-      backdrop = 100,
-      preview = {
-        border = "rounded",
-        wrap = true,
-        hidden = false,
-        layout = "horizontal",
-        horizontal = "right:50%",
-      },
     },
   },
 }

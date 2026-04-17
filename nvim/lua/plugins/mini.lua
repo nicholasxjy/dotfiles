@@ -57,29 +57,6 @@ return {
     end,
   },
   {
-    "nvim-mini/mini.ai",
-    version = false,
-    event = "VeryLazy",
-    config = function()
-      require("mini.ai").setup()
-    end,
-  },
-  {
-    "nvim-mini/mini.surround",
-    version = false,
-    event = "VeryLazy",
-    opts = {
-      mappings = {
-        add = "gsa",
-        delete = "gsd",
-        replace = "gsr",
-      },
-    },
-    config = function(_, opts)
-      require("mini.surround").setup(opts)
-    end,
-  },
-  {
     "nvim-mini/mini.trailspace",
     version = false,
     event = "VeryLazy",
@@ -237,11 +214,11 @@ return {
         n_hues = 8,
 
         -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
-        saturation = "high",
+        saturation = "lowmedium",
 
         -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'green',
         -- 'cyan', 'azure', 'blue', 'purple'
-        accent = "cyan",
+        accent = "bg",
 
         -- Plugin integrations. Use `default = false` to disable all integrations.
         -- Also can be set per plugin (see |MiniHues.config|).
@@ -259,73 +236,6 @@ return {
       -- vim.api.nvim_set_hl(0, "FzfLuaBorder", { fg = p.accent })
       -- vim.api.nvim_set_hl(0, "FzfLuaFzfMatch", { fg = p.accent, bg = p.bg, bold = true })
       -- vim.api.nvim_set_hl(0, "FzfLuaDirPart", { fg = p.bg_mid2, bg = p.bg_edge2 })
-    end,
-  },
-  {
-    "nvim-mini/mini.clue",
-    version = false,
-    event = "VeryLazy",
-    config = function()
-      local miniclue = require("mini.clue")
-      miniclue.setup({
-        window = {
-          delay = 100,
-          config = {
-            width = "auto",
-            col = "auto",
-            anchor = "NW",
-            border = "single",
-          },
-        },
-        triggers = {
-          -- Leader triggers
-          { mode = { "n", "x" }, keys = "<Leader>" },
-
-          -- `[` and `]` keys
-          { mode = "n", keys = "[" },
-          { mode = "n", keys = "]" },
-
-          -- Built-in completion
-          { mode = "i", keys = "<C-x>" },
-
-          -- `g` key
-          { mode = { "n", "x" }, keys = "g" },
-
-          -- Marks
-          { mode = { "n", "x" }, keys = "'" },
-          { mode = { "n", "x" }, keys = "`" },
-
-          -- Registers
-          { mode = { "n", "x" }, keys = '"' },
-          { mode = { "i", "c" }, keys = "<C-r>" },
-
-          -- Window commands
-          { mode = "n", keys = "<C-w>" },
-
-          -- `z` key
-          { mode = { "n", "x" }, keys = "z" },
-        },
-
-        clues = {
-          { mode = "n", keys = "<leader>a", desc = "+AI" },
-          { mode = "n", keys = "<leader>b", desc = "+Buffer" },
-          { mode = "n", keys = "<leader>c", desc = "+Code" },
-          { mode = "n", keys = "<leader>d", desc = "+Debug" },
-          { mode = "n", keys = "<leader>f", desc = "+Files" },
-          { mode = "n", keys = "<leader>s", desc = "+Search" },
-          { mode = "n", keys = "<leader>g", desc = "+Git" },
-          { mode = "n", keys = "<leader>x", desc = "+Diagnostic" },
-          { mode = "n", keys = "<leader>u", desc = "+UI" },
-          -- Enhance this by adding descriptions for <Leader> mapping groups
-          miniclue.gen_clues.square_brackets(),
-          miniclue.gen_clues.builtin_completion(),
-          miniclue.gen_clues.g(),
-          miniclue.gen_clues.marks(),
-          miniclue.gen_clues.registers(),
-          miniclue.gen_clues.windows(),
-          miniclue.gen_clues.z(),
-        },
-      })
     end,
   },
 }

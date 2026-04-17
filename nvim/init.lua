@@ -1,2 +1,3 @@
 require("core")
-require("current-theme")
+
+vim.cmd.colorscheme("randomhue")

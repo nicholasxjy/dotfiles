@@ -19,17 +19,25 @@ return {
     end,
   },
   {
-    "OXY2DEV/markview.nvim",
-    lazy = false,
-    dependencies = { "saghen/blink.cmp" },
-    cmd = "Markview",
-    keys = {
-      { "<leader>um", "<cmd>Markview toggle<cr>", desc = "Markview toggle" },
-    },
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.icons" },
     opts = {
-      preview = {
-        icon_provider = "mini",
-      },
+      file_types = { "markdown", "Avante" },
+      -- completions = { blink = { enabled = true } },
+      -- code = {
+      --   language_border = "",
+      --   width = "block",
+      --   right_pad = 1,
+      -- },
     },
+    ft = { "markdown", "norg", "rmd", "org", "codecompanion", "Avante" },
+    config = function(_, opts)
+      require("render-markdown").setup(opts)
+      Snacks.toggle({
+        name = "Render Markdown",
+        get = require("render-markdown").get,
+        set = require("render-markdown").set,
+      }):map("<leader>um")
+    end,
   },
 }

@@ -5,7 +5,6 @@ return {
     {
       "<tab>",
       function()
-        -- if there is a next edit, jump to it, otherwise apply it if any
         if not require("sidekick").nes_jump_or_apply() then
           return "<Tab>" -- fallback to normal tab
         end
@@ -81,13 +80,11 @@ return {
     },
     cli = {
       watch = true,
-      -- win = {
-      --   layout = "float",
-      --   float = {
-      --     width = 0.8,
-      --     height = 0.7,
-      --   },
-      -- },
+      win = {
+        split = {
+          width = 0.4,
+        },
+      },
       mux = {
         backend = vim.env.ZELLIJ and "zellij" or "tmux",
         enabled = true,
@@ -95,7 +92,11 @@ return {
         -- window: when run inside a terminal multiplexer, new sessions will be created in a new tab
         -- split: when run inside a terminal multiplexer, new sessions will be created in a new split
         -- NOTE: zellij only supports `terminal`
-        create = vim.env.ZELLIJ and "terminal" or "window",
+        create = "terminal",
+        split = {
+          vertical = true, -- vertical or horizontal split
+          size = 0.4, -- size of the split (0-1 for percentage)
+        },
       },
     },
   },

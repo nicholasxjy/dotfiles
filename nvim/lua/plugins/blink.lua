@@ -1,3 +1,5 @@
+local ui = require("core.ui")
+
 return {
   {
     "L3MON4D3/LuaSnip",
@@ -70,7 +72,7 @@ return {
         appearance = {
           -- use_nvim_cmp_as_default = true,
           -- nerd_font_variant = "mono",
-          -- kind_icons = ui.icons.lspkind_kind_icons,
+          kind_icons = ui.icons.lspkind_kind_icons,
         },
         completion = {
           ghost_text = { enabled = true },
@@ -94,8 +96,8 @@ return {
               components = {
                 kind_icon = {
                   text = function(ctx)
-                    local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-                    return kind_icon .. " "
+                    -- local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+                    return ctx.kind_icon .. " "
                   end,
                   highlight = function(ctx)
                     local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
@@ -141,6 +143,11 @@ return {
           completion = {
             ghost_text = { enabled = true },
             list = { selection = { preselect = false, auto_insert = true } },
+            menu = {
+              auto_show = function()
+                return vim.fn.getcmdtype() == ":"
+              end,
+            },
           },
         },
         sources = {
@@ -202,7 +209,7 @@ return {
         -- default: 'terminal', 'quickfix', 'nofile', 'prompt'
         buftypes = { include_defaults = true },
         -- default: 'lspinfo', 'packer', 'checkhealth', 'help', 'man', 'gitcommit', 'dashboard', ''
-        filetypes = { include_defaults = true },
+        filetypes = { include_defaults = true, "fyler", "Fyler" },
       },
       static = {
         enabled = false,
@@ -244,66 +251,6 @@ return {
           },
         },
       },
-    },
-  },
-  {
-    "saghen/blink.pairs",
-    dependencies = "saghen/blink.download",
-    build = "cargo build --release",
-    event = { "InsertEnter" },
-    --- @module 'blink.pairs'
-    --- @type blink.pairs.Config
-    opts = {
-      mappings = {
-        -- you can call require("blink.pairs.mappings").enable()
-        -- and require("blink.pairs.mappings").disable()
-        -- to enable/disable mappings at runtime
-        enabled = true,
-        cmdline = true,
-        -- or disable with `vim.g.pairs = false` (global) and `vim.b.pairs = false` (per-buffer)
-        -- and/or with `vim.g.blink_pairs = false` and `vim.b.blink_pairs = false`
-        disabled_filetypes = {},
-        wrap = {
-          -- move closing pair via motion
-          ["<C-b>"] = "motion",
-          -- move opening pair via motion
-          ["<C-S-b>"] = "motion_reverse",
-          -- set to 'treesitter' or 'treesitter_reverse' to use treesitter instead of motions
-          -- set to nil, '' or false to disable the mapping
-          -- normal_mode = {} <- for normal mode mappings, only supports 'motion' and 'motion_reverse'
-        },
-        -- see the defaults:
-        -- https://github.com/Saghen/blink.pairs/blob/main/lua/blink/pairs/config/mappings.lua#L52
-        pairs = {},
-      },
-      highlights = {
-        enabled = true,
-        -- requires require('vim._extui').enable({}), otherwise has no effect
-        cmdline = true,
-        -- set to { 'BlinkPairs' } to disable rainbow highlighting
-        groups = {
-          "BlinkPairsRed",
-          "BlinkPairsOrange",
-          "BlinkPairsYellow",
-          "BlinkPairsBlue",
-          "BlinkPairsGreen",
-          "BlinkPairsViolet",
-          "BlinkPairsCyan",
-        },
-        unmatched_group = "BlinkPairsUnmatched",
-
-        -- highlights matching pairs under the cursor
-        matchparen = {
-          enabled = true,
-          -- known issue where typing won't update matchparen highlight, disabled by default
-          cmdline = true,
-          -- also include pairs not on top of the cursor, but surrounding the cursor
-          include_surrounding = true,
-          group = "BlinkPairsMatchParen",
-          priority = 250,
-        },
-      },
-      debug = false,
     },
   },
 }

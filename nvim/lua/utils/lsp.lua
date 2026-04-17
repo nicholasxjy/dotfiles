@@ -54,6 +54,7 @@ local diagnostics_workspace_errors = picker_call("diagnostics_workspace", "diagn
   severity_limit = vim.diagnostic.severity.ERROR,
   sort = true,
 }, diagnostics_opts(vim.diagnostic.severity.ERROR))
+
 M.keymap_setup = function()
   if vim.g.lsp_keymaps_ready then
     return
@@ -62,9 +63,7 @@ M.keymap_setup = function()
 
   vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
 
-  -- vim.keymap.set("n", "K", function()
-  --   vim.lsp.buf.hover()
-  -- end, { desc = "Hover", silent = true })
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover", silent = true })
 
   vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
@@ -74,12 +73,12 @@ M.keymap_setup = function()
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
   vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
 
-  vim.keymap.set("n", "]]", function()
-    Snacks.words.jump(vim.v.count1)
-  end, { desc = "Next Reference" })
-  vim.keymap.set("n", "[[", function()
-    Snacks.words.jump(-vim.v.count1)
-  end, { desc = "Prev Reference" })
+  -- vim.keymap.set("n", "]]", function()
+  --   Snacks.words.jump(vim.v.count1)
+  -- end, { desc = "Next Reference" })
+  -- vim.keymap.set("n", "[[", function()
+  --   Snacks.words.jump(-vim.v.count1)
+  -- end, { desc = "Prev Reference" })
 
   -- Diagnostic keymaps
   local diagnostic_goto = function(count, severity)

@@ -1,5 +1,3 @@
-local ui = require("core.ui")
-
 return {
   {
     "ibhagwan/fzf-lua",
@@ -37,9 +35,9 @@ return {
         multiprocess = true,
       },
       lsp = {
-        symbols = {
-          symbol_icons = ui.icons.mini_kind_icons,
-        },
+        -- symbols = {
+        --   symbol_icons = ui.icons.mini_kind_icons,
+        -- },
       },
       diagnostics = {
         cwd_only = true,
@@ -65,7 +63,6 @@ return {
         "<leader>m",
         function()
           require("fzf-lua").marks({
-            winopts = ui.fzf.mini_pick.winopts,
             previewer = false,
           })
         end,
