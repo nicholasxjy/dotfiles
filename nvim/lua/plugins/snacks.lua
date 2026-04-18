@@ -1,5 +1,15 @@
 local ui = require("core.ui")
 
+--- Create a picker keymap callback, optionally with default opts
+local function pick(method, opts)
+  return function()
+    Snacks.picker[method](opts)
+  end
+end
+
+--- Picker opts scoped to cwd
+local cwd = { filter = { cwd = true } }
+
 return {
   "folke/snacks.nvim",
   lazy = false,
@@ -132,89 +142,52 @@ return {
       end,
       desc = "Explorer",
     },
-    {
-      "<leader>r",
-      function()
-        Snacks.picker.resume()
-      end,
-      desc = "Resume Search",
-    },
-    {
-      "<leader>ff",
-      function()
-        Snacks.picker.files({
-          hidden = true,
-          filter = { cwd = true },
-        })
-      end,
-      desc = "Find Files",
-      silent = true,
-    },
+    { "<leader>r", pick("resume"), desc = "Resume Search" },
+    { "<leader>/", pick("lines"), desc = "Blines" },
+    { "<leader>m", pick("marks"), desc = "Marks" },
+    { "<leader>ff", pick("files", { hidden = true, filter = cwd.filter }), desc = "Find Files", silent = true },
     {
       "ff",
-      function()
-        Snacks.picker.smart({
-          hidden = true,
-          filter = { cwd = true },
-          layout = ui.layout.vscode,
-        })
-      end,
+      pick("smart", { hidden = true, filter = cwd.filter, layout = ui.layout.vscode }),
       desc = "Find Files",
       silent = true,
     },
     {
       "nn",
-      function()
-        Snacks.picker.buffers({
-          sort_lastused = true,
-          current = false,
-          layout = ui.layout.vscode,
-          win = {
-            input = {
-              keys = {
-                ["<c-x>"] = { "bufdelete", mode = { "n", "i" } },
-              },
-            },
-            list = { keys = { ["dd"] = "bufdelete" } },
-          },
-        })
-      end,
+      pick("buffers", {
+        sort_lastused = true,
+        current = false,
+        layout = ui.layout.vscode,
+        win = {
+          input = { keys = { ["<c-x>"] = { "bufdelete", mode = { "n", "i" } } } },
+          list = { keys = { ["dd"] = "bufdelete" } },
+        },
+      }),
       desc = "Find Buffers",
       silent = true,
     },
-    {
-      "<leader>sw",
-      function()
-        Snacks.picker.grep_word({
-          filter = { cwd = true },
-        })
-      end,
-      desc = "Grep Word",
-      mode = { "n", "x", "v" },
-    },
-    {
-      "<leader>sg",
-      function()
-        Snacks.picker.grep({
-          filter = { cwd = true },
-        })
-      end,
-      desc = "Live Grep",
-    },
-    {
-      "<leader>sG",
-      function()
-        Snacks.picker.grep()
-      end,
-      desc = "Global Grep",
-    },
-    {
-      "<leader>z",
-      function()
-        Snacks.zen()
-      end,
-      desc = "Toggle Zen",
-    },
+    { "<leader>fa", pick("autocmds"), desc = "Autocmds" },
+    { "<leader>fc", pick("colorschemes"), desc = "Colorschemes" },
+    { "<leader>fC", pick("commands"), desc = "Commands" },
+    { "<leader>fi", pick("icons"), desc = "Icons" },
+    { "<leader>fl", pick("loclist"), desc = "Location" },
+    { "<leader>fk", pick("keymaps"), desc = "Keymaps" },
+    { "<leader>fr", pick("registers"), desc = "Registers" },
+    { "<leader>fu", pick("undo"), desc = "Undos" },
+    { "<leader>fq", pick("qflist"), desc = "Quickfix" },
+    -- git
+    { "<leader>gb", pick("git_branches"), desc = "Git Branches" },
+    { "<leader>gl", pick("git_log"), desc = "Git Log" },
+    { "<leader>gL", pick("git_log_line"), desc = "Git Log Line" },
+    { "<leader>gs", pick("git_status"), desc = "Git Status" },
+    { "<leader>gS", pick("git_stash"), desc = "Git Stash" },
+    { "<leader>gd", pick("git_diff"), desc = "Git Diff (Hunks)" },
+    { "<leader>gf", pick("git_log_file"), desc = "Git Log File" },
+    -- search
+    { "<leader>sw", pick("grep_word", cwd), desc = "Grep Word", mode = { "n", "x", "v" } },
+    { "<leader>sg", pick("grep", cwd), desc = "Live Grep" },
+    { "<leader>sG", pick("grep"), desc = "Global Grep" },
+    -- misc
     {
       "<leader>un",
       function()
@@ -222,12 +195,6 @@ return {
       end,
       desc = "Clear Notifications",
     },
-    {
-      "<leader>N",
-      function()
-        Snacks.picker.notifications()
-      end,
-      desc = "Notifications",
-    },
+    { "<leader>N", pick("notifications"), desc = "Notifications" },
   },
 }

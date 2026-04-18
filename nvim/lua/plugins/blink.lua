@@ -78,7 +78,7 @@ return {
           ghost_text = { enabled = true },
           documentation = {
             auto_show = true,
-            auto_show_delay_ms = 0,
+            auto_show_delay_ms = 100,
             window = {
               border = vim.g.border_style,
               max_height = 20,
@@ -201,8 +201,6 @@ return {
   },
   {
     "saghen/blink.indent",
-    --- @module 'blink.indent'
-    --- @type blink.indent.Config
     event = { "BufReadPost", "BufNewFile" },
     opts = {
       blocked = {

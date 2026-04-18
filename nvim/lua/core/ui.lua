@@ -58,19 +58,6 @@ M.layout = {
   },
 }
 
-M.fzf = {
-  mini_pick = {
-    winopts = {
-      height = 0.4, -- window height
-      width = 0.7, -- window width
-      row = 0.5, -- window row position (0=top, 1=bottom)
-      -- col = 0.50, -- window col position (0=left, 1=right)
-      border = "none",
-      backdrop = 50,
-    },
-  },
-}
-
 M.icons = {
   mini_kind_icons = {
     Codeium = "󰚩",

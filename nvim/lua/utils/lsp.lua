@@ -1,16 +1,8 @@
 local M = {}
 
-local function using_fzf_picker()
-  return vim.g.picker == "fzf"
-end
-
-local function picker_call(fzf_name, snacks_name, fzf_opts, snacks_opts)
+local function pick(name, opts)
   return function()
-    if using_fzf_picker() then
-      require("fzf-lua")[fzf_name](fzf_opts)
-    else
-      Snacks.picker[snacks_name](snacks_opts)
-    end
+    Snacks.picker[name](opts)
   end
 end
 
@@ -34,26 +26,20 @@ local function diagnostics_opts(min_severity)
   return opts
 end
 
-local lsp_definitions = picker_call("lsp_definitions", "lsp_definitions")
-local lsp_declarations = picker_call("lsp_declarations", "lsp_declarations")
-local lsp_implementations = picker_call("lsp_implementations", "lsp_implementations")
-local lsp_references = picker_call("lsp_references", "lsp_references")
-local lsp_type_definitions = picker_call("lsp_typedefs", "lsp_type_definitions")
-local lsp_incoming_calls = picker_call("lsp_incoming_calls", "lsp_incoming_calls")
-local lsp_outgoing_calls = picker_call("lsp_outgoing_calls", "lsp_outgoing_calls")
-local lsp_symbols = picker_call("lsp_document_symbols", "lsp_symbols")
-local lsp_workspace_symbols = picker_call("lsp_workspace_symbols", "lsp_workspace_symbols")
+local lsp_definitions = pick("lsp_definitions")
+local lsp_declarations = pick("lsp_declarations")
+local lsp_implementations = pick("lsp_implementations")
+local lsp_references = pick("lsp_references")
+local lsp_type_definitions = pick("lsp_type_definitions")
+local lsp_incoming_calls = pick("lsp_incoming_calls")
+local lsp_outgoing_calls = pick("lsp_outgoing_calls")
+local lsp_symbols = pick("lsp_symbols")
+local lsp_workspace_symbols = pick("lsp_workspace_symbols")
 
-local diagnostics_buffer = picker_call("diagnostics_document", "diagnostics_buffer", { sort = true })
-local diagnostics_workspace = picker_call("diagnostics_workspace", "diagnostics", { sort = true }, diagnostics_opts())
-local diagnostics_workspace_warns = picker_call("diagnostics_workspace", "diagnostics", {
-  severity_limit = vim.diagnostic.severity.WARN,
-  sort = true,
-}, diagnostics_opts(vim.diagnostic.severity.WARN))
-local diagnostics_workspace_errors = picker_call("diagnostics_workspace", "diagnostics", {
-  severity_limit = vim.diagnostic.severity.ERROR,
-  sort = true,
-}, diagnostics_opts(vim.diagnostic.severity.ERROR))
+local diagnostics_buffer = pick("diagnostics_buffer")
+local diagnostics_workspace = pick("diagnostics", diagnostics_opts())
+local diagnostics_workspace_warns = pick("diagnostics", diagnostics_opts(vim.diagnostic.severity.WARN))
+local diagnostics_workspace_errors = pick("diagnostics", diagnostics_opts(vim.diagnostic.severity.ERROR))
 
 M.keymap_setup = function()
   if vim.g.lsp_keymaps_ready then
@@ -72,13 +58,6 @@ M.keymap_setup = function()
 
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
   vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
-
-  -- vim.keymap.set("n", "]]", function()
-  --   Snacks.words.jump(vim.v.count1)
-  -- end, { desc = "Next Reference" })
-  -- vim.keymap.set("n", "[[", function()
-  --   Snacks.words.jump(-vim.v.count1)
-  -- end, { desc = "Prev Reference" })
 
   -- Diagnostic keymaps
   local diagnostic_goto = function(count, severity)
@@ -112,31 +91,9 @@ M.keymap_setup = function()
 end
 
 M.methods_setup = function(client, bufnr)
-  local Methods = vim.lsp.protocol.Methods
-
   vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
   vim.lsp.linked_editing_range.enable(true, { bufnr = bufnr })
   vim.lsp.on_type_formatting.enable(true, { bufnr = bufnr })
-
-  if client:supports_method(Methods.textDocument_documentHighlight) then
-    local under_cursor_highlights_group =
-      vim.api.nvim_create_augroup("xue_cursor_highlights_" .. bufnr, { clear = true })
-    -- When cursor movement is paused or we jump to the normal mode, enable instance highlighting
-    vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
-      group = under_cursor_highlights_group,
-      desc = "Highlight references under the cursor",
-      buffer = bufnr,
-      callback = vim.lsp.buf.document_highlight,
-    })
-
-    -- If the cursor has moved or we go to insert mode or close buffer, disable all instance highlighting
-    vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave" }, {
-      group = under_cursor_highlights_group,
-      desc = "Clear highlight references",
-      buffer = bufnr,
-      callback = vim.lsp.buf.clear_references,
-    })
-  end
 
   if client and client.name == "eslint" then
     vim.api.nvim_create_autocmd("BufWritePre", {
