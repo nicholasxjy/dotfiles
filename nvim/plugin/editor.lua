@@ -83,3 +83,5 @@ vim.g.visual_whitespace = {
   },
   ignore = { filetypes = {}, buftypes = {} },
 }
+
+require("jishiben").setup()

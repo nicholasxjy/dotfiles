@@ -9,9 +9,12 @@ end)
 
 require("mini.hues").setup({
   -- **Required** base colors as '#rrggbb' hex strings
-  background = "#171614",
+  -- background = "#171614",
   foreground = "#AEA09F",
 
+  -- background = "#2D2424",
+  background = "#202940",
+  -- foreground = "#8D7B68",
   -- Number of hues used for non-base colors
   n_hues = 8,
 
@@ -20,7 +23,7 @@ require("mini.hues").setup({
 
   -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'green',
   -- 'cyan', 'azure', 'blue', 'purple'
-  accent = "bg",
+  accent = "purple",
 
   -- Plugin integrations. Use `default = false` to disable all integrations.
   -- Also can be set per plugin (see |MiniHues.config|).
@@ -214,6 +217,10 @@ local function setup_deferred()
 
   require("mini.tabline").setup({
     show_icons = true,
+  })
+
+  require("mini.statusline").setup({
+    use_icons = true,
   })
 end
 

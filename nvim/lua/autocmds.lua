@@ -1,7 +1,3 @@
-local excluded_last_loc_filetypes = {
-  gitcommit = true,
-}
-
 local function augroup(name)
   return vim.api.nvim_create_augroup("sjvim_" .. name, { clear = true })
 end
@@ -139,30 +135,6 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
   end,
 })
 
--- go to last loc when opening a buffer
-vim.api.nvim_create_autocmd("BufReadPost", {
-  group = augroup("last_loc"),
-  callback = function(event)
-    local buf = event.buf
-    local buf_vars = vim.b[buf]
-    if excluded_last_loc_filetypes[vim.bo[buf].filetype] or buf_vars.lazyvim_last_loc then
-      return
-    end
-
-    buf_vars.lazyvim_last_loc = true
-    local mark = vim.api.nvim_buf_get_mark(buf, '"')
-    if mark[1] == 0 or mark[1] > vim.api.nvim_buf_line_count(buf) then
-      return
-    end
-
-    vim.schedule(function()
-      if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_get_current_buf() == buf then
-        pcall(vim.api.nvim_win_set_cursor, 0, mark)
-        vim.cmd("normal! zz")
-      end
-    end)
-  end,
-})
 -- make it easier to close man-files when opened inline
 vim.api.nvim_create_autocmd("FileType", {
   group = augroup("man_unlisted"),

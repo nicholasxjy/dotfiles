@@ -15,6 +15,7 @@ vim.pack.add({
   "https://github.com/rcarriga/nvim-notify",
 
   "https://github.com/nicholasxjy/mini.hues",
+  "https://github.com/nicholasxjy/mini.statusline",
   "https://github.com/nvim-mini/mini.icons",
   "https://github.com/nvim-mini/mini.files",
   "https://github.com/nvim-mini/mini.tabline",
@@ -31,6 +32,7 @@ vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/b0o/SchemaStore.nvim",
   "https://github.com/nicholasxjy/translator.nvim",
+  { src = "https://github.com/nicholasxjy/jishiben.nvim", version = "v2" },
   "https://github.com/windwp/nvim-ts-autotag",
   "https://github.com/folke/ts-comments.nvim",
   "https://github.com/MagicDuck/grug-far.nvim",
@@ -58,8 +60,6 @@ vim.pack.add({
   "https://github.com/esmuellert/codediff.nvim",
 
   "https://github.com/mfussenegger/nvim-lint",
-
-  "https://github.com/sschleemilch/slimline.nvim",
 
   "https://github.com/rafamadriz/friendly-snippets",
   "https://github.com/L3MON4D3/LuaSnip",

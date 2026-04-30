@@ -36,12 +36,13 @@ local function setup_blink()
       menu = {
         scrollbar = true,
         draw = {
+          columns = { { "kind_icon" }, { "label", "label_description", gap = 1 }, { "kind" } },
           -- treesitter = { "lsp" },
           components = {
             kind_icon = {
               text = function(ctx)
-                -- local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-                return ctx.kind_icon .. " "
+                local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+                return kind_icon .. " "
               end,
               highlight = function(ctx)
                 local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
