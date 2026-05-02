@@ -10,6 +10,7 @@ local function setup_fzf()
     fzf_colors = true,
     defaults = {
       formatter = "path.filename_first",
+      path_shorten = 1,
     },
     winopts = {
       height = 1, -- window height

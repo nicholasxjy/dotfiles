@@ -19,7 +19,7 @@ opt.conceallevel = 1
 opt.scrolloff = 999
 opt.linebreak = true
 
-opt.winborder = "none"
+opt.winborder = "single"
 -- Set tab width
 opt.tabstop = 2
 opt.shiftwidth = 2

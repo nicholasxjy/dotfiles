@@ -13,6 +13,7 @@ vim.pack.add({
     version = "main",
   },
   "https://github.com/rcarriga/nvim-notify",
+  "https://github.com/nicholasxjy/lsp-progress-notify.nvim",
 
   "https://github.com/nicholasxjy/mini.hues",
   "https://github.com/nicholasxjy/mini.statusline",
@@ -54,6 +55,7 @@ vim.pack.add({
   "https://github.com/folke/persistence.nvim",
   "https://github.com/jake-stewart/multicursor.nvim",
   "https://github.com/mcauley-penney/visual-whitespace.nvim",
+  "https://github.com/gbprod/yanky.nvim",
 
   "https://github.com/lewis6991/gitsigns.nvim",
   "https://github.com/barrettruth/diffs.nvim",

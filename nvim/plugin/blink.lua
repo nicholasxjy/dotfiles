@@ -1,4 +1,5 @@
 local blink = require("blink.cmp")
+local ui = require("ui")
 
 local function setup_blink()
   if vim.g.blink_setup_done then
@@ -25,6 +26,9 @@ local function setup_blink()
         show_documentation = true,
       },
     },
+    appearance = {
+      kind_icons = ui.icons.lspkind_kind_icons,
+    },
     completion = {
       ghost_text = { enabled = true },
       documentation = {
@@ -37,12 +41,12 @@ local function setup_blink()
         scrollbar = true,
         draw = {
           columns = { { "kind_icon" }, { "label", "label_description", gap = 1 }, { "kind" } },
-          -- treesitter = { "lsp" },
+          treesitter = { "lsp" },
           components = {
             kind_icon = {
               text = function(ctx)
-                local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-                return kind_icon .. " "
+                -- local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+                return ctx.kind_icon .. " "
               end,
               highlight = function(ctx)
                 local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
@@ -83,9 +87,11 @@ local function setup_blink()
   })
 end
 
-vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
+vim.api.nvim_create_autocmd("VimEnter", {
   once = true,
-  callback = setup_blink,
+  callback = function()
+    vim.schedule(setup_blink)
+  end,
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

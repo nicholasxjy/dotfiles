@@ -13,12 +13,15 @@ sidekick.setup({
       ohmypi = {
         cmd = { "omp" },
       },
+      jcode = {
+        cmd = { "jcode" },
+      },
     },
     watch = true,
     win = {
       layout = "left",
       split = {
-        width = 0.3,
+        width = 0.35,
       },
     },
     mux = {
@@ -31,7 +34,7 @@ sidekick.setup({
       create = vim.env.ZELLIJ and "terminal" or "split",
       split = {
         vertical = true, -- vertical or horizontal split
-        size = 0.3, -- size of the split (0-1 for percentage)
+        size = 0.35, -- size of the split (0-1 for percentage)
       },
     },
     prompts = {

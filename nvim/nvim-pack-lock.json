@@ -5,15 +5,15 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "8092a4212b66b4ff2c392080ff4186ff0b7d4945",
+      "rev": "6db1246640e9e1bdf8a1d1f6d27a940fc0a572d5",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "blink.cmp": {
-      "rev": "1617522ae80ca2436813da8afe2fc4b1280e975d",
+      "rev": "80f5dd3f11049f1c3a87557718d4e55556a0e3f5",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.download": {
-      "rev": "dda2666685a5ac3598166577d2e34f1fff6b1637",
+      "rev": "f29d8bac6549bc1e7d699c83f680823d7def98bd",
       "src": "https://github.com/saghen/blink.download"
     },
     "blink.indent": {
@@ -21,11 +21,11 @@
       "src": "https://github.com/saghen/blink.indent"
     },
     "blink.lib": {
-      "rev": "dda2666685a5ac3598166577d2e34f1fff6b1637",
+      "rev": "f29d8bac6549bc1e7d699c83f680823d7def98bd",
       "src": "https://github.com/saghen/blink.lib"
     },
     "blink.pairs": {
-      "rev": "2da33da164fbbf5cf52214fb9e7db1096d55e0dc",
+      "rev": "1e8ad765ab956e87b0c7b86a32ffc5c265d9519b",
       "src": "https://github.com/saghen/blink.pairs"
     },
     "codediff.nvim": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/Saecki/crates.nvim"
     },
     "diffs.nvim": {
-      "rev": "10be27951f5046e08cefa284fb9d83b06f1135cb",
+      "rev": "02230b93f07dbc37232e16043395a28a8e7e6ad1",
       "src": "https://github.com/barrettruth/diffs.nvim"
     },
     "friendly-snippets": {
@@ -53,11 +53,11 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "b437bafc981a180d609bb4092c56ce8999f7a2c4",
+      "rev": "b62213f542dc7a123e1ee9b01e3833d2add59c17",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
-      "rev": "6d808f99bd63303646794406e270bd553ad7792e",
+      "rev": "dd3f588bacbeb041be6facf1742e42097f62165d",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "grug-far.nvim": {
@@ -72,6 +72,10 @@
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
+    },
+    "lsp-progress-notify.nvim": {
+      "rev": "53791deb2d4d6b81ce8af6dde1b22f04ed8c11f6",
+      "src": "https://github.com/nicholasxjy/lsp-progress-notify.nvim"
     },
     "lualine.nvim": {
       "rev": "131a558e13f9f28b15cd235557150ccb23f89286",
@@ -102,7 +106,7 @@
       "src": "https://github.com/nvim-mini/mini.icons"
     },
     "mini.statusline": {
-      "rev": "61be8c3e546fa19d8cbfb097017b780a96a18b01",
+      "rev": "a39749ccb489718efdd574a2a0980b1d08c9f00b",
       "src": "https://github.com/nicholasxjy/mini.statusline"
     },
     "mini.surround": {
@@ -130,7 +134,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "f7e89f3d19fb436e1fbeff3bf4291eef35da94e3",
+      "rev": "31026a13eefb20681124706a79fc1df6bf11ab27",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-notify": {
@@ -194,12 +198,16 @@
       "src": "https://github.com/sschleemilch/slimline.nvim"
     },
     "smart-splits.nvim": {
-      "rev": "033a1ff747652dfa27bfbe90e0844b5cb59a741f",
+      "rev": "80be31a3d2e37d32bd37794da72a4f69fce7a85f",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "snacks.nvim": {
       "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim"
+    },
+    "themeInitNvim": {
+      "rev": "02c34ce50c741c2e6b08e17fb629a23c9e014061",
+      "src": "https://codeberg.org/initsyscall/themeInitNvim"
     },
     "tiny-inline-diagnostic.nvim": {
       "rev": "147af4e49f51dd48f41972de26552872b8ba7b25",
@@ -232,6 +240,10 @@
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
       "src": "https://github.com/folke/which-key.nvim"
+    },
+    "yanky.nvim": {
+      "rev": "784188e0a7363e762e53140f39124d786aec0832",
+      "src": "https://github.com/gbprod/yanky.nvim"
     }
   }
 }

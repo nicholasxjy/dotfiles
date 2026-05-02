@@ -84,4 +84,8 @@ vim.g.visual_whitespace = {
   ignore = { filetypes = {}, buftypes = {} },
 }
 
-require("jishiben").setup()
+require("jishiben").setup({
+  win = {
+    border = "single",
+  },
+})
