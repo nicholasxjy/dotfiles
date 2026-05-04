@@ -13,7 +13,6 @@ vim.pack.add({
     version = "main",
   },
   "https://github.com/rcarriga/nvim-notify",
-  "https://github.com/nicholasxjy/lsp-progress-notify.nvim",
 
   "https://github.com/nicholasxjy/mini.hues",
   "https://github.com/nicholasxjy/mini.statusline",
@@ -22,7 +21,6 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.tabline",
   "https://github.com/nvim-mini/mini.surround",
   "https://github.com/nvim-mini/mini.trailspace",
-  "https://github.com/nvim-mini/mini.hipatterns",
 
   "https://github.com/saghen/blink.download",
   "https://github.com/saghen/blink.lib",
@@ -56,6 +54,9 @@ vim.pack.add({
   "https://github.com/jake-stewart/multicursor.nvim",
   "https://github.com/mcauley-penney/visual-whitespace.nvim",
   "https://github.com/gbprod/yanky.nvim",
+  "https://github.com/nvim-lua/plenary.nvim",
+  "https://github.com/folke/todo-comments.nvim",
+  "https://github.com/brenoprata10/nvim-highlight-colors",
 
   "https://github.com/lewis6991/gitsigns.nvim",
   "https://github.com/barrettruth/diffs.nvim",

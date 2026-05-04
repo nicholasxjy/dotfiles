@@ -47,4 +47,4 @@ require("blink.pairs").setup({
   debug = false,
 })
 
-util.build_on_change("blink.pairs", "update", "cargo build --release")
+util.build_cmd_on_change("blink.pairs", { "install", "update" }, { "cargo", "build", "--release" })

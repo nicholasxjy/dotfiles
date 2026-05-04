@@ -89,3 +89,6 @@ require("jishiben").setup({
     border = "single",
   },
 })
+
+require("todo-comments").setup()
+require("nvim-highlight-colors").setup({})

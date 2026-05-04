@@ -21,7 +21,7 @@ sidekick.setup({
     win = {
       layout = "left",
       split = {
-        width = 0.35,
+        width = 0.4,
       },
     },
     mux = {
@@ -31,10 +31,10 @@ sidekick.setup({
       -- window: when run inside a terminal multiplexer, new sessions will be created in a new tab
       -- split: when run inside a terminal multiplexer, new sessions will be created in a new split
       -- NOTE: zellij only supports `terminal`
-      create = vim.env.ZELLIJ and "terminal" or "split",
+      create = "terminal", --vim.env.ZELLIJ and "terminal" or "split",
       split = {
         vertical = true, -- vertical or horizontal split
-        size = 0.35, -- size of the split (0-1 for percentage)
+        size = 0.4, -- size of the split (0-1 for percentage)
       },
     },
     prompts = {

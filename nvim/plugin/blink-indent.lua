@@ -20,7 +20,7 @@ require("blink.indent").setup({
     },
   },
   scope = {
-    enabled = true,
+    enabled = false,
     char = "▎",
     priority = 1000,
     highlights = {
@@ -33,7 +33,7 @@ require("blink.indent").setup({
       "BlinkIndentBlue",
     },
     underline = {
-      enabled = true,
+      enabled = false,
       highlights = {
         "BlinkIndentRedUnderline",
         "BlinkIndentCyanUnderline",

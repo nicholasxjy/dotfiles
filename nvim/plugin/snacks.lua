@@ -208,3 +208,7 @@ vim.keymap.set(
   }),
   { desc = "Global Grep" }
 )
+
+vim.keymap.set("n", "<leader>xt", function()
+  pick("todo_comments", { { keywords = { "TODO", "FIX", "FIXME", "NOTE", "PERF", "HACK" } } })
+end, { desc = "TODO/FIXME/NOTE etc" })

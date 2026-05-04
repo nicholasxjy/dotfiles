@@ -35,7 +35,7 @@ local languages = {
   "rust",
 }
 
-util.build_on_change("nvim-treesitter", "update", "TSUpdate")
+util.build_ex_on_change("nvim-treesitter", { "install", "update" }, "TSUpdate")
 
 local ts
 local installed_cache = {}

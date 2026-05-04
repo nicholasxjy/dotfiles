@@ -1,5 +1,5 @@
 local util = require("util")
-util.build_on_change("LuaSnip", "update", "make install_jsregexp")
+util.build_cmd_on_change("LuaSnip", { "install", "update" }, { "make", "install_jsregexp" })
 
 local function setup_luasnip()
   if vim.g.luasnip_setup_done then

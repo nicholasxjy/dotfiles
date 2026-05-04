@@ -1,3 +1,4 @@
+local ui = require("ui")
 local util = require("util")
 
 vim.schedule(function()
@@ -11,11 +12,21 @@ require("mini.hues").setup({
   -- **Required** base colors as '#rrggbb' hex strings
   -- background = "#171614",
   -- foreground = "#AEA09F",
-
-  foreground = "#DFF1F1",
-  -- background = "#2D2424",
-  background = "#202940",
   -- foreground = "#8D7B68",
+  -- foreground = "#EDE9E6",
+  foreground = "#c8d3f5",
+  -- foreground = "#DFF1F1",
+  --
+  -- background = "#2D2424",
+  -- background = "#202940",
+  background = "#454040",
+  -- background = "#213C51",
+  -- background = "#41431B",
+  -- background = "#4B352A",
+  -- background = "#332941",
+  -- background = "#222436",
+  -- background = "#24283b",
+
   -- Number of hues used for non-base colors
   n_hues = 8,
 
@@ -80,20 +91,6 @@ local function setup_deferred()
   end
   vim.g.mini_deferred_setup_done = true
 
-  local hipatterns = require("mini.hipatterns")
-  hipatterns.setup({
-    highlighters = {
-      -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
-      fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
-      hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
-      todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
-      note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
-
-      -- Highlight hex color strings (`#rrggbb`) using that color
-      hex_color = hipatterns.gen_highlighter.hex_color(),
-    },
-  })
-
   require("mini.surround").setup({
     mappings = {
       add = "gsa",
@@ -129,7 +126,8 @@ local function setup_deferred()
     },
   })
 
-  require("mini.files").setup({
+  local MiniFiles = require("mini.files")
+  MiniFiles.setup({
     mappings = {
       show_help = "?",
       go_in_plus = "<cr>",
@@ -142,6 +140,53 @@ local function setup_deferred()
     },
     options = { permanent_delete = false },
   })
+
+  -- Window width based on the offset from the center, i.e. center window
+  -- is 60, then next over is 20, then the rest are 10.
+  -- Can use more resolution if you want like { 60, 20, 20, 10, 5 }
+  local widths = { 60, 20, 10 }
+
+  local ensure_center_layout = function(ev)
+    local state = MiniFiles.get_explorer_state()
+    if state == nil then
+      return
+    end
+
+    -- Compute "depth offset" - how many windows are between this and focused
+    local path_this = vim.api.nvim_buf_get_name(ev.data.buf_id):match("^minifiles://%d+/(.*)$")
+    local depth_this
+    for i, path in ipairs(state.branch) do
+      if path == path_this then
+        depth_this = i
+      end
+    end
+    if depth_this == nil then
+      return
+    end
+    local depth_offset = depth_this - state.depth_focus
+
+    -- Adjust config of this event's window
+    local i = math.abs(depth_offset) + 1
+    local win_config = vim.api.nvim_win_get_config(ev.data.win_id)
+    win_config.width = i <= #widths and widths[i] or widths[#widths]
+
+    win_config.col = math.floor(0.5 * (vim.o.columns - widths[1]))
+    for j = 1, math.abs(depth_offset) do
+      local sign = depth_offset == 0 and 0 or (depth_offset > 0 and 1 or -1)
+      -- widths[j+1] for the negative case because we don't want to add the center window's width
+      local prev_win_width = (sign == -1 and widths[j + 1]) or widths[j] or widths[#widths]
+      -- Add an extra +2 each step to account for the border width
+      win_config.col = win_config.col + sign * (prev_win_width + 2)
+    end
+
+    win_config.height = depth_offset == 0 and 25 or 20
+    win_config.row = math.floor(0.5 * (vim.o.lines - win_config.height))
+    -- win_config.border = { "🭽", "▔", "🭾", "▕", "🭿", "▁", "🭼", "▏" }
+    win_config.border = "rounded"
+    vim.api.nvim_win_set_config(ev.data.win_id, win_config)
+  end
+
+  vim.api.nvim_create_autocmd("User", { pattern = "MiniFilesWindowUpdate", callback = ensure_center_layout })
 
   vim.api.nvim_create_autocmd("User", {
     pattern = "MiniFilesWindowOpen",
@@ -223,6 +268,39 @@ local function setup_deferred()
   require("mini.statusline").setup({
     use_icons = true,
     show_workspace_diagnostics = true,
+    diff = {
+      -- Icon used before diff summary
+      icon = nil,
+      -- Signs shown for each diff type
+      signs = {
+        added = ui.icons.git.added,
+        modified = ui.icons.git.modified,
+        removed = ui.icons.git.removed,
+      },
+    },
+    diagnostics = {
+      icon = nil,
+      -- Signs shown for each severity level
+      signs = {
+        ERROR = ui.icons.diagnostics.Error,
+        WARN = ui.icons.diagnostics.Warn,
+        INFO = ui.icons.diagnostics.Info,
+        HINT = ui.icons.diagnostics.Hint,
+      },
+    },
+    highlight_groups = {
+      diff = {
+        added = "DiffAdded",
+        modified = "DiffModified",
+        removed = "DiffRemoved",
+      },
+      diagnostics = {
+        ERROR = "DiagnosticError",
+        WARN = "DiagnosticWarn",
+        INFO = "DiagnosticInfo",
+        HINT = "DiagnosticHint",
+      },
+    },
   })
 end
 

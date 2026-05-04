@@ -114,15 +114,15 @@ M.icons = {
     LogPoint = ".>",
   },
   diagnostics = {
-    Error = "",
-    Warn = "",
-    Hint = "",
-    Info = "",
+    Error = " ",
+    Warn = " ",
+    Hint = " ",
+    Info = " ",
   },
   git = {
-    added = "",
-    modified = "",
-    removed = "",
+    added = " ",
+    modified = " ",
+    removed = " ",
   },
 }
 

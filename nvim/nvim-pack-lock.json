@@ -9,7 +9,7 @@
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "blink.cmp": {
-      "rev": "80f5dd3f11049f1c3a87557718d4e55556a0e3f5",
+      "rev": "d3874d2a13aa19b095bdd10d37a82a8f0aa7cad3",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.download": {
@@ -25,7 +25,7 @@
       "src": "https://github.com/saghen/blink.lib"
     },
     "blink.pairs": {
-      "rev": "1e8ad765ab956e87b0c7b86a32ffc5c265d9519b",
+      "rev": "57785effbe1d8ba7810ce79dfd4e6a47bac22726",
       "src": "https://github.com/saghen/blink.pairs"
     },
     "codediff.nvim": {
@@ -53,7 +53,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "b62213f542dc7a123e1ee9b01e3833d2add59c17",
+      "rev": "64590411e6cf3d603d1e1bdad3a3d051f2f5a91a",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -73,14 +73,6 @@
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
     },
-    "lsp-progress-notify.nvim": {
-      "rev": "53791deb2d4d6b81ce8af6dde1b22f04ed8c11f6",
-      "src": "https://github.com/nicholasxjy/lsp-progress-notify.nvim"
-    },
-    "lualine.nvim": {
-      "rev": "131a558e13f9f28b15cd235557150ccb23f89286",
-      "src": "https://github.com/nvim-lualine/lualine.nvim"
-    },
     "markdown-preview.nvim": {
       "rev": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
       "src": "https://github.com/iamcco/markdown-preview.nvim"
@@ -93,10 +85,6 @@
       "rev": "3e247eb12ca8c05622ceb8745f9004f761b22ef8",
       "src": "https://github.com/nvim-mini/mini.files"
     },
-    "mini.hipatterns": {
-      "rev": "9eff319bbe66adfaf781a0d0e174baa08ba94909",
-      "src": "https://github.com/nvim-mini/mini.hipatterns"
-    },
     "mini.hues": {
       "rev": "85bd5c266da049ce9390fa7168952c9de29c05d6",
       "src": "https://github.com/nicholasxjy/mini.hues"
@@ -106,7 +94,7 @@
       "src": "https://github.com/nvim-mini/mini.icons"
     },
     "mini.statusline": {
-      "rev": "a39749ccb489718efdd574a2a0980b1d08c9f00b",
+      "rev": "3f5d2d47750c9000a6115ba6910919ae26daf9df",
       "src": "https://github.com/nicholasxjy/mini.statusline"
     },
     "mini.surround": {
@@ -124,6 +112,10 @@
     "multicursor.nvim": {
       "rev": "704b99f10a72cc05d370cfeb294ff83412a8ab55",
       "src": "https://github.com/jake-stewart/multicursor.nvim"
+    },
+    "nvim-highlight-colors": {
+      "rev": "e2cb22089cc2358b2b995c09578224f142de6039",
+      "src": "https://github.com/brenoprata10/nvim-highlight-colors"
     },
     "nvim-jdtls": {
       "rev": "77ccaeb422f8c81b647605da5ddb4a7f725cda90",
@@ -167,6 +159,10 @@
       "rev": "b20b2a7887bd39c1a356980b45e03250f3dce49c",
       "src": "https://github.com/folke/persistence.nvim"
     },
+    "plenary.nvim": {
+      "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
+      "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
     "promise-async": {
       "rev": "119e8961014c9bfaf1487bf3c2a393d254f337e2",
       "src": "https://github.com/kevinhwang91/promise-async"
@@ -193,10 +189,6 @@
       "src": "https://github.com/nicholasxjy/sidekick.nvim",
       "version": "'focus-pane'"
     },
-    "slimline.nvim": {
-      "rev": "6e1387e69e222957ff87e5ddc61470d4e04ac683",
-      "src": "https://github.com/sschleemilch/slimline.nvim"
-    },
     "smart-splits.nvim": {
       "rev": "80be31a3d2e37d32bd37794da72a4f69fce7a85f",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
@@ -205,13 +197,13 @@
       "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim"
     },
-    "themeInitNvim": {
-      "rev": "02c34ce50c741c2e6b08e17fb629a23c9e014061",
-      "src": "https://codeberg.org/initsyscall/themeInitNvim"
-    },
     "tiny-inline-diagnostic.nvim": {
       "rev": "147af4e49f51dd48f41972de26552872b8ba7b25",
       "src": "https://github.com/rachartier/tiny-inline-diagnostic.nvim"
+    },
+    "todo-comments.nvim": {
+      "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",
+      "src": "https://github.com/folke/todo-comments.nvim"
     },
     "translator.nvim": {
       "rev": "9f2e88e3d2782f0a2871f066049d0548382779f8",

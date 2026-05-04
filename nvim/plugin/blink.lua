@@ -40,7 +40,7 @@ local function setup_blink()
       menu = {
         scrollbar = true,
         draw = {
-          columns = { { "kind_icon" }, { "label", "label_description", gap = 1 }, { "kind" } },
+          columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
           treesitter = { "lsp" },
           components = {
             kind_icon = {
