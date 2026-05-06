@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "6db1246640e9e1bdf8a1d1f6d27a940fc0a572d5",
+      "rev": "c8982fcea21d0d8e928a367e0c1536e6ac7cf98e",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "blink.cmp": {
@@ -17,7 +17,7 @@
       "src": "https://github.com/saghen/blink.download"
     },
     "blink.indent": {
-      "rev": "9c80820ca77218a8d28e70075d6f44a1609911fe",
+      "rev": "15b3b25c2e76025733cc96df0144e9a9ef4d495c",
       "src": "https://github.com/saghen/blink.indent"
     },
     "blink.lib": {
@@ -25,7 +25,7 @@
       "src": "https://github.com/saghen/blink.lib"
     },
     "blink.pairs": {
-      "rev": "57785effbe1d8ba7810ce79dfd4e6a47bac22726",
+      "rev": "aab1fb8dcb3582970dc0c6b74d4c41a996e2255e",
       "src": "https://github.com/saghen/blink.pairs"
     },
     "codediff.nvim": {
@@ -37,7 +37,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "copilot.lua": {
-      "rev": "78c638293f0ea6a2245eca46e9933ee271792d7e",
+      "rev": "61784cb7a1a109d72b9cb107ee70d11bc7d095ff",
       "src": "https://github.com/zbirenbaum/copilot.lua"
     },
     "crates.nvim": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/Saecki/crates.nvim"
     },
     "diffs.nvim": {
-      "rev": "02230b93f07dbc37232e16043395a28a8e7e6ad1",
+      "rev": "084c4dc119dee9133fc8b215b308f29aeafb9564",
       "src": "https://github.com/barrettruth/diffs.nvim"
     },
     "friendly-snippets": {
@@ -53,7 +53,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "64590411e6cf3d603d1e1bdad3a3d051f2f5a91a",
+      "rev": "cf4c30892644f01ebfb1e248eeca9e259856f9dc",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -114,7 +114,7 @@
       "src": "https://github.com/jake-stewart/multicursor.nvim"
     },
     "nvim-highlight-colors": {
-      "rev": "e2cb22089cc2358b2b995c09578224f142de6039",
+      "rev": "e4c7af0211866162d999ce0bdd6a029302e19139",
       "src": "https://github.com/brenoprata10/nvim-highlight-colors"
     },
     "nvim-jdtls": {

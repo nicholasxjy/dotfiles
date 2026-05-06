@@ -19,13 +19,16 @@ require("mini.hues").setup({
   --
   -- background = "#2D2424",
   -- background = "#202940",
-  background = "#454040",
+  -- background = "#454040",
   -- background = "#213C51",
   -- background = "#41431B",
   -- background = "#4B352A",
   -- background = "#332941",
   -- background = "#222436",
   -- background = "#24283b",
+  -- background = "#091413",
+  -- background = "#152A38",
+  background = "#1C352D",
 
   -- Number of hues used for non-base colors
   n_hues = 8,
