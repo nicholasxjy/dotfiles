@@ -57,6 +57,7 @@ vim.pack.add({
   "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/folke/todo-comments.nvim",
   "https://github.com/brenoprata10/nvim-highlight-colors",
+  "https://github.com/folke/flash.nvim",
 
   "https://github.com/lewis6991/gitsigns.nvim",
   "https://github.com/barrettruth/diffs.nvim",
