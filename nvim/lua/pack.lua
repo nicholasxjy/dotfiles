@@ -22,11 +22,10 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.surround",
   "https://github.com/nvim-mini/mini.trailspace",
 
-  "https://github.com/saghen/blink.download",
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
-  "https://github.com/saghen/blink.indent",
-  "https://github.com/saghen/blink.pairs",
+
+  "https://github.com/windwp/nvim-autopairs",
 
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/b0o/SchemaStore.nvim",

@@ -67,7 +67,7 @@ vim.g.visual_whitespace = {
     tab = true,
     nbsp = true,
     lead = true,
-    trail = true,
+    trail = false,
   },
   list_chars = {
     space = "·",

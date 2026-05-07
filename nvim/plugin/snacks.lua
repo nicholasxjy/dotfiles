@@ -26,7 +26,7 @@ require("snacks").setup({
   input = { enabled = true },
   words = { enabled = false },
   statuscolumn = {
-    enabled = true,
+    enabled = false,
     left = { "mark", "sign" }, -- priority of signs on the left (high to low)
     right = { "fold", "git" }, -- priority of signs on the right (high to low)
     folds = {
@@ -211,5 +211,5 @@ vim.keymap.set(
 )
 
 vim.keymap.set("n", "<leader>xt", function()
-  pick("todo_comments", { { keywords = { "TODO", "FIX", "FIXME", "NOTE", "PERF", "HACK" } } })
+  pick("todo_comments")
 end, { desc = "TODO/FIXME/NOTE etc" })

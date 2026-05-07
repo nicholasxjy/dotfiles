@@ -19,5 +19,6 @@ vim.keymap.set({ "n", "x" }, "gp", "<Plug>(YankyGPutAfter)")
 vim.keymap.set({ "n", "x" }, "gP", "<Plug>(YankyGPutBefore)")
 
 vim.keymap.set({ "n", "x" }, "<leader>up", function()
+  ---@diagnostic disable-next-line: undefined-field
   Snacks.picker.yanky()
 end, { desc = "Open Yank History" })

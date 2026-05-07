@@ -1,48 +1,37 @@
-local function setup_fzf()
-  if vim.g.fzf_setup_done then
-    return require("fzf-lua")
-  end
-  vim.g.fzf_setup_done = true
-
-  local fzf = require("fzf-lua")
-  fzf.setup({
-    "border-fused",
-    fzf_colors = true,
-    defaults = {
-      formatter = "path.filename_first",
-      path_shorten = 1,
-    },
-    winopts = {
-      height = 1, -- window height
-      width = 0.9, -- window width
-      row = 1, -- window row position (0=top, 1=bottom)
-      -- col = 0.2,
+local fzf = require("fzf-lua")
+fzf.setup({
+  "border-fused",
+  fzf_colors = true,
+  defaults = {
+    formatter = "path.filename_first",
+    -- path_shorten = 1,
+  },
+  winopts = {
+    height = 1, -- window height
+    width = 0.9, -- window width
+    row = 1, -- window row position (0=top, 1=bottom)
+    -- col = 0.2,
+    border = "single",
+    backdrop = 50,
+    preview = {
       border = "single",
-      backdrop = 50,
-      preview = {
-        border = "single",
-        wrap = true,
-        hidden = false,
-        layout = "vertical",
-        vertical = "up:50%",
-      },
+      wrap = true,
+      hidden = false,
+      layout = "vertical",
+      vertical = "up:50%",
     },
-    files = {
-      multiprocess = true,
-    },
-    diagnostics = {
-      cwd_only = true,
-    },
-    debug = false,
-  })
-  return fzf
-end
-
-_G.__setup_fzf = setup_fzf
+  },
+  files = {
+    multiprocess = true,
+  },
+  diagnostics = {
+    cwd_only = true,
+  },
+  debug = false,
+})
 
 local function call_fzf(method, opts)
   return function()
-    local fzf = setup_fzf()
     return fzf[method](opts)
   end
 end
