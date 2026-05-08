@@ -17,8 +17,13 @@ blink.setup({
   },
   signature = {
     enabled = true,
+    trigger = {
+      blocked_trigger_characters = { " ", "\n", "\t" },
+      blocked_retrigger_characters = { " ", "\n", "\t" },
+    },
     window = {
-      show_documentation = true,
+      -- Keep signature help lightweight while typing.
+      show_documentation = false,
     },
   },
   appearance = {
@@ -28,7 +33,8 @@ blink.setup({
     ghost_text = { enabled = true },
     documentation = {
       auto_show = true,
-      auto_show_delay_ms = 100,
+      auto_show_delay_ms = 250,
+      update_delay_ms = 250,
     },
     accept = { auto_brackets = { enabled = true } },
     list = { selection = { preselect = true, auto_insert = false } },
@@ -36,12 +42,12 @@ blink.setup({
       scrollbar = true,
       draw = {
         columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
-        treesitter = { "lsp" },
+        -- treesitter = { "lsp" },
         components = {
           kind_icon = {
             text = function(ctx)
-              -- local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-              return ctx.kind_icon .. " "
+              local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+              return kind_icon .. " "
             end,
             highlight = function(ctx)
               local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)

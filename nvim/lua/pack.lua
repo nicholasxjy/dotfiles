@@ -15,17 +15,19 @@ vim.pack.add({
   "https://github.com/rcarriga/nvim-notify",
 
   "https://github.com/nicholasxjy/mini.hues",
-  "https://github.com/nicholasxjy/mini.statusline",
   "https://github.com/nvim-mini/mini.icons",
   "https://github.com/nvim-mini/mini.files",
   "https://github.com/nvim-mini/mini.tabline",
   "https://github.com/nvim-mini/mini.surround",
   "https://github.com/nvim-mini/mini.trailspace",
+  "https://github.com/nvim-mini/mini.clue",
 
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
 
   "https://github.com/windwp/nvim-autopairs",
+  "https://github.com/meuter/lualine-so-fancy.nvim",
+  "https://github.com/nvim-lualine/lualine.nvim",
 
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/b0o/SchemaStore.nvim",
@@ -72,8 +74,6 @@ vim.pack.add({
   "https://github.com/stevearc/oil.nvim",
 
   { src = "https://github.com/nicholasxjy/sidekick.nvim", version = "focus-pane" },
-
-  "https://github.com/folke/which-key.nvim",
 
   "https://github.com/Saecki/crates.nvim",
   { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },

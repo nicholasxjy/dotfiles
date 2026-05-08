@@ -49,7 +49,7 @@ map("n", "<leader>j", function()
   Snacks.bufdelete({ wipe = true })
 end, { desc = "Delete Buffer" })
 
-map({ "n", "i", "x", "s" }, "<leader>k", "<cmd>w<cr><esc>", { desc = "Save" })
+map({ "n", "x", "s" }, "<leader>k", "<cmd>w<cr><esc>", { desc = "Save" })
 
 map("n", "<leader>bo", function()
   Snacks.bufdelete.other()

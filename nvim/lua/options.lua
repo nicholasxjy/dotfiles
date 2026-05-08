@@ -42,7 +42,7 @@ opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = true -- Disable line wrap
 opt.undolevels = 10000
-opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
+-- opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
 
 vim.o.foldcolumn = "1" -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value

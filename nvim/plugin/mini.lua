@@ -89,11 +89,6 @@ local function open_buf_in_split(buf_id, key_map, direction)
 end
 
 local function setup_deferred()
-  if vim.g.mini_deferred_setup_done then
-    return
-  end
-  vim.g.mini_deferred_setup_done = true
-
   require("mini.surround").setup({
     mappings = {
       add = "gsa",
@@ -268,41 +263,65 @@ local function setup_deferred()
     show_icons = true,
   })
 
-  require("mini.statusline").setup({
-    use_icons = true,
-    show_workspace_diagnostics = true,
-    diff = {
-      -- Icon used before diff summary
-      icon = nil,
-      -- Signs shown for each diff type
-      signs = {
-        added = ui.icons.git.added,
-        modified = ui.icons.git.modified,
-        removed = ui.icons.git.removed,
+  -- mini clue
+  local miniclue = require("mini.clue")
+  miniclue.setup({
+    window = {
+      delay = 100,
+      config = {
+        width = "auto",
+        col = "auto",
+        anchor = "NW",
+        border = "single",
       },
     },
-    diagnostics = {
-      icon = nil,
-      -- Signs shown for each severity level
-      signs = {
-        ERROR = ui.icons.diagnostics.Error,
-        WARN = ui.icons.diagnostics.Warn,
-        INFO = ui.icons.diagnostics.Info,
-        HINT = ui.icons.diagnostics.Hint,
-      },
+    triggers = {
+      -- Leader triggers
+      { mode = { "n", "x" }, keys = "<Leader>" },
+
+      -- `[` and `]` keys
+      { mode = "n", keys = "[" },
+      { mode = "n", keys = "]" },
+
+      -- Built-in completion
+      { mode = "i", keys = "<C-x>" },
+
+      -- `g` key
+      { mode = { "n", "x" }, keys = "g" },
+
+      -- Marks
+      { mode = { "n", "x" }, keys = "'" },
+      { mode = { "n", "x" }, keys = "`" },
+
+      -- Registers
+      { mode = { "n", "x" }, keys = '"' },
+      { mode = { "i", "c" }, keys = "<C-r>" },
+
+      -- Window commands
+      { mode = "n", keys = "<C-w>" },
+
+      -- `z` key
+      { mode = { "n", "x" }, keys = "z" },
     },
-    highlight_groups = {
-      diff = {
-        added = "DiffAdded",
-        modified = "DiffModified",
-        removed = "DiffRemoved",
-      },
-      diagnostics = {
-        ERROR = "DiagnosticError",
-        WARN = "DiagnosticWarn",
-        INFO = "DiagnosticInfo",
-        HINT = "DiagnosticHint",
-      },
+
+    clues = {
+      { mode = "n", keys = "<leader>a", desc = "+AI" },
+      { mode = "n", keys = "<leader>b", desc = "+Buffer" },
+      { mode = "n", keys = "<leader>c", desc = "+Code" },
+      { mode = "n", keys = "<leader>d", desc = "+Debug" },
+      { mode = "n", keys = "<leader>f", desc = "+Files" },
+      { mode = "n", keys = "<leader>s", desc = "+Search" },
+      { mode = "n", keys = "<leader>g", desc = "+Git" },
+      { mode = "n", keys = "<leader>x", desc = "+Diagnostic" },
+      { mode = "n", keys = "<leader>u", desc = "+UI" },
+      -- Enhance this by adding descriptions for <Leader> mapping groups
+      miniclue.gen_clues.square_brackets(),
+      miniclue.gen_clues.builtin_completion(),
+      miniclue.gen_clues.g(),
+      miniclue.gen_clues.marks(),
+      miniclue.gen_clues.registers(),
+      miniclue.gen_clues.windows(),
+      miniclue.gen_clues.z(),
     },
   })
 end
