@@ -1,20 +1,24 @@
 local util = require("util")
 
-util.later(function()
-  require("flash").setup({
-    label = {
-      rainbow = {
-        enabled = true,
-        shade = 5,
+local function flash()
+  util.ensure_plugin("flash.nvim", function()
+    require("flash").setup({
+      label = {
+        rainbow = {
+          enabled = true,
+          shade = 5,
+        },
       },
-    },
-  })
-end, 20, "VimEnter", true)
+    })
+  end)
+
+  return require("flash")
+end
 
 vim.keymap.set({ "n", "x", "o" }, "s", function()
-  require("flash").jump()
+  flash().jump()
 end, { desc = "Flash" })
 
 vim.keymap.set({ "n", "x", "o" }, "S", function()
-  require("flash").treesitter()
+  flash().treesitter()
 end, { desc = "Flash treesitter" })

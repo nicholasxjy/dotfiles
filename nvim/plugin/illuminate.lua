@@ -1,16 +1,32 @@
-require("illuminate").configure({
-  providers = {
-    "lsp",
-    "treesitter",
-    "regex",
-  },
-  delay = 100,
+local util = require("util")
+
+local function setup_illuminate()
+  util.ensure_plugin("vim-illuminate", function()
+    require("illuminate").configure({
+      providers = {
+        "lsp",
+        "treesitter",
+        "regex",
+      },
+      delay = 100,
+    })
+  end, false)
+
+  return require("illuminate")
+end
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("IlluminateDeferredSetup", { clear = true }),
+  once = true,
+  callback = function()
+    vim.schedule(setup_illuminate)
+  end,
 })
 
 vim.keymap.set("n", "]]", function()
-  require("illuminate").goto_next_reference()
+  setup_illuminate().goto_next_reference()
 end, { desc = "Next reference" })
 
 vim.keymap.set("n", "[[", function()
-  require("illuminate").goto_prev_reference()
+  setup_illuminate().goto_prev_reference()
 end, { desc = "Prev reference" })

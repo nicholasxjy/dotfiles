@@ -1,6 +1,6 @@
 local function handler(virtText, lnum, endLnum, width, truncate)
   local newVirtText = {}
-  local suffix = ("  %d... "):format(endLnum - lnum)
+  local suffix = ("  %d lines... "):format(endLnum - lnum)
   local sufWidth = vim.fn.strdisplaywidth(suffix)
   local targetWidth = width - sufWidth
   local curWidth = 0
@@ -26,56 +26,69 @@ local function handler(virtText, lnum, endLnum, width, truncate)
   return newVirtText
 end
 
-local ufo = require("ufo")
-ufo.setup({
-  preview = {
-    mappings = {
-      scrollB = "<C-B>",
-      scrollF = "<C-F>",
-      scrollU = "<C-U>",
-      scrollD = "<C-D>",
-    },
-  },
-  provider_selector = function(_, filetype, buftype)
-    local function handleFallbackException(bufnr, err, providerName)
-      if type(err) == "string" and err:match("UfoFallbackException") then
-        return require("ufo").getFolds(bufnr, providerName)
-      else
-        return require("promise").reject(err)
-      end
-    end
+local util = require("util")
 
-    return (filetype == "" or buftype == "nofile") and "indent" -- only use indent until a file is opened
-      or function(bufnr)
-        return require("ufo")
-          .getFolds(bufnr, "lsp")
-          :catch(function(err)
-            return handleFallbackException(bufnr, err, "treesitter")
-          end)
-          :catch(function(err)
-            return handleFallbackException(bufnr, err, "indent")
-          end)
-      end
-  end,
-  fold_virt_text_handler = handler,
+local function setup_ufo()
+  util.ensure_plugin("nvim-ufo", function()
+    require("ufo").setup({
+      preview = {
+        mappings = {
+          scrollB = "<C-B>",
+          scrollF = "<C-F>",
+          scrollU = "<C-U>",
+          scrollD = "<C-D>",
+        },
+      },
+      provider_selector = function(_, filetype, buftype)
+        local function handleFallbackException(bufnr, err, providerName)
+          if type(err) == "string" and err:match("UfoFallbackException") then
+            return require("ufo").getFolds(bufnr, providerName)
+          else
+            return require("promise").reject(err)
+          end
+        end
+
+        return (filetype == "" or buftype == "nofile") and "indent"
+          or function(bufnr)
+            return require("ufo")
+              .getFolds(bufnr, "lsp")
+              :catch(function(err)
+                return handleFallbackException(bufnr, err, "treesitter")
+              end)
+              :catch(function(err)
+                return handleFallbackException(bufnr, err, "indent")
+              end)
+          end
+      end,
+      fold_virt_text_handler = handler,
+    })
+  end)
+
+  return require("ufo")
+end
+
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+  group = vim.api.nvim_create_augroup("UfoDeferredSetup", { clear = true }),
+  once = true,
+  callback = setup_ufo,
 })
 
 vim.keymap.set("n", "zR", function()
-  ufo.openAllFolds()
+  setup_ufo().openAllFolds()
 end, { desc = "Open All Folds" })
 
 vim.keymap.set("n", "zM", function()
-  ufo.closeAllFolds()
+  setup_ufo().closeAllFolds()
 end, { desc = "Close All Folds" })
 
 vim.keymap.set("n", "zr", function()
-  ufo.openFoldsExceptKinds()
+  setup_ufo().openFoldsExceptKinds()
 end, { desc = "Open More Folds" })
 
 vim.keymap.set("n", "zm", function()
-  ufo.closeFoldsWith()
+  setup_ufo().closeFoldsWith()
 end, { desc = "Close More Folds" })
 
 vim.keymap.set("n", "zp", function()
-  ufo.peekFoldedLinesUnderCursor()
+  setup_ufo().peekFoldedLinesUnderCursor()
 end, { desc = "Peek Fold" })

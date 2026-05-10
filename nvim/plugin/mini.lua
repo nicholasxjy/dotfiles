@@ -28,8 +28,8 @@ require("mini.hues").setup({
   -- background = "#24283b",
   -- background = "#091413",
   -- background = "#152A38",
-  background = "#1C352D",
-
+  -- background = "#1C352D",
+  background = "#313E17",
   -- Number of hues used for non-base colors
   n_hues = 8,
 
@@ -322,6 +322,54 @@ local function setup_deferred()
       miniclue.gen_clues.registers(),
       miniclue.gen_clues.windows(),
       miniclue.gen_clues.z(),
+    },
+  })
+
+  require("mini.statusline").setup({
+    use_icons = true,
+    show_workspace_diagnostics = true,
+    -- Diff section defaults
+    diff = {
+      -- Icon used before diff summary. If `nil`, no icon is shown.
+      icon = nil,
+      -- Signs shown for each diff type
+      signs = {
+        added = ui.icons.git.added,
+        modified = ui.icons.git.modified,
+        removed = ui.icons.git.removed,
+      },
+    },
+    -- Diagnostics section defaults
+    diagnostics = {
+      -- Icon used before diagnostics summary. If `nil`, no icon is shown.
+      icon = nil,
+      -- Signs shown for each severity level
+      signs = {
+        ERROR = ui.icons.diagnostics.Error,
+        WARN = ui.icons.diagnostics.Warn,
+        INFO = ui.icons.diagnostics.Info,
+        HINT = ui.icons.diagnostics.Hint,
+      },
+    },
+    -- Highlight groups used by default content and built-in sections
+    highlight_groups = {
+      devinfo = "MiniStatuslineDevinfo",
+      filename = "MiniStatuslineFilename",
+      fileinfo = "MiniStatuslineFileinfo",
+      inactive = "MiniStatuslineInactive",
+      lsp_progress = "MiniStatuslineLspProgress",
+      lsp_progress_done = "MiniStatuslineLspProgressDone",
+      diff = {
+        added = "DiffAdded",
+        modified = "DiffModified",
+        removed = "DiffRemoved",
+      },
+      diagnostics = {
+        ERROR = "DiagnosticError",
+        WARN = "DiagnosticWarn",
+        INFO = "DiagnosticInfo",
+        HINT = "DiagnosticHint",
+      },
     },
   })
 end

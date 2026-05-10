@@ -1,46 +1,69 @@
-local fzf = require("fzf-lua")
-fzf.setup({
-  "border-fused",
-  fzf_colors = true,
-  defaults = {
-    formatter = "path.filename_first",
-    -- path_shorten = 1,
-  },
-  winopts = {
-    height = 1, -- window height
-    width = 0.9, -- window width
-    row = 1, -- window row position (0=top, 1=bottom)
-    -- col = 0.2,
-    border = "single",
-    backdrop = 50,
-    preview = {
-      border = "single",
-      wrap = true,
-      hidden = false,
-      layout = "vertical",
-      vertical = "up:50%",
-    },
-  },
-  files = {
-    multiprocess = true,
-  },
-  diagnostics = {
-    cwd_only = true,
-  },
-  debug = false,
-})
+local util = require("util")
+
+local function ensure_fzf()
+  util.ensure_plugin("fzf-lua", function()
+    local fzf = require("fzf-lua")
+    fzf.setup({
+      "border-fused",
+      fzf_colors = true,
+      defaults = {
+        formatter = "path.filename_first",
+      },
+      winopts = {
+        height = 1,
+        width = 0.9,
+        row = 1,
+        border = "single",
+        backdrop = 50,
+        preview = {
+          border = "single",
+          wrap = true,
+          hidden = false,
+          layout = "vertical",
+          vertical = "up:50%",
+        },
+      },
+      files = {
+        multiprocess = true,
+      },
+      diagnostics = {
+        cwd_only = true,
+      },
+      debug = false,
+    })
+  end)
+
+  return require("fzf-lua")
+end
+
+_G.__setup_fzf = ensure_fzf
 
 local function call_fzf(method, opts)
   return function()
-    return fzf[method](opts)
+    return ensure_fzf()[method](opts)
   end
 end
+
 local map = vim.keymap.set
+local mini_pick = {
+  height = 0.4,
+  width = 0.6,
+  row = 0.5,
+  border = "none",
+  backdrop = 70,
+}
 
 local mappings = {
-  { "<leader>/", "blines", nil, "Search Buffer" },
+  {
+    "nn",
+    "buffers",
+    { winopts = mini_pick, current = false, cwd_only = true, previewer = false, sort_lastused = true },
+    "Fzf buffers",
+  },
+  { "<leader>R", "resume", nil, "Fzf resume" },
+  { "<leader>/", "grep_curbuf", nil, "Grep current buffer" },
   { "<leader>:", "commands", nil, "Commands" },
-  { "<leader>m", "marks", { previewer = false }, "Marks" },
+  { "<leader>m", "marks", { winopts = mini_pick, previewer = false }, "Marks" },
   { "<leader>fb", "buffers", { cwd_only = true }, "Buffers" },
   { "<leader>fc", "colorschemes", nil, "Colorschemes" },
   { "<leader>fq", "quickfix", nil, "Quickfix" },
@@ -50,7 +73,6 @@ local mappings = {
   { "<leader>fk", "keymaps", nil, "Keymaps" },
   { "<leader>fj", "jumps", nil, "Jumps" },
   { "<leader>fr", "registers", nil, "Registers" },
-  -- git
   { "<leader>gf", "git_files", nil, "Git Files" },
   { "<leader>gb", "git_branches", nil, "Git Branches" },
   { "<leader>gc", "git_commits", nil, "Git Commits" },

@@ -1,4 +1,5 @@
 local M = {}
+local configured_plugins = {}
 
 local function to_hex(color)
   return color and string.format("#%06x", color) or nil
@@ -106,6 +107,24 @@ M.later = function(f, delay, event, once)
       vim.defer_fn(f, delay)
     end,
   })
+end
+
+M.packadd = function(name, load)
+  local should_load = load ~= false
+  vim.cmd.packadd({ vim.fn.escape(name, " "), bang = not should_load, magic = { file = false } })
+end
+
+M.ensure_plugin = function(name, setup, load)
+  M.packadd(name, load)
+  if configured_plugins[name] then
+    return
+  end
+
+  if setup then
+    setup()
+  end
+
+  configured_plugins[name] = true
 end
 
 return M

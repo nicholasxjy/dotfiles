@@ -1,10 +1,10 @@
 local vscode = {
   hidden = { "preview" },
   layout = {
-    backdrop = false,
+    backdrop = true,
     -- row = -1,
-    row = 0.4,
-    width = 0.5,
+    -- row = 0.4,
+    width = 0.6,
     min_width = 80,
     height = 0.4,
     border = "none",
@@ -149,20 +149,20 @@ vim.keymap.set("n", "ff", pick("smart", { hidden = true, filter = cwd.filter, la
   silent = true,
 })
 
-vim.keymap.set(
-  "n",
-  "nn",
-  pick("buffers", {
-    sort_lastused = true,
-    current = false,
-    layout = vscode,
-    win = {
-      input = { keys = { ["<c-x>"] = { "bufdelete", mode = { "n", "i" } } } },
-      list = { keys = { ["dd"] = "bufdelete" } },
-    },
-  }),
-  { desc = "Find Buffers", silent = true }
-)
+-- vim.keymap.set(
+--   "n",
+--   "nn",
+--   pick("buffers", {
+--     sort_lastused = true,
+--     current = false,
+--     layout = vscode,
+--     win = {
+--       input = { keys = { ["<c-x>"] = { "bufdelete", mode = { "n", "i" } } } },
+--       list = { keys = { ["dd"] = "bufdelete" } },
+--     },
+--   }),
+--   { desc = "Find Buffers", silent = true }
+-- )
 -- vim.keymap.set("n", "<leader>fa", pick("autocmds"), { desc = "Autocmds" })
 -- vim.keymap.set("n", "<leader>fc", pick("colorschemes"), { desc = "Colorschemes" })
 -- vim.keymap.set("n", "<leader>fC", pick("commands"), { desc = "Commands" })

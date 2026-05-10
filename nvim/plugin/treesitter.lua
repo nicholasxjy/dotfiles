@@ -41,7 +41,6 @@ local ts
 local installed_cache = {}
 local available_cache = {}
 local caches_ready = false
-local install_scheduled = false
 local textobjects_ready = false
 local group = vim.api.nvim_create_augroup("TreesitterSetup", { clear = true })
 
@@ -50,12 +49,20 @@ local function get_ts()
   return ts
 end
 
+local function reset_caches()
+  installed_cache = {}
+  available_cache = {}
+  caches_ready = false
+end
+
 local function ensure_caches()
   if caches_ready then
     return get_ts()
   end
 
   local ts_mod = get_ts()
+  reset_caches()
+
   for _, lang in ipairs(ts_mod.get_installed()) do
     installed_cache[lang] = true
   end
@@ -68,27 +75,32 @@ local function ensure_caches()
   return ts_mod
 end
 
-local function ensure_missing_installed()
-  if install_scheduled then
+local function collect_missing_languages()
+  local ts_mod = ensure_caches()
+  local missing = {}
+
+  for _, lang in ipairs(languages) do
+    if available_cache[lang] and not installed_cache[lang] then
+      missing[#missing + 1] = lang
+    end
+  end
+
+  return ts_mod, missing
+end
+
+local function install_configured_languages()
+  local ts_mod, missing = collect_missing_languages()
+  if #missing == 0 then
+    vim.notify("All configured Tree-sitter parsers are installed", vim.log.levels.INFO)
     return
   end
-  install_scheduled = true
 
-  vim.schedule(function()
-    local ts_mod = ensure_caches()
-    local missing = {}
+  for _, lang in ipairs(missing) do
+    installed_cache[lang] = true
+  end
 
-    for _, lang in ipairs(languages) do
-      if available_cache[lang] and not installed_cache[lang] then
-        missing[#missing + 1] = lang
-        installed_cache[lang] = true
-      end
-    end
-
-    if #missing > 0 then
-      ts_mod.install(missing)
-    end
-  end)
+  ts_mod.install(missing)
+  vim.notify("Installing Tree-sitter parsers: " .. table.concat(missing, ", "), vim.log.levels.INFO)
 end
 
 local include_surrounding_whitespace = {
@@ -115,7 +127,9 @@ local function ensure_textobjects()
   return require("nvim-treesitter-textobjects.select")
 end
 
-util.later(ensure_missing_installed, 20, "VimEnter", true)
+vim.api.nvim_create_user_command("TSInstallConfigured", install_configured_languages, {
+  desc = "Install configured Tree-sitter parsers",
+})
 
 vim.api.nvim_create_autocmd("FileType", {
   group = group,
@@ -123,26 +137,26 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(ev)
     local ts_mod = ensure_caches()
     local lang = vim.treesitter.language.get_lang(ev.match)
-    if lang and available_cache[lang] then
-      if not installed_cache[lang] then
-        ts_mod.install(lang)
-        installed_cache[lang] = true
-      end
-      vim.treesitter.start()
-      ts_mod.indentexpr()
+    if not (lang and available_cache[lang] and installed_cache[lang]) then
+      return
     end
+
+    vim.treesitter.start()
+    ts_mod.indentexpr()
   end,
 })
 
 vim.api.nvim_create_autocmd("PackChanged", {
-  callback = function()
-    ensure_caches().update()
+  callback = function(ev)
+    if ev.data.spec.name == "nvim-treesitter" then
+      reset_caches()
+      ensure_caches().update()
+    end
   end,
 })
 
 local map = vim.keymap.set
 
--- Globally map Tree-sitter text object binds
 local function textobj_map(key, query)
   local outer = "@" .. query .. ".outer"
   local inner = "@" .. query .. ".inner"

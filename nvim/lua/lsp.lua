@@ -36,7 +36,7 @@ vim.diagnostic.config({
 vim.lsp.enable({
   "lua_ls",
   -- "emmylua_ls",
-  -- "copilot",
+  "copilot",
   "bashls",
 
   "dockerls",
@@ -47,7 +47,7 @@ vim.lsp.enable({
   "biome",
   "eslint",
   "vtsls",
-  "vuels",
+  "vue_ls",
 
   "gopls",
   "golangci_lint_ls",

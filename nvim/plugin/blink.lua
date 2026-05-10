@@ -1,14 +1,13 @@
 local blink = require("blink.cmp")
 local ui = require("ui")
+local util = require("util")
 
-vim.schedule(function()
-  pcall(function()
-    ---@diagnostic disable-next-line: undefined-field
-    blink.build():wait(60000)
-  end)
+util.build_fn_on_change("blink.cmp", { "install", "update" }, function()
+  util.packadd("blink.cmp")
+  ---@diagnostic disable-next-line: undefined-field
+  blink.build():wait(60000)
 end)
-
-blink.setup({
+local blink_opts = {
   fuzzy = { implementation = "prefer_rust_with_warning" },
   keymap = {
     preset = "enter",
@@ -85,11 +84,32 @@ blink.setup({
   sources = {
     default = { "lsp", "path", "snippets", "buffer" },
   },
+}
+
+local function setup_blink()
+  if vim.g.blink_setup_done then
+    return
+  end
+
+  if type(_G.__setup_luasnip) == "function" then
+    _G.__setup_luasnip()
+  end
+
+  vim.g.blink_setup_done = true
+  blink.setup(blink_opts)
+end
+
+vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
+  group = vim.api.nvim_create_augroup("BlinkDeferredSetup", { clear = true }),
+  once = true,
+  callback = function()
+    vim.schedule(setup_blink)
+  end,
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-vim.tbl_deep_extend("force", capabilities, {
+capabilities = vim.tbl_deep_extend("force", capabilities, {
   workspace = {
     fileOperations = {
       didRename = true,

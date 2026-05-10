@@ -3,6 +3,8 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.g.picker = "fzf"
+
+-- vim.o.background = "light"
 -- options
 local opt = vim.opt
 -- UI/General
