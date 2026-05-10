@@ -40,6 +40,7 @@ local ensure_installed = {
   "lemminx",
   "ruff",
   "yaml-language-server",
+  "zls",
 }
 
 local function setup_mason()
@@ -91,6 +92,8 @@ local function install_missing_tools()
     vim.notify("Installing Mason tools: " .. table.concat(missing, ", "), vim.log.levels.INFO)
   end)
 end
+
+setup_mason()
 
 vim.api.nvim_create_user_command("Mason", function(args)
   pcall(vim.api.nvim_del_user_command, "Mason")
