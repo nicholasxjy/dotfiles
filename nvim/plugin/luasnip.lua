@@ -31,7 +31,5 @@ _G.__setup_luasnip = setup_luasnip
 vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
   group = vim.api.nvim_create_augroup("LuaSnipDeferredSetup", { clear = true }),
   once = true,
-  callback = function()
-    vim.schedule(setup_luasnip)
-  end,
+  callback = setup_luasnip,
 })

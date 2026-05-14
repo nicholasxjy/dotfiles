@@ -18,9 +18,7 @@ end
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("IlluminateDeferredSetup", { clear = true }),
   once = true,
-  callback = function()
-    vim.schedule(setup_illuminate)
-  end,
+  callback = setup_illuminate,
 })
 
 vim.keymap.set("n", "]]", function()

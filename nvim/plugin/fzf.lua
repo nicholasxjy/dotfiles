@@ -47,7 +47,7 @@ end
 local map = vim.keymap.set
 local mini_pick = {
   height = 0.4,
-  width = 0.6,
+  width = 0.7,
   row = 0.5,
   border = "none",
   backdrop = 70,

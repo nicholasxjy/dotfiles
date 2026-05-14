@@ -29,7 +29,18 @@ require("mini.hues").setup({
   -- background = "#091413",
   -- background = "#152A38",
   -- background = "#1C352D",
-  background = "#313E17",
+  -- background = "#313E17",
+  -- background = "#1A1A1D",
+  -- background = "#092635",
+  -- background = "#212A3E",
+  -- background = "#2C3333",
+  -- background = "#18122B",
+  -- background = "#132C33",
+  -- background = "#454040",
+  -- background = "#2D2727",
+  background = "#39311D",
+  -- background = "#36413D",
+  -- background = "#2F3032",
   -- Number of hues used for non-base colors
   n_hues = 8,
 
@@ -89,6 +100,10 @@ local function open_buf_in_split(buf_id, key_map, direction)
 end
 
 local function setup_deferred()
+  require("mini.pairs").setup({
+    modes = { insert = true, command = true, terminal = true },
+  })
+
   require("mini.surround").setup({
     mappings = {
       add = "gsa",

@@ -95,23 +95,6 @@ end
 
 setup_mason()
 
-vim.api.nvim_create_user_command("Mason", function(args)
-  pcall(vim.api.nvim_del_user_command, "Mason")
-  setup_mason()
-  local cmd = "Mason"
-  if args.bang then
-    cmd = cmd .. "!"
-  end
-  if args.args ~= "" then
-    cmd = cmd .. " " .. args.args
-  end
-  vim.cmd(cmd)
-end, {
-  nargs = "*",
-  bang = true,
-  desc = "Open Mason",
-})
-
 vim.api.nvim_create_user_command("MasonToolsInstall", install_missing_tools, {
   desc = "Install configured Mason tools",
 })

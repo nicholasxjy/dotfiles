@@ -20,7 +20,7 @@ local function setup_sidekick()
         },
         watch = true,
         win = {
-          layout = "left",
+          layout = "right",
           split = {
             width = 0.4,
           },
@@ -28,7 +28,7 @@ local function setup_sidekick()
         mux = {
           backend = vim.env.ZELLIJ and "zellij" or "tmux",
           enabled = true,
-          create = "terminal",
+          create = vim.env.ZELLIJ and "terminal" or "terminal",
           split = {
             vertical = true,
             size = 0.4,

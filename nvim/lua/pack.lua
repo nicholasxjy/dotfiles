@@ -11,8 +11,16 @@ local eager_specs = {
     version = "main",
   },
 
+  "https://github.com/nicholasxjy/translator.nvim",
+  "https://github.com/nicholasxjy/jishiben.nvim",
+
+  "https://github.com/rrethy/vim-illuminate",
+  "https://github.com/hiphish/rainbow-delimiters.nvim",
+
   "https://github.com/nicholasxjy/mini.hues",
   "https://github.com/nicholasxjy/mini.statusline",
+
+  "https://github.com/nvim-mini/mini.pairs",
   "https://github.com/nvim-mini/mini.icons",
   "https://github.com/nvim-mini/mini.files",
   "https://github.com/nvim-mini/mini.tabline",
@@ -20,6 +28,9 @@ local eager_specs = {
   "https://github.com/nvim-mini/mini.trailspace",
   "https://github.com/nvim-mini/mini.clue",
 
+  "https://github.com/nicholasxjy/colorful-menu.nvim",
+  "https://github.com/rafamadriz/friendly-snippets",
+  "https://github.com/L3MON4D3/LuaSnip",
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
 
@@ -41,10 +52,7 @@ local eager_specs = {
 
 local lazy_specs = {
   "https://github.com/ibhagwan/fzf-lua",
-  "https://github.com/windwp/nvim-autopairs",
   "https://github.com/folke/lazydev.nvim",
-  "https://github.com/nicholasxjy/translator.nvim",
-  "https://github.com/nicholasxjy/jishiben.nvim",
   "https://github.com/MagicDuck/grug-far.nvim",
   "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   "https://github.com/iamcco/markdown-preview.nvim",
@@ -54,11 +62,8 @@ local lazy_specs = {
   "https://github.com/folke/flash.nvim",
   "https://github.com/rcarriga/nvim-notify",
   "https://github.com/nicholasxjy/lsp-progress-notify.nvim",
-  "https://github.com/rrethy/vim-illuminate",
   "https://github.com/andymass/vim-matchup",
   "https://github.com/mcauley-penney/visual-whitespace.nvim",
-  "https://github.com/rafamadriz/friendly-snippets",
-  "https://github.com/L3MON4D3/LuaSnip",
   "https://github.com/windwp/nvim-ts-autotag",
   "https://github.com/rachartier/tiny-inline-diagnostic.nvim",
   "https://github.com/kevinhwang91/nvim-ufo",
@@ -72,8 +77,8 @@ local lazy_specs = {
   "https://github.com/gbprod/yanky.nvim",
   "https://github.com/folke/todo-comments.nvim",
   "https://github.com/brenoprata10/nvim-highlight-colors",
-  "https://github.com/hiphish/rainbow-delimiters.nvim",
   { src = "https://github.com/nicholasxjy/sidekick.nvim", version = "focus-pane" },
+  "https://github.com/mvllow/modes.nvim",
 }
 
 local function defer_load() end

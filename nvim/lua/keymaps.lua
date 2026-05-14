@@ -100,6 +100,7 @@ map("v", ">", ">gv", {})
 -- magic tricks
 map({ "n", "v" }, "gh", "^", { desc = "Line Start", nowait = true })
 map({ "n", "v" }, "gl", "$", { desc = "Line End", nowait = true })
+map({ "n", "v" }, "g<space>", "%", { desc = "Match Pair", nowait = true })
 map({ "n", "v" }, "gm", "%", { desc = "Match Pair", nowait = true })
 
 -- Duplicate and comment first instance

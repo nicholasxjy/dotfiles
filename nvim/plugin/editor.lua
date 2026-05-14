@@ -1,5 +1,38 @@
 local util = require("util")
 
+local modes_opts = {
+  colors = {
+    -- bg = "#403121", -- Optional bg param, defaults to Normal hl group
+  },
+
+  -- Set opacity for cursorline and number background
+  line_opacity = 0.15,
+
+  -- Enable cursor highlights
+  set_cursor = false,
+
+  -- Enable cursorline initially, and disable cursorline for inactive windows
+  -- or ignored filetypes
+  set_cursorline = true,
+
+  -- Enable line number highlights to match cursorline
+  set_number = true,
+
+  -- Enable sign column highlights to match cursorline
+  set_signcolumn = true,
+
+  -- Disable modes highlights for specified filetypes
+  -- or enable with prefix "!" if otherwise disabled (please PR common patterns)
+  -- Can also be a function fun():boolean that disables modes highlights when true
+  ignore = { "NvimTree", "TelescopePrompt", "!minifiles" },
+}
+
+util.later(function()
+  util.ensure_plugin("modes.nvim", function()
+    require("modes").setup(modes_opts)
+  end)
+end, 20, "VimEnter", true)
+
 local function persistence()
   util.ensure_plugin("persistence.nvim", function()
     require("persistence").setup({
@@ -55,16 +88,12 @@ vim.api.nvim_create_user_command("Screenkey", function(args)
   vim.cmd(cmd)
 end, { nargs = "*", bang = true, desc = "Toggle Screenkey" })
 
-local function treesj()
-  util.ensure_plugin("treesj", function()
-    require("treesj").setup({ use_default_keymaps = false })
-  end, false)
+util.ensure_plugin("treesj", function()
+  require("treesj").setup({ use_default_keymaps = false })
+end, false)
 
-  return require("treesj")
-end
-
-vim.keymap.set("n", "gS", function()
-  treesj().toggle()
+vim.keymap.set("n", "<leader>uJ", function()
+  require("treesj").toggle()
 end, { desc = "Toggle Split" })
 
 local function setup_rainbow_delimiters()
@@ -95,9 +124,7 @@ end
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   group = vim.api.nvim_create_augroup("RainbowDelimitersDeferred", { clear = true }),
   once = true,
-  callback = function()
-    vim.schedule(setup_rainbow_delimiters)
-  end,
+  callback = setup_rainbow_delimiters,
 })
 
 vim.g.visual_whitespace = {
@@ -132,32 +159,19 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
   end,
 })
 
-local function jishiben()
-  util.ensure_plugin("jishiben.nvim", function()
-    local width = math.max(1, vim.o.columns)
-    local height = math.max(1, math.floor(vim.o.lines * 0.4) - 2)
-    require("jishiben").setup({
-      win = {
-        border = "rounded",
-        width = width,
-        height = height,
-        row = vim.o.lines - height - 2,
-        col = 0,
-      },
-    })
-  end, false)
-
-  return require("jishiben")
-end
-
-vim.api.nvim_create_user_command("JishibenOpen", function()
-  jishiben().open()
-end, { desc = "Open Jishiben" })
-
-vim.api.nvim_create_user_command("JishibenClear", function()
-  jishiben().clear_all()
-  vim.notify("Jishiben: all notes cleared")
-end, { desc = "Clear Jishiben notes" })
+util.ensure_plugin("jishiben.nvim", function()
+  local width = math.max(1, vim.o.columns)
+  local height = math.max(1, math.floor(vim.o.lines * 0.4) - 2)
+  require("jishiben").setup({
+    win = {
+      border = "rounded",
+      width = width,
+      height = height,
+      row = vim.o.lines - height - 2,
+      col = 0,
+    },
+  })
+end, false)
 
 local function setup_editor_buffer_plugins()
   util.ensure_plugin("todo-comments.nvim", function()
