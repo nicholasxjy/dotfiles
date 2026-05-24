@@ -54,12 +54,6 @@ local mini_pick = {
 }
 
 local mappings = {
-  {
-    "nn",
-    "buffers",
-    { winopts = mini_pick, current = false, cwd_only = true, previewer = false, sort_lastused = true },
-    "Fzf buffers",
-  },
   { "<leader>R", "resume", nil, "Fzf resume" },
   { "<leader>/", "grep_curbuf", nil, "Grep current buffer" },
   { "<leader>:", "commands", nil, "Commands" },

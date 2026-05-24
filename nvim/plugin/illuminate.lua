@@ -8,14 +8,14 @@ local function setup_illuminate()
         "treesitter",
         "regex",
       },
-      delay = 100,
+      delay = 250,
     })
-  end, false)
+  end)
 
   return require("illuminate")
 end
 
-vim.api.nvim_create_autocmd("LspAttach", {
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
   group = vim.api.nvim_create_augroup("IlluminateDeferredSetup", { clear = true }),
   once = true,
   callback = setup_illuminate,

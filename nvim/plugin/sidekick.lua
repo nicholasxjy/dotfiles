@@ -9,33 +9,32 @@ local function setup_sidekick()
       cli = {
         tools = {
           codex = {
-            cmd = { "omx", "--madmax", "--high" },
+            cmd = { "codex" },
           },
-          ohmypi = {
+          omp = {
             cmd = { "omp" },
-          },
-          jcode = {
-            cmd = { "jcode" },
           },
         },
         watch = true,
         win = {
           layout = "right",
           split = {
-            width = 0.4,
+            width = 0.45,
           },
         },
         mux = {
           backend = vim.env.ZELLIJ and "zellij" or "tmux",
           enabled = true,
-          create = vim.env.ZELLIJ and "terminal" or "terminal",
+          create = vim.env.ZELLIJ and "terminal" or "split",
           split = {
             vertical = true,
-            size = 0.4,
+            size = 0.45,
           },
         },
         prompts = {
           optimize = "optimize {this}",
+          improve = "improve this function {function}",
+          commit = "commit changes",
         },
       },
     })

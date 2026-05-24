@@ -2,7 +2,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.g.picker = "fzf"
+vim.g.picker = "snacks"
 
 -- vim.o.background = "light"
 -- options
@@ -50,4 +50,4 @@ vim.o.foldcolumn = "1" -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
-vim.o.statuscolumn = "%!v:lua.require('statuscolumn').setup()"
+vim.opt.statuscolumn = require("statuscolumn").expr

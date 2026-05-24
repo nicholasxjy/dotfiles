@@ -28,6 +28,10 @@ end
 
 local util = require("util")
 
+local function should_setup_ufo(bufnr)
+  return vim.bo[bufnr].buftype == ""
+end
+
 local function setup_ufo()
   util.ensure_plugin("nvim-ufo", function()
     require("ufo").setup({
@@ -40,25 +44,11 @@ local function setup_ufo()
         },
       },
       provider_selector = function(_, filetype, buftype)
-        local function handleFallbackException(bufnr, err, providerName)
-          if type(err) == "string" and err:match("UfoFallbackException") then
-            return require("ufo").getFolds(bufnr, providerName)
-          else
-            return require("promise").reject(err)
-          end
+        if filetype == "" or buftype == "nofile" then
+          return "indent"
         end
 
-        return (filetype == "" or buftype == "nofile") and "indent"
-          or function(bufnr)
-            return require("ufo")
-              .getFolds(bufnr, "lsp")
-              :catch(function(err)
-                return handleFallbackException(bufnr, err, "treesitter")
-              end)
-              :catch(function(err)
-                return handleFallbackException(bufnr, err, "indent")
-              end)
-          end
+        return { "treesitter", "indent" }
       end,
       fold_virt_text_handler = handler,
     })
@@ -69,8 +59,14 @@ end
 
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
   group = vim.api.nvim_create_augroup("UfoDeferredSetup", { clear = true }),
-  once = true,
-  callback = setup_ufo,
+  callback = function(ev)
+    if not should_setup_ufo(ev.buf) then
+      return
+    end
+
+    vim.schedule(setup_ufo)
+    pcall(vim.api.nvim_del_augroup_by_name, "UfoDeferredSetup")
+  end,
 })
 
 vim.keymap.set("n", "zR", function()

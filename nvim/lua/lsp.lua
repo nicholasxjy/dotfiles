@@ -1,4 +1,5 @@
 local ui = require("ui")
+local util = require("util")
 
 vim.diagnostic.config({
   underline = true,
@@ -33,7 +34,7 @@ vim.diagnostic.config({
   },
 })
 
-vim.lsp.enable({
+local enabled_servers = {
   "lua_ls",
   -- "emmylua_ls",
   "copilot",
@@ -64,10 +65,101 @@ vim.lsp.enable({
   "taplo",
 
   "zls",
-})
+}
 
-local snacks = require("snacks")
+local lsp_enabled = false
+local missing_lsp_configs = {}
+local replay_lsp_filetype_scheduled = false
+
+local function notify_missing_configs()
+  local missing = vim.tbl_keys(missing_lsp_configs)
+  table.sort(missing)
+  if #missing == 0 then
+    return
+  end
+
+  vim.notify(("Missing LSP configs: %s"):format(table.concat(missing, ", ")), vim.log.levels.ERROR)
+end
+
+local function schedule_lsp_filetype_replay()
+  if replay_lsp_filetype_scheduled then
+    return
+  end
+
+  replay_lsp_filetype_scheduled = true
+  vim.schedule(function()
+    replay_lsp_filetype_scheduled = false
+    if lsp_enabled then
+      vim.cmd.doautoall("nvim.lsp.enable FileType")
+    end
+  end)
+end
+
+local function configure_completion_capabilities()
+  if type(_G.__setup_blink_lsp_capabilities) == "function" then
+    _G.__setup_blink_lsp_capabilities()
+  end
+end
+
+local function prepend_path(path)
+  local separator = package.config:sub(1, 1) == "\\" and ";" or ":"
+  local current_path = vim.env.PATH or ""
+  local paths = vim.split(current_path, separator, { plain = true })
+
+  if not vim.tbl_contains(paths, path) then
+    vim.env.PATH = path .. separator .. current_path
+  end
+end
+
+local function configure_lsp_prerequisites()
+  prepend_path(vim.fs.joinpath(vim.fn.stdpath("data"), "mason", "bin"))
+
+  if type(_G.__setup_lazydev) == "function" then
+    _G.__setup_lazydev()
+  end
+end
+
+local function enable_lsp()
+  if lsp_enabled then
+    return
+  end
+
+  configure_lsp_prerequisites()
+  configure_completion_capabilities()
+  util.ensure_plugin("nvim-lspconfig")
+
+  local found_missing_config = false
+  local servers_to_enable = {}
+  for _, server in ipairs(enabled_servers) do
+    if vim.lsp.config[server] == nil then
+      missing_lsp_configs[server] = true
+      found_missing_config = true
+    else
+      servers_to_enable[#servers_to_enable + 1] = server
+    end
+  end
+
+  if found_missing_config then
+    vim.schedule(notify_missing_configs)
+  end
+
+  if #servers_to_enable > 0 then
+    vim.lsp.enable(servers_to_enable)
+    lsp_enabled = true
+    schedule_lsp_filetype_replay()
+  end
+end
+
+local snacks_cache = nil
 local fzf_cache = nil
+
+local function get_snacks()
+  if snacks_cache == nil then
+    local ok, mod = pcall(require, "snacks")
+    snacks_cache = ok and mod or false
+  end
+  return snacks_cache ~= false and snacks_cache or nil
+end
 
 local function get_fzf()
   if fzf_cache == nil then
@@ -81,7 +173,6 @@ local function get_fzf()
 end
 
 local function pick(snacks_name, snacks_opts, fzf_name, fzf_opts)
-  local snacks_method = snacks.picker[snacks_name]
   local fzf_method_name = fzf_name or snacks_name
 
   return function()
@@ -92,7 +183,14 @@ local function pick(snacks_name, snacks_opts, fzf_name, fzf_opts)
         return fzf_method(fzf_opts)
       end
     end
-    return snacks_method(snacks_opts)
+
+    local snacks = get_snacks()
+    local snacks_method = snacks and snacks.picker and snacks.picker[snacks_name]
+    if snacks_method then
+      return snacks_method(snacks_opts)
+    end
+
+    vim.notify(("Picker unavailable: %s"):format(snacks_name), vim.log.levels.WARN)
   end
 end
 
@@ -149,23 +247,49 @@ local diagnostics_workspace_errors = pick(
   fzf_diagnostics_opts(vim.diagnostic.severity.ERROR)
 )
 
+local function lsp_navigation_keymaps(opts)
+  vim.keymap.set("n", "gd", lsp_definitions, vim.tbl_extend("force", opts, { desc = "Goto Definition" }))
+  vim.keymap.set("n", "gD", lsp_declarations, vim.tbl_extend("force", opts, { desc = "Goto Declaration" }))
+  vim.keymap.set("n", "gr", lsp_references, vim.tbl_extend("force", opts, { desc = "Goto References" }))
+  vim.keymap.set("n", "gi", lsp_implementations, vim.tbl_extend("force", opts, { desc = "Goto Implementation" }))
+  vim.keymap.set("n", "gy", lsp_type_definitions, vim.tbl_extend("force", opts, { desc = "Goto TypeDefs" }))
+  vim.keymap.set("n", "gI", lsp_incoming_calls, vim.tbl_extend("force", opts, { desc = "Incoming Calls" }))
+  vim.keymap.set("n", "gO", lsp_outgoing_calls, vim.tbl_extend("force", opts, { desc = "Outgoing Calls" }))
+end
+
 local keymap_setup = function()
   if vim.g.lsp_keymaps_ready then
     return
   end
   vim.g.lsp_keymaps_ready = true
 
-  vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "LspInfo" })
+  vim.keymap.set("n", "<leader>cl", ":checkhealth vim.lsp<cr>", { desc = "LspInfo" })
 
-  vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover", silent = true })
-  vim.keymap.set("n", "gk", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+  vim.keymap.set("n", "K", function()
+    vim.lsp.buf.hover()
+  end, { desc = "Hover", silent = true })
+  vim.keymap.set("n", "gk", function()
+    vim.lsp.buf.signature_help()
+  end, { desc = "Signature Help" })
 
-  vim.keymap.set({ "n", "v", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+  vim.keymap.set({ "n", "v", "x" }, "<leader>ca", function()
+    vim.lsp.buf.code_action()
+  end, { desc = "Code Action" })
   --
-  vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Codelens" })
+  vim.keymap.set({ "n", "v" }, "<leader>cc", function()
+    vim.lsp.codelens.run()
+  end, { desc = "Codelens" })
 
-  vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
-  vim.keymap.set("n", "<leader>cR", Snacks.rename.rename_file, { desc = "Snacks Rename" })
+  vim.keymap.set("n", "<leader>cr", function()
+    vim.lsp.buf.rename()
+  end, { desc = "Rename" })
+  vim.keymap.set("n", "<leader>cR", function()
+    local snacks = get_snacks()
+    if snacks and snacks.rename and snacks.rename.rename_file then
+      return snacks.rename.rename_file()
+    end
+    vim.notify("Snacks rename is unavailable", vim.log.levels.WARN)
+  end, { desc = "Snacks Rename" })
 
   -- Diagnostic keymaps
   local diagnostic_goto = function(count, severity)
@@ -182,13 +306,7 @@ local keymap_setup = function()
   vim.keymap.set("n", "]w", diagnostic_goto(1, "WARN"), { desc = "Next warning" })
   vim.keymap.set("n", "[w", diagnostic_goto(-1, "WARN"), { desc = "Prev warning" })
 
-  vim.keymap.set("n", "gd", lsp_definitions, { desc = "Goto Definition" })
-  vim.keymap.set("n", "gD", lsp_declarations, { desc = "Goto Declaration" })
-  vim.keymap.set("n", "gr", lsp_references, { desc = "Goto References" })
-  vim.keymap.set("n", "gi", lsp_implementations, { desc = "Goto Implementation" })
-  vim.keymap.set("n", "gy", lsp_type_definitions, { desc = "Goto TypeDefs" })
-  vim.keymap.set("n", "gI", lsp_incoming_calls, { desc = "Incoming Calls" })
-  vim.keymap.set("n", "gO", lsp_outgoing_calls, { desc = "Outgoing Calls" })
+  lsp_navigation_keymaps({})
 
   vim.keymap.set("n", "<leader>ss", lsp_symbols, { desc = "Lsp symbols" })
   vim.keymap.set("n", "<leader>sS", lsp_workspace_symbols, { desc = "Workspace lsp symbols" })
@@ -225,6 +343,25 @@ end
 
 keymap_setup()
 
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = vim.api.nvim_create_augroup("LspFiletypeEnable", { clear = true }),
+  once = true,
+  callback = function()
+    enable_lsp()
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "FileType" }, {
+  group = vim.api.nvim_create_augroup("LspAttachReplay", { clear = true }),
+  callback = function()
+    if not lsp_enabled then
+      enable_lsp()
+    else
+      schedule_lsp_filetype_replay()
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
   callback = function(args)
@@ -238,6 +375,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
       return
     end
 
+    lsp_navigation_keymaps({ buffer = args.buf, nowait = true })
     methods_setup(client, args.buf)
   end,
 })

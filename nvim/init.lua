@@ -1,4 +1,8 @@
-require("vim._core.ui2").enable({})
+vim.fn.setenv("ENABLE_WASMTIME", "ON")
+
+pcall(function()
+  require("vim._core.ui2").enable({})
+end)
 
 if vim.fn.executable("go") == 1 and vim.env.GOROOT and vim.env.GOROOT ~= "" then
   local result = vim.system({ "env", "-u", "GOROOT", "go", "env", "GOROOT" }, { text = true }):wait()

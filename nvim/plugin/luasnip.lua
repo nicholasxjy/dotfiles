@@ -21,14 +21,14 @@ local function setup_luasnip()
     require("luasnip.loaders.from_vscode").lazy_load()
     require("luasnip.loaders.from_lua").lazy_load({ paths = { "./snippets" } })
     vim.g.luasnip_setup_done = true
-  end, false)
+  end)
 
   return require("luasnip")
 end
 
 _G.__setup_luasnip = setup_luasnip
 
-vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
+vim.api.nvim_create_autocmd("BufEnter", {
   group = vim.api.nvim_create_augroup("LuaSnipDeferredSetup", { clear = true }),
   once = true,
   callback = setup_luasnip,

@@ -1,69 +1,33 @@
-local blink = require("blink.cmp")
-local ui = require("ui")
 local util = require("util")
 
-util.build_fn_on_change("blink.cmp", { "install", "update" }, function()
-  util.packadd("blink.cmp")
-  ---@diagnostic disable-next-line: undefined-field
-  blink.build():wait(60000)
-end)
-
-require("colorful-menu").setup({
+local colorful_menu_opts = {
   ls = {
     lua_ls = {
-      -- Maybe you want to dim arguments a bit.
       arguments_hl = "LspInlayHint",
     },
     gopls = {
-      -- By default, we render variable/function's type in the right most side,
-      -- to make them not to crowd together with the original label.
-
-      -- when true:
-      -- foo             *Foo
-      -- ast         "go/ast"
-
-      -- when false:
-      -- foo *Foo
-      -- ast "go/ast"
       align_type_to_right = true,
-      -- When true, label for field and variable will format like "foo: Foo"
-      -- instead of go's original syntax "foo Foo". If align_type_to_right is
-      -- true, this option has no effect.
       add_colon_before_type = false,
-      -- See https://github.com/xzbdmw/colorful-menu.nvim/pull/36
       preserve_type_when_truncate = true,
     },
-    -- for lsp_config or typescript-tools
     ts_ls = {
-      -- false means do not include any extra info,
-      -- see https://github.com/xzbdmw/colorful-menu.nvim/issues/42
       extra_info_hl = "BlinkCmpLabelDescription",
     },
     vtsls = {
-      -- false means do not include any extra info,
-      -- see https://github.com/xzbdmw/colorful-menu.nvim/issues/42
       extra_info_hl = "BlinkCmpLabelDescription",
     },
     ["rust-analyzer"] = {
-      -- Such as (as Iterator), (use std::io).
       extra_info_hl = "BlinkCmpLabelDescription",
-      -- Similar to the same setting of gopls.
       align_type_to_right = true,
-      -- See https://github.com/xzbdmw/colorful-menu.nvim/pull/36
       preserve_type_when_truncate = true,
     },
     clangd = {
-      -- Such as "From <stdio.h>".
       extra_info_hl = "BlinkCmpLabelDescription",
-      -- Similar to the same setting of gopls.
       align_type_to_right = true,
-      -- the hl group of leading dot of "•std::filesystem::permissions(..)"
       import_dot_hl = "@comment",
-      -- See https://github.com/xzbdmw/colorful-menu.nvim/pull/36
       preserve_type_when_truncate = true,
     },
     zls = {
-      -- Similar to the same setting of gopls.
       align_type_to_right = true,
     },
     roslyn = {
@@ -75,33 +39,137 @@ require("colorful-menu").setup({
     jdtls = {
       extra_info_hl = "BlinkCmpLabelDescription",
     },
-    -- The same applies to pyright/pylance
     basedpyright = {
-      -- It is usually import path such as "os"
       extra_info_hl = "BlinkCmpLabelDescription",
     },
     pylsp = {
       extra_info_hl = "BlinkCmpLabelDescription",
-      -- Dim the function argument area, which is the main
-      -- difference with pyright.
       arguments_hl = "LspInlayHint",
     },
-    -- If true, try to highlight "not supported" languages.
     fallback = true,
-    -- this will be applied to label description for unsupport languages
     fallback_extra_info_hl = "BlinkCmpLabelDescription",
   },
-  -- If the built-in logic fails to find a suitable highlight group for a label,
-  -- this highlight is applied to the label.
   fallback_highlight = "@variable",
-  -- If provided, the plugin truncates the final displayed text to
-  -- this width (measured in display cells). Any highlights that extend
-  -- beyond the truncation point are ignored. When set to a float
-  -- between 0 and 1, it'll be treated as percentage of the width of
-  -- the window: math.floor(max_width * vim.api.nvim_win_get_width(0))
-  -- Default 60.
   max_width = 60,
-})
+}
+
+local blink_completion_capabilities = {
+  textDocument = {
+    completion = {
+      completionItem = {
+        snippetSupport = true,
+        commitCharactersSupport = false,
+        documentationFormat = { "markdown", "plaintext" },
+        deprecatedSupport = true,
+        preselectSupport = false,
+        tagSupport = { valueSet = { 1 } },
+        insertReplaceSupport = true,
+        resolveSupport = {
+          properties = {
+            "documentation",
+            "detail",
+            "additionalTextEdits",
+            "command",
+            "data",
+          },
+        },
+        insertTextModeSupport = {
+          valueSet = { 1 },
+        },
+        labelDetailsSupport = true,
+      },
+      completionList = {
+        itemDefaults = {
+          "commitCharacters",
+          "editRange",
+          "insertTextFormat",
+          "insertTextMode",
+          "data",
+        },
+      },
+      contextSupport = true,
+      insertTextMode = 1,
+    },
+  },
+}
+
+util.build_fn_on_change("blink.cmp", { "install", "update" }, function()
+  util.packadd("blink.lib", false)
+  util.packadd("blink.cmp", false)
+  ---@diagnostic disable-next-line: undefined-field
+  require("blink.cmp").build():wait(60000)
+end)
+
+local function setup_colorful_menu()
+  if vim.g.colorful_menu_setup_done then
+    return
+  end
+
+  util.ensure_plugin("colorful-menu.nvim", function()
+    require("colorful-menu").setup(colorful_menu_opts)
+    vim.g.colorful_menu_setup_done = true
+  end, false)
+end
+
+-- util.build_cmd_on_change("blink.pairs", { "install", "update" }, { "cargo", "build", "--release" })
+
+local function setup_blink_pairs()
+  if vim.g.blink_pairs_setup_done then
+    return
+  end
+  util.ensure_plugin("blink.pairs", function()
+    require("blink.pairs").setup({
+      mappings = {
+        -- you can call require("blink.pairs.mappings").enable()
+        -- and require("blink.pairs.mappings").disable()
+        -- to enable/disable mappings at runtime
+        enabled = true,
+        cmdline = true,
+        -- or disable with `vim.g.pairs = false` (global) and `vim.b.pairs = false` (per-buffer)
+        -- and/or with `vim.g.blink_pairs = false` and `vim.b.blink_pairs = false`
+        disabled_filetypes = {},
+        wrap = {
+          -- move closing pair via motion
+          ["<C-b>"] = "motion",
+          -- move opening pair via motion
+          ["<C-S-b>"] = "motion_reverse",
+          -- set to 'treesitter' or 'treesitter_reverse' to use treesitter instead of motions
+          -- set to nil, '' or false to disable the mapping
+          -- normal_mode = {} <- for normal mode mappings, only supports 'motion' and 'motion_reverse'
+        },
+        -- see the defaults:
+        -- https://github.com/Saghen/blink.pairs/blob/main/lua/blink/pairs/config/mappings.lua#L52
+        pairs = {},
+      },
+      highlights = {
+        enabled = true,
+        cmdline = true,
+        groups = {
+          "BlinkPairsRed",
+          "BlinkPairsCyan",
+          "BlinkPairsYellow",
+          "BlinkPairsGreen",
+          "BlinkPairsOrange",
+          "BlinkPairsViolet",
+          "BlinkPairsBlue",
+        },
+        unmatched_group = "BlinkPairsUnmatched",
+        -- highlights matching pairs under the cursor
+        matchparen = {
+          enabled = true,
+          cmdline = true,
+          include_surrounding = false,
+          group = "BlinkPairsMatchParen",
+          priority = 250,
+        },
+      },
+      debug = false,
+    })
+    vim.g.blink_pairs_setup_done = true
+  end, false)
+end
+
+setup_blink_pairs()
 
 local blink_opts = {
   fuzzy = { implementation = "prefer_rust_with_warning" },
@@ -117,13 +185,10 @@ local blink_opts = {
       blocked_retrigger_characters = { " ", "\n", "\t" },
     },
     window = {
-      -- Keep signature help lightweight while typing.
       show_documentation = false,
     },
   },
-  appearance = {
-    kind_icons = ui.icons.lazy_kind_icons,
-  },
+  appearance = {},
   completion = {
     ghost_text = { enabled = true },
     documentation = {
@@ -136,8 +201,7 @@ local blink_opts = {
     menu = {
       scrollbar = true,
       draw = {
-        columns = { { "kind_icon" }, { "label", gap = 1 } },
-        -- treesitter = { "lsp" },
+        columns = { { "kind_icon" }, { "label", gap = 1 }, { "kind" } },
         components = {
           label = {
             text = function(ctx)
@@ -149,17 +213,17 @@ local blink_opts = {
           },
           kind_icon = {
             text = function(ctx)
-              -- local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-              return ctx.kind_icon .. " "
+              local kind_icon = require("mini.icons").get("lsp", ctx.kind)
+              return kind_icon .. " "
             end,
             highlight = function(ctx)
-              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+              local _, hl = require("mini.icons").get("lsp", ctx.kind)
               return hl
             end,
           },
           kind = {
             highlight = function(ctx)
-              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+              local _, hl = require("mini.icons").get("lsp", ctx.kind)
               return hl
             end,
           },
@@ -199,8 +263,13 @@ local function setup_blink()
     _G.__setup_luasnip()
   end
 
-  vim.g.blink_setup_done = true
-  blink.setup(blink_opts)
+  setup_colorful_menu()
+
+  util.packadd("blink.lib", false)
+  util.ensure_plugin("blink.cmp", function()
+    require("blink.cmp").setup(blink_opts)
+    vim.g.blink_setup_done = true
+  end, false)
 end
 
 vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
@@ -211,25 +280,33 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
   end,
 })
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+function _G.__setup_blink_lsp_capabilities()
+  if vim.g.blink_lsp_capabilities_setup_done then
+    return
+  end
 
-capabilities = vim.tbl_deep_extend("force", capabilities, {
-  workspace = {
-    fileOperations = {
-      didRename = true,
-      willRename = true,
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+  capabilities = vim.tbl_deep_extend("force", capabilities, {
+    workspace = {
+      fileOperations = {
+        didRename = true,
+        willRename = true,
+      },
     },
-  },
-  textDocument = {
-    foldingRange = {
-      dynamicRegistration = false,
-      lineFoldingOnly = true,
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      },
     },
-  },
-})
+  })
 
-capabilities = vim.tbl_deep_extend("force", capabilities, blink.get_lsp_capabilities(capabilities, true))
+  capabilities = vim.tbl_deep_extend("force", capabilities, blink_completion_capabilities)
 
-vim.lsp.config("*", {
-  capabilities = capabilities,
-})
+  vim.lsp.config("*", {
+    capabilities = capabilities,
+  })
+
+  vim.g.blink_lsp_capabilities_setup_done = true
+end

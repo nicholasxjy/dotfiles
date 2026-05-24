@@ -1,5 +1,4 @@
 local ui = require("ui")
-local util = require("util")
 
 vim.schedule(function()
   package.preload["nvim-web-devicons"] = function()
@@ -12,37 +11,21 @@ require("mini.hues").setup({
   -- **Required** base colors as '#rrggbb' hex strings
   -- background = "#171614",
   -- foreground = "#AEA09F",
-  -- foreground = "#8D7B68",
-  -- foreground = "#EDE9E6",
-  foreground = "#c8d3f5",
-  -- foreground = "#DFF1F1",
+  -- foreground = "#c8d3f5",
+  -- foreground = "#E4D8DC",
+  foreground = "#b0b0b0",
   --
-  -- background = "#2D2424",
-  -- background = "#202940",
-  -- background = "#454040",
-  -- background = "#213C51",
-  -- background = "#41431B",
-  -- background = "#4B352A",
-  -- background = "#332941",
-  -- background = "#222436",
-  -- background = "#24283b",
-  -- background = "#091413",
-  -- background = "#152A38",
-  -- background = "#1C352D",
-  -- background = "#313E17",
-  -- background = "#1A1A1D",
-  -- background = "#092635",
-  -- background = "#212A3E",
-  -- background = "#2C3333",
-  -- background = "#18122B",
-  -- background = "#132C33",
-  -- background = "#454040",
-  -- background = "#2D2727",
-  background = "#39311D",
+  -- background = "#39311D",
   -- background = "#36413D",
   -- background = "#2F3032",
+  -- background = "#1B0C0C",
+  -- background = "#040D12",
+  background = "#1C0A00",
+  -- background = "#001C30",
+  -- background = "#222831",
+  -- background = "#1C1124",
   -- Number of hues used for non-base colors
-  n_hues = 8,
+  n_hues = 12,
 
   -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
   saturation = "high",
@@ -51,12 +34,66 @@ require("mini.hues").setup({
   -- 'cyan', 'azure', 'blue', 'purple'
   accent = "bg",
 
-  -- Plugin integrations. Use `default = false` to disable all integrations.
-  -- Also can be set per plugin (see |MiniHues.config|).
-  plugins = { default = true },
+  -- Plugin integrations. Keep a narrow whitelist to avoid generating highlights
+  -- for integrations this config never uses.
+  plugins = {
+    default = true,
+  },
 
   -- Whether to auto adjust highlight groups based on certain events
   autoadjust = true,
+})
+
+require("mini.tabline").setup({
+  show_icons = true,
+})
+
+require("mini.statusline").setup({
+  use_icons = true,
+  show_workspace_diagnostics = true,
+  -- Diff section defaults
+  diff = {
+    -- Icon used before diff summary. If `nil`, no icon is shown.
+    icon = nil,
+    -- Signs shown for each diff type
+    signs = {
+      added = ui.icons.git.added,
+      modified = ui.icons.git.modified,
+      removed = ui.icons.git.removed,
+    },
+  },
+  -- Diagnostics section defaults
+  diagnostics = {
+    -- Icon used before diagnostics summary. If `nil`, no icon is shown.
+    icon = nil,
+    -- Signs shown for each severity level
+    signs = {
+      ERROR = ui.icons.diagnostics.Error,
+      WARN = ui.icons.diagnostics.Warn,
+      INFO = ui.icons.diagnostics.Info,
+      HINT = ui.icons.diagnostics.Hint,
+    },
+  },
+  -- Highlight groups used by default content and built-in sections
+  highlight_groups = {
+    devinfo = "MiniStatuslineDevinfo",
+    filename = "MiniStatuslineFilename",
+    fileinfo = "MiniStatuslineFileinfo",
+    inactive = "MiniStatuslineInactive",
+    lsp_progress = "MiniStatuslineLspProgress",
+    lsp_progress_done = "MiniStatuslineLspProgressDone",
+    diff = {
+      added = "DiffAdded",
+      modified = "DiffModified",
+      removed = "DiffRemoved",
+    },
+    diagnostics = {
+      ERROR = "DiagnosticError",
+      WARN = "DiagnosticWarn",
+      INFO = "DiagnosticInfo",
+      HINT = "DiagnosticHint",
+    },
+  },
 })
 
 vim.keymap.set("n", "<leader>ut", function()
@@ -99,294 +136,172 @@ local function open_buf_in_split(buf_id, key_map, direction)
   vim.keymap.set("n", key_map, rhs, { buffer = buf_id, desc = "Open in " .. string.sub(direction, 12) })
 end
 
-local function setup_deferred()
-  require("mini.pairs").setup({
-    modes = { insert = true, command = true, terminal = true },
-  })
+require("mini.surround").setup({
+  mappings = {
+    add = "gsa",
+    delete = "gsd",
+    replace = "gsr",
+    find = "gsf",
+  },
+})
 
-  require("mini.surround").setup({
-    mappings = {
-      add = "gsa",
-      delete = "gsd",
-      replace = "gsr",
-      find = "gsf",
-    },
-  })
+require("mini.trailspace").setup({
+  only_in_normal_buffers = true,
+})
 
-  require("mini.trailspace").setup({
-    only_in_normal_buffers = true,
-  })
+require("mini.icons").setup({
+  file = {
+    [".keep"] = { glyph = "󰊢", hl = "MiniIconsGrey" },
+    ["devcontainer.json"] = { glyph = "", hl = "MiniIconsAzure" },
+    [".go-version"] = { glyph = "", hl = "MiniIconsBlue" },
+    [".eslintrc.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },
+    [".node-version"] = { glyph = "", hl = "MiniIconsGreen" },
+    [".prettierrc"] = { glyph = "", hl = "MiniIconsPurple" },
+    [".yarnrc.yml"] = { glyph = "", hl = "MiniIconsBlue" },
+    ["eslint.config.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },
+    ["package.json"] = { glyph = "", hl = "MiniIconsGreen" },
+    ["tsconfig.json"] = { glyph = "", hl = "MiniIconsAzure" },
+    ["tsconfig.build.json"] = { glyph = "", hl = "MiniIconsAzure" },
+    ["yarn.lock"] = { glyph = "", hl = "MiniIconsBlue" },
+  },
+  filetype = {
+    dotenv = { glyph = "", hl = "MiniIconsYellow" },
+    gotmpl = { glyph = "󰟓", hl = "MiniIconsGrey" },
+    postcss = { glyph = "󰌜", hl = "MiniIconsOrange" },
+  },
+})
 
-  require("mini.icons").setup({
-    file = {
-      [".keep"] = { glyph = "󰊢", hl = "MiniIconsGrey" },
-      ["devcontainer.json"] = { glyph = "", hl = "MiniIconsAzure" },
-      [".go-version"] = { glyph = "", hl = "MiniIconsBlue" },
-      [".eslintrc.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },
-      [".node-version"] = { glyph = "", hl = "MiniIconsGreen" },
-      [".prettierrc"] = { glyph = "", hl = "MiniIconsPurple" },
-      [".yarnrc.yml"] = { glyph = "", hl = "MiniIconsBlue" },
-      ["eslint.config.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },
-      ["package.json"] = { glyph = "", hl = "MiniIconsGreen" },
-      ["tsconfig.json"] = { glyph = "", hl = "MiniIconsAzure" },
-      ["tsconfig.build.json"] = { glyph = "", hl = "MiniIconsAzure" },
-      ["yarn.lock"] = { glyph = "", hl = "MiniIconsBlue" },
-    },
-    filetype = {
-      dotenv = { glyph = "", hl = "MiniIconsYellow" },
-      gotmpl = { glyph = "󰟓", hl = "MiniIconsGrey" },
-      postcss = { glyph = "󰌜", hl = "MiniIconsOrange" },
-    },
-  })
+local MiniFiles = require("mini.files")
+MiniFiles.setup({
+  mappings = {
+    show_help = "?",
+    go_in_plus = "<cr>",
+    go_out_plus = "-",
+  },
+  content = {
+    filter = function(entry)
+      return entry.name ~= ".DS_Store"
+    end,
+  },
+  options = { permanent_delete = false },
+})
 
-  local MiniFiles = require("mini.files")
-  MiniFiles.setup({
-    mappings = {
-      show_help = "?",
-      go_in_plus = "<cr>",
-      go_out_plus = "-",
-    },
-    content = {
-      filter = function(entry)
-        return entry.name ~= ".DS_Store"
-      end,
-    },
-    options = { permanent_delete = false },
-  })
+-- Window width based on the offset from the center, i.e. center window
+-- is 60, then next over is 20, then the rest are 10.
+-- Can use more resolution if you want like { 60, 20, 20, 10, 5 }
+local widths = { 60, 20, 10 }
 
-  -- Window width based on the offset from the center, i.e. center window
-  -- is 60, then next over is 20, then the rest are 10.
-  -- Can use more resolution if you want like { 60, 20, 20, 10, 5 }
-  local widths = { 60, 20, 10 }
-
-  local ensure_center_layout = function(ev)
-    local state = MiniFiles.get_explorer_state()
-    if state == nil then
-      return
-    end
-
-    -- Compute "depth offset" - how many windows are between this and focused
-    local path_this = vim.api.nvim_buf_get_name(ev.data.buf_id):match("^minifiles://%d+/(.*)$")
-    local depth_this
-    for i, path in ipairs(state.branch) do
-      if path == path_this then
-        depth_this = i
-      end
-    end
-    if depth_this == nil then
-      return
-    end
-    local depth_offset = depth_this - state.depth_focus
-
-    -- Adjust config of this event's window
-    local i = math.abs(depth_offset) + 1
-    local win_config = vim.api.nvim_win_get_config(ev.data.win_id)
-    win_config.width = i <= #widths and widths[i] or widths[#widths]
-
-    win_config.col = math.floor(0.5 * (vim.o.columns - widths[1]))
-    for j = 1, math.abs(depth_offset) do
-      local sign = depth_offset == 0 and 0 or (depth_offset > 0 and 1 or -1)
-      -- widths[j+1] for the negative case because we don't want to add the center window's width
-      local prev_win_width = (sign == -1 and widths[j + 1]) or widths[j] or widths[#widths]
-      -- Add an extra +2 each step to account for the border width
-      win_config.col = win_config.col + sign * (prev_win_width + 2)
-    end
-
-    win_config.height = depth_offset == 0 and 25 or 20
-    win_config.row = math.floor(0.5 * (vim.o.lines - win_config.height))
-    -- win_config.border = { "🭽", "▔", "🭾", "▕", "🭿", "▁", "🭼", "▏" }
-    win_config.border = "rounded"
-    vim.api.nvim_win_set_config(ev.data.win_id, win_config)
+local ensure_center_layout = function(ev)
+  local state = MiniFiles.get_explorer_state()
+  if state == nil then
+    return
   end
 
-  vim.api.nvim_create_autocmd("User", { pattern = "MiniFilesWindowUpdate", callback = ensure_center_layout })
+  -- Compute "depth offset" - how many windows are between this and focused
+  local path_this = vim.api.nvim_buf_get_name(ev.data.buf_id):match("^minifiles://%d+/(.*)$")
+  local depth_this
+  for i, path in ipairs(state.branch) do
+    if path == path_this then
+      depth_this = i
+    end
+  end
+  if depth_this == nil then
+    return
+  end
+  local depth_offset = depth_this - state.depth_focus
 
-  vim.api.nvim_create_autocmd("User", {
-    pattern = "MiniFilesWindowOpen",
-    callback = function(args)
-      local win_id = args.data.win_id
-      vim.wo[win_id].winblend = 0
-      local config = vim.api.nvim_win_get_config(win_id)
-      config.border = "single"
-      vim.api.nvim_win_set_config(win_id, config)
-    end,
-  })
+  -- Adjust config of this event's window
+  local i = math.abs(depth_offset) + 1
+  local win_config = vim.api.nvim_win_get_config(ev.data.win_id)
+  win_config.width = i <= #widths and widths[i] or widths[#widths]
 
-  vim.api.nvim_create_autocmd("User", {
-    pattern = "MiniFilesBufferCreate",
-    callback = function(args)
-      local buf_id = args.data.buf_id
-      vim.keymap.set("n", "g.", function()
-        vim.g.show_dotfiles = not vim.g.show_dotfiles
-        require("mini.files").refresh({
-          content = {
-            filter = function(entry)
-              return vim.g.show_dotfiles or entry.name:sub(1, 1) ~= "."
-            end,
-          },
-        })
-      end, { buffer = buf_id, desc = "Toggle Dotfiles" })
-    end,
-  })
+  win_config.col = math.floor(0.5 * (vim.o.columns - widths[1]))
+  for j = 1, math.abs(depth_offset) do
+    local sign = depth_offset == 0 and 0 or (depth_offset > 0 and 1 or -1)
+    -- widths[j+1] for the negative case because we don't want to add the center window's width
+    local prev_win_width = (sign == -1 and widths[j + 1]) or widths[j] or widths[#widths]
+    -- Add an extra +2 each step to account for the border width
+    win_config.col = win_config.col + sign * (prev_win_width + 2)
+  end
 
-  vim.api.nvim_create_autocmd("User", {
-    desc = "Add minifiles split keymaps",
-    pattern = "MiniFilesBufferCreate",
-    callback = function(args)
-      local buf_id = args.data.buf_id
-      open_buf_in_split(buf_id, "<C-h>", "topleft vertical")
-      open_buf_in_split(buf_id, "<C-j>", "belowright horizontal")
-      open_buf_in_split(buf_id, "<C-k>", "topleft horizontal")
-      open_buf_in_split(buf_id, "<C-l>", "belowright vertical")
-      open_buf_in_split(buf_id, "<C-t>", "tab")
-    end,
-  })
-
-  vim.api.nvim_create_autocmd("User", {
-    desc = "Notify LSPs that a file was renamed",
-    pattern = "MiniFilesActionRename",
-    callback = function(args)
-      local changes = {
-        files = {
-          {
-            oldUri = vim.uri_from_fname(args.data.from),
-            newUri = vim.uri_from_fname(args.data.to),
-          },
-        },
-      }
-      local will_rename_method, did_rename_method =
-        vim.lsp.protocol.Methods.workspace_willRenameFiles, vim.lsp.protocol.Methods.workspace_didRenameFiles
-      local clients = vim.lsp.get_clients()
-      for _, client in ipairs(clients) do
-        if client:supports_method(will_rename_method) then
-          local res = client:request_sync(will_rename_method, changes, 1000, 0)
-          if res and res.result then
-            vim.lsp.util.apply_workspace_edit(res.result, client.offset_encoding)
-          end
-        end
-      end
-
-      for _, client in ipairs(clients) do
-        if client:supports_method(did_rename_method) then
-          client:notify(did_rename_method, changes)
-        end
-      end
-    end,
-  })
-
-  require("mini.tabline").setup({
-    show_icons = true,
-  })
-
-  -- mini clue
-  local miniclue = require("mini.clue")
-  miniclue.setup({
-    window = {
-      delay = 100,
-      config = {
-        width = "auto",
-        col = "auto",
-        anchor = "NW",
-        border = "single",
-      },
-    },
-    triggers = {
-      -- Leader triggers
-      { mode = { "n", "x" }, keys = "<Leader>" },
-
-      -- `[` and `]` keys
-      { mode = "n", keys = "[" },
-      { mode = "n", keys = "]" },
-
-      -- Built-in completion
-      { mode = "i", keys = "<C-x>" },
-
-      -- `g` key
-      { mode = { "n", "x" }, keys = "g" },
-
-      -- Marks
-      { mode = { "n", "x" }, keys = "'" },
-      { mode = { "n", "x" }, keys = "`" },
-
-      -- Registers
-      { mode = { "n", "x" }, keys = '"' },
-      { mode = { "i", "c" }, keys = "<C-r>" },
-
-      -- Window commands
-      { mode = "n", keys = "<C-w>" },
-
-      -- `z` key
-      { mode = { "n", "x" }, keys = "z" },
-    },
-
-    clues = {
-      { mode = "n", keys = "<leader>a", desc = "+AI" },
-      { mode = "n", keys = "<leader>b", desc = "+Buffer" },
-      { mode = "n", keys = "<leader>c", desc = "+Code" },
-      { mode = "n", keys = "<leader>d", desc = "+Debug" },
-      { mode = "n", keys = "<leader>f", desc = "+Files" },
-      { mode = "n", keys = "<leader>s", desc = "+Search" },
-      { mode = "n", keys = "<leader>g", desc = "+Git" },
-      { mode = "n", keys = "<leader>x", desc = "+Diagnostic" },
-      { mode = "n", keys = "<leader>u", desc = "+UI" },
-      -- Enhance this by adding descriptions for <Leader> mapping groups
-      miniclue.gen_clues.square_brackets(),
-      miniclue.gen_clues.builtin_completion(),
-      miniclue.gen_clues.g(),
-      miniclue.gen_clues.marks(),
-      miniclue.gen_clues.registers(),
-      miniclue.gen_clues.windows(),
-      miniclue.gen_clues.z(),
-    },
-  })
-
-  require("mini.statusline").setup({
-    use_icons = true,
-    show_workspace_diagnostics = true,
-    -- Diff section defaults
-    diff = {
-      -- Icon used before diff summary. If `nil`, no icon is shown.
-      icon = nil,
-      -- Signs shown for each diff type
-      signs = {
-        added = ui.icons.git.added,
-        modified = ui.icons.git.modified,
-        removed = ui.icons.git.removed,
-      },
-    },
-    -- Diagnostics section defaults
-    diagnostics = {
-      -- Icon used before diagnostics summary. If `nil`, no icon is shown.
-      icon = nil,
-      -- Signs shown for each severity level
-      signs = {
-        ERROR = ui.icons.diagnostics.Error,
-        WARN = ui.icons.diagnostics.Warn,
-        INFO = ui.icons.diagnostics.Info,
-        HINT = ui.icons.diagnostics.Hint,
-      },
-    },
-    -- Highlight groups used by default content and built-in sections
-    highlight_groups = {
-      devinfo = "MiniStatuslineDevinfo",
-      filename = "MiniStatuslineFilename",
-      fileinfo = "MiniStatuslineFileinfo",
-      inactive = "MiniStatuslineInactive",
-      lsp_progress = "MiniStatuslineLspProgress",
-      lsp_progress_done = "MiniStatuslineLspProgressDone",
-      diff = {
-        added = "DiffAdded",
-        modified = "DiffModified",
-        removed = "DiffRemoved",
-      },
-      diagnostics = {
-        ERROR = "DiagnosticError",
-        WARN = "DiagnosticWarn",
-        INFO = "DiagnosticInfo",
-        HINT = "DiagnosticHint",
-      },
-    },
-  })
+  win_config.height = depth_offset == 0 and 25 or 20
+  win_config.row = math.floor(0.5 * (vim.o.lines - win_config.height))
+  -- win_config.border = { "🭽", "▔", "🭾", "▕", "🭿", "▁", "🭼", "▏" }
+  win_config.border = "rounded"
+  vim.api.nvim_win_set_config(ev.data.win_id, win_config)
 end
 
-util.later(setup_deferred, 20, "VimEnter", true)
+vim.api.nvim_create_autocmd("User", { pattern = "MiniFilesWindowUpdate", callback = ensure_center_layout })
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "MiniFilesWindowOpen",
+  callback = function(args)
+    local win_id = args.data.win_id
+    vim.wo[win_id].winblend = 0
+    local config = vim.api.nvim_win_get_config(win_id)
+    config.border = "single"
+    vim.api.nvim_win_set_config(win_id, config)
+  end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "MiniFilesBufferCreate",
+  callback = function(args)
+    local buf_id = args.data.buf_id
+    vim.keymap.set("n", "g.", function()
+      vim.g.show_dotfiles = not vim.g.show_dotfiles
+      require("mini.files").refresh({
+        content = {
+          filter = function(entry)
+            return vim.g.show_dotfiles or entry.name:sub(1, 1) ~= "."
+          end,
+        },
+      })
+    end, { buffer = buf_id, desc = "Toggle Dotfiles" })
+  end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+  desc = "Add minifiles split keymaps",
+  pattern = "MiniFilesBufferCreate",
+  callback = function(args)
+    local buf_id = args.data.buf_id
+    open_buf_in_split(buf_id, "<C-h>", "topleft vertical")
+    open_buf_in_split(buf_id, "<C-j>", "belowright horizontal")
+    open_buf_in_split(buf_id, "<C-k>", "topleft horizontal")
+    open_buf_in_split(buf_id, "<C-l>", "belowright vertical")
+    open_buf_in_split(buf_id, "<C-t>", "tab")
+  end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+  desc = "Notify LSPs that a file was renamed",
+  pattern = "MiniFilesActionRename",
+  callback = function(args)
+    local changes = {
+      files = {
+        {
+          oldUri = vim.uri_from_fname(args.data.from),
+          newUri = vim.uri_from_fname(args.data.to),
+        },
+      },
+    }
+    local will_rename_method, did_rename_method =
+      vim.lsp.protocol.Methods.workspace_willRenameFiles, vim.lsp.protocol.Methods.workspace_didRenameFiles
+    local clients = vim.lsp.get_clients()
+    for _, client in ipairs(clients) do
+      if client:supports_method(will_rename_method) then
+        local res = client:request_sync(will_rename_method, changes, 1000, 0)
+        if res and res.result then
+          vim.lsp.util.apply_workspace_edit(res.result, client.offset_encoding)
+        end
+      end
+    end
+
+    for _, client in ipairs(clients) do
+      if client:supports_method(did_rename_method) then
+        client:notify(did_rename_method, changes)
+      end
+    end
+  end,
+})

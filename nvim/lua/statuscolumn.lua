@@ -1,106 +1,148 @@
 local M = {}
 
--- ┃, ┆, ┇, ┊, ┋, ╎, ╏, ║, ╽, ╿
+M.expr = "%!v:lua.require('statuscolumn').setup()"
 
-M.border = function()
-  return "%#StatusBorder#│ " -- │┃, ┆, ┇, ┊, ┋, ╎, ╏, ║, ╽, ╿
+local EMPTY = "  "
+local MARK_CACHE_TTL_MS = 1000
+local mark_cache = {}
+
+local function current_winid()
+  return vim.g.statusline_winid or vim.api.nvim_get_current_win()
 end
 
-M.number = function()
-  local lnum = vim.v.lnum
-  local r = vim.v.relnum
-  return string.format("%3d ", (r == 0 and lnum or r))
-end
-
-local function current_bufnr()
-  local winid = vim.g.statusline_winid or 0
-  if winid == 0 then
-    return vim.api.nvim_get_current_buf()
-  end
+local function current_bufnr(winid)
   return vim.api.nvim_win_get_buf(winid)
 end
 
-local function find_mark(bufnr, lnum)
-  local bufname = vim.api.nvim_buf_get_name(bufnr)
-  local normalized_bufname = bufname ~= "" and vim.fs.normalize(bufname) or nil
+local function line_number_text()
+  local number = vim.v.relnum
+  if number == 0 then
+    number = vim.v.lnum
+  end
 
-  local function pick(entries)
-    for _, entry in ipairs(entries) do
-      local pos = entry.pos
-      local mark = entry.mark
-      local same_buffer = pos and pos[1] == bufnr
+  if number < 10 then
+    return "  " .. number .. " "
+  end
+  if number < 100 then
+    return " " .. number .. " "
+  end
+  return number .. " "
+end
 
+local function clear_mark_cache(bufnr)
+  if bufnr and bufnr > 0 then
+    mark_cache[bufnr] = nil
+  end
+end
+
+local function add_marks(by_lnum, entries, bufnr, normalized_bufname)
+  for _, entry in ipairs(entries) do
+    local pos = entry.pos
+    local mark = entry.mark
+    if pos and mark and mark:match("^'[a-zA-Z]$") then
+      local same_buffer = pos[1] == bufnr
       if not same_buffer and normalized_bufname and entry.file then
         same_buffer = vim.fs.normalize(entry.file) == normalized_bufname
       end
-
-      if same_buffer and pos and pos[2] == lnum and mark and mark:match("^'[a-zA-Z]$") then
-        return mark:sub(2)
+      if same_buffer and by_lnum[pos[2]] == nil then
+        by_lnum[pos[2]] = mark:sub(2)
       end
     end
   end
-
-  return pick(vim.fn.getmarklist(bufnr)) or pick(vim.fn.getmarklist())
 end
 
-M.marks = function()
-  local mark = find_mark(current_bufnr(), vim.v.lnum)
+local function marks_for_buffer(bufnr)
+  local now = vim.uv.now()
+  local cached = mark_cache[bufnr]
+  if cached and cached.expires_at > now then
+    return cached.by_lnum
+  end
+
+  local by_lnum = {}
+  local bufname = vim.api.nvim_buf_get_name(bufnr)
+  local normalized_bufname = bufname ~= "" and vim.fs.normalize(bufname) or nil
+
+  add_marks(by_lnum, vim.fn.getmarklist(bufnr), bufnr, normalized_bufname)
+  add_marks(by_lnum, vim.fn.getmarklist(), bufnr, normalized_bufname)
+
+  mark_cache[bufnr] = {
+    by_lnum = by_lnum,
+    expires_at = now + MARK_CACHE_TTL_MS,
+  }
+
+  return by_lnum
+end
+
+local function mark_text(bufnr, lnum)
+  local mark = marks_for_buffer(bufnr)[lnum]
   if not mark then
-    return "  "
+    return EMPTY
   end
   return "%#Keyword#" .. mark .. " "
 end
 
-M.folds = function()
-  local foldlevel = vim.fn.foldlevel(vim.v.lnum)
-  local foldlevel_before = vim.fn.foldlevel((vim.v.lnum - 1) >= 1 and vim.v.lnum - 1 or 1)
-  local foldlevel_after =
-    vim.fn.foldlevel((vim.v.lnum + 1) <= vim.fn.line("$") and (vim.v.lnum + 1) or vim.fn.line("$"))
-
-  local foldclosed = vim.fn.foldclosed(vim.v.lnum)
-
-  if foldlevel == 0 then
-    return "  "
+local function git_text(bufnr, lnum)
+  local gitsigns = package.loaded.gitsigns
+  if type(gitsigns) ~= "table" or type(gitsigns.statuscolumn) ~= "function" then
+    return EMPTY
   end
 
-  -- local rainbow_colors = {
-  --   "RainbowDelimiterRed",
-  --   "RainbowDelimiterOrange",
-  --   "RainbowDelimiterYellow",
-  --   "RainbowDelimiterGreen",
-  --   "RainbowDelimiterCyan",
-  --   "RainbowDelimiterBlue",
-  --   "RainbowDelimiterViolet",
-  -- }
-  -- local group = rainbow_colors[(foldlevel - 1) % #rainbow_colors + 1]
-
-  local group = "LineNr"
-  if foldclosed ~= -1 and foldclosed == vim.v.lnum then
-    return "%#" .. "String" .. "# "
+  local ok, text = pcall(gitsigns.statuscolumn, bufnr, lnum)
+  if not ok or text == nil or text == "" then
+    return EMPTY
   end
 
-  if foldlevel > foldlevel_before then
-    return "%#" .. group .. "# "
-  end
-
-  if foldlevel > foldlevel_after then
-    return "%#" .. group .. "# "
-  end
-
-  return "%#" .. group .. "#╎ "
-end
-
-M.setup = function()
-  local text = ""
-
-  text = table.concat({
-    M.marks(),
-    M.number(),
-    "%s",
-    M.border(),
-    M.folds(),
-  })
   return text
 end
+
+function M.setup()
+  local winid = current_winid()
+  local bufnr = current_bufnr(winid)
+  local lnum = vim.v.lnum
+
+  return table.concat({
+    mark_text(bufnr, lnum),
+    "%s",
+    line_number_text(),
+    git_text(bufnr, lnum),
+    "%#StatusBorder#│ ",
+    "%#FoldColumn#%C",
+  })
+end
+
+function M.enabled(winid)
+  winid = winid or vim.api.nvim_get_current_win()
+  return vim.api.nvim_get_option_value("statuscolumn", { win = winid }) == M.expr
+end
+
+function M.enable(winid)
+  winid = winid or vim.api.nvim_get_current_win()
+  vim.api.nvim_set_option_value("statuscolumn", M.expr, { win = winid })
+end
+
+function M.disable(winid)
+  winid = winid or vim.api.nvim_get_current_win()
+  vim.api.nvim_set_option_value("statuscolumn", "", { win = winid })
+end
+
+function M.toggle(winid)
+  if M.enabled(winid) then
+    M.disable(winid)
+  else
+    M.enable(winid)
+  end
+end
+
+vim.api.nvim_create_user_command("StatuscolumnToggle", function()
+  M.toggle()
+end, { desc = "Toggle statuscolumn in the current window" })
+
+local group = vim.api.nvim_create_augroup("Statuscolumn", { clear = true })
+vim.api.nvim_create_autocmd({ "BufDelete", "BufEnter", "BufWritePost", "BufWipeout", "CmdlineLeave", "CursorHold" }, {
+  group = group,
+  callback = function(ev)
+    clear_mark_cache(ev.buf)
+  end,
+})
 
 return M

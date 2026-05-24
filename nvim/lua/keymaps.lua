@@ -14,16 +14,20 @@ end
 local unmap = vim.keymap.del
 
 local function safe_unmap(mode, lhs)
-  pcall(unmap, mode, lhs)
+  local keymaps = type(lhs) == "string" and { lhs } or lhs
+  for _, keymap in ipairs(keymaps) do
+    pcall(unmap, mode, keymap)
+  end
+end
+
+local function refresh_tabline()
+  vim.schedule(function()
+    vim.cmd.redrawtabline()
+  end)
 end
 
 -- remove default keybindings that cause `gr` delay
-safe_unmap("n", "gri")
-safe_unmap("n", "grr")
-safe_unmap("n", "gra")
-safe_unmap("n", "grn")
-safe_unmap("n", "grt")
-safe_unmap("n", "grx")
+safe_unmap("n", { "gri", "grr", "gra", "grn", "grt", "grx" })
 
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true })
@@ -47,12 +51,14 @@ map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", {
 -- Buffers
 map("n", "<leader>j", function()
   Snacks.bufdelete({ wipe = true })
+  refresh_tabline()
 end, { desc = "Delete Buffer" })
 
 map({ "n", "x", "s" }, "<leader>k", "<cmd>w<cr><esc>", { desc = "Save" })
 
 map("n", "<leader>bo", function()
   Snacks.bufdelete.other()
+  refresh_tabline()
 end, { desc = "Delete Other Buffers" })
 
 map("n", "<leader>q", ":q<cr>", { desc = "Quit" })
@@ -110,3 +116,20 @@ map("n", "ycc", "yygccp", { remap = true, desc = "Duplicate and Comment" })
 map("x", "/", "<Esc>/\\%V", { desc = "Search Selection" })
 
 map("n", "<leader>um", ":messages<cr>", { desc = "Show messages" })
+
+-- incremental selection treesitter/lsp
+vim.keymap.set({ "n", "x", "o" }, "<A-o>", function()
+  if vim.treesitter.get_parser(nil, nil, { error = false }) then
+    require("vim.treesitter._select").select_parent(vim.v.count1)
+  else
+    vim.lsp.buf.selection_range(vim.v.count1)
+  end
+end, { desc = "Select parent treesitter node or outer incremental lsp selections" })
+
+vim.keymap.set({ "n", "x", "o" }, "<A-i>", function()
+  if vim.treesitter.get_parser(nil, nil, { error = false }) then
+    require("vim.treesitter._select").select_child(vim.v.count1)
+  else
+    vim.lsp.buf.selection_range(-vim.v.count1)
+  end
+end, { desc = "Select child treesitter node or inner incremental lsp selections" })

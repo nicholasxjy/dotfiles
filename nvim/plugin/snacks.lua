@@ -1,4 +1,3 @@
-
 local vscode = {
   hidden = { "preview" },
   layout = {
@@ -26,6 +25,7 @@ require("snacks").setup({
   scroll = { enabled = false },
   input = { enabled = true },
   words = { enabled = false },
+  indent = { enabled = false },
   statuscolumn = {
     enabled = false,
     left = { "mark", "sign" }, -- priority of signs on the left (high to low)
@@ -150,20 +150,20 @@ vim.keymap.set("n", "ff", pick("smart", { hidden = true, filter = cwd.filter, la
   silent = true,
 })
 
--- vim.keymap.set(
---   "n",
---   "nn",
---   pick("buffers", {
---     sort_lastused = true,
---     current = false,
---     layout = vscode,
---     win = {
---       input = { keys = { ["<c-x>"] = { "bufdelete", mode = { "n", "i" } } } },
---       list = { keys = { ["dd"] = "bufdelete" } },
---     },
---   }),
---   { desc = "Find Buffers", silent = true }
--- )
+vim.keymap.set(
+  "n",
+  "nn",
+  pick("buffers", {
+    sort_lastused = true,
+    current = true,
+    layout = vscode,
+    win = {
+      input = { keys = { ["<c-x>"] = { "bufdelete", mode = { "n", "i" } } } },
+      list = { keys = { ["dd"] = "bufdelete" } },
+    },
+  }),
+  { desc = "Find Buffers", silent = true }
+)
 -- vim.keymap.set("n", "<leader>fa", pick("autocmds"), { desc = "Autocmds" })
 -- vim.keymap.set("n", "<leader>fc", pick("colorschemes"), { desc = "Colorschemes" })
 -- vim.keymap.set("n", "<leader>fC", pick("commands"), { desc = "Commands" })
@@ -212,5 +212,6 @@ vim.keymap.set(
 )
 
 vim.keymap.set("n", "<leader>xt", function()
-  pick("todo_comments")
+  ---@diagnostic disable-next-line: undefined-field
+  Snacks.picker.todo_comments()
 end, { desc = "TODO/FIXME/NOTE etc" })
