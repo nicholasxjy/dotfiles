@@ -1,126 +1,78 @@
 # AGENTS.md
 
-This repository is a **Neovim configuration** written in **Lua**, organized as a modular `lua/` tree and managed with **lazy.nvim**.
+This file gives project-specific instructions for agents working in
+`/Users/nick/.config/nvim`.
 
-## Quick orientation
+## Project Shape
 
-Entry points:
-- `init.lua` → loads core + theme (`init.lua:1-2`)
-- `lua/core/init.lua` → loads options, lazy.nvim, keymaps, autocmds (`lua/core/init.lua:1-4`)
-- Plugin manager bootstrap + setup: `lua/core/lazy.lua` (`lua/core/lazy.lua:1-41`)
+This is a personal Neovim configuration written in Lua. It targets modern
+Neovim with `folke/lazy.nvim` as the plugin manager.
 
-Top-level layout:
-- `lua/core/` — editor configuration (options, keymaps, autocmds, UI glue)
-- `lua/plugins/` — lazy.nvim plugin specs (one file per topic/plugin family)
-- `lua/utils/` — shared helpers used by core/plugins (e.g. `lsp.lua`, `mini.lua`, `snippets.lua`)
-- `lsp/` — per-server LSP settings (Lua modules)
-- `ftplugin/` — filetype-specific configuration
-- `snippets/` — custom LuaSnip snippet definitions (per-filetype)
+- `init.lua` is the startup entrypoint. Keep it small and ordered.
+- `lua/options.lua` owns global editor options.
+- `lua/keymaps.lua` owns global keymaps and the local keymap helper.
+- `lua/autocmds.lua` owns user commands and general autocommands.
+- `lua/pack.lua` owns lazy.nvim bootstrap and setup.
+- `lua/lsp.lua` owns diagnostics, LSP enablement, and LSP keymaps.
+- `lua/util.lua` owns shared non-plugin helpers.
+- `lua/ui.lua` owns shared icons and visual constants.
+- `lua/plugins/*.lua` contains lazy.nvim plugin specs and plugin-specific
+  setup. Prefer adding plugin config there instead of growing `init.lua`.
+- `ftplugin/*.lua` contains filetype-specific behavior.
+- `lazy-lock.json` and the legacy `nvim-pack-lock.json` are generated plugin
+  lock state. Do not hand-edit them.
 
-## Essential commands (observed)
+## Editing Rules
 
-This repo is meant to be exercised from Neovim.
+- Use Lua idioms already present in the config: local helpers, `vim.*` APIs,
+  `vim.api.nvim_create_autocmd`, `vim.keymap.set`, and `vim.tbl_extend`.
+- Keep modules focused. Add a new plugin in a focused `lua/plugins/*.lua` spec
+  file unless the configuration is truly shared.
+- Prefer lazy/deferred setup for optional or expensive plugins. Existing
+  patterns include lazy.nvim `event`, `cmd`, `ft`, `keys`, `opts`,
+  `dependencies`, and `build`, plus `vim.schedule` and one-shot autocommands.
+- Avoid introducing new plugin managers or dependency frameworks. This config
+  uses lazy.nvim, not `vim.pack`.
+- Keep keymap descriptions accurate and concise. Preserve the space leader.
+- Be careful with startup performance: avoid unconditional `require()` calls for
+  plugins that are meant to load lazily.
+- Do not remove user-specific paths or runtime assumptions unless the task is
+  explicitly to make the config portable.
+- Do not edit generated or machine-managed files unless the task requires it.
+  In particular, leave plugin lock files alone unless updating plugins.
 
-### Neovim
-- Check Neovim version:
-  - `nvim --version`
+## Style
 
-### Plugin manager (lazy.nvim)
-- lazy.nvim is bootstrapped automatically on startup via git clone:
-  - see `lua/core/lazy.lua:1-7`
-- Inside Neovim:
-  - `:Lazy` (also mapped to `<leader>L`) - open lazy.nvim UI (`lua/core/keymaps.lua:55`)
+- Format Lua with Stylua using `stylua.toml`.
+- Use 2-space indentation and keep lines near the configured 120-column width.
+- Prefer clear local functions over broad abstractions.
+- Comments should explain non-obvious behavior or constraints, not restate the
+  code.
 
-### Tooling installer (mason.nvim)
-- Mason is configured as a lazy.nvim plugin and is set to update via:
-  - `build = ":MasonUpdate"` (`lua/plugins/mason.lua:3`)
-- Inside Neovim:
-  - `:Mason` (also mapped to `<leader>M` and `<leader>cm`) (`lua/core/keymaps.lua:56`, `lua/plugins/mason.lua:7`)
+## Verification
 
-## Formatting & style
+For small Lua/config edits, run the lightest check that proves startup still
+loads:
 
-Lua formatting is configured via StyLua:
-- `stylua.toml`:
-  - spaces, 2-width indent (`stylua.toml:1-2`)
-  - column width 120 (`stylua.toml:3`)
-  - `sort_requires.enabled = true` (`stylua.toml:4-5`)
+```sh
+nvim --headless "+lua vim.health.start('config'); vim.health.ok('loaded')" +qa
+```
 
-Conventions observed in code:
-- Indentation: 2 spaces (also enforced via `vim.opt.tabstop/shiftwidth/expandtab`) (`lua/core/options.lua:34-39`)
-- Keymaps are usually defined via a small wrapper `map(...)` around `vim.keymap.set` (`lua/core/keymaps.lua:1-12`)
-- Plugin specs are returned as Lua tables from files under `lua/plugins/**`.
+For formatting-sensitive changes, run:
 
-## Key configuration switches (globals)
+```sh
+stylua --check .
+```
 
-Several global toggles are expected to exist:
-- `<leader>` and `<localleader>` are set to space (`lua/core/options.lua:1-2`)
-- `vim.g.bordered` controls UI borders for multiple UIs (`lua/core/options.lua:12`, `lua/core/lazy.lua:26`, `lua/plugins/mason.lua:13`, `lua/plugins/lspconfig.lua:20`)
-- `vim.g.autoformat` default enabled (`lua/core/options.lua:3`)
-- `vim.g.copilot_enabled` default disabled (`lua/core/options.lua:6`)
+When changing plugin declarations or plugin build hooks, also validate inside
+Neovim with relevant `:Lazy` checks or direct startup/load checks. Do not claim
+plugin updates are complete unless the command was actually run.
 
-## Picker / fuzzy finding
+## Safety
 
-Fuzzy finding uses **Snacks.picker** exclusively (fzf-lua has been removed):
-- Picker config and keymaps: `lua/plugins/snacks.lua`
-- LSP picker keymaps (definitions, references, diagnostics, etc.): `lua/utils/lsp.lua`
-  - Uses a `pick(name, opts)` helper that calls `Snacks.picker[name](opts)`
-
-## LSP architecture
-
-LSP is configured with `nvim-lspconfig` and uses Neovim's newer `vim.lsp.enable(...)` flow:
-- `lua/plugins/lspconfig.lua`:
-  - Configures diagnostics UI and signs
-  - Builds LSP client capabilities and extends them via `blink.cmp`
-  - Enables a curated list of servers via `vim.lsp.enable({ ... })`
-  - `LspAttach` autocmd delegates keymaps/setup to `utils.lsp.on_attach`
-- `lua/utils/lsp.lua`:
-  - `keymap_setup()` — global LSP keymaps (go-to-definition, references, diagnostics, etc.)
-  - `methods_setup()` — per-buffer LSP features (inlay hints, linked editing, eslint auto-fix)
-
-Per-server settings live under `lsp/` (e.g. `lsp/lua_ls.lua`, `lsp/gopls.lua`, etc.).
-
-## Autocmds and buffer behavior
-
-Autocmds are centralized in `lua/core/autocmds.lua`.
-Notable behaviors:
-- Some filetypes disable autoformat via buffer-local `vim.b.autoformat = false`:
-  - `shell`, `bash`, `sh`, `java` (`lua/core/autocmds.lua:23-29`)
-- Many "utility" filetypes are set to close with `q` and be unlisted (`lua/core/autocmds.lua:30-64`)
-- Auto-create directories on save (`lua/core/autocmds.lua:128-137`)
-
-## Testing
-
-"Testing" in this repository is primarily Neovim/plugin-level behavior.
-There is a neotest plugin spec and keymaps:
-- `lua/plugins/test.lua` defines `nvim-neotest/neotest` and maps under `<leader>t` (`lua/plugins/test.lua:1-26`).
-
-No external test runner or CI config was observed in the current tree.
-
-## Adding/changing plugins
-
-Pattern:
-- Add or adjust plugin specs in `lua/plugins/*.lua`.
-- lazy.nvim loads specs via a single import:
-  - `{ import = "plugins" }` (`lua/core/lazy.lua`)
-
-When changing plugin behavior:
-- Prefer updating the plugin spec file responsible for that domain (e.g. LSP in `lua/plugins/lspconfig.lua`, Mason in `lua/plugins/mason.lua`).
-
-## Gotchas / non-obvious details
-
-- This config assumes a fairly recent Neovim; it uses `vim.uv`/`vim.loop` and `vim.lsp.enable(...)` (`lua/core/lazy.lua:3`, `lua/plugins/lspconfig.lua:70`).
-- Borders are globally toggleable via `vim.g.bordered`; many UIs read it.
-- Some default Neovim keybindings are explicitly removed to avoid `gr` delay (`lua/core/keymaps.lua:16-22`).
-
-## Where to look for common tasks
-
-- Change editor options: `lua/core/options.lua`
-- Add/modify keymaps: `lua/core/keymaps.lua`
-- Add/modify autocmds: `lua/core/autocmds.lua`
-- Plugin manager settings/import order: `lua/core/lazy.lua`
-- Picker / fuzzy finding: `lua/plugins/snacks.lua`
-- LSP enablement/diagnostic UX: `lua/plugins/lspconfig.lua`
-- LSP keymaps and attach logic: `lua/utils/lsp.lua`
-- Per-language LSP settings: `lsp/*.lua`
-- Filetype tweaks: `ftplugin/*.lua`
-- Custom snippets: `snippets/*.lua`
+- This directory may not be a Git repository. Check before relying on Git.
+- Preserve unrelated local edits.
+- Avoid destructive cleanup of installed packs, caches, Mason packages, or lock
+  files unless the user explicitly asks for it.
+- If a command would require network access, explain the need through the tool
+  escalation path and keep the requested command scoped.

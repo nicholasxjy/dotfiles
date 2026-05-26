@@ -14,16 +14,14 @@ end
 local unmap = vim.keymap.del
 
 local function safe_unmap(mode, lhs)
-  pcall(unmap, mode, lhs)
+  local keymaps = type(lhs) == "string" and { lhs } or lhs
+  for _, keymap in ipairs(keymaps) do
+    pcall(unmap, mode, keymap)
+  end
 end
 
 -- remove default keybindings that cause `gr` delay
-safe_unmap("n", "gri")
-safe_unmap("n", "grr")
-safe_unmap("n", "gra")
-safe_unmap("n", "grn")
-safe_unmap("n", "grt")
-safe_unmap("n", "grx")
+safe_unmap("n", { "gri", "grr", "gra", "grn", "grt", "grx" })
 
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true })
@@ -44,21 +42,9 @@ map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
 map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
 map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+map({ "n", "x", "s" }, "<leader>k", "<cmd>w<cr><esc>", { desc = "Save" })
 
-map({ "n" }, "<leader>k", "<cmd>w<cr>", { desc = "Save", nowait = true, silent = true })
-
--- Buffers
-map("n", "<leader>j", function()
-  Snacks.bufdelete({ wipe = true })
-end, { desc = "Delete Buffer", nowait = true, silent = true })
-
-map("n", "<leader>bo", function()
-  Snacks.bufdelete.other()
-end, { desc = "Delete Other Buffers" })
-
-map("n", "<leader>q", ":q<cr>", { desc = "Quit", nowait = true })
-map("n", "<leader>L", ":Lazy<cr>", { desc = "Lazy" })
-map("n", "<leader>M", ":Mason<cr>", { desc = "Mason" })
+map("n", "<leader>q", ":q<cr>", { desc = "Quit" })
 
 -- Clear search with <esc>
 map({ "n", "i", "s" }, "<esc>", function()
@@ -68,10 +54,6 @@ map({ "n", "i", "s" }, "<esc>", function()
   end
   return "<esc>"
 end, { expr = true, desc = "Clear Search" })
-
--- Clear search, diff update and redraw
--- taken from runtime/lua/_editor.lua
-map("n", "<leader>ur", "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>", { desc = "Redraw" })
 
 -- save file
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save" })
@@ -83,21 +65,9 @@ map("n", "H", ":bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "<leader>-", "<C-W>s", { desc = "Split Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Right", remap = true })
 
--- Terminal/Run...
-map("n", "<c-/>", function()
-  Snacks.terminal()
-end, { desc = "Terminal" })
-map("n", "<c-_>", function()
-  Snacks.terminal()
-end, { desc = "which_key_ignore" })
-
 -- Terminal Mappings
 map("t", "<C-/>", "<cmd>close<cr>", { desc = "Close Terminal" })
 map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
-
-map("n", "<leader>gg", function()
-  Snacks.lazygit()
-end, { desc = "Lazygit" })
 
 -- better indenting
 map("v", "<", "<gv", {})
@@ -106,6 +76,7 @@ map("v", ">", ">gv", {})
 -- magic tricks
 map({ "n", "v" }, "gh", "^", { desc = "Line Start", nowait = true })
 map({ "n", "v" }, "gl", "$", { desc = "Line End", nowait = true })
+map({ "n", "v" }, "g<space>", "%", { desc = "Match Pair", nowait = true })
 map({ "n", "v" }, "gm", "%", { desc = "Match Pair", nowait = true })
 
 -- Duplicate and comment first instance
@@ -113,3 +84,22 @@ map("n", "ycc", "yygccp", { remap = true, desc = "Duplicate and Comment" })
 
 -- Search only in visual area when in visual mode
 map("x", "/", "<Esc>/\\%V", { desc = "Search Selection" })
+
+map("n", "<leader>um", ":messages<cr>", { desc = "Show messages" })
+
+-- incremental selection treesitter/lsp
+vim.keymap.set({ "n", "x", "o" }, "<A-o>", function()
+  if vim.treesitter.get_parser(nil, nil, { error = false }) then
+    require("vim.treesitter._select").select_parent(vim.v.count1)
+  else
+    vim.lsp.buf.selection_range(vim.v.count1)
+  end
+end, { desc = "Select parent treesitter node or outer incremental lsp selections" })
+
+vim.keymap.set({ "n", "x", "o" }, "<A-i>", function()
+  if vim.treesitter.get_parser(nil, nil, { error = false }) then
+    require("vim.treesitter._select").select_child(vim.v.count1)
+  else
+    vim.lsp.buf.selection_range(-vim.v.count1)
+  end
+end, { desc = "Select child treesitter node or inner incremental lsp selections" })

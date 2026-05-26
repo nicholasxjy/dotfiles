@@ -1,17 +1,11 @@
+-- globals
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-vim.g.autoformat = true
-vim.g.inlay_hints = true
-vim.g.codelens = true
-vim.g.copilot_enabled = false
 
 vim.g.picker = "snacks"
 
-vim.g.transparent = false
-vim.g.bordered = false
--- vim.o.winborder = "rounded"
-vim.o.background = "dark"
-
+-- vim.o.background = "light"
+-- options
 local opt = vim.opt
 -- UI/General
 opt.number = true
@@ -24,9 +18,11 @@ opt.mouse = "a"
 opt.undofile = true
 opt.swapfile = false
 opt.conceallevel = 1
-opt.scrolloff = 999
+opt.scrolloff = 8
+opt.sidescrolloff = 8
 opt.linebreak = true
 
+opt.winborder = "rounded"
 -- Set tab width
 opt.tabstop = 2
 opt.shiftwidth = 2
@@ -49,5 +45,11 @@ opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = true -- Disable line wrap
 opt.undolevels = 10000
-opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
--- vim.o.statuscolumn = "%!v:lua.require('core.statuscolumn').setup()"
+opt.timeoutlen = 300
+opt.ttimeoutlen = 10
+
+vim.o.foldcolumn = "1" -- '0' is not bad
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+vim.opt.statuscolumn = require("statuscolumn").expr

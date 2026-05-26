@@ -1,9 +1,19 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
----@diagnostic disable-next-line: undefined-field
+
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
+
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
@@ -15,25 +25,24 @@ require("lazy").setup({
     version = false,
   },
   install = {
-    missing = true,
     colorscheme = { "randomhue" },
   },
-  checker = { enabled = true },
-  ui = {
-    size = { width = 0.8, height = 0.7 },
-    border = vim.g.bordered and "rounded" or "none",
-    backdrop = 100,
+  checker = {
+    enabled = true,
+  },
+  change_detection = {
+    notify = true,
   },
   performance = {
     rtp = {
       disabled_plugins = {
-        "gzip",
-        "tarPlugin",
-        "tohtml",
-        "zipPlugin",
         "netrwPlugin",
+        "tohtml",
         "tutor",
       },
     },
+  },
+  ui = {
+    border = "single",
   },
 })
