@@ -75,9 +75,9 @@ end
 
 local modes_opts = {
   colors = {
-    bg = "#3A0519",
+    bg = "#121358",
   },
-  line_opacity = 0.15,
+  line_opacity = 0.1,
   set_cursor = false,
   set_cursorline = true,
   set_number = true,
@@ -503,7 +503,7 @@ return {
         "treesitter",
         "regex",
       },
-      delay = 250,
+      delay = 400,
     },
     config = function(_, opts)
       require("illuminate").configure(opts)

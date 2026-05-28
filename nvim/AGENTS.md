@@ -1,7 +1,7 @@
 # AGENTS.md
 
 This file gives project-specific instructions for agents working in
-`/Users/nick/.config/nvim`.
+`$HOME/.config/nvim`.
 
 ## Project Shape
 

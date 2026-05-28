@@ -21,6 +21,8 @@ opt.conceallevel = 1
 opt.scrolloff = 8
 opt.sidescrolloff = 8
 opt.linebreak = true
+opt.lazyredraw = true
+opt.synmaxcol = 240
 
 opt.winborder = "rounded"
 -- Set tab width

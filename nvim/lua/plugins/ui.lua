@@ -1,7 +1,7 @@
 local vscode = {
   hidden = { "preview" },
   layout = {
-    backdrop = true,
+    backdrop = false,
     width = 0.6,
     min_width = 80,
     height = 0.4,
@@ -184,7 +184,7 @@ return {
         silent = true,
       },
       {
-        "nn",
+        "<leader>h",
         pick("buffers", {
           sort_lastused = true,
           current = true,
@@ -296,7 +296,16 @@ return {
     priority = 1000,
     opts = {
       foreground = "#b0b0b0",
-      background = "#1C0A00",
+      background = "#091413",
+      -- background = "#1C0A00",
+      -- background = "#3E3F29",
+      -- background = "#06202B",
+      -- background = "#181C14",
+      -- background = "#1F150C",
+      -- background = "#001C30",
+      -- background = "#181D31",
+      -- background = "#152D35",
+      -- background = "#231E23",
       n_hues = 12,
       saturation = "high",
       accent = "bg",
@@ -314,7 +323,7 @@ return {
       local ui = require("ui")
       return {
         use_icons = true,
-        show_workspace_diagnostics = false,
+        show_workspace_diagnostics = true,
         diff = {
           icon = nil,
           signs = {
@@ -645,6 +654,7 @@ return {
         col = 0,
         title = true,
         title_pos = "center",
+        border = "single",
       },
       plugins = {
         registers = false,
@@ -745,10 +755,6 @@ return {
       "rcarriga/nvim-notify",
     },
     opts = progress_opts,
-    config = function(_, opts)
-      require("lsp-progress-notify").setup(opts)
-      vim.g.lsp_progress_notify_setup_done = true
-    end,
   },
 
   {

@@ -1,3 +1,5 @@
+local ui = require("ui")
+
 local function has_config(ctx, files)
   return not vim.tbl_isempty(vim.fs.find(files, { path = ctx.dirname, upward = true }))
 end
@@ -112,7 +114,10 @@ local blink_opts = {
       show_documentation = false,
     },
   },
-  appearance = {},
+  appearance = {
+    kind_icons = ui.icons.lazy_kind_icons,
+    -- use_nvim_cmp_as_default = true,
+  },
   completion = {
     ghost_text = { enabled = true },
     documentation = {
@@ -125,7 +130,7 @@ local blink_opts = {
     menu = {
       scrollbar = true,
       draw = {
-        columns = { { "kind_icon" }, { "label", gap = 1 }, { "kind" } },
+        columns = { { "kind_icon" }, { "label", gap = 1 } },
         components = {
           label = {
             text = function(ctx)
@@ -137,8 +142,8 @@ local blink_opts = {
           },
           kind_icon = {
             text = function(ctx)
-              local kind_icon = require("mini.icons").get("lsp", ctx.kind)
-              return kind_icon .. " "
+              -- local kind_icon = require("mini.icons").get("lsp", ctx.kind)
+              return ctx.kind_icon .. " "
             end,
             highlight = function(ctx)
               local _, hl = require("mini.icons").get("lsp", ctx.kind)
@@ -174,7 +179,29 @@ local blink_opts = {
   },
   snippets = { preset = "luasnip" },
   sources = {
-    default = { "lsp", "path", "snippets", "buffer" },
+    per_filetype = {
+      lua = { inherit_defaults = true, "lazydev" },
+    },
+    default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+    providers = {
+      lazydev = {
+        name = "LazyDev",
+        module = "lazydev.integrations.blink",
+        score_offset = 100, -- show at a higher priority than lsp
+      },
+      buffer = {
+        opts = {
+          -- get all buffers, even ones like neo-tree
+          -- get_bufnrs = vim.api.nvim_list_bufs,
+          -- or (recommended) filter to only "normal" buffers
+          get_bufnrs = function()
+            return vim.tbl_filter(function(bufnr)
+              return vim.bo[bufnr].buftype == ""
+            end, vim.api.nvim_list_bufs())
+          end,
+        },
+      },
+    },
   },
 }
 
@@ -413,7 +440,6 @@ return {
 
   {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPost", "BufNewFile" },
   },
 
   {

@@ -68,8 +68,8 @@ local enabled_servers = {
 
 local lsp_enabled = false
 local missing_lsp_configs = {}
-local replay_lsp_filetype_scheduled = false
 local go_env_checked = false
+local pending_lsp_buffers = {}
 
 local function notify_missing_configs()
   local missing = vim.tbl_keys(missing_lsp_configs)
@@ -79,20 +79,6 @@ local function notify_missing_configs()
   end
 
   vim.notify(("Missing LSP configs: %s"):format(table.concat(missing, ", ")), vim.log.levels.ERROR)
-end
-
-local function schedule_lsp_filetype_replay()
-  if replay_lsp_filetype_scheduled then
-    return
-  end
-
-  replay_lsp_filetype_scheduled = true
-  vim.schedule(function()
-    replay_lsp_filetype_scheduled = false
-    if lsp_enabled then
-      vim.cmd.doautoall("nvim.lsp.enable FileType")
-    end
-  end)
 end
 
 local function configure_completion_capabilities()
@@ -138,20 +124,28 @@ local function prepend_path(path)
   end
 end
 
-local function configure_lsp_prerequisites()
+local function configure_lsp_prerequisites(bufnr)
   prepend_path(vim.fs.joinpath(vim.fn.stdpath("data"), "mason", "bin"))
 
-  if type(_G.__setup_lazydev) == "function" then
+  if vim.bo[bufnr].filetype == "lua" and type(_G.__setup_lazydev) == "function" then
     _G.__setup_lazydev()
   end
 end
 
-local function enable_lsp()
+local function start_lsp_for_buffer(bufnr)
+  vim.api.nvim_exec_autocmds("FileType", {
+    group = "nvim.lsp.enable",
+    buffer = bufnr,
+    modeline = false,
+  })
+end
+
+local function enable_lsp(bufnr)
   if lsp_enabled then
     return
   end
 
-  configure_lsp_prerequisites()
+  configure_lsp_prerequisites(bufnr)
   configure_completion_capabilities()
   require("lazy").load({ plugins = { "nvim-lspconfig" }, wait = true })
 
@@ -173,12 +167,11 @@ local function enable_lsp()
   if #servers_to_enable > 0 then
     vim.lsp.enable(servers_to_enable)
     lsp_enabled = true
-    schedule_lsp_filetype_replay()
+    start_lsp_for_buffer(bufnr)
   end
 end
 
 local snacks_cache = nil
-local fzf_cache = nil
 
 local function get_snacks()
   if snacks_cache == nil then
@@ -188,29 +181,8 @@ local function get_snacks()
   return snacks_cache ~= false and snacks_cache or nil
 end
 
-local function get_fzf()
-  if fzf_cache == nil then
-    if type(_G.__setup_fzf) == "function" then
-      _G.__setup_fzf()
-    end
-    local ok, mod = pcall(require, "fzf-lua")
-    fzf_cache = ok and mod or false
-  end
-  return fzf_cache ~= false and fzf_cache or nil
-end
-
-local function pick(snacks_name, snacks_opts, fzf_name, fzf_opts)
-  local fzf_method_name = fzf_name or snacks_name
-
+local function pick(snacks_name, snacks_opts)
   return function()
-    if vim.g.picker == "fzf" then
-      local fzf = get_fzf()
-      local fzf_method = fzf and fzf[fzf_method_name]
-      if fzf_method then
-        return fzf_method(fzf_opts)
-      end
-    end
-
     local snacks = get_snacks()
     local snacks_method = snacks and snacks.picker and snacks.picker[snacks_name]
     if snacks_method then
@@ -241,40 +213,24 @@ local function diagnostics_opts(min_severity)
   return opts
 end
 
-local function fzf_diagnostics_opts(min_severity)
-  local opts = { sort = true }
-  if min_severity then
-    opts.severity_limit = min_severity
-  end
-  return opts
-end
-
 local lsp_definitions = pick("lsp_definitions")
 local lsp_declarations = pick("lsp_declarations")
 local lsp_implementations = pick("lsp_implementations")
 local lsp_references = pick("lsp_references")
-local lsp_type_definitions = pick("lsp_type_definitions", nil, "lsp_typedefs")
+local lsp_type_definitions = pick("lsp_type_definitions")
 local lsp_incoming_calls = pick("lsp_incoming_calls")
 local lsp_outgoing_calls = pick("lsp_outgoing_calls")
-local lsp_symbols = pick("lsp_symbols", nil, "lsp_document_symbols")
+local lsp_symbols = pick("lsp_symbols")
 local lsp_workspace_symbols = pick("lsp_workspace_symbols")
 
-local diagnostics_buffer = pick("diagnostics_buffer", nil, "diagnostics_document", { sort = true })
-local diagnostics_workspace = pick("diagnostics", diagnostics_opts(), "diagnostics_workspace", fzf_diagnostics_opts())
-local diagnostics_workspace_warns = pick(
-  "diagnostics",
-  diagnostics_opts(vim.diagnostic.severity.WARN),
-  "diagnostics_workspace",
-  fzf_diagnostics_opts(vim.diagnostic.severity.WARN)
-)
-local diagnostics_workspace_errors = pick(
-  "diagnostics",
-  diagnostics_opts(vim.diagnostic.severity.ERROR),
-  "diagnostics_workspace",
-  fzf_diagnostics_opts(vim.diagnostic.severity.ERROR)
-)
+local diagnostics_buffer = pick("diagnostics_buffer")
+local diagnostics_workspace = pick("diagnostics", diagnostics_opts())
+local diagnostics_workspace_warns = pick("diagnostics", diagnostics_opts(vim.diagnostic.severity.WARN))
+local diagnostics_workspace_errors = pick("diagnostics", diagnostics_opts(vim.diagnostic.severity.ERROR))
 
 local function lsp_navigation_keymaps(opts)
+  opts = vim.tbl_extend("force", { nowait = true, silent = true }, opts or {})
+
   vim.keymap.set("n", "gd", lsp_definitions, vim.tbl_extend("force", opts, { desc = "Goto Definition" }))
   vim.keymap.set("n", "gD", lsp_declarations, vim.tbl_extend("force", opts, { desc = "Goto Declaration" }))
   vim.keymap.set("n", "gr", lsp_references, vim.tbl_extend("force", opts, { desc = "Goto References" }))
@@ -378,9 +334,17 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "FileType" }, {
     end
 
     if not lsp_enabled then
-      enable_lsp()
-    else
-      schedule_lsp_filetype_replay()
+      if pending_lsp_buffers[args.buf] then
+        return
+      end
+
+      pending_lsp_buffers[args.buf] = true
+      vim.schedule(function()
+        pending_lsp_buffers[args.buf] = nil
+        if prepare_buffer_lsp(args.buf) then
+          enable_lsp(args.buf)
+        end
+      end)
     end
   end,
 })
