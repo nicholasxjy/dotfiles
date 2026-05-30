@@ -1,10 +1,12 @@
 local M = {}
 
-M.expr = "%!v:lua.require('statuscolumn').setup()"
+M.expr = "%!v:lua.__statuscolumn()"
 
 local EMPTY = "  "
 local MARK_CACHE_TTL_MS = 1000
+local GIT_CACHE_TTL_MS = 200
 local mark_cache = {}
+local git_cache = {}
 
 local function current_winid()
   return vim.g.statusline_winid or vim.api.nvim_get_current_win()
@@ -32,6 +34,12 @@ end
 local function clear_mark_cache(bufnr)
   if bufnr and bufnr > 0 then
     mark_cache[bufnr] = nil
+  end
+end
+
+local function clear_git_cache(bufnr)
+  if bufnr and bufnr > 0 then
+    git_cache[bufnr] = nil
   end
 end
 
@@ -82,6 +90,19 @@ local function mark_text(bufnr, lnum)
 end
 
 local function git_text(bufnr, lnum)
+  local now = vim.uv.now()
+  local cached = git_cache[bufnr]
+  if cached and cached.expires_at > now and cached.by_lnum[lnum] ~= nil then
+    return cached.by_lnum[lnum]
+  end
+  if not cached or cached.expires_at <= now then
+    cached = {
+      by_lnum = {},
+      expires_at = now + GIT_CACHE_TTL_MS,
+    }
+    git_cache[bufnr] = cached
+  end
+
   local gitsigns = package.loaded.gitsigns
   if type(gitsigns) ~= "table" or type(gitsigns.statuscolumn) ~= "function" then
     return EMPTY
@@ -89,8 +110,10 @@ local function git_text(bufnr, lnum)
 
   local ok, text = pcall(gitsigns.statuscolumn, bufnr, lnum)
   if not ok or text == nil or text == "" then
-    return EMPTY
+    text = EMPTY
   end
+
+  cached.by_lnum[lnum] = text
 
   return text
 end
@@ -105,8 +128,8 @@ function M.setup()
     "%s",
     line_number_text(),
     git_text(bufnr, lnum),
-    "%#StatusBorder#│ ",
     "%#FoldColumn#%C",
+    "%#StatusBorder# ",
   })
 end
 
@@ -142,7 +165,12 @@ vim.api.nvim_create_autocmd({ "BufDelete", "BufEnter", "BufWritePost", "BufWipeo
   group = group,
   callback = function(ev)
     clear_mark_cache(ev.buf)
+    clear_git_cache(ev.buf)
   end,
 })
+
+function _G.__statuscolumn()
+  return M.setup()
+end
 
 return M

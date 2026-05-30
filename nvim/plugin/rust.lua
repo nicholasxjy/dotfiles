@@ -1,24 +1,20 @@
-local util = require("util")
-
 vim.api.nvim_create_autocmd("BufRead", {
   pattern = "Cargo.toml",
   once = true,
   callback = function()
-    util.ensure_plugin("crates.nvim", function()
-      require("crates").setup({
-        completion = {
-          crates = {
-            enabled = true,
-          },
-        },
-        lsp = {
+    require("crates").setup({
+      completion = {
+        crates = {
           enabled = true,
-          actions = true,
-          completion = true,
-          hover = true,
         },
-      })
-    end)
+      },
+      lsp = {
+        enabled = true,
+        actions = true,
+        completion = true,
+        hover = true,
+      },
+    })
   end,
 })
 

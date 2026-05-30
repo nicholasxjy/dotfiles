@@ -9,21 +9,20 @@ end)
 
 require("mini.hues").setup({
   -- **Required** base colors as '#rrggbb' hex strings
-  -- background = "#171614",
-  -- foreground = "#AEA09F",
-  -- foreground = "#c8d3f5",
-  -- foreground = "#E4D8DC",
-  foreground = "#b0b0b0",
-  --
-  -- background = "#39311D",
-  -- background = "#36413D",
-  -- background = "#2F3032",
-  -- background = "#1B0C0C",
-  -- background = "#040D12",
-  background = "#1C0A00",
+  -- foreground = "#A4A7A4",
+  foreground = "#909398",
+  -- foreground = "#b0b0b0",
+  -- foreground = "#C5C9C7",
+  background = "#091413",
+  -- background = "#1C0A00",
+  -- background = "#3E3F29",
+  -- background = "#06202B",
+  -- background = "#181C14",
+  -- background = "#1F150C",
   -- background = "#001C30",
-  -- background = "#222831",
-  -- background = "#1C1124",
+  -- background = "#181D31",
+  -- background = "#152D35",
+  -- background = "#231E23",
   -- Number of hues used for non-base colors
   n_hues = 12,
 
@@ -277,31 +276,7 @@ vim.api.nvim_create_autocmd("User", {
 vim.api.nvim_create_autocmd("User", {
   desc = "Notify LSPs that a file was renamed",
   pattern = "MiniFilesActionRename",
-  callback = function(args)
-    local changes = {
-      files = {
-        {
-          oldUri = vim.uri_from_fname(args.data.from),
-          newUri = vim.uri_from_fname(args.data.to),
-        },
-      },
-    }
-    local will_rename_method, did_rename_method =
-      vim.lsp.protocol.Methods.workspace_willRenameFiles, vim.lsp.protocol.Methods.workspace_didRenameFiles
-    local clients = vim.lsp.get_clients()
-    for _, client in ipairs(clients) do
-      if client:supports_method(will_rename_method) then
-        local res = client:request_sync(will_rename_method, changes, 1000, 0)
-        if res and res.result then
-          vim.lsp.util.apply_workspace_edit(res.result, client.offset_encoding)
-        end
-      end
-    end
-
-    for _, client in ipairs(clients) do
-      if client:supports_method(did_rename_method) then
-        client:notify(did_rename_method, changes)
-      end
-    end
+  callback = function(event)
+    Snacks.rename.on_rename_file(event.data.from, event.data.to)
   end,
 })

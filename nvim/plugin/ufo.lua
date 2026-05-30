@@ -1,6 +1,6 @@
 local function handler(virtText, lnum, endLnum, width, truncate)
   local newVirtText = {}
-  local suffix = ("  %d lines... "):format(endLnum - lnum)
+  local suffix = ("  %d... "):format(endLnum - lnum)
   local sufWidth = vim.fn.strdisplaywidth(suffix)
   local targetWidth = width - sufWidth
   local curWidth = 0
@@ -26,65 +26,43 @@ local function handler(virtText, lnum, endLnum, width, truncate)
   return newVirtText
 end
 
-local util = require("util")
+local ufo = require("ufo")
 
-local function should_setup_ufo(bufnr)
-  return vim.bo[bufnr].buftype == ""
-end
-
-local function setup_ufo()
-  util.ensure_plugin("nvim-ufo", function()
-    require("ufo").setup({
-      preview = {
-        mappings = {
-          scrollB = "<C-B>",
-          scrollF = "<C-F>",
-          scrollU = "<C-U>",
-          scrollD = "<C-D>",
-        },
-      },
-      provider_selector = function(_, filetype, buftype)
-        if filetype == "" or buftype == "nofile" then
-          return "indent"
-        end
-
-        return { "treesitter", "indent" }
-      end,
-      fold_virt_text_handler = handler,
-    })
-  end)
-
-  return require("ufo")
-end
-
-vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
-  group = vim.api.nvim_create_augroup("UfoDeferredSetup", { clear = true }),
-  callback = function(ev)
-    if not should_setup_ufo(ev.buf) then
-      return
+ufo.setup({
+  preview = {
+    mappings = {
+      scrollB = "<C-B>",
+      scrollF = "<C-F>",
+      scrollU = "<C-U>",
+      scrollD = "<C-D>",
+    },
+  },
+  provider_selector = function(_, filetype, buftype)
+    if filetype == "" or buftype == "nofile" then
+      return "indent"
     end
 
-    vim.schedule(setup_ufo)
-    pcall(vim.api.nvim_del_augroup_by_name, "UfoDeferredSetup")
+    return { "treesitter", "indent" }
   end,
+  fold_virt_text_handler = handler,
 })
 
 vim.keymap.set("n", "zR", function()
-  setup_ufo().openAllFolds()
+  ufo.openAllFolds()
 end, { desc = "Open All Folds" })
 
 vim.keymap.set("n", "zM", function()
-  setup_ufo().closeAllFolds()
+  ufo.closeAllFolds()
 end, { desc = "Close All Folds" })
 
 vim.keymap.set("n", "zr", function()
-  setup_ufo().openFoldsExceptKinds()
+  ufo.openFoldsExceptKinds()
 end, { desc = "Open More Folds" })
 
 vim.keymap.set("n", "zm", function()
-  setup_ufo().closeFoldsWith()
+  ufo.closeFoldsWith()
 end, { desc = "Close More Folds" })
 
 vim.keymap.set("n", "zp", function()
-  setup_ufo().peekFoldedLinesUnderCursor()
+  ufo.peekFoldedLinesUnderCursor()
 end, { desc = "Peek Fold" })

@@ -1,7 +1,7 @@
 # AGENTS.md
 
 This file gives project-specific instructions for agents working in
-`/Users/nick/.config/nvim`.
+`$HOME/.config/nvim`.
 
 ## Project Shape
 
@@ -18,7 +18,8 @@ Neovim with the built-in `vim.pack` plugin manager.
   build hooks.
 - `lua/ui.lua` owns shared icons and visual constants.
 - `plugin/*.lua` contains plugin-specific setup. Prefer adding plugin config
-  there instead of growing `init.lua`.
+  there instead of growing `init.lua`; when behavior depends on project-local
+  config files, gate it on those files instead of applying it globally.
 - `ftplugin/*.lua` contains filetype-specific behavior.
 - `nvim-pack-lock.json` is generated plugin lock state. Do not hand-edit it.
 

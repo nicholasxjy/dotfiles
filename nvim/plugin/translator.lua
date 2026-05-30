@@ -1,22 +1,16 @@
-local util = require("util")
+local translator = require("translator")
 
-local function translator()
-  util.ensure_plugin("translator.nvim", function()
-    require("translator").setup({
-      default_target_lang = "zh",
-      default_source_lang = nil,
-      window = {
-        width = 60,
-      },
-    })
-  end)
-
-  return require("translator")
-end
+translator.setup({
+  default_target_lang = "zh",
+  default_source_lang = nil,
+  window = {
+    width = 60,
+  },
+})
 
 vim.keymap.set("v", "<leader>bv", function()
-  translator().transVisualSel()
+  translator.transVisualSel()
 end, { desc = "Translate Selection" })
 vim.keymap.set("n", "<leader>bc", function()
-  translator().transCurWord()
+  translator.transCurWord()
 end, { desc = "Translate Word" })

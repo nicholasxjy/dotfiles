@@ -2,8 +2,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.g.picker = "snacks"
-
 -- vim.o.background = "light"
 -- options
 local opt = vim.opt
@@ -18,7 +16,6 @@ opt.mouse = "a"
 opt.undofile = true
 opt.swapfile = false
 opt.conceallevel = 1
-opt.scrolloff = 999
 opt.linebreak = true
 
 opt.winborder = "single"

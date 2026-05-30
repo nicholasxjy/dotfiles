@@ -1,5 +1,4 @@
 -- How to find the project name for a given root dir.
-require("util").packadd("nvim-jdtls", false)
 
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 -- where are the config and workspace dirs for a project?

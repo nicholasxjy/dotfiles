@@ -26,15 +26,7 @@ require("snacks").setup({
   input = { enabled = true },
   words = { enabled = false },
   indent = { enabled = false },
-  statuscolumn = {
-    enabled = false,
-    left = { "mark", "sign" }, -- priority of signs on the left (high to low)
-    right = { "fold", "git" }, -- priority of signs on the right (high to low)
-    folds = {
-      open = true, -- show open fold icons
-      git_hl = true, -- use Git Signs hl for fold icons
-    },
-  },
+  statuscolumn = { enabled = false },
   notifier = { enabled = false },
   toggle = { enabled = true },
   lazygit = { enabled = true },
@@ -152,7 +144,7 @@ vim.keymap.set("n", "ff", pick("smart", { hidden = true, filter = cwd.filter, la
 
 vim.keymap.set(
   "n",
-  "nn",
+  "<leader>h",
   pick("buffers", {
     sort_lastused = true,
     current = true,

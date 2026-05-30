@@ -20,12 +20,6 @@ local function safe_unmap(mode, lhs)
   end
 end
 
-local function refresh_tabline()
-  vim.schedule(function()
-    vim.cmd.redrawtabline()
-  end)
-end
-
 -- remove default keybindings that cause `gr` delay
 safe_unmap("n", { "gri", "grr", "gra", "grn", "grt", "grx" })
 
@@ -50,15 +44,11 @@ map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc 
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 -- Buffers
 map("n", "<leader>j", function()
-  Snacks.bufdelete({ wipe = true })
-  refresh_tabline()
+  Snacks.bufdelete()
 end, { desc = "Delete Buffer" })
-
 map({ "n", "x", "s" }, "<leader>k", "<cmd>w<cr><esc>", { desc = "Save" })
-
 map("n", "<leader>bo", function()
   Snacks.bufdelete.other()
-  refresh_tabline()
 end, { desc = "Delete Other Buffers" })
 
 map("n", "<leader>q", ":q<cr>", { desc = "Quit" })

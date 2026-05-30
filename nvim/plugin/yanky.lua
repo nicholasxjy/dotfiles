@@ -1,29 +1,23 @@
-local util = require("util")
+local yanky = require("yanky")
 
-local function setup_yanky()
-  util.ensure_plugin("yanky.nvim", function()
-    require("yanky").setup({
-      system_clipboard = {
-        sync_with_ring = true,
-        clipboard_register = nil,
-      },
-      highlight = {
-        on_put = true,
-        on_yank = true,
-        timer = 500,
-      },
-      preserve_cursor_position = {
-        enabled = true,
-      },
-    })
-  end, false)
-
-  return require("yanky")
-end
+yanky.setup({
+  system_clipboard = {
+    sync_with_ring = true,
+    clipboard_register = nil,
+  },
+  highlight = {
+    on_put = true,
+    on_yank = true,
+    timer = 500,
+  },
+  preserve_cursor_position = {
+    enabled = true,
+  },
+})
 
 local function yanky_put(type, is_visual)
   return function()
-    setup_yanky().put(type, is_visual)
+    yanky.put(type, is_visual)
   end
 end
 
@@ -37,7 +31,6 @@ vim.keymap.set("x", "gp", yanky_put("gp", true), { desc = "Put After and Leave C
 vim.keymap.set("x", "gP", yanky_put("gP", true), { desc = "Put Before and Leave Cursor Before" })
 
 vim.keymap.set({ "n", "x" }, "<leader>up", function()
-  setup_yanky()
   ---@diagnostic disable-next-line: undefined-field
   Snacks.picker.yanky()
 end, { desc = "Open Yank History" })

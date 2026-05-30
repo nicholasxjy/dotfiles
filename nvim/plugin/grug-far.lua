@@ -1,19 +1,11 @@
-local util = require("util")
-
-local function grug_far()
-  util.ensure_plugin("grug-far.nvim", function()
-    require("grug-far").setup({
-      headerMaxWidth = 80,
-    })
-  end)
-
-  return require("grug-far")
-end
+local gr = require("grug-far")
+gr.setup({
+  headerMaxWidth = 80,
+})
 
 vim.keymap.set({ "n", "v" }, "<leader>sr", function()
-  local grug = grug_far()
   local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
-  grug.open({
+  gr.open({
     transient = true,
     prefills = {
       filesFilter = ext and ext ~= "" and "*." .. ext or nil,

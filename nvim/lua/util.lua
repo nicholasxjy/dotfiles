@@ -1,9 +1,4 @@
 local M = {}
-local configured_plugins = {}
-
-local function to_hex(color)
-  return color and string.format("#%06x", color) or nil
-end
 
 local function kind_matches(expected, actual)
   if type(expected) == "table" then
@@ -73,58 +68,6 @@ end
 
 M.build_fn_on_change = function(name, kinds, fn)
   return M.build_on_change(name, kinds, fn)
-end
-
-M.build_ex_on_change = function(name, kinds, ex_cmd)
-  return M.build_on_change(name, kinds, ex_cmd)
-end
-
-M.get_hl_colors = function(groups)
-  groups = type(groups) == "table" and groups or { groups }
-
-  for _, group in ipairs(groups) do
-    local ok, hl = pcall(vim.api.nvim_get_hl, 0, {
-      name = group,
-      link = false,
-      create = false,
-    })
-
-    if ok and hl and (hl.fg or hl.bg) then
-      return {
-        fg = to_hex(hl.fg),
-        bg = to_hex(hl.bg),
-      }
-    end
-  end
-
-  return {}
-end
-
-M.later = function(f, delay, event, once)
-  vim.api.nvim_create_autocmd(event, {
-    once = once,
-    callback = function()
-      vim.defer_fn(f, delay)
-    end,
-  })
-end
-
-M.packadd = function(name, load)
-  local should_load = load ~= false
-  vim.cmd.packadd({ vim.fn.escape(name, " "), bang = not should_load, magic = { file = false } })
-end
-
-M.ensure_plugin = function(name, setup, load)
-  M.packadd(name, load)
-  if configured_plugins[name] then
-    return
-  end
-
-  if setup then
-    setup()
-  end
-
-  configured_plugins[name] = true
 end
 
 return M

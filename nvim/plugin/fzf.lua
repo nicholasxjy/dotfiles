@@ -1,46 +1,36 @@
-local util = require("util")
-
-local function ensure_fzf()
-  util.ensure_plugin("fzf-lua", function()
-    local fzf = require("fzf-lua")
-    fzf.setup({
-      "border-fused",
-      fzf_colors = true,
-      defaults = {
-        formatter = "path.filename_first",
-      },
-      winopts = {
-        height = 1,
-        width = 0.9,
-        row = 1,
-        border = "single",
-        backdrop = 50,
-        preview = {
-          border = "single",
-          wrap = true,
-          hidden = false,
-          layout = "vertical",
-          vertical = "up:50%",
-        },
-      },
-      files = {
-        multiprocess = true,
-      },
-      diagnostics = {
-        cwd_only = true,
-      },
-      debug = false,
-    })
-  end)
-
-  return require("fzf-lua")
-end
-
-_G.__setup_fzf = ensure_fzf
+local fzf = require("fzf-lua")
+fzf.setup({
+  "border-fused",
+  fzf_colors = true,
+  defaults = {
+    formatter = "path.filename_first",
+  },
+  winopts = {
+    height = 1,
+    width = 0.9,
+    row = 1,
+    border = "single",
+    backdrop = 50,
+    preview = {
+      border = "single",
+      wrap = true,
+      hidden = false,
+      layout = "vertical",
+      vertical = "up:50%",
+    },
+  },
+  files = {
+    multiprocess = true,
+  },
+  diagnostics = {
+    cwd_only = true,
+  },
+  debug = false,
+})
 
 local function call_fzf(method, opts)
   return function()
-    return ensure_fzf()[method](opts)
+    return fzf[method](opts)
   end
 end
 

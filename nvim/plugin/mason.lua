@@ -1,5 +1,3 @@
-local util = require("util")
-
 local ensure_installed = {
   "lua-language-server",
   "copilot-language-server",
@@ -43,35 +41,28 @@ local ensure_installed = {
   "zls",
 }
 
-local function setup_mason()
-  util.ensure_plugin("mason.nvim", function()
-    require("mason").setup({
-      pip = {
-        upgrade_pip = true,
-      },
-      ui = {
-        backdrop = 100,
-        height = 0.65,
-        width = 0.7,
-      },
-    })
+require("mason").setup({
+  pip = {
+    upgrade_pip = true,
+  },
+  ui = {
+    backdrop = 100,
+    height = 0.65,
+    width = 0.7,
+  },
+})
 
-    local registry = require("mason-registry")
-    registry:on("package:install:success", function()
-      vim.defer_fn(function()
-        vim.api.nvim_exec_autocmds("FileType", {
-          buffer = vim.api.nvim_get_current_buf(),
-          modeline = false,
-        })
-      end, 100)
-    end)
-  end)
-end
+local registry = require("mason-registry")
+registry:on("package:install:success", function()
+  vim.defer_fn(function()
+    vim.api.nvim_exec_autocmds("FileType", {
+      buffer = vim.api.nvim_get_current_buf(),
+      modeline = false,
+    })
+  end, 100)
+end)
 
 local function install_missing_tools()
-  setup_mason()
-
-  local registry = require("mason-registry")
   local missing = {}
   registry.refresh(function()
     for _, tool in ipairs(ensure_installed) do
@@ -92,8 +83,6 @@ local function install_missing_tools()
     vim.notify("Installing Mason tools: " .. table.concat(missing, ", "), vim.log.levels.INFO)
   end)
 end
-
-setup_mason()
 
 vim.api.nvim_create_user_command("MasonToolsInstall", install_missing_tools, {
   desc = "Install configured Mason tools",
