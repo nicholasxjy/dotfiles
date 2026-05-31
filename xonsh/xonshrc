@@ -1,0 +1,285 @@
+
+# ~/.xonshrc
+
+# ----------------------
+# Env
+# ----------------------
+
+# $HOME = "/Users/nick"
+
+$VI_MODE = True
+# $PROMPT_TOOLKIT_CURSOR_SHAPE = "modal"
+
+$GH_COPILOT_USE_HELIX_FETCHER = "true"
+
+$JAVA_HOME = "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home"
+
+$HOMEBREW_PREFIX = "/opt/homebrew"
+$HOMEBREW_CELLAR = "/opt/homebrew/Cellar"
+$HOMEBREW_REPOSITORY = "/opt/homebrew"
+$HOMEBREW_NO_DOWNLOADS_CONCURRENCY = "auto"
+
+$BUN_INSTALL = f"{$HOME}/.bun"
+
+# ----------------------
+# PATH
+# ----------------------
+
+$PATH.append(f"{${...}.get('GOPATH', '')}/bin") if ${...}.get("GOPATH") else None
+
+$PATH = [
+    "/opt/homebrew/bin",
+    "/opt/homebrew/sbin",
+    "/opt/nanobrew/prefix/bin",
+    f"{$HOME}/.local/xonsh-env/bin",
+    f"{$HOME}/.local/bin",
+    f"{$HOME}/.local/sbin",
+    f"{$HOME}/.cargo/bin",
+    f"{$HOME}/miniconda3/bin",
+    f"{$JAVA_HOME}/bin",
+    f"{$BUN_INSTALL}/bin",
+] + $PATH
+
+# ----------------------
+# MANPATH / INFOPATH
+# ----------------------
+
+$MANPATH = ["/opt/homebrew/share/man"] + ${...}.get("MANPATH", [])
+$INFOPATH = ["/opt/homebrew/share/info"] + ${...}.get("INFOPATH", [])
+
+
+# ----------------------
+# xontrib
+# ----------------------
+xontrib load coreutils
+xontrib load pipeliner
+xontrib load fish_completer
+xontrib load abbrevs
+xontrib load fzf-widgets
+
+# ----------------------
+# FZF
+# ----------------------
+
+$FZF_DEFAULT_OPTS = """
+--height=40%
+--layout=reverse
+--border=none
+--info=inline
+--prompt='❯ '
+--pointer='▶'
+--marker='✓'
+--cycle
+--ansi
+"""
+$fzf_history_binding = "c-r"  # Ctrl+R
+$fzf_ssh_binding = "c-s"      # Ctrl+S
+$fzf_file_binding = "c-t"      # Ctrl+T
+$fzf_dir_binding = "c-g"      # Ctrl+G
+
+# ----------------------
+# Aliases
+# ----------------------
+
+aliases["python"] = "python3"
+aliases["pip"] = "pip3"
+
+aliases["grep"] = "grep --color=auto"
+aliases["egrep"] = "egrep --color=auto"
+aliases["fgrep"] = "fgrep --color=auto"
+
+abbrevs["cp"] = "cp -Ri"
+abbrevs["mv"] = "mv -i"
+abbrevs["rm"] = "rm -i"
+
+abbrevs["md"] = "mkdir -p"
+abbrevs["rd"] = "rmdir -p"
+
+abbrevs["gs"] = "git status"
+abbrevs["gl"] = "git log --oneline"
+
+aliases[".."] = "cd .."
+aliases["..."] = "cd ../.."
+aliases["...."] = "cd ../../.."
+aliases["....."] = "cd ../../../.."
+aliases["......"] = "cd ../../../../.."
+
+aliases["l"] = "eza --long --all --header --git --icons --no-permissions --no-time --no-user --no-filesize --group-directories-first"
+aliases["ll"] = "eza -lagh --git --icons --no-user"
+aliases["la"] = "eza -lagh --git --icons --no-user --sort modified"
+aliases["cll"] = "clear && eza --long --all --header --git --icons --no-permissions --no-time --no-user --no-filesize --group-directories-first"
+
+aliases["tree"] = 'eza -Ta --icons --ignore-glob="node_modules|.git|.vscode|.DS_Store"'
+aliases["ltd"] = 'eza -TaD --icons --ignore-glob="node_modules|.git|.vscode|.DS_Store"'
+
+aliases["du"] = "dua"
+aliases["wget"] = "wget -c"
+abbrevs["cat"] = "bat -p"
+
+aliases["ip"] = "dig +short myip.opendns.com @resolver1.opendns.com"
+aliases["ipl"] = "ipconfig getifaddr en0"
+aliases["ips"] = r"""ifconfig -a | grep -o 'inet6\? \(\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\)\|[a-fA-F0-9:]\+\)' | sed -e 's/inet6* //'"""
+aliases["sniff"] = "sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+aliases["whois"] = "grc whois"
+
+aliases["hostfile"] = "sudo nvim /etc/hosts"
+aliases["nvim"] = "~/nvim-macos-arm64/bin/nvim"
+aliases["httpdump"] = (
+    'sudo tcpdump -i en1 -n -s 0 -w - | '
+    'grep -a -o -E "Host: .*|GET /.*"'
+)
+
+
+# ----------------------
+# Init tools
+# ----------------------
+
+execx($(zoxide init xonsh), 'exec', __xonsh__.ctx, filename='zoxide')
+execx($(starship init xonsh))
+execx($(atuin init xonsh))
+execx($(mise activate xonsh))
+
+
+# ----------------------
+# Functions
+# ----------------------
+
+import subprocess
+from shutil import which
+
+
+def run_if_exists(command, *args):
+    if which(command):
+        subprocess.run([command, *args], check=False)
+
+
+@aliases.register
+def _killprocess(args=None):
+    """Kill process that user selects in fzf from ps aux output"""
+    try:
+        lines = $(ps aux | fzf -m --header-lines=1).strip()
+
+        if lines:
+            pids = []
+            for line in lines.splitlines():
+                parts = line.split()
+                if len(parts) > 1:
+                    pids.append(parts[1])
+
+            if pids:
+                print("Killing processes:", " ".join(pids))
+                kill -9 @(pids)
+    except Exception as err:
+        print(f"killprocess error: {err}")
+        return None
+
+
+@aliases.register
+def _killport(args=None):
+    """Select a listening port to kill"""
+    try:
+        selected = $(
+            lsof -iTCP -sTCP:LISTEN -P
+            | awk 'NR>1 {print $2, $9, $1}'
+            | sort -u
+            | fzf --exact --tac \
+                --preview 'pstree -p $(echo {} | awk "{print \\$1}")' \
+                --preview-window=down,30% \
+                --header "Select a process to kill (PID Port Command):"
+        ).strip()
+
+        if selected:
+            pid = selected.split()[0]
+            print(f"Killing process: {pid}")
+            kill -9 @(pid)
+        else:
+            return None
+    except Exception as err:
+        print(f"killport error: {err}")
+        return None
+
+
+@aliases.register("sudo!!")
+def _sudo_bang_bang(args=None):
+    """Run previous command with sudo"""
+    try:
+        cmd = __xonsh__.history[-1].inp.strip()
+
+        if cmd:
+            sudo @(cmd.split())
+        else:
+            print("NONE")
+            return None
+    except Exception as err:
+        print(f"sudo!! error: {err}")
+        return None
+
+
+@aliases.register
+def _proxy(args=None):
+    """Set http proxy"""
+    proxy_url = "http://127.0.0.1:7890"
+
+    $HTTP_PROXY = proxy_url
+    $HTTPS_PROXY = proxy_url
+    $ALL_PROXY = proxy_url
+
+    run_if_exists("npm", "config", "set", "proxy", proxy_url)
+    run_if_exists("npm", "config", "set", "https-proxy", proxy_url)
+
+    run_if_exists("yarn", "config", "set", "proxy", proxy_url)
+    run_if_exists("yarn", "config", "set", "https-proxy", proxy_url)
+
+    print(f"Proxy enabled: {proxy_url}")
+
+
+@aliases.register
+def _socks_proxy(args=None):
+    """Set socks5 proxy"""
+    proxy_url = "socks5://127.0.0.1:7890"
+
+    $HTTP_PROXY = proxy_url
+    $HTTPS_PROXY = proxy_url
+    $ALL_PROXY = proxy_url
+
+    print(f"SOCKS5 proxy enabled: {proxy_url}")
+
+
+@aliases.register
+def _noproxy(args=None):
+    """Unset all proxy variables"""
+    ${...}.pop("HTTP_PROXY", None)
+    ${...}.pop("HTTPS_PROXY", None)
+    ${...}.pop("ALL_PROXY", None)
+
+    run_if_exists("npm", "config", "delete", "proxy")
+    run_if_exists("npm", "config", "delete", "https-proxy")
+
+    run_if_exists("yarn", "config", "delete", "proxy")
+    run_if_exists("yarn", "config", "delete", "https-proxy")
+
+    print("Proxy disabled")
+
+
+@aliases.register
+def _zd(args=None):
+    """zoxide better cd"""
+    try:
+        directory = $(
+            zoxide query -l
+            | fzf \
+                --bind 'tab:down' \
+                --bind 'btab:up' \
+                --prompt="zoxide directory> " \
+                --no-preview
+        ).strip()
+
+        if directory:
+            cd @(directory)
+        else:
+            print("NONE")
+    except Exception as err:
+        print(f"zd error: {err}")
+        return None
+
+
