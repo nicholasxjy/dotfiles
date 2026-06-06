@@ -1,3 +1,5 @@
+vim.pack.add({ "https://github.com/rachartier/tiny-inline-diagnostic.nvim" }, { load = false })
+
 local tiny_opts = {
   preset = "modern",
   transparent_bg = false,
@@ -28,10 +30,27 @@ local tiny_opts = {
   },
 }
 
+local loaded = false
+
+local function load_tiny_inline_diagnostic()
+  if loaded then
+    return require("tiny-inline-diagnostic")
+  end
+
+  vim.cmd.packadd("tiny-inline-diagnostic.nvim")
+
+  local tiny_inline_diagnostic = require("tiny-inline-diagnostic")
+  tiny_inline_diagnostic.setup(tiny_opts)
+
+  loaded = true
+
+  return tiny_inline_diagnostic
+end
+
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("TinyInlineDiagnosticDeferred", { clear = true }),
   once = true,
   callback = function()
-    require("tiny-inline-diagnostic").setup(tiny_opts)
+    load_tiny_inline_diagnostic()
   end,
 })

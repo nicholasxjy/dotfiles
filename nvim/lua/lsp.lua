@@ -66,6 +66,34 @@ local enabled_servers = {
   "zls",
 }
 
+local capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), {
+  workspace = {
+    fileOperations = {
+      didRename = true,
+      willRename = true,
+    },
+  },
+  textDocument = {
+    foldingRange = {
+      dynamicRegistration = false,
+      lineFoldingOnly = true,
+    },
+  },
+})
+
+vim.pack.add({
+  "https://github.com/saghen/blink.lib",
+  "https://github.com/saghen/blink.cmp",
+}, { load = false })
+
+vim.cmd.packadd("blink.lib")
+vim.cmd.packadd("blink.cmp")
+capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities())
+
+vim.lsp.config("*", {
+  capabilities = capabilities,
+})
+
 local function pick(snacks_name, snacks_opts)
   return function()
     local snacks = require("snacks")

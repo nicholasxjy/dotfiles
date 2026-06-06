@@ -1,4 +1,14 @@
 local ui = require("ui")
+local util = require("util")
+
+vim.pack.add({
+  "https://github.com/rafamadriz/friendly-snippets",
+  "https://github.com/L3MON4D3/LuaSnip",
+  "https://github.com/nicholasxjy/colorful-menu.nvim",
+  "https://github.com/saghen/blink.lib",
+  "https://github.com/saghen/blink.cmp",
+  "https://github.com/saghen/blink.pairs",
+}, { load = false })
 
 local colorful_menu_opts = {
   ls = {
@@ -186,38 +196,52 @@ local blink_pairs_opts = {
   debug = false,
 }
 
-require("colorful-menu").setup(colorful_menu_opts)
+util.build_cmd_on_change("LuaSnip", { "install", "update" }, { "make", "install_jsregexp" })
 
-local pairs = require("blink.pairs")
+local loaded = false
 
-pairs.setup(blink_pairs_opts)
----@diagnostic disable-next-line: undefined-field
-pairs.build():pwait()
+local function load_blink()
+  if loaded then
+    return
+  end
 
-local cmp = require("blink.cmp")
-cmp.setup(blink_opts)
----@diagnostic disable-next-line: undefined-field
-cmp.build():pwait()
+  vim.cmd.packadd("friendly-snippets")
+  vim.cmd.packadd("LuaSnip")
+  vim.cmd.packadd("colorful-menu.nvim")
+  vim.cmd.packadd("blink.lib")
+  vim.cmd.packadd("blink.cmp")
+  vim.cmd.packadd("blink.pairs")
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+  local ls = require("luasnip")
+  ls.config.set_config({
+    enable_autosnippets = true,
+    history = true,
+    updateevents = "TextChanged,TextChangedI",
+  })
+  ls.filetype_extend("typescript", { "javascript" })
+  ls.filetype_extend("javascriptreact", { "javascript" })
+  ls.filetype_extend("typescriptreact", { "javascript" })
+  require("luasnip.loaders.from_vscode").lazy_load()
+  require("luasnip.loaders.from_lua").lazy_load({ paths = { "./snippets" } })
 
-capabilities = vim.tbl_deep_extend("force", capabilities, {
-  workspace = {
-    fileOperations = {
-      didRename = true,
-      willRename = true,
-    },
-  },
-  textDocument = {
-    foldingRange = {
-      dynamicRegistration = false,
-      lineFoldingOnly = true,
-    },
-  },
-})
+  require("colorful-menu").setup(colorful_menu_opts)
 
-capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities())
+  local pairs = require("blink.pairs")
+  ---@diagnostic disable-next-line: undefined-field
+  pairs.build():pwait(60000)
+  pairs.setup(blink_pairs_opts)
 
-vim.lsp.config("*", {
-  capabilities = capabilities,
+  local cmp = require("blink.cmp")
+  ---@diagnostic disable-next-line: undefined-field
+  cmp.build():pwait(60000)
+  cmp.setup(blink_opts)
+
+  loaded = true
+end
+
+vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
+  once = true,
+  callback = function()
+    vim.schedule(load_blink)
+  end,
 })

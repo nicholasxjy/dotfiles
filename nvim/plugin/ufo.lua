@@ -26,43 +26,70 @@ local function handler(virtText, lnum, endLnum, width, truncate)
   return newVirtText
 end
 
-local ufo = require("ufo")
+vim.pack.add({
+  "https://github.com/kevinhwang91/promise-async",
+  "https://github.com/kevinhwang91/nvim-ufo",
+}, { load = false })
 
-ufo.setup({
-  preview = {
-    mappings = {
-      scrollB = "<C-B>",
-      scrollF = "<C-F>",
-      scrollU = "<C-U>",
-      scrollD = "<C-D>",
+local loaded = false
+
+local function load_ufo()
+  if loaded then
+    return require("ufo")
+  end
+
+  vim.cmd.packadd("promise-async")
+  vim.cmd.packadd("nvim-ufo")
+
+  local ufo = require("ufo")
+
+  ufo.setup({
+    preview = {
+      mappings = {
+        scrollB = "<C-B>",
+        scrollF = "<C-F>",
+        scrollU = "<C-U>",
+        scrollD = "<C-D>",
+      },
     },
-  },
-  provider_selector = function(_, filetype, buftype)
-    if filetype == "" or buftype == "nofile" then
-      return "indent"
-    end
+    provider_selector = function(_, filetype, buftype)
+      if filetype == "" or buftype == "nofile" then
+        return "indent"
+      end
 
-    return { "treesitter", "indent" }
+      return { "treesitter", "indent" }
+    end,
+    fold_virt_text_handler = handler,
+  })
+
+  loaded = true
+
+  return ufo
+end
+
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+  once = true,
+  callback = function()
+    load_ufo()
   end,
-  fold_virt_text_handler = handler,
 })
 
 vim.keymap.set("n", "zR", function()
-  ufo.openAllFolds()
+  load_ufo().openAllFolds()
 end, { desc = "Open All Folds" })
 
 vim.keymap.set("n", "zM", function()
-  ufo.closeAllFolds()
+  load_ufo().closeAllFolds()
 end, { desc = "Close All Folds" })
 
 vim.keymap.set("n", "zr", function()
-  ufo.openFoldsExceptKinds()
+  load_ufo().openFoldsExceptKinds()
 end, { desc = "Open More Folds" })
 
 vim.keymap.set("n", "zm", function()
-  ufo.closeFoldsWith()
+  load_ufo().closeFoldsWith()
 end, { desc = "Close More Folds" })
 
 vim.keymap.set("n", "zp", function()
-  ufo.peekFoldedLinesUnderCursor()
+  load_ufo().peekFoldedLinesUnderCursor()
 end, { desc = "Peek Fold" })

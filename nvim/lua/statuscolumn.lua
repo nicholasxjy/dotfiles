@@ -118,6 +118,25 @@ local function git_text(bufnr, lnum)
   return text
 end
 
+local function fold_text(lnum)
+  if vim.fn.foldclosed(lnum) == lnum then
+    return "+"
+  end
+
+  local level = vim.fn.foldlevel(lnum)
+  if level == 0 then
+    return " "
+  end
+
+  local previous_level = lnum > 1 and vim.fn.foldlevel(lnum - 1) or 0
+  local next_level = lnum < vim.fn.line("$") and vim.fn.foldlevel(lnum + 1) or 0
+  if level > previous_level or level > next_level then
+    return "-"
+  end
+
+  return "|"
+end
+
 function M.setup()
   local winid = current_winid()
   local bufnr = current_bufnr(winid)
@@ -128,7 +147,7 @@ function M.setup()
     "%s",
     line_number_text(),
     git_text(bufnr, lnum),
-    "%#FoldColumn#%C",
+    "%#FoldColumn#" .. fold_text(lnum),
     "%#StatusBorder# ",
   })
 end
