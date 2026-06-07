@@ -36,3 +36,14 @@ if status is-interactive
         starship init fish | source
     end
 end
+
+function fish_title
+    set -l cmd $argv[1]
+    set -l shell (string replace -r '^.*/' '' (status fish-path))
+
+    if test -n "$cmd"
+        echo "$shell | $cmd "(prompt_pwd)
+    else
+        echo "$shell | "(prompt_pwd)
+    end
+end

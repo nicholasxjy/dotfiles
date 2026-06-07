@@ -26,6 +26,9 @@ local function load_sidekick()
         omp = {
           cmd = { "omp" },
         },
+        maki = {
+          cmd = { "maki" },
+        },
       },
       watch = true,
       win = {
@@ -35,9 +38,9 @@ local function load_sidekick()
         },
       },
       mux = {
-        backend = vim.env.ZELLIJ and "zellij" or "tmux",
+        backend = "zellij",
         enabled = true,
-        create = vim.env.ZELLIJ and "terminal" or "split",
+        create = "terminal",
         split = {
           vertical = true,
           size = 0.45,

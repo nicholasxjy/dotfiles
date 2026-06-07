@@ -2,7 +2,7 @@ local ui = require("ui")
 
 vim.pack.add({
   "https://github.com/nvim-mini/mini.icons",
-  "https://github.com/nicholasxjy/mini.hues",
+  -- "https://github.com/nicholasxjy/mini.hues",
 })
 
 vim.pack.add({
@@ -16,47 +16,47 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.clue",
 }, { load = false })
 
-require("mini.hues").setup({
-  -- **Required** base colors as '#rrggbb' hex strings
-  -- foreground = "#A4A7A4",
-  -- foreground = "#909398",
-  -- foreground = "#b0b0b0",
-  -- foreground = "#C5C9C7",
-  foreground = "#828bb8",
-  --
-  -- background = "#091413",
-  background = "#1B1A17",
-  -- background = "#070F2B",
-  -- background = "#001C30",
-  -- background = "#191825",
-
-  -- background = "#1A120B",
-  -- background = "#072227",
-  -- background = "#09122C",
-  -- background = "#181D31",
-  -- background = "#231E23",
-  -- background = "#2C3333",
-  -- background = "#222831",
-  -- background = "#171010",
-  -- Number of hues used for non-base colors
-  n_hues = 12,
-
-  -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
-  saturation = "high",
-
-  -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'green',
-  -- 'cyan', 'azure', 'blue', 'purple'
-  accent = "bg",
-
-  -- Plugin integrations. Keep a narrow whitelist to avoid generating highlights
-  -- for integrations this config never uses.
-  plugins = {
-    default = true,
-  },
-
-  -- Whether to auto adjust highlight groups based on certain events
-  autoadjust = true,
-})
+-- require("mini.hues").setup({
+--   -- **Required** base colors as '#rrggbb' hex strings
+--   -- foreground = "#A4A7A4",
+--   -- foreground = "#909398",
+--   -- foreground = "#b0b0b0",
+--   -- foreground = "#C5C9C7",
+--   foreground = "#828bb8",
+--   --
+--   -- background = "#091413",
+--   background = "#1B1A17",
+--   -- background = "#070F2B",
+--   -- background = "#001C30",
+--   -- background = "#191825",
+--
+--   -- background = "#1A120B",
+--   -- background = "#072227",
+--   -- background = "#09122C",
+--   -- background = "#181D31",
+--   -- background = "#231E23",
+--   -- background = "#2C3333",
+--   -- background = "#222831",
+--   -- background = "#171010",
+--   -- Number of hues used for non-base colors
+--   n_hues = 12,
+--
+--   -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
+--   saturation = "high",
+--
+--   -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'green',
+--   -- 'cyan', 'azure', 'blue', 'purple'
+--   accent = "bg",
+--
+--   -- Plugin integrations. Keep a narrow whitelist to avoid generating highlights
+--   -- for integrations this config never uses.
+--   plugins = {
+--     default = true,
+--   },
+--
+--   -- Whether to auto adjust highlight groups based on certain events
+--   autoadjust = true,
+-- })
 
 require("mini.icons").setup({
   file = {
