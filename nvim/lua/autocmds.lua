@@ -26,15 +26,13 @@ end, { nargs = "+", desc = "Delete plugins (space separated)" })
 
 -- NOTE: pack nonactive - show all non active plugins on disk but removed from pack.lua
 vim.api.nvim_create_user_command("PackCheck", function()
-  local non_active = vim
-    .iter(vim.pack.get())
-    :filter(function(x)
-      return not x.active
-    end)
-    :map(function(x)
-      return x.spec.name
-    end)
-    :totable()
+  local non_active = {}
+
+  for _, plugin in ipairs(vim.pack.get()) do
+    if not plugin.active then
+      non_active[#non_active + 1] = plugin.spec.name
+    end
+  end
 
   if #non_active == 0 then
     vim.notify("🆗 No non-active plugins found!", vim.log.levels.INFO)
