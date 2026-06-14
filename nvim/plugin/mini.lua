@@ -18,6 +18,7 @@ vim.pack.add({
 
 require("mini.hues").setup({
   foreground = "#b0b0b0",
+  background = "#2C3639",
 
   -- foreground = "#C9D1C0",
   -- background = "#11170D",
@@ -68,11 +69,12 @@ require("mini.hues").setup({
 
   -- Mint: fresh mint on deep pine
   -- foreground = "#B8E0C8",
-  background = "#0A1510",
+  -- background = "#0A1510",
 
   -- Mint: warm sage on olive-black
   -- foreground = "#E0E8D4",
   -- background = "#141806",
+
   -- Number of hues used for non-base colors
   n_hues = 12,
 
