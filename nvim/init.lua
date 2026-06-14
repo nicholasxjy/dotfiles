@@ -10,4 +10,4 @@ require("autocmds")
 require("pack")
 require("lsp")
 
-vim.cmd.colorscheme("wolf")
+-- vim.cmd.colorscheme("wolf")

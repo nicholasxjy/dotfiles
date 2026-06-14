@@ -133,13 +133,13 @@ local lsp_references = pick("lsp_references")
 local lsp_type_definitions = pick("lsp_type_definitions")
 local lsp_incoming_calls = pick("lsp_incoming_calls")
 local lsp_outgoing_calls = pick("lsp_outgoing_calls")
-local lsp_symbols = pick("lsp_symbols")
-local lsp_workspace_symbols = pick("lsp_workspace_symbols")
-
-local diagnostics_buffer = pick("diagnostics_buffer")
-local diagnostics_workspace = pick("diagnostics", diagnostics_opts())
-local diagnostics_workspace_warns = pick("diagnostics", diagnostics_opts(vim.diagnostic.severity.WARN))
-local diagnostics_workspace_errors = pick("diagnostics", diagnostics_opts(vim.diagnostic.severity.ERROR))
+-- local lsp_symbols = pick("lsp_symbols")
+-- local lsp_workspace_symbols = pick("lsp_workspace_symbols")
+--
+-- local diagnostics_buffer = pick("diagnostics_buffer")
+-- local diagnostics_workspace = pick("diagnostics", diagnostics_opts())
+-- local diagnostics_workspace_warns = pick("diagnostics", diagnostics_opts(vim.diagnostic.severity.WARN))
+-- local diagnostics_workspace_errors = pick("diagnostics", diagnostics_opts(vim.diagnostic.severity.ERROR))
 
 local function lsp_keymaps(opts)
   vim.keymap.set("n", "gd", lsp_definitions, vim.tbl_extend("force", opts, { desc = "Goto Definition" }))
@@ -150,13 +150,13 @@ local function lsp_keymaps(opts)
   vim.keymap.set("n", "gI", lsp_incoming_calls, vim.tbl_extend("force", opts, { desc = "Incoming Calls" }))
   vim.keymap.set("n", "gO", lsp_outgoing_calls, vim.tbl_extend("force", opts, { desc = "Outgoing Calls" }))
 
-  vim.keymap.set("n", "<leader>ss", lsp_symbols, { desc = "Lsp symbols" })
-  vim.keymap.set("n", "<leader>sS", lsp_workspace_symbols, { desc = "Workspace lsp symbols" })
-
-  vim.keymap.set("n", "<leader>xx", diagnostics_buffer, { desc = "Diagnostics" })
-  vim.keymap.set("n", "<leader>xX", diagnostics_workspace, { desc = "Workspace Diagnostics" })
-  vim.keymap.set("n", "<leader>xw", diagnostics_workspace_warns, { desc = "Workspace Diagnostics(Warns)" })
-  vim.keymap.set("n", "<leader>xe", diagnostics_workspace_errors, { desc = "Workspace Diagnostics(Errors)" })
+  -- vim.keymap.set("n", "<leader>ss", lsp_symbols, { desc = "Lsp symbols" })
+  -- vim.keymap.set("n", "<leader>sS", lsp_workspace_symbols, { desc = "Workspace lsp symbols" })
+  --
+  -- vim.keymap.set("n", "<leader>xx", diagnostics_buffer, { desc = "Diagnostics" })
+  -- vim.keymap.set("n", "<leader>xX", diagnostics_workspace, { desc = "Workspace Diagnostics" })
+  -- vim.keymap.set("n", "<leader>xw", diagnostics_workspace_warns, { desc = "Workspace Diagnostics(Warns)" })
+  -- vim.keymap.set("n", "<leader>xe", diagnostics_workspace_errors, { desc = "Workspace Diagnostics(Errors)" })
 end
 
 local keymap_setup = function()

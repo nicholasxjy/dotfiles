@@ -7,8 +7,10 @@ vim.pack.add({
   "https://github.com/folke/todo-comments.nvim",
   "https://github.com/mcauley-penney/visual-whitespace.nvim",
   "https://github.com/folke/ts-comments.nvim",
+
   "https://github.com/nicholasxjy/jishiben.nvim",
   "https://github.com/nicholasxjy/translator.nvim",
+
   "https://github.com/Wansmer/treesj",
 }, { load = false })
 
@@ -119,15 +121,15 @@ local function load_editor()
 
   require("treesj").setup({ use_default_keymaps = false })
 
-  local width = math.max(1, vim.o.columns)
-  local height = math.max(1, math.floor(vim.o.lines * 0.4) - 2)
+  -- local width = math.max(1, vim.o.columns)
+  -- local height = math.max(1, math.floor(vim.o.lines * 0.4) - 2)
   require("jishiben").setup({
     win = {
       border = "single",
-      width = width,
-      height = height,
-      row = vim.o.lines - height - 2,
-      col = 0,
+      -- width = width,
+      -- height = height,
+      -- row = vim.o.lines - height - 2,
+      -- col = 0,
     },
   })
 

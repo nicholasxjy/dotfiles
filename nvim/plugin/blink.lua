@@ -64,6 +64,22 @@ local colorful_menu_opts = {
   max_width = 60,
 }
 
+local get_kind_hl = function(ctx)
+  local highlight_colors_avail, highlight_colors = pcall(require, "nvim-highlight-colors")
+  if highlight_colors_avail then
+    local kinds = require("blink.cmp.types").CompletionItemKind
+    if ctx.item.kind == kinds.Color then
+      local doc = vim.tbl_get(ctx, "item", "documentation")
+      if doc then
+        local color_item = highlight_colors_avail and highlight_colors.format(doc, { kind = kinds[kinds.Color] })
+        if color_item and color_item.abbr_hl_group then
+          return color_item.abbr_hl_group
+        end
+      end
+    end
+  end
+end
+
 local blink_opts = {
   fuzzy = { implementation = "prefer_rust_with_warning" },
   keymap = {
@@ -96,7 +112,7 @@ local blink_opts = {
     menu = {
       scrollbar = true,
       draw = {
-        columns = { { "kind_icon" }, { "label", gap = 1 } },
+        columns = { { "label", gap = 1 }, { "kind_icon", "kind" } },
         components = {
           label = {
             text = function(ctx)
@@ -113,13 +129,13 @@ local blink_opts = {
             end,
             highlight = function(ctx)
               local _, hl = require("mini.icons").get("lsp", ctx.kind)
-              return hl
+              return get_kind_hl(ctx) or hl
             end,
           },
           kind = {
             highlight = function(ctx)
               local _, hl = require("mini.icons").get("lsp", ctx.kind)
-              return hl
+              return get_kind_hl(ctx) or hl
             end,
           },
         },
@@ -134,7 +150,7 @@ local blink_opts = {
       ["<C-k>"] = { "select_prev", "fallback" },
     },
     completion = {
-      ghost_text = { enabled = true },
+      ghost_text = { enabled = false },
       list = { selection = { preselect = false, auto_insert = true } },
       menu = {
         auto_show = function()
@@ -276,7 +292,7 @@ local function load_blink()
       },
       -- enable to show underlines on the line above the current scope
       underline = {
-        enabled = true,
+        enabled = false,
         highlights = {
           "BlinkIndentRedUnderline",
           "BlinkIndentCyanUnderline",

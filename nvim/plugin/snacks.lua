@@ -1,7 +1,7 @@
 local vscode = {
   hidden = { "preview" },
   layout = {
-    backdrop = false,
+    backdrop = true,
     -- row = -1,
     row = 0.6,
     width = 0.6,
@@ -46,7 +46,7 @@ require("snacks").setup({
       circle = false,
       layout = {
         ---@diagnostic disable-next-line: assign-type-mismatch
-        backdrop = false,
+        backdrop = true,
         row = -1,
         width = 0.9,
         min_width = 80,

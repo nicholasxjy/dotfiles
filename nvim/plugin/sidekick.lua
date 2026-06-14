@@ -26,20 +26,28 @@ local function load_sidekick()
         omp = {
           cmd = { "omp" },
         },
+        jcode = {
+          cmd = { "jcode" },
+        },
         maki = {
           cmd = { "maki" },
         },
       },
       watch = true,
       win = {
-        layout = "right",
+        layout = "float",
+        float = {
+          row = 0,
+          width = 0.9,
+          height = 0.7,
+        },
         split = {
           width = 0.45,
         },
       },
       mux = {
+        enabled = false,
         backend = "zellij",
-        enabled = true,
         create = "terminal",
         split = {
           vertical = true,
@@ -77,11 +85,11 @@ end, {
   desc = "Next Suggestion",
 })
 
-vim.keymap.set({ "n", "t", "i", "x" }, "<c-.>", function()
+vim.keymap.set({ "n", "t", "i", "x" }, "<M-.>", function()
   local _, cli = load_sidekick()
-  cli.focus()
+  cli.toggle()
 end, {
-  desc = "Focus Sidekick",
+  desc = "Toggle Sidekick",
   silent = true,
 })
 

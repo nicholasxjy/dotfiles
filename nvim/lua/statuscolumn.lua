@@ -120,7 +120,7 @@ end
 
 local function fold_text(lnum)
   if vim.fn.foldclosed(lnum) == lnum then
-    return "+"
+    return "󰡍"
   end
 
   local level = vim.fn.foldlevel(lnum)
@@ -134,7 +134,7 @@ local function fold_text(lnum)
     return "-"
   end
 
-  return "|"
+  return "│"
 end
 
 function M.setup()
