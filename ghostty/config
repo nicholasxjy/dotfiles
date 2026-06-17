@@ -1,55 +1,131 @@
+# theme = gyokuro
+theme = moon
+# theme = hojicha
 
-theme = glacier
-shell-integration = zsh
-shell-integration-features = no-cursor
+shell-integration-features = ssh-env,cursor,sudo,title
 
-font-family = "Monolisa"
-font-family-bold = "Monolisa"
-font-family-italic = "Monolisa"
-font-family-bold-italic = "Monolisa"
 
-font-style = Regular
-font-style-bold = Bold
-font-style-italic = Regular Italic
-font-style-bold-italic = Bold Italic
 
-font-size = 24
-
+font-size = 18
+font-family = FiraCode Nerd Font
 font-feature = calt
 font-feature = liga
 font-feature = ss02
-font-feature = ss07
+font-feature = ss03
+font-feature = ss05
+font-feature = ss06
 font-feature = ss08
+font-feature = ss09
 font-feature = ss10
-font-feature = ss11
-font-feature = ss12
-font-feature = ss17
-font-feature = ss18
+font-feature = cv25
+font-feature = cv26
+font-feature = cv28
+font-feature = cv29
+font-feature = cv30
+font-feature = cv31
 
+# font-size = 20.4
+# font-family = TX-02-Variable
+# font-style = Condensed
+# font-style-bold = Bold Condensed
+# font-style-italic = Condensed Oblique
+# font-style-bold-italic = Bold Condensed Oblique
+# font-feature = ss03
+# font-feature = ss04
+# font-feature = ss05
+# font-feature = ss06
+# font-feature = ss07
 
-adjust-cell-height = -6%
+# font-size = 20.6
+# font-family = PragmataPro Liga
+# font-family = Maple Mono NF CN
+# font-feature = calt
+# font-feature = cv03
+# font-feature = cv04
+# font-feature = ss11
+# font-feature = ss13
+# font-feature = ss14
+# font-feature = ss15
+# font-feature = ss17
+# font-feature = ss18
+# font-feature = ss20
+#
+# font-size = 21
+# font-family = Iosevka Nerd Font
+# font-family = Maple Mono NF CN
+# font-feature = calt
+# font-feature = dlig
+# font-feature = cv07'2
+# font-feature = cv10'6
+# font-feature = cv11'5
+# font-feature = cv14'4
+# font-feature = cv20'5
+# font-feature = cv31'4
+# font-feature = cv35'14
+# font-feature = cv36
+# font-feature = cv41'11
+# font-feature = cv42
+# font-feature = cv44'3
+# font-feature = cv45'5
+# font-feature = cv47'4
+# font-feature = cv52'13
+# font-feature = cv54'8
+# font-feature = cv56'4
+# font-feature = cv59'8
+# font-feature = VSAG'2
+# font-feature = VSAH'3
+# font-feature = VSAL'5
+# font-feature = VSAQ'3
+# font-feature = VLAF'2
+# font-feature = VLAA
+# font-feature = VLAG'2
+#
+#
+#
+font-thicken = false
+# adjust-cell-width = 6%
+# adjust-cell-height = -8%
+# adjust-cell-height = 2%
+# adjust-cursor-height = -10%
 
+window-padding-x = 0,0
 window-padding-y = 0,0
 window-padding-balance = true
-# cursor-style = underline
-cursor-style-blink = true
-cursor-color = #B6F500
-cursor-opacity = 0.85
 
-background-opacity = 0.96
+cursor-color=#E9B3FB
+# cursor-style = bar
+cursor-opacity = 0.8
+cursor-style-blink = true
+
+
 background-blur-radius = 30
+# background-opacity = 0.96
+# background-blur=macos-glass-regular
+
 link-url = true
-macos-titlebar-style = hidden
-copy-on-select = true
+copy-on-select = clipboard
+
 macos-option-as-alt = true
+macos-titlebar-style = hidden
+macos-window-shadow = true
+
 auto-update = check
 auto-update-channel = tip
 
-cursor-invert-fg-bg = false
+bold-is-bright = true
+# minimum-contrast = 1.05
 mouse-hide-while-typing = true
 
 keybind = super+i=inspector:toggle
 keybind = super+r=reload_config
+keybind = ctrl+.=csi:46;5u
 
-custom-shader = shaders/cursor_blaze_no_trail.glsl
-custom-shader = shaders/cursor_smear.glsl
+# custom-shader = ./shaders/cursor_smear_fade.glsl
+# custom-shader = ./shaders/cursor_sweep.glsl
+custom-shader = ./shaders/cursor_synesthaxia.glsl
+# custom-shader = ./shaders/cursor_follow_eye.glsl
+# custom-shader = ./shaders/cursor_warp.glsl
+# custom-shader = ./shaders/ripple_cursor.glsl
+custom-shader = ./shaders/sonic_boom_cursor.glsl
+
+keybind = shift+enter=text:\n
