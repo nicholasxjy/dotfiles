@@ -1,3 +1,5 @@
+local ui = require("ui")
+
 vim.pack.add({
   "https://github.com/nicholasxjy/sidekick.nvim",
 }, { load = false })
@@ -16,7 +18,7 @@ local function load_sidekick()
 
   sidekick.setup({
     nes = {
-      enabled = true,
+      enabled = false,
     },
     cli = {
       tools = {
@@ -26,32 +28,29 @@ local function load_sidekick()
         omp = {
           cmd = { "omp" },
         },
-        jcode = {
-          cmd = { "jcode" },
-        },
         maki = {
           cmd = { "maki" },
         },
       },
       watch = true,
       win = {
-        layout = "float",
+        layout = "right",
         float = {
           row = 0,
-          width = 0.9,
-          height = 0.7,
+          width = 1,
+          height = 0.6,
         },
         split = {
-          width = 0.45,
+          width = 0.3,
         },
       },
       mux = {
-        enabled = false,
-        backend = "zellij",
-        create = "terminal",
+        enabled = true,
+        backend = "tmux",
+        create = "split",
         split = {
           vertical = true,
-          size = 0.45,
+          size = 0.3,
         },
       },
       prompts = {
@@ -87,7 +86,11 @@ end, {
 
 vim.keymap.set({ "n", "t", "i", "x" }, "<M-.>", function()
   local _, cli = load_sidekick()
-  cli.toggle()
+  cli.toggle({
+    snacks = {
+      layout = ui.snacks_layout.vscode,
+    },
+  })
 end, {
   desc = "Toggle Sidekick",
   silent = true,
@@ -95,7 +98,11 @@ end, {
 
 vim.keymap.set("n", "<leader>aa", function()
   local _, cli = load_sidekick()
-  cli.toggle()
+  cli.toggle({
+    snacks = {
+      layout = ui.snacks_layout.vscode,
+    },
+  })
 end, { desc = "Toggle CLI" })
 
 vim.keymap.set("n", "<leader>as", function()

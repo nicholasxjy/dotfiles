@@ -81,8 +81,8 @@ local function load_editor()
 
   local modes_opts = {
     colors = {
-      bg = "#2A221E",
-      -- bg = "#121358", -- Optional bg param, defaults to Normal hl group
+      -- bg = "#2A221E",
+      bg = "#121358", -- Optional bg param, defaults to Normal hl group
     },
     line_opacity = 0.15,
     set_cursor = false,

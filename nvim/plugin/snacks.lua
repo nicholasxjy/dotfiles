@@ -1,26 +1,7 @@
-local vscode = {
-  hidden = { "preview" },
-  layout = {
-    backdrop = true,
-    -- row = -1,
-    row = 0.6,
-    width = 0.6,
-    min_width = 80,
-    height = 0.3,
-    border = "none",
-    box = "vertical",
-    {
-      box = "vertical",
-      border = "none",
-      title = "{title} {live} {flags}",
-      title_pos = "center",
-      { win = "input", height = 1, border = "bottom" },
-      { win = "list", border = "hpad" },
-    },
-  },
-}
+local ui = require("ui")
 
 require("snacks").setup({
+  animate = { enabled = false },
   dashboard = { enabled = false },
   explorer = { enabled = true, replace_netrw = false },
   image = { enabled = true },
@@ -46,20 +27,20 @@ require("snacks").setup({
       circle = false,
       layout = {
         ---@diagnostic disable-next-line: assign-type-mismatch
-        backdrop = true,
+        backdrop = false,
         row = -1,
-        width = 0.9,
+        -- width = 1,
         min_width = 80,
-        border = "none",
+        border = "solid",
         box = "vertical",
-        { win = "preview", title = "{preview}", height = 0.45, border = "rounded" },
+        { win = "preview", title = "{preview}", height = 0.5, border = "single" },
         {
           box = "vertical",
           border = "none",
           title = "{title} {live} {flags}",
           title_pos = "center",
-          { win = "input", height = 1, border = "none" },
-          { win = "list", border = "rounded" },
+          { win = "input", height = 1, border = "bottom" },
+          { win = "list", border = "hpad" },
         },
       },
     },
@@ -133,13 +114,15 @@ end
 local cwd = { filter = { cwd = true } }
 
 vim.keymap.set("n", "<leader>E", function()
-  Snacks.explorer()
+  Snacks.explorer({
+    layout = ui.snacks_layout.sidebar,
+  })
 end, { desc = "Explorer" })
 
-vim.keymap.set("n", "<leader>r", pick("resume"), { desc = "Resume Search" })
-vim.keymap.set("n", "<leader>:", pick("commands"), { desc = "Commands" })
-vim.keymap.set("n", "<leader>/", pick("lines"), { desc = "Blines" })
-vim.keymap.set("n", "<leader>m", pick("marks"), { desc = "Marks" })
+-- vim.keymap.set("n", "<leader>r", pick("resume"), { desc = "Resume Search" })
+-- vim.keymap.set("n", "<leader>:", pick("commands"), { desc = "Commands" })
+-- vim.keymap.set("n", "<leader>/", pick("lines"), { desc = "Blines" })
+-- vim.keymap.set("n", "<leader>m", pick("marks"), { desc = "Marks" })
 
 vim.keymap.set("n", "<leader>ff", pick("files", { hidden = true }), { desc = "Find Files", silent = true })
 
@@ -149,7 +132,7 @@ vim.keymap.set(
   pick("smart", {
     hidden = true,
     filter = cwd.filter,
-    layout = vscode,
+    layout = ui.snacks_layout.ivy,
   }),
   {
     desc = "Find Files",
@@ -164,7 +147,7 @@ vim.keymap.set(
   pick("buffers", {
     sort_lastused = true,
     current = true,
-    layout = vscode,
+    layout = ui.snacks_layout.ivy,
     win = {
       input = { keys = { ["<c-x>"] = { "bufdelete", mode = { "n", "i" } } } },
       list = { keys = { ["dd"] = "bufdelete" } },
@@ -172,51 +155,42 @@ vim.keymap.set(
   }),
   { desc = "Find Buffers", silent = true, nowait = true }
 )
-vim.keymap.set("n", "<leader>fa", pick("autocmds"), { desc = "Autocmds" })
-vim.keymap.set("n", "<leader>fc", pick("colorschemes"), { desc = "Colorschemes" })
-vim.keymap.set("n", "<leader>fi", pick("icons"), { desc = "Icons" })
-vim.keymap.set("n", "<leader>fl", pick("loclist"), { desc = "Location" })
-vim.keymap.set("n", "<leader>fk", pick("keymaps"), { desc = "Keymaps" })
-vim.keymap.set("n", "<leader>fh", pick("highlights"), { desc = "Highlights" })
-vim.keymap.set("n", "<leader>fr", pick("registers"), { desc = "Registers" })
-vim.keymap.set("n", "<leader>fu", pick("undo"), { desc = "Undos" })
-vim.keymap.set("n", "<leader>fq", pick("qflist"), { desc = "Quickfix" })
--- git
-vim.keymap.set("n", "<leader>gb", pick("git_branches"), { desc = "Git Branches" })
-vim.keymap.set("n", "<leader>gl", pick("git_log"), { desc = "Git Log" })
-vim.keymap.set("n", "<leader>gL", pick("git_log_line"), { desc = "Git Log Line" })
-vim.keymap.set("n", "<leader>gs", pick("git_status"), { desc = "Git Status" })
-vim.keymap.set("n", "<leader>gS", pick("git_stash"), { desc = "Git Stash" })
-vim.keymap.set("n", "<leader>gd", pick("git_diff"), { desc = "Git Diff (Hunks)" })
-vim.keymap.set("n", "<leader>gf", pick("git_log_file"), { desc = "Git Log File" })
-
+-- vim.keymap.set("n", "<leader>fa", pick("autocmds"), { desc = "Autocmds" })
+-- vim.keymap.set("n", "<leader>fc", pick("colorschemes"), { desc = "Colorschemes" })
+-- vim.keymap.set("n", "<leader>fi", pick("icons"), { desc = "Icons" })
+-- vim.keymap.set("n", "<leader>fl", pick("loclist"), { desc = "Location" })
+-- vim.keymap.set("n", "<leader>fk", pick("keymaps"), { desc = "Keymaps" })
+-- vim.keymap.set("n", "<leader>fh", pick("highlights"), { desc = "Highlights" })
+-- vim.keymap.set("n", "<leader>fr", pick("registers"), { desc = "Registers" })
+-- vim.keymap.set("n", "<leader>fu", pick("undo"), { desc = "Undos" })
+-- vim.keymap.set("n", "<leader>fq", pick("qflist"), { desc = "Quickfix" })
+-- -- git
+-- vim.keymap.set("n", "<leader>gb", pick("git_branches"), { desc = "Git Branches" })
+-- vim.keymap.set("n", "<leader>gl", pick("git_log"), { desc = "Git Log" })
+-- vim.keymap.set("n", "<leader>gL", pick("git_log_line"), { desc = "Git Log Line" })
+-- vim.keymap.set("n", "<leader>gs", pick("git_status"), { desc = "Git Status" })
+-- vim.keymap.set("n", "<leader>gS", pick("git_stash"), { desc = "Git Stash" })
+-- vim.keymap.set("n", "<leader>gd", pick("git_diff"), { desc = "Git Diff (Hunks)" })
+-- vim.keymap.set("n", "<leader>gf", pick("git_log_file"), { desc = "Git Log File" })
+--
 -- search
-vim.keymap.set(
-  { "n", "x", "v" },
-  "<leader>sw",
-  pick("grep_word", {
-    formatters = { file = { filename_first = false } },
-    filter = { cwd = true },
-  }),
-  { desc = "Grep Word" }
-)
-vim.keymap.set(
-  "n",
-  "<leader>sg",
-  pick("grep", {
-    formatters = { file = { filename_first = false } },
-    filter = { cwd = true },
-  }),
-  { desc = "Live Grep" }
-)
-vim.keymap.set(
-  "n",
-  "<leader>sG",
-  pick("grep", {
-    formatters = { file = { filename_first = false } },
-  }),
-  { desc = "Global Grep" }
-)
+-- vim.keymap.set(
+--   { "n", "x", "v" },
+--   "<leader>sw",
+--   pick("grep_word", {
+--     filter = { cwd = true },
+--   }),
+--   { desc = "Grep Word" }
+-- )
+-- vim.keymap.set(
+--   "n",
+--   "<leader>sg",
+--   pick("grep", {
+--     filter = { cwd = true },
+--   }),
+--   { desc = "Live Grep" }
+-- )
+-- vim.keymap.set("n", "<leader>sG", pick("grep", {}), { desc = "Global Grep" })
 
 vim.keymap.set("n", "<leader>xt", function()
   ---@diagnostic disable-next-line: undefined-field

@@ -18,63 +18,25 @@ vim.pack.add({
 
 require("mini.hues").setup({
   foreground = "#b0b0b0",
-  background = "#2C3639",
-
-  -- foreground = "#C9D1C0",
-  -- background = "#11170D",
   --
-  -- foreground = "#CBCFEA",
-  -- background = "#121225",
+  -- background = "#1A2130",
+  -- background = "#213448",
+  -- background = "#2C3947",
+  -- background = "#3B4953",
+  -- background = "#27374D",
 
-  -- foreground = "#E4E0C6",
-  -- background = "#081826",
-  --
-  -- foreground = "#E8E6CF",
-  -- background = "#101204",
+  -- background = "#334443",
+  background = "#2C3333",
+  -- background = "#444941",
 
-  -- foreground = "#D6E7F7",
-  -- background = "#0D1724",
+  -- background = "#373640",
+  -- background = "#37353E",
 
-  -- foreground = "#CFE3EE",
-  -- background = "#10202A",
-  --
+  -- background = "#3C2C3E",
+  -- background = "#342B38",
 
-  -- foreground = "#FFD6E8",
-  -- background = "#160A12",
-  --
-  -- foreground = "#F1D4E5",
-  -- background = "#1D1018",
-
-  -- Brown: warm parchment on deep espresso
-  -- foreground = "#E6D2B5",
-  -- background = "#1A120B",
-
-  -- foreground = "#D0DCEA",
-  -- background = "#0D1A30",
-  --
-  -- foreground = "#C4D4E8",
-  -- background = "#0A1428",
-  --
-  -- Mint: soft sage on deep forest
-  -- foreground = "#D4E8D8",
-  -- background = "#0F1814",
-
-  -- Mint: cool mint cream on dark teal-green
-  -- foreground = "#CFE8DB",
-  -- background = "#101F18",
-
-  -- Mint: pale jade on midnight mint
-  -- foreground = "#D0E7DC",
-  -- background = "#0E1612",
-
-  -- Mint: fresh mint on deep pine
-  -- foreground = "#B8E0C8",
-  -- background = "#0A1510",
-
-  -- Mint: warm sage on olive-black
-  -- foreground = "#E0E8D4",
-  -- background = "#141806",
-
+  -- background = "#201E43",
+  -- background = "#161A30",
   -- Number of hues used for non-base colors
   n_hues = 12,
 

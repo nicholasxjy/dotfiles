@@ -36,7 +36,7 @@ vim.diagnostic.config({
 local enabled_servers = {
   "lua_ls",
   -- "emmylua_ls",
-  "copilot",
+  -- "copilot",
   "bashls",
 
   "dockerls",

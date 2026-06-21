@@ -90,15 +90,23 @@ vim.api.nvim_create_autocmd("FileType", {
     "startuptime",
     "tsplayground",
     "DiffviewFiles",
+    "msgarea",
+    "Msgarea",
+    "Messages",
   },
   callback = function(event)
-    vim.bo[event.buf].buflisted = false
+    local bufnr = event.buf
+    vim.bo[bufnr].buflisted = false
     vim.schedule(function()
+      if not vim.api.nvim_buf_is_valid(bufnr) then
+        return
+      end
+
       vim.keymap.set("n", "q", function()
         vim.cmd("close")
-        pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+        pcall(vim.api.nvim_buf_delete, bufnr, { force = true })
       end, {
-        buffer = event.buf,
+        buffer = bufnr,
         silent = true,
         desc = "Quit buffer",
       })
@@ -119,7 +127,7 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = augroup("highlight_yank"),
   callback = function()
-    (vim.hl or vim.highlight).on_yank()
+    vim.hl.hl_op()
   end,
 })
 

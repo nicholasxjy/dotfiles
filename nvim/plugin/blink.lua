@@ -11,6 +11,73 @@ vim.pack.add({
   "https://github.com/saghen/blink.indent",
 }, { load = false })
 
+local excmds_cache = {}
+local function populate_excmds_cache()
+  local ts = vim.treesitter
+
+  local path = vim.api.nvim_get_runtime_file("doc/index.txt", false)[1]
+  local bufnr = vim.fn.bufadd(path)
+  local buf_was_already_loaded = vim.api.nvim_buf_is_loaded(bufnr)
+  if not buf_was_already_loaded then
+    vim.fn.bufload(bufnr)
+  end
+
+  local parser = ts.get_parser(bufnr, "vimdoc")
+  local tree = assert(parser):parse()[1]
+  local root = tree:root()
+  local query = ts.query.parse(
+    "vimdoc",
+    [[
+    (h1 (tag text: (_) @tag) (#eq? @tag "ex-cmd-index")) @heading
+    (block (line (column_heading))) @block
+  ]]
+  )
+
+  local ex_cmd_heading_end
+  local target_block
+  for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
+    local name = query.captures[id]
+    if name == "heading" then
+      ex_cmd_heading_end = select(3, node:range())
+    end
+    if name == "block" and ex_cmd_heading_end and node:start() >= ex_cmd_heading_end then
+      target_block = node
+      break
+    end
+  end
+
+  local text = ts.get_node_text(target_block, bufnr)
+  local lines = vim.split(text, "\n")
+  local pattern = "^|:([^|]+)|%s+:%S+%s+(.+)$"
+  for i, line in ipairs(lines) do
+    local cmd, description = line:match(pattern)
+    if cmd then
+      -- HACK: some descriptions in index.txt are wrapped to
+      -- the next line. I want to append those bits to this line
+      -- and this heuristic seems to work
+      local next_line = lines[i + 1]
+      if next_line and not vim.startswith(next_line, "|:") then
+        description = description .. " " .. vim.trim(next_line)
+      end
+      excmds_cache[cmd] = description
+    end
+  end
+
+  -- clean up after ourselves
+  if not buf_was_already_loaded then
+    vim.api.nvim_buf_delete(bufnr, { force = true })
+  end
+end
+
+local usercmds_cache = {}
+local function populate_usercmds_cache()
+  for cmd, cmd_spec in pairs(vim.api.nvim_get_commands({})) do
+    usercmds_cache[cmd] = cmd_spec.desc ~= "" and cmd_spec.desc
+      or cmd_spec.definition ~= "" and cmd_spec.definition
+      or ""
+  end
+end
+
 local colorful_menu_opts = {
   ls = {
     lua_ls = {
@@ -81,7 +148,7 @@ local get_kind_hl = function(ctx)
 end
 
 local blink_opts = {
-  fuzzy = { implementation = "prefer_rust_with_warning" },
+  fuzzy = { implementation = "prefer_rust_with_warning", sorts = { "exact", "score", "sort_text" } },
   keymap = {
     preset = "enter",
     ["<C-j>"] = { "select_next", "fallback" },
@@ -89,10 +156,6 @@ local blink_opts = {
   },
   signature = {
     enabled = true,
-    trigger = {
-      blocked_trigger_characters = { " ", "\n", "\t" },
-      blocked_retrigger_characters = { " ", "\n", "\t" },
-    },
     window = {
       show_documentation = false,
     },
@@ -101,7 +164,7 @@ local blink_opts = {
     kind_icons = ui.icons.lazy_kind_icons,
   },
   completion = {
-    ghost_text = { enabled = true },
+    ghost_text = { enabled = false },
     documentation = {
       auto_show = true,
       auto_show_delay_ms = 250,
@@ -112,7 +175,8 @@ local blink_opts = {
     menu = {
       scrollbar = true,
       draw = {
-        columns = { { "label", gap = 1 }, { "kind_icon", "kind" } },
+        treesitter = { "lsp" },
+        columns = { { "kind_icon", "label", gap = 1 } },
         components = {
           label = {
             text = function(ctx)
@@ -156,12 +220,41 @@ local blink_opts = {
         auto_show = function()
           return vim.fn.getcmdtype() == ":"
         end,
+        draw = { columns = { { "label" }, { "label_description" } } },
       },
     },
   },
   snippets = { preset = "luasnip" },
   sources = {
-    default = { "lsp", "path", "snippets", "buffer" },
+    default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+    providers = {
+      lazydev = {
+        name = "LazyDev",
+        module = "lazydev.integrations.blink",
+        score_offset = 100,
+      },
+      cmdline = {
+        transform_items = function(ctx, items)
+          -- HACK: some labels will incorrectly match descriptions, for example
+          -- "lsp stop" will match the "stop" label for ":stop" command
+          -- which is incorrect. Here I just check if there are any
+          -- whitespaces before the cursor and don't match on those occurances
+          local text_before_cursor = ctx.line:sub(1, ctx.cursor[2])
+          if text_before_cursor:find("%s") then
+            return items
+          end
+
+          return vim
+            .iter(ipairs(items))
+            :map(function(_, item)
+              item.labelDetails = item.labelDetails or {}
+              item.labelDetails.description = excmds_cache[item.label] or usercmds_cache[item.label] or ""
+              return item
+            end)
+            :totable()
+        end,
+      },
+    },
   },
 }
 
@@ -315,6 +408,14 @@ local function load_blink()
   ---@diagnostic disable-next-line: undefined-field
   cmp.build():pwait(60000)
   cmp.setup(blink_opts)
+
+  vim.schedule(function()
+    populate_excmds_cache()
+    populate_usercmds_cache()
+  end)
+
+  -- NOTE: enable msgarea
+  -- require("msgarea.blink_integration").enable()
 
   loaded = true
 end

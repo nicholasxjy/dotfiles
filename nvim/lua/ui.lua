@@ -126,4 +126,88 @@ M.icons = {
   },
 }
 
+M.snacks_layout = {
+  sidebar = {
+    preview = "main",
+    layout = {
+      backdrop = false,
+      width = math.floor(vim.o.columns * 0.2),
+      min_width = math.floor(vim.o.columns * 0.2),
+      height = 0,
+      position = "left",
+      border = "none",
+      box = "vertical",
+      {
+        win = "input",
+        height = 1,
+        border = true,
+        title = "{title} {live} {flags}",
+        title_pos = "center",
+      },
+      { win = "list", border = "none" },
+      { win = "preview", title = "{preview}", height = 0.4, border = "top" },
+    },
+  },
+  vscode = {
+    hidden = { "preview" },
+    layout = {
+      backdrop = false,
+      row = -1,
+      width = 0.65,
+      height = 0.4,
+      min_width = 80,
+      border = "solid",
+      box = "vertical",
+      title = "{title} {live} {flags}",
+      { win = "preview", title = "{preview}", height = 0.45, border = "rounded" },
+      {
+        box = "vertical",
+        border = "none",
+        title = "{title} {live} {flags}",
+        title_pos = "center",
+        { win = "input", height = 1, border = "top_bottom" },
+        { win = "list", border = "hpad" },
+      },
+    },
+  },
+  ivy = {
+    hidden = { "preview" },
+    layout = {
+      box = "vertical",
+      backdrop = false,
+      row = -1,
+      width = 0,
+      height = 0.4,
+      border = "top",
+      title = " {title} {live} {flags}",
+      title_pos = "left",
+      { win = "input", height = 1, border = "bottom" },
+      {
+        box = "horizontal",
+        { win = "list", border = "none" },
+        { win = "preview", title = "{preview}", width = 0.6, border = "left" },
+      },
+    },
+  },
+  ivy_split = {
+    preview = "main",
+    layout = {
+      box = "vertical",
+      backdrop = false,
+      width = 0,
+      height = 0.4,
+      position = "bottom",
+      border = "top",
+      title = " {title} {live} {flags}",
+      title_pos = "left",
+      { win = "input", height = 1, border = "bottom" },
+      {
+        box = "horizontal",
+        { win = "list", border = "none" },
+        { win = "preview", title = "{preview}", width = 0.6, border = "left" },
+      },
+    },
+  },
+}
+
 return M
