@@ -2,16 +2,16 @@ vim.pack.add({
   "http://github.com/2KAbhishek/nerdy.nvim",
   "https://github.com/arnamak/stay-centered.nvim",
   "https://github.com/NStefan002/screenkey.nvim",
-  "https://github.com/mvllow/modes.nvim",
   "https://github.com/brenoprata10/nvim-highlight-colors",
   "https://github.com/folke/todo-comments.nvim",
   "https://github.com/mcauley-penney/visual-whitespace.nvim",
   "https://github.com/folke/ts-comments.nvim",
-
+  "https://github.com/nemanjamalesija/smart-paste.nvim",
   "https://github.com/nicholasxjy/jishiben.nvim",
   "https://github.com/nicholasxjy/translator.nvim",
-
   "https://github.com/Wansmer/treesj",
+  "https://github.com/Bekaboo/dropbar.nvim",
+  "https://github.com/nicholasxjy/modes.nvim",
 }, { load = false })
 
 vim.g.visual_whitespace = {
@@ -41,6 +41,20 @@ vim.g.visual_whitespace = {
 
 local loaded = false
 
+local function hl_color(group, attr, fallback)
+  local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group, link = false })
+  if not ok then
+    return fallback
+  end
+
+  local color = hl[attr]
+  if color == nil then
+    return fallback
+  end
+
+  return string.format("#%06x", color)
+end
+
 local function load_editor()
   if loaded then
     return
@@ -49,7 +63,6 @@ local function load_editor()
   vim.cmd.packadd("nerdy.nvim")
   vim.cmd.packadd("stay-centered.nvim")
   vim.cmd.packadd("screenkey.nvim")
-  vim.cmd.packadd("modes.nvim")
   vim.cmd.packadd("nvim-highlight-colors")
   vim.cmd.packadd("todo-comments.nvim")
   vim.cmd.packadd("visual-whitespace.nvim")
@@ -57,10 +70,50 @@ local function load_editor()
   vim.cmd.packadd("jishiben.nvim")
   vim.cmd.packadd("translator.nvim")
   vim.cmd.packadd("treesj")
+  vim.cmd.packadd("smart-paste.nvim")
+  vim.cmd.packadd("dropbar.nvim")
+  vim.cmd.packadd("modes.nvim")
 
-  local nerdy = require("nerdy")
+  require("yazi").setup({})
+  require("dropbar").setup()
+  require("smart-paste").setup()
 
-  nerdy.setup({
+  require("modes").setup({
+    colors = {
+      bg = "#0D1164", --hl_color("Normal", "bg", "#0D1164"),
+      copy = hl_color("WarningMsg", "fg", "#f5c359"),
+      delete = hl_color("ErrorMsg", "fg", "#c75c6a"),
+      change = hl_color("ErrorMsg", "fg", "#c75c6a"),
+      format = hl_color("Operator", "fg", "#c79585"),
+      insert = hl_color("DiagnosticInfo", "fg", "#78ccc5"),
+      replace = hl_color("Substitute", "bg", "#245361"),
+      select = hl_color("Search", "bg", "#9745be"),
+      visual = hl_color("Visual", "bg", "#9745be"),
+    },
+
+    -- Set opacity for cursorline and number background
+    line_opacity = 0.15,
+
+    -- Enable cursor highlights
+    set_cursor = false,
+
+    -- Enable cursorline initially, and disable cursorline for inactive windows
+    -- or ignored filetypes
+    set_cursorline = true,
+
+    -- Enable line number highlights to match cursorline
+    set_number = true,
+
+    -- Enable sign column highlights to match cursorline
+    set_signcolumn = true,
+
+    -- Disable modes highlights for specified filetypes
+    -- or enable with prefix "!" if otherwise disabled (please PR common patterns)
+    -- Can also be a function fun():boolean that disables modes highlights when true
+    ignore = { "NvimTree", "TelescopePrompt", "!minifiles" },
+  })
+
+  require("nerdy").setup({
     max_recents = 30, -- Configure recent icons limit
     copy_to_clipboard = false, -- Copy glyph to clipboard instead of inserting
     copy_register = "+", -- Register to use for copying (if `copy_to_clipboard` is true)
@@ -79,24 +132,6 @@ local function load_editor()
     disable_on_mouse = true,
   })
 
-  local modes_opts = {
-    colors = {
-      -- bg = "#2A221E",
-      bg = "#121358", -- Optional bg param, defaults to Normal hl group
-    },
-    line_opacity = 0.15,
-    set_cursor = false,
-    set_cursorline = true,
-    set_number = true,
-    set_signcolumn = true,
-    -- Disable modes highlights for specified filetypes
-    -- or enable with prefix "!" if otherwise disabled (please PR common patterns)
-    -- Can also be a function fun():boolean that disables modes highlights when true
-    ignore = { "NvimTree", "TelescopePrompt", "!minifiles" },
-  }
-
-  require("modes").setup(modes_opts)
-
   require("screenkey").setup({
     win_opts = {
       row = vim.o.lines - vim.o.cmdheight - 1,
@@ -105,7 +140,6 @@ local function load_editor()
       anchor = "SE",
       width = 20,
       height = 2,
-      border = "single",
       title = "Screenkey",
       title_pos = "center",
       style = "minimal",
@@ -125,7 +159,6 @@ local function load_editor()
   -- local height = math.max(1, math.floor(vim.o.lines * 0.4) - 2)
   require("jishiben").setup({
     win = {
-      border = "single",
       -- width = width,
       -- height = height,
       -- row = vim.o.lines - height - 2,

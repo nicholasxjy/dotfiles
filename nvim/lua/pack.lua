@@ -25,6 +25,10 @@ require("vim._core.ui2").enable({
   },
 })
 
+vim.keymap.set("n", "q", function()
+  require("msgarea").close_all()
+end, { desc = "Msgaeare closeall" })
+
 -- pack install
 vim.pack.add({
   "https://github.com/folke/lazydev.nvim",

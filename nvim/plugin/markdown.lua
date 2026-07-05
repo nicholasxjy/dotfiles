@@ -16,8 +16,8 @@ vim.api.nvim_create_autocmd("FileType", {
   once = true,
   callback = function()
     vim.cmd.packadd("markdown-preview.nvim")
-
     vim.cmd.packadd("render-markdown.nvim")
+
     require("render-markdown").setup({
       file_types = { "markdown" },
       completions = { blink = { enabled = true }, lsp = { enabled = false } },

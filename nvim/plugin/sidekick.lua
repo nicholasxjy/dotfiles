@@ -34,18 +34,18 @@ local function load_sidekick()
       },
       watch = true,
       win = {
-        layout = "right",
+        layout = "float",
         float = {
-          row = 0,
-          width = 1,
-          height = 0.6,
+          row = 1,
+          width = 0.94,
+          height = 0.8,
         },
         split = {
           width = 0.3,
         },
       },
       mux = {
-        enabled = true,
+        enabled = false,
         backend = "tmux",
         create = "split",
         split = {
@@ -55,7 +55,6 @@ local function load_sidekick()
       },
       prompts = {
         optimize = "optimize {this}",
-        improve = "improve this function {function}",
         commit = "commit changes",
       },
     },

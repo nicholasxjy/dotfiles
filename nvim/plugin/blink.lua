@@ -161,7 +161,7 @@ local blink_opts = {
     },
   },
   appearance = {
-    kind_icons = ui.icons.lazy_kind_icons,
+    kind_icons = ui.icons.lspkind_kind_icons,
   },
   completion = {
     ghost_text = { enabled = false },
@@ -415,7 +415,7 @@ local function load_blink()
   end)
 
   -- NOTE: enable msgarea
-  -- require("msgarea.blink_integration").enable()
+  require("msgarea.blink_integration").enable()
 
   loaded = true
 end

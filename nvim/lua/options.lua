@@ -18,7 +18,10 @@ opt.swapfile = false
 opt.conceallevel = 1
 opt.linebreak = true
 
-opt.winborder = "single"
+-- opt.winborder = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" }
+-- opt.winborder = { "🭽", "▔", "🭾", "▕", "🭿", "▁", "🭼", "▏" }
+opt.winborder = "solid"
+
 -- Set tab width
 opt.tabstop = 2
 opt.shiftwidth = 2

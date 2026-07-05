@@ -1,4 +1,4 @@
-local ui = require("ui")
+-- local ui = require("ui")
 
 vim.pack.add({
   "https://github.com/nvim-mini/mini.icons",
@@ -6,7 +6,6 @@ vim.pack.add({
 })
 
 vim.pack.add({
-  "https://github.com/nicholasxjy/mini.statusline",
   "https://github.com/nvim-mini/mini.files",
   "https://github.com/nvim-mini/mini.tabline",
   "https://github.com/nvim-mini/mini.surround",
@@ -17,44 +16,40 @@ vim.pack.add({
 }, { load = false })
 
 require("mini.hues").setup({
-  foreground = "#b0b0b0",
-  --
-  -- background = "#1A2130",
-  -- background = "#213448",
-  -- background = "#2C3947",
-  -- background = "#3B4953",
-  -- background = "#27374D",
+  -- foreground = "#c7ad85",
+  -- foreground = "#AEA09F",
+  -- foreground = "#BFC9D1",
+  -- foreground = "#AEBDCA",
+  foreground = "#abb1a9",
 
-  -- background = "#334443",
-  background = "#2C3333",
-  -- background = "#444941",
-
-  -- background = "#373640",
-  -- background = "#37353E",
-
-  -- background = "#3C2C3E",
-  -- background = "#342B38",
-
-  -- background = "#201E43",
-  -- background = "#161A30",
+  -- background = "#272e33",
+  -- background = "#333c43",
+  -- background = "#2d353b",
+  background = "#1d2021",
+  -- background = "#282828",
+  -- background = "#32302f",
   -- Number of hues used for non-base colors
   n_hues = 12,
 
   -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
-  saturation = "high",
+  saturation = "mediumhigh",
 
-  -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'green',
-  -- 'cyan', 'azure', 'blue', 'purple'
-  accent = "lime",
+  -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'lime',
+  -- 'green', 'teal', 'cyan', 'azure', 'blue', 'indigo', 'purple', 'pink',
+  -- or a '#rrggbb' hex string.
+  accent = "#C562AF", --"#8A8635", --"#6AECE1", --"#2FA4D7", --"#934761", --"#4B5694", --"#FF9E20", --"#5478FF",
 
   -- Plugin integrations. Keep a narrow whitelist to avoid generating highlights
   -- for integrations this config never uses.
   plugins = {
     default = true,
+    ["MeanderingProgrammer/render-markdown.nvim"] = true,
   },
 
   -- Whether to auto adjust highlight groups based on certain events
   autoadjust = true,
+
+  dim_popup = true,
 })
 
 require("mini.icons").setup({
@@ -93,7 +88,6 @@ local function load_mini_extras()
     return
   end
 
-  vim.cmd.packadd("mini.statusline")
   vim.cmd.packadd("mini.files")
   vim.cmd.packadd("mini.tabline")
   vim.cmd.packadd("mini.surround")
@@ -116,59 +110,10 @@ local function load_mini_extras()
     },
     window = {
       -- Floating window config
-      config = { border = "single" },
       -- Maximum window width as share (between 0 and 1) of available columns
       max_width_share = 0.382,
       -- Value of 'winblend' option
       winblend = 0,
-    },
-  })
-
-  require("mini.statusline").setup({
-    use_icons = true,
-    show_workspace_diagnostics = true,
-    -- Diff section defaults
-    diff = {
-      -- Icon used before diff summary. If `nil`, no icon is shown.
-      icon = nil,
-      -- Signs shown for each diff type
-      signs = {
-        added = ui.icons.git.added,
-        modified = ui.icons.git.modified,
-        removed = ui.icons.git.removed,
-      },
-    },
-    -- Diagnostics section defaults
-    diagnostics = {
-      -- Icon used before diagnostics summary. If `nil`, no icon is shown.
-      icon = nil,
-      -- Signs shown for each severity level
-      signs = {
-        ERROR = ui.icons.diagnostics.Error,
-        WARN = ui.icons.diagnostics.Warn,
-        INFO = ui.icons.diagnostics.Info,
-        HINT = ui.icons.diagnostics.Hint,
-      },
-    },
-    -- Highlight groups used by default content and built-in sections
-    highlight_groups = {
-      devinfo = "MiniStatuslineDevinfo",
-      filename = "MiniStatuslineFilename",
-      fileinfo = "MiniStatuslineFileinfo",
-      inactive = "MiniStatuslineInactive",
-      lsp_progress = "MiniStatuslineLspProgress",
-      lsp_progress_done = "MiniStatuslineLspProgressDone",
-      diff = {
-        added = "DiffAdded",
-        modified = "DiffModified",
-        removed = "DiffRemoved",
-      },
-      diagnostics = {
-        ERROR = "DiagnosticError",
-        WARN = "DiagnosticWarn",
-        INFO = "DiagnosticInfo",
-        HINT = "DiagnosticHint",
-      },
     },
   })
 
@@ -265,8 +210,8 @@ local function load_mini_extras()
 
     win_config.height = depth_offset == 0 and 25 or 20
     win_config.row = math.floor(0.5 * (vim.o.lines - win_config.height))
-    -- win_config.border = { "🭽", "▔", "🭾", "▕", "🭿", "▁", "🭼", "▏" }
-    win_config.border = "rounded"
+    win_config.border = { "🭽", "▔", "🭾", "▕", "🭿", "▁", "🭼", "▏" }
+    -- win_config.border = "rounded"
     vim.api.nvim_win_set_config(ev.data.win_id, win_config)
   end
 
@@ -330,7 +275,6 @@ local function load_mini_extras()
         width = "auto",
         col = "auto",
         anchor = "NW",
-        border = "rounded",
       },
     },
     triggers = {
