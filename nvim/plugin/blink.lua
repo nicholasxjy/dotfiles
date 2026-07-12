@@ -9,7 +9,7 @@ vim.pack.add({
   "https://github.com/saghen/blink.cmp",
   "https://github.com/saghen/blink.pairs",
   "https://github.com/saghen/blink.indent",
-}, { load = false })
+})
 
 local excmds_cache = {}
 local function populate_excmds_cache()
@@ -161,7 +161,9 @@ local blink_opts = {
     },
   },
   appearance = {
-    kind_icons = ui.icons.lspkind_kind_icons,
+    -- Icons in ui.icons.default_kind_icons include trailing spaces (non-mono nerd font).
+    nerd_font_variant = "normal",
+    kind_icons = ui.icons.default_kind_icons,
   },
   completion = {
     ghost_text = { enabled = false },
@@ -176,7 +178,8 @@ local blink_opts = {
       scrollbar = true,
       draw = {
         treesitter = { "lsp" },
-        columns = { { "kind_icon", "label", gap = 1 } },
+        -- Keep kind_icon in its own column so appearance.kind_icons always renders.
+        columns = { { "kind_icon" }, { "label", gap = 1 } },
         components = {
           label = {
             text = function(ctx)
@@ -188,18 +191,28 @@ local blink_opts = {
           },
           kind_icon = {
             text = function(ctx)
-              -- local kind_icon = require("mini.icons").get("lsp", ctx.kind)
-              return ctx.kind_icon .. " "
+              -- Resolve from appearance.kind_icons explicitly (do not use mini.icons
+              -- for the glyph — that would ignore appearance.kind_icons).
+              local icons = require("blink.cmp.config").appearance.kind_icons
+              local icon = icons[ctx.kind] or ctx.kind_icon
+              return icon .. ctx.icon_gap
             end,
             highlight = function(ctx)
-              local _, hl = require("mini.icons").get("lsp", ctx.kind)
-              return get_kind_hl(ctx) or hl
+              -- priority 20000 beats CursorLine so kind colors stay visible
+              local hl = get_kind_hl(ctx)
+              if not hl then
+                _, hl = require("mini.icons").get("lsp", ctx.kind)
+              end
+              return { { group = hl or ctx.kind_hl, priority = 20000 } }
             end,
           },
           kind = {
             highlight = function(ctx)
-              local _, hl = require("mini.icons").get("lsp", ctx.kind)
-              return get_kind_hl(ctx) or hl
+              local hl = get_kind_hl(ctx)
+              if not hl then
+                _, hl = require("mini.icons").get("lsp", ctx.kind)
+              end
+              return hl or ctx.kind_hl
             end,
           },
         },
@@ -308,121 +321,96 @@ local blink_pairs_opts = {
 
 util.build_cmd_on_change("LuaSnip", { "install", "update" }, { "make", "install_jsregexp" })
 
-local loaded = false
-
-local function load_blink()
-  if loaded then
-    return
-  end
-
-  vim.cmd.packadd("friendly-snippets")
-  vim.cmd.packadd("LuaSnip")
-  vim.cmd.packadd("colorful-menu.nvim")
-  vim.cmd.packadd("blink.lib")
-  vim.cmd.packadd("blink.cmp")
-  vim.cmd.packadd("blink.pairs")
-  vim.cmd.packadd("blink.indent")
-
-  local ls = require("luasnip")
-  ls.config.set_config({
-    enable_autosnippets = true,
-    history = true,
-    updateevents = "TextChanged,TextChangedI",
-  })
-  ls.filetype_extend("typescript", { "javascript" })
-  ls.filetype_extend("javascriptreact", { "javascript" })
-  ls.filetype_extend("typescriptreact", { "javascript" })
-  require("luasnip.loaders.from_vscode").lazy_load()
-  require("luasnip.loaders.from_lua").lazy_load({ paths = { "./snippets" } })
-
-  require("colorful-menu").setup(colorful_menu_opts)
-
-  require("blink.indent").setup({
-    blocked = {
-      buftypes = { include_defaults = true },
-      filetypes = { include_defaults = true },
-    },
-    mappings = {
-      -- which lines around the scope are included for 'ai': 'top', 'bottom', 'both', or 'none'
-      border = "both",
-      -- set to '' to disable
-      -- textobjects (e.g. `y2ii` to yank current and outer scope)
-      object_scope = "ii",
-      object_scope_with_border = "ai",
-      -- motions
-      goto_top = "[i",
-      goto_bottom = "]i",
-    },
-    static = {
-      enabled = false,
-      char = "▎",
-      whitespace_char = nil, -- inherits from `vim.opt.listchars:get().space` when `nil` (see `:h listchars`)
-      priority = 1,
-      -- specify multiple highlights here for rainbow-style indent guides
-      highlights = {
-        "BlinkIndentRed",
-        "BlinkIndentOrange",
-        "BlinkIndentYellow",
-        "BlinkIndentGreen",
-        "BlinkIndentViolet",
-        "BlinkIndentCyan",
-      },
-    },
-    scope = {
-      enabled = true, -- highlight highest level of indentation on the current line
-      indent_at_cursor = true, -- clamp to indent level of cursor
-      -- char = "▎",
-      char = "│",
-      priority = 1000,
-      highlights = {
-        "BlinkIndentRed",
-        "BlinkIndentCyan",
-        "BlinkIndentYellow",
-        "BlinkIndentGreen",
-        "BlinkIndentOrange",
-        "BlinkIndentViolet",
-        "BlinkIndentBlue",
-      },
-      -- enable to show underlines on the line above the current scope
-      underline = {
-        enabled = false,
-        highlights = {
-          "BlinkIndentRedUnderline",
-          "BlinkIndentCyanUnderline",
-          "BlinkIndentYellowUnderline",
-          "BlinkIndentGreenUnderline",
-          "BlinkIndentOrangeUnderline",
-          "BlinkIndentVioletUnderline",
-          "BlinkIndentBlueUnderline",
-        },
-      },
-    },
-  })
-
-  local pairs = require("blink.pairs")
-  ---@diagnostic disable-next-line: undefined-field
-  pairs.build():pwait(60000)
-  pairs.setup(blink_pairs_opts)
-
-  local cmp = require("blink.cmp")
-  ---@diagnostic disable-next-line: undefined-field
-  cmp.build():pwait(60000)
-  cmp.setup(blink_opts)
-
-  vim.schedule(function()
-    populate_excmds_cache()
-    populate_usercmds_cache()
-  end)
-
-  -- NOTE: enable msgarea
-  require("msgarea.blink_integration").enable()
-
-  loaded = true
-end
-
-vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
-  once = true,
-  callback = function()
-    vim.schedule(load_blink)
-  end,
+local ls = require("luasnip")
+ls.config.set_config({
+  enable_autosnippets = true,
+  history = true,
+  updateevents = "TextChanged,TextChangedI",
 })
+ls.filetype_extend("typescript", { "javascript" })
+ls.filetype_extend("javascriptreact", { "javascript" })
+ls.filetype_extend("typescriptreact", { "javascript" })
+require("luasnip.loaders.from_vscode").load()
+require("luasnip.loaders.from_lua").load({ paths = { "./snippets" } })
+
+require("colorful-menu").setup(colorful_menu_opts)
+
+require("blink.indent").setup({
+  blocked = {
+    buftypes = { include_defaults = true },
+    filetypes = { include_defaults = true },
+  },
+  mappings = {
+    -- which lines around the scope are included for 'ai': 'top', 'bottom', 'both', or 'none'
+    border = "both",
+    -- set to '' to disable
+    -- textobjects (e.g. `y2ii` to yank current and outer scope)
+    object_scope = "ii",
+    object_scope_with_border = "ai",
+    -- motions
+    goto_top = "[i",
+    goto_bottom = "]i",
+  },
+  static = {
+    enabled = false,
+    char = "▎",
+    whitespace_char = nil, -- inherits from `vim.opt.listchars:get().space` when `nil` (see `:h listchars`)
+    priority = 1,
+    -- specify multiple highlights here for rainbow-style indent guides
+    highlights = {
+      "BlinkIndentRed",
+      "BlinkIndentOrange",
+      "BlinkIndentYellow",
+      "BlinkIndentGreen",
+      "BlinkIndentViolet",
+      "BlinkIndentCyan",
+    },
+  },
+  scope = {
+    enabled = true, -- highlight highest level of indentation on the current line
+    indent_at_cursor = true, -- clamp to indent level of cursor
+    -- char = "▎",
+    char = "│",
+    priority = 1000,
+    highlights = {
+      "BlinkIndentRed",
+      "BlinkIndentCyan",
+      "BlinkIndentYellow",
+      "BlinkIndentGreen",
+      "BlinkIndentOrange",
+      "BlinkIndentViolet",
+      "BlinkIndentBlue",
+    },
+    -- enable to show underlines on the line above the current scope
+    underline = {
+      enabled = false,
+      highlights = {
+        "BlinkIndentRedUnderline",
+        "BlinkIndentCyanUnderline",
+        "BlinkIndentYellowUnderline",
+        "BlinkIndentGreenUnderline",
+        "BlinkIndentOrangeUnderline",
+        "BlinkIndentVioletUnderline",
+        "BlinkIndentBlueUnderline",
+      },
+    },
+  },
+})
+
+local pairs = require("blink.pairs")
+---@diagnostic disable-next-line: undefined-field
+pairs.build():pwait(60000)
+pairs.setup(blink_pairs_opts)
+
+local cmp = require("blink.cmp")
+---@diagnostic disable-next-line: undefined-field
+cmp.build():pwait(60000)
+cmp.setup(blink_opts)
+
+vim.schedule(function()
+  populate_excmds_cache()
+  populate_usercmds_cache()
+end)
+
+-- NOTE: enable msgarea
+-- require("msgarea.blink_integration").enable()

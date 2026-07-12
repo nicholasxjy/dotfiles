@@ -1,48 +1,24 @@
-vim.pack.add({ "https://github.com/Saecki/crates.nvim" }, { load = false })
+vim.pack.add({ "https://github.com/Saecki/crates.nvim" })
 
-local crates_loaded = false
+local crates = require("crates")
 
-local function load_crates()
-  if crates_loaded then
-    return require("crates")
-  end
-
-  vim.cmd.packadd("crates.nvim")
-
-  local crates = require("crates")
-
-  crates.setup({
-    completion = {
-      crates = {
-        enabled = true,
-      },
-    },
-    lsp = {
+crates.setup({
+  completion = {
+    crates = {
       enabled = true,
-      actions = true,
-      completion = true,
-      hover = true,
     },
-  })
-
-  crates_loaded = true
-
-  return crates
-end
-
-vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
-  pattern = "Cargo.toml",
-  once = true,
-  callback = function()
-    load_crates()
-  end,
+  },
+  lsp = {
+    enabled = true,
+    actions = true,
+    completion = true,
+    hover = true,
+  },
 })
 
 vim.pack.add({
   { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
-}, { load = false })
-
-local rustaceanvim_loaded = false
+})
 
 local function rustaceanvim_opts()
   return {
@@ -108,35 +84,17 @@ local function rustaceanvim_dap_adapter()
   return require("rustaceanvim.config").get_codelldb_adapter(codelldb_path, liblldb_path)
 end
 
-local function load_rustaceanvim()
-  if rustaceanvim_loaded then
-    return
-  end
+vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, rustaceanvim_opts())
 
-  vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, rustaceanvim_opts())
-
-  if vim.fn.executable("rust-analyzer") == 0 then
-    require("snacks").notify.error(
-      "**rust-analyzer** not found in PATH, please install it.\nhttps://rust-analyzer.github.io/",
-      { title = "rustaceanvim" }
-    )
-  end
-
-  vim.cmd.packadd("rustaceanvim")
-
-  vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, {
-    dap = {
-      adapter = rustaceanvim_dap_adapter(),
-    },
-  })
-
-  rustaceanvim_loaded = true
+if vim.fn.executable("rust-analyzer") == 0 then
+  require("snacks").notify.error(
+    "**rust-analyzer** not found in PATH, please install it.\nhttps://rust-analyzer.github.io/",
+    { title = "rustaceanvim" }
+  )
 end
 
-vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
-  pattern = "*.rs",
-  once = true,
-  callback = function()
-    load_rustaceanvim()
-  end,
+vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, {
+  dap = {
+    adapter = rustaceanvim_dap_adapter(),
+  },
 })

@@ -45,7 +45,7 @@ require("snacks").setup({
         min_width = 80,
         border = "solid",
         box = "vertical",
-        { win = "preview", title = "{preview}", height = 0.5, border = "single" },
+        { win = "preview", title = "{preview}", height = 0.5, border = "rounded" },
         {
           box = "vertical",
           border = "none",
@@ -63,7 +63,7 @@ require("snacks").setup({
     },
     formatters = {
       file = {
-        filename_first = false,
+        filename_first = true,
         truncate = "center",
         git_status_hl = true,
       },
@@ -74,7 +74,7 @@ require("snacks").setup({
       },
     },
     icons = {
-      kinds = ui.icons.lspkind_kind_icons,
+      kinds = ui.icons.default_kind_icons,
     },
     win = {
       input = {
@@ -98,25 +98,18 @@ require("snacks").setup({
   },
 })
 
-vim.api.nvim_create_autocmd("User", {
-  once = true,
-  callback = function()
-    -- Create some toggle mappings
-    Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
-    Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-    Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
-    Snacks.toggle.diagnostics():map("<leader>ud")
-    Snacks.toggle.line_number():map("<leader>ul")
-    Snacks.toggle
-      .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-      :map("<leader>uc")
-    -- Snacks.toggle.treesitter():map("<leader>uT")
-    Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
-    Snacks.toggle.inlay_hints():map("<leader>uh")
-    Snacks.toggle.indent():map("<leader>ug")
-    Snacks.toggle.dim():map("<leader>uD")
-  end,
-})
+Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
+Snacks.toggle.diagnostics():map("<leader>ud")
+Snacks.toggle.line_number():map("<leader>ul")
+Snacks.toggle
+  .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+  :map("<leader>uc")
+Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
+Snacks.toggle.inlay_hints():map("<leader>uh")
+Snacks.toggle.indent():map("<leader>ug")
+Snacks.toggle.dim():map("<leader>uD")
 
 --- Create a picker keymap callback, optionally with default opts
 local function pick(method, opts)
@@ -133,7 +126,7 @@ local function current_root()
 end
 
 local function root_prompt(root)
-  return ("%s > "):format(vim.fn.fnamemodify(root, ":~"))
+  return ("%s/"):format(vim.fn.fnamemodify(root, ":~"))
 end
 
 local function grep_buffer_word()
@@ -148,47 +141,6 @@ local function grep_buffer_word()
   })
 end
 
-local function marks_picker()
-  Snacks.picker.marks({
-    finder = function(_, ctx)
-      local items = {}
-      local current_buf = ctx.filter.current_buf
-      local bufname = vim.api.nvim_buf_get_name(current_buf)
-
-      local function add_marks(entries, mark_scope)
-        for _, mark in ipairs(entries) do
-          local file = mark.file or bufname
-          local buf = mark.pos[1] and mark.pos[1] > 0 and mark.pos[1] or nil
-          local line
-          if buf and mark.pos[2] > 0 and vim.api.nvim_buf_is_valid(buf) then
-            line = vim.api.nvim_buf_get_lines(buf, mark.pos[2] - 1, mark.pos[2], false)[1]
-          end
-          local label = mark.mark:sub(2, 2)
-
-          items[#items + 1] = {
-            text = table.concat({ label, file, line }, " "),
-            label = label,
-            line = line,
-            buf = buf,
-            file = file,
-            mark_scope = mark_scope,
-            pos = mark.pos[2] > 0 and { mark.pos[2], mark.pos[3] },
-          }
-        end
-      end
-
-      add_marks(vim.fn.getmarklist(current_buf), 1)
-      add_marks(vim.fn.getmarklist(), 2)
-      table.sort(items, function(a, b)
-        return a.mark_scope == b.mark_scope and a.label < b.label or a.mark_scope < b.mark_scope
-      end)
-
-      return items
-    end,
-    sort = { fields = { "mark_scope", "score:desc", "idx" } },
-  })
-end
-
 vim.keymap.set("n", "<leader>E", function()
   Snacks.explorer({
     layout = ui.snacks_layout.sidebar,
@@ -198,7 +150,7 @@ end, { desc = "Explorer" })
 vim.keymap.set("n", "<leader>r", pick("resume"), { desc = "Resume Search" })
 vim.keymap.set("n", "<leader>:", pick("commands"), { desc = "Commands" })
 vim.keymap.set("n", "<leader>/", pick("lines"), { desc = "Blines" })
-vim.keymap.set("n", "<leader>m", marks_picker, { desc = "Marks" })
+vim.keymap.set("n", "<leader>m", pick("marks"), { desc = "Marks" })
 
 vim.keymap.set("n", "<leader>ff", pick("files", { hidden = true }), { desc = "Find Files", silent = true })
 

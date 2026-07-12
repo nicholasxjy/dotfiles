@@ -7,7 +7,7 @@ oil.setup({
     show_hidden = true,
   },
   confirmation = {
-    border = "single",
+    border = "solid",
   },
   keymaps = {
     ["q"] = "actions.close",

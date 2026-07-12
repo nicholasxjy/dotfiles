@@ -8,10 +8,6 @@ local function kind_matches(expected, actual)
   return expected == actual
 end
 
-local function should_load_plugin(action)
-  return type(action) ~= "table"
-end
-
 local function run_build_action(action, ev)
   if type(action) == "function" then
     return action(ev)
@@ -51,10 +47,6 @@ M.build_on_change = function(name, kinds, action)
       local spec_name, ev_kind = ev.data.spec.name, ev.data.kind
       if spec_name ~= name or not kind_matches(kinds, ev_kind) then
         return
-      end
-
-      if should_load_plugin(action) and not ev.data.active then
-        vim.cmd.packadd(name)
       end
 
       run_build_action(action, ev)

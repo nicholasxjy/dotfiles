@@ -134,7 +134,7 @@ local function fold_text(lnum)
     return "-"
   end
 
-  return "│"
+  return "┊"
 end
 
 function M.setup()

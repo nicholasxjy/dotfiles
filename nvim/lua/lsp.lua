@@ -84,10 +84,8 @@ local capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_c
 vim.pack.add({
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
-}, { load = false })
+})
 
-vim.cmd.packadd("blink.lib")
-vim.cmd.packadd("blink.cmp")
 capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities())
 
 vim.lsp.config("*", {
