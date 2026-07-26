@@ -1,53 +1,74 @@
-vim.pack.add({
-  "https://github.com/romus204/tree-sitter-manager.nvim",
+local languages = {
+  "astro",
+  "c",
+  "comment",
+  "css",
+  "csv",
+  "diff",
+  "dockerfile",
+  "fish",
+  "git_config",
+  "gitcommit",
+  "gitignore",
+  "go",
+  "graphql",
+  "html",
+  "javascript",
+  "jq",
+  "jsdoc",
+  "json",
+  "lua",
+  "luadoc",
+  "markdown",
+  "markdown_inline",
+  "query",
+  "regex",
+  "scss",
+  "sql",
+  "tsx",
+  "typescript",
+  "yaml",
+}
+
+vim.api.nvim_create_autocmd("FileType", { -- enable treesitter highlighting and indents
+  callback = function(args)
+    local filetype = args.match
+    local lang = vim.treesitter.language.get_lang(filetype)
+    if lang and vim.treesitter.language.add(lang) then
+      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      vim.treesitter.start()
+    end
+  end,
 })
 
-require("tree-sitter-manager").setup({
-  parser_dir = vim.fn.stdpath("data") .. "/site/parser",
-  query_dir = vim.fn.stdpath("data") .. "/site/queries",
-  assume_installed = {}, -- blacklist languages
-  ensure_installed = {
-    "bash",
-    "c",
-    "diff",
-    "html",
-    "javascript",
-    "jsdoc",
-    "json",
-    "lua",
-    "luadoc",
-    "luap",
-    "markdown",
-    "markdown_inline",
-    "printf",
-    "python",
-    "query",
-    "regex",
-    "toml",
-    "tsx",
-    "typescript",
-    "vim",
-    "vimdoc",
-    "xml",
-    "yaml",
-    "git_config",
-    "gitcommit",
-    "git_rebase",
-    "gitignore",
-    "gitattributes",
-    "typst",
-    "go",
-    "rust",
-    "java",
-    "javadoc",
-  }, -- parsers to install at startup
-  auto_install = true, -- auto-install when a new filetype is encountered
-  noauto_install = {}, -- blacklist from auto_install
-  highlight = true, -- enable treesitter highlighting (use list to whitelist)
-  nohighlight = {}, -- blacklist from highlight
-  languages = {}, -- override or add new parser sources
-  nerdfont = true, -- use Nerd Font icons in the manager UI
-  border = "rounded", -- border style for the TUI window
-  min_width = 78, -- minimum size of the TUI
-  min_height = 40,
+vim.api.nvim_create_autocmd("PackChanged", {
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    if name == "nvim-treesitter" and kind == "update" then
+      if not ev.data.active then
+        vim.cmd.packadd("nvim-treesitter")
+      end
+      vim.cmd("TSUpdate")
+    end
+  end,
+})
+
+vim.pack.add({
+  {
+    src = "https://github.com/nvim-treesitter/nvim-treesitter",
+    version = "main",
+  },
+})
+
+local ts = require("nvim-treesitter")
+
+ts.install(languages)
+
+-- equivalent to :TSUpdate
+ts.update("all")
+
+vim.api.nvim_create_autocmd("PackChanged", {
+  callback = function()
+    ts.update()
+  end,
 })

@@ -18,5 +18,7 @@ vim.keymap.set({ "n", "x", "o" }, "s", function()
 end, { desc = "Flash" })
 
 vim.keymap.set({ "n", "x", "o" }, "S", function()
-  flash.treesitter()
+  if vim.treesitter.get_parser(nil, nil, { error = false }) then
+    flash.treesitter()
+  end
 end, { desc = "Flash treesitter" })

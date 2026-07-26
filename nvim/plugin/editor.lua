@@ -6,7 +6,7 @@ vim.pack.add({
   "https://github.com/folke/todo-comments.nvim",
   "https://github.com/folke/ts-comments.nvim",
   "https://github.com/nemanjamalesija/smart-paste.nvim",
-  { src = "https://github.com/nicholasxjy/jishiben.nvim", version = "feat/prompt" },
+  "https://github.com/nicholasxjy/jishiben.nvim",
   "https://github.com/nicholasxjy/translator.nvim",
   "https://github.com/Wansmer/treesj",
   "https://github.com/nicholasxjy/modes.nvim",

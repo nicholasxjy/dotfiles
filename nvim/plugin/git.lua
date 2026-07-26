@@ -24,7 +24,7 @@ gs.setup({
     changedelete = { text = "▎" },
     untracked = { text = "?" },
   },
-  signcolumn = false,
+  signcolumn = true,
   current_line_blame = true,
   on_attach = function(buffer)
     local function map(lhs, rhs, desc)

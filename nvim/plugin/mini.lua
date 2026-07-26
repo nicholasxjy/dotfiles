@@ -1,14 +1,11 @@
--- local ui = require("ui")
-
 vim.pack.add({
   "https://github.com/nvim-mini/mini.icons",
-  "https://github.com/nicholasxjy/mini.hues",
+  -- "https://github.com/nicholasxjy/mini.hues",
 })
 
 vim.pack.add({
   "https://github.com/nvim-mini/mini.files",
   "https://github.com/nvim-mini/mini.tabline",
-  "https://github.com/nicholasxjy/mini.statusline",
   "https://github.com/nvim-mini/mini.surround",
   "https://github.com/nvim-mini/mini.trailspace",
   "https://github.com/nvim-mini/mini.ai",
@@ -16,45 +13,45 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.clue",
 })
 
-require("mini.hues").setup({
-  -- foreground = "#c7ad85",
-  foreground = "#AEA09F",
-  -- foreground = "#BFC9D1",
-  -- foreground = "#AEBDCA",
-  -- foreground = "#abb1a9",
-
-  -- background = "#222436",
-
-  -- background = "#24283b",
-  background = "#2C3947",
-
-  -- background = "#272e33",
-  -- background = "#333c43",
-  -- background = "#2d353b",
-  -- background = "#1d2021",
-  -- background = "#282828",
-  -- background = "#32302f",
-  -- Number of hues used for non-base colors
-  n_hues = 12,
-
-  -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
-  saturation = "high",
-  -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'lime',
-  -- 'green', 'teal', 'cyan', 'azure', 'blue', 'indigo', 'purple', 'pink',
-  -- or a '#rrggbb' hex string.
-  accent = "#4fd6be", --"#C562AF", --"#8A8635",  --"#2FA4D7", --"#934761", --"#4B5694", --"#FF9E20", --"#5478FF",
-
-  -- Plugin integrations. Keep a narrow whitelist to avoid generating highlights
-  -- for integrations this config never uses.
-  plugins = {
-    default = true,
-  },
-
-  -- Whether to auto adjust highlight groups based on certain events
-  autoadjust = true,
-
-  dim_popup = true,
-})
+-- require("mini.hues").setup({
+--   -- foreground = "#c7ad85",
+--   foreground = "#AEA09F",
+--   -- foreground = "#BFC9D1",
+--   -- foreground = "#AEBDCA",
+--   -- foreground = "#abb1a9",
+--
+--   -- background = "#222436",
+--
+--   -- background = "#24283b",
+--   -- background = "#2C3947",
+--
+--   -- background = "#272e33",
+--   -- background = "#333c43",
+--   -- background = "#2d353b",
+--   -- background = "#1d2021",
+--   -- background = "#282828",
+--   background = "#32302f",
+--   -- Number of hues used for non-base colors
+--   n_hues = 12,
+--
+--   -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
+--   saturation = "high",
+--   -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'lime',
+--   -- 'green', 'teal', 'cyan', 'azure', 'blue', 'indigo', 'purple', 'pink',
+--   -- or a '#rrggbb' hex string.
+--   accent = "#C562AF", --"#4fd6be", --"#8A8635",  --"#2FA4D7", --"#934761", --"#4B5694", --"#FF9E20", --"#5478FF",
+--
+--   -- Plugin integrations. Keep a narrow whitelist to avoid generating highlights
+--   -- for integrations this config never uses.
+--   plugins = {
+--     default = true,
+--   },
+--
+--   -- Whether to auto adjust highlight groups based on certain events
+--   autoadjust = true,
+--
+--   dim_popup = true,
+-- })
 
 require("mini.icons").setup({
   file = {
@@ -87,11 +84,6 @@ end)
 
 require("mini.tabline").setup({
   show_icons = true,
-})
-
-require("mini.statusline").setup({
-  -- Whether to show diagnostics from all buffers instead of current buffer
-  show_workspace_diagnostics = true,
 })
 
 require("mini.ai").setup()
@@ -326,7 +318,7 @@ vim.keymap.set("n", "<leader>ut", function()
   require("mini.trailspace").trim()
 end, { desc = "Trim Trailing Space" })
 
-vim.keymap.set("n", "<leader>e", function()
+vim.keymap.set("n", "<leader>E", function()
   local bufname = vim.api.nvim_buf_get_name(0)
   local path = vim.fn.fnamemodify(bufname, ":p")
 

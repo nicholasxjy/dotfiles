@@ -13,15 +13,12 @@ require("snacks").setup({
   words = { enabled = false },
   indent = { enabled = false },
   statuscolumn = {
-    enabled = false,
+    enabled = true,
     left = { "mark", "sign" }, -- priority of signs on the left (high to low)
     right = { "fold", "git" }, -- priority of signs on the right (high to low)
     folds = {
       open = true, -- show open fold icons
       git_hl = true, -- use Git Signs hl for fold icons
-    },
-    git = {
-      patterns = { "GitSign", "MiniDiffSign" },
     },
     refresh = 50, -- refresh at most every 50ms
   },
@@ -141,16 +138,16 @@ local function grep_buffer_word()
   })
 end
 
-vim.keymap.set("n", "<leader>E", function()
+vim.keymap.set("n", "<leader>e", function()
   Snacks.explorer({
     layout = ui.snacks_layout.sidebar,
   })
 end, { desc = "Explorer" })
 
 vim.keymap.set("n", "<leader>r", pick("resume"), { desc = "Resume Search" })
-vim.keymap.set("n", "<leader>:", pick("commands"), { desc = "Commands" })
-vim.keymap.set("n", "<leader>/", pick("lines"), { desc = "Blines" })
-vim.keymap.set("n", "<leader>m", pick("marks"), { desc = "Marks" })
+-- vim.keymap.set("n", "<leader>:", pick("commands"), { desc = "Commands" })
+-- vim.keymap.set("n", "<leader>/", pick("lines"), { desc = "Blines" })
+-- vim.keymap.set("n", "<leader>m", pick("marks"), { desc = "Marks" })
 
 vim.keymap.set("n", "<leader>ff", pick("files", { hidden = true }), { desc = "Find Files", silent = true })
 
@@ -188,23 +185,23 @@ vim.keymap.set(
   }),
   { desc = "Find Buffers", silent = true, nowait = true }
 )
-vim.keymap.set("n", "<leader>fa", pick("autocmds"), { desc = "Autocmds" })
-vim.keymap.set("n", "<leader>fc", pick("colorschemes"), { desc = "Colorschemes" })
-vim.keymap.set("n", "<leader>fi", pick("icons"), { desc = "Icons" })
-vim.keymap.set("n", "<leader>fl", pick("loclist"), { desc = "Location" })
-vim.keymap.set("n", "<leader>fk", pick("keymaps"), { desc = "Keymaps" })
-vim.keymap.set("n", "<leader>fh", pick("highlights"), { desc = "Highlights" })
-vim.keymap.set("n", "<leader>fr", pick("registers"), { desc = "Registers" })
-vim.keymap.set("n", "<leader>fu", pick("undo"), { desc = "Undos" })
-vim.keymap.set("n", "<leader>fq", pick("qflist"), { desc = "Quickfix" })
--- git
-vim.keymap.set("n", "<leader>gb", pick("git_branches"), { desc = "Git Branches" })
-vim.keymap.set("n", "<leader>gl", pick("git_log"), { desc = "Git Log" })
-vim.keymap.set("n", "<leader>gL", pick("git_log_line"), { desc = "Git Log Line" })
-vim.keymap.set("n", "<leader>gs", pick("git_status"), { desc = "Git Status" })
-vim.keymap.set("n", "<leader>gS", pick("git_stash"), { desc = "Git Stash" })
-vim.keymap.set("n", "<leader>gd", pick("git_diff"), { desc = "Git Diff (Hunks)" })
-vim.keymap.set("n", "<leader>gf", pick("git_log_file"), { desc = "Git Log File" })
+-- vim.keymap.set("n", "<leader>fa", pick("autocmds"), { desc = "Autocmds" })
+-- vim.keymap.set("n", "<leader>fc", pick("colorschemes"), { desc = "Colorschemes" })
+-- vim.keymap.set("n", "<leader>fi", pick("icons"), { desc = "Icons" })
+-- vim.keymap.set("n", "<leader>fl", pick("loclist"), { desc = "Location" })
+-- vim.keymap.set("n", "<leader>fk", pick("keymaps"), { desc = "Keymaps" })
+-- vim.keymap.set("n", "<leader>fh", pick("highlights"), { desc = "Highlights" })
+-- vim.keymap.set("n", "<leader>fr", pick("registers"), { desc = "Registers" })
+-- vim.keymap.set("n", "<leader>fu", pick("undo"), { desc = "Undos" })
+-- vim.keymap.set("n", "<leader>fq", pick("qflist"), { desc = "Quickfix" })
+-- -- git
+-- vim.keymap.set("n", "<leader>gb", pick("git_branches"), { desc = "Git Branches" })
+-- vim.keymap.set("n", "<leader>gl", pick("git_log"), { desc = "Git Log" })
+-- vim.keymap.set("n", "<leader>gL", pick("git_log_line"), { desc = "Git Log Line" })
+-- vim.keymap.set("n", "<leader>gs", pick("git_status"), { desc = "Git Status" })
+-- vim.keymap.set("n", "<leader>gS", pick("git_stash"), { desc = "Git Stash" })
+-- vim.keymap.set("n", "<leader>gd", pick("git_diff"), { desc = "Git Diff (Hunks)" })
+-- vim.keymap.set("n", "<leader>gf", pick("git_log_file"), { desc = "Git Log File" })
 
 -- search
 vim.keymap.set(

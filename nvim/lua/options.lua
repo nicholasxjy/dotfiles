@@ -1,11 +1,8 @@
--- globals
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- vim.o.background = "light"
--- options
 local opt = vim.opt
--- UI/General
+
 opt.number = true
 opt.relativenumber = true
 opt.ignorecase = true
@@ -18,11 +15,8 @@ opt.swapfile = false
 opt.conceallevel = 1
 opt.linebreak = true
 
--- opt.winborder = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" }
--- opt.winborder = { "🭽", "▔", "🭾", "▕", "🭿", "▁", "🭼", "▏" }
-opt.winborder = "solid"
+opt.winborder = "single"
 
--- Set tab width
 opt.tabstop = 2
 opt.shiftwidth = 2
 opt.expandtab = true
@@ -42,12 +36,10 @@ opt.splitright = true -- Put new windows right of current
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
-opt.wrap = true -- Disable line wrap
+opt.wrap = true
 opt.undolevels = 10000
--- opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
 
-vim.o.foldcolumn = "1" -- '0' is not bad
-vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
-vim.opt.statuscolumn = require("statuscolumn").expr
+opt.foldcolumn = "1"
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.foldenable = true
