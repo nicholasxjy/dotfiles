@@ -1,2 +1,7 @@
--- bootstrap lazy.nvim, LazyVim and your plugins
-require("config.lazy")
+require("options")
+require("keymaps")
+require("autocmds")
+
+require("pack")
+
+vim.cmd.colorscheme("tokyonight")

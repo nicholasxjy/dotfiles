@@ -1,0 +1,1 @@
+require("zed-bar").setup({})
