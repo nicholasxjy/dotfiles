@@ -1,3 +1,5 @@
+local loader = require("loader")
+
 local languages = {
   "astro",
   "c",
@@ -30,6 +32,18 @@ local languages = {
   "yaml",
 }
 
+local parsers_checked = false
+local function install_configured()
+  if parsers_checked then
+    return
+  end
+
+  parsers_checked = true
+  require("nvim-treesitter").install(languages)
+end
+
+local setup = function()
+
 vim.api.nvim_create_autocmd("FileType", { -- enable treesitter highlighting and indents
   callback = function(args)
     local filetype = args.match
@@ -41,34 +55,14 @@ vim.api.nvim_create_autocmd("FileType", { -- enable treesitter highlighting and 
   end,
 })
 
-vim.api.nvim_create_autocmd("PackChanged", {
-  callback = function(ev)
-    local name, kind = ev.data.spec.name, ev.data.kind
-    if name == "nvim-treesitter" and kind == "update" then
-      if not ev.data.active then
-        vim.cmd.packadd("nvim-treesitter")
-      end
-      vim.cmd("TSUpdate")
-    end
-  end,
-})
+vim.cmd.packadd("nvim-treesitter")
+install_configured()
+end
 
-vim.pack.add({
-  {
-    src = "https://github.com/nvim-treesitter/nvim-treesitter",
-    version = "main",
-  },
-})
+loader.defer_buffer("treesitter", setup)
 
-local ts = require("nvim-treesitter")
-
-ts.install(languages)
-
--- equivalent to :TSUpdate
-ts.update("all")
-
-vim.api.nvim_create_autocmd("PackChanged", {
-  callback = function()
-    ts.update()
-  end,
-})
+vim.api.nvim_create_user_command("TSInstallConfigured", function()
+  if loader.load("treesitter", setup) then
+    install_configured()
+  end
+end, { desc = "Install configured Treesitter parsers" })

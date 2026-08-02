@@ -1,3 +1,9 @@
+local loader = require("loader")
+local cond = vim.env.HERDR_ENV ~= "1"
+
+local setup = function()
+vim.cmd.packadd("smart-splits.nvim")
+
 local ss = require("smart-splits")
 
 ss.setup({
@@ -20,3 +26,8 @@ end, { desc = "Focus Up" })
 vim.keymap.set("n", "<c-l>", function()
   ss.move_cursor_right()
 end, { desc = "Focus Right" })
+end
+
+if cond then
+  loader.defer("smart-splits", setup)
+end

@@ -1,0 +1,109 @@
+
+onboarding = false
+
+[ui]
+show_agent_labels_on_pane_borders = true
+
+agent_panel_sort = "spaces"
+[update]
+channel = "stable"
+
+# herdr configuration
+# Keybindings ported from ~/.tmux.conf
+
+[theme]
+# tmux: set -g @plugin 'catppuccin/tmux' (@catppuccin_flavor "mocha")
+name = "tokyo-night"
+# Follow the host terminal's light/dark appearance.
+
+[keys]
+# tmux: set -g prefix C-a
+prefix = "ctrl+a"
+
+# tmux window/tab bindings
+new_tab = ["prefix+c", "alt+t"]
+previous_tab = ["prefix+p", "alt+h"]
+next_tab = ["prefix+n", "alt+l"]
+close_tab = "prefix+ampersand"
+
+# tmux pane bindings
+close_pane = ["prefix+x", "alt+x"]
+split_vertical = ["prefix+\\", "alt+n"]
+split_horizontal = ["prefix+minus", "alt+d"]
+
+# tmux session/config bindings
+workspace_picker = "prefix+o"
+new_workspace = "prefix+shift+w"
+close_workspace = "prefix+shift+d"
+
+goto = "alt+s"
+reload_config = "prefix+r"
+settings = "prefix+;"
+
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "herdr-splits.nav-left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "herdr-splits.nav-down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "herdr-splits.nav-up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "herdr-splits.nav-right"
+
+[[keys.command]]
+key = "prefix+shift+h"
+type = "shell"
+command = '"$HERDR_BIN_PATH" pane resize --direction left --current'
+description = "resize pane left"
+
+[[keys.command]]
+key = "prefix+shift+j"
+type = "shell"
+command = '"$HERDR_BIN_PATH" pane resize --direction down --current'
+description = "resize pane down"
+
+[[keys.command]]
+key = "prefix+shift+k"
+type = "shell"
+command = '"$HERDR_BIN_PATH" pane resize --direction up --current'
+description = "resize pane up"
+
+[[keys.command]]
+key = "prefix+shift+l"
+type = "shell"
+command = '"$HERDR_BIN_PATH" pane resize --direction right --current'
+description = "resize pane right"
+
+
+[experimental]
+# Allow launching herdr from inside a herdr-managed pane.
+# allow_nested = false
+# Experimental local Kitty graphics rendering for attached clients.
+# Requires a Kitty graphics-compatible outer terminal.
+kitty_graphics = true
+# Save recent pane screen history across full server restarts.
+pane_history = false
+# Expose the focused pane's cursor to the outer terminal so macOS input
+# methods keep tracking the candidate window when TUIs paint their own
+# cursor (Claude Code, pi, codex). Trade-off: extra cursor visible for
+# apps that hide it without painting a replacement (vim normal mode, etc.).
+reveal_hidden_cursor_for_cjk_ime = false
+# Optional allow-list: only reveal for focused panes whose detected agent
+# matches one of these names. Empty means apply to any focused pane.
+# If the list contains no valid names, the reveal does not apply.
+# Accepted: pi, claude, codex, gemini, cursor, cline, opencode, copilot,
+# kimi, kiro, droid, amp, grok, hermes, kilo, qodercli, qoder.
+# cjk_ime_agents = []
+# Cursor shape rendered when reveal_hidden_cursor_for_cjk_ime is true.
+# Values: block, steady_block (default), underline, steady_underline, bar, steady_bar.
+# cjk_ime_cursor_shape = "steady_block"

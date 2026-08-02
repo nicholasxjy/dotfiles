@@ -17,9 +17,12 @@ Neovim with the built-in `vim.pack` plugin manager.
 - `lua/util.lua` owns shared helpers such as deferred plugin setup and pack
   build hooks.
 - `lua/ui.lua` owns shared icons and visual constants.
-- `plugin/*.lua` contains plugin-specific setup. Prefer adding plugin config
-  there instead of growing `init.lua`; when behavior depends on project-local
-  config files, gate it on those files instead of applying it globally.
+- `plugin/*.lua` contains plugin-specific setup or a functional entrypoint.
+  Related smaller configurations live under the matching
+  `plugin/<domain>/*.lua` directory and are loaded explicitly by that
+  entrypoint. Prefer adding plugin config there instead of growing `init.lua`;
+  when behavior depends on project-local config files, gate it on those files
+  instead of applying it globally.
 - `ftplugin/*.lua` contains filetype-specific behavior.
 - `nvim-pack-lock.json` is generated plugin lock state. Do not hand-edit it.
 
@@ -28,8 +31,8 @@ Neovim with the built-in `vim.pack` plugin manager.
 - Use Lua idioms already present in the config: local helpers, `vim.*` APIs,
   `vim.api.nvim_create_autocmd`, `vim.keymap.set`, and `vim.tbl_extend`.
 - Keep modules focused. Add a new plugin to `lua/pack.lua`, then configure it
-  in a matching `plugin/<name>.lua` file unless the configuration is truly
-  shared.
+  in a matching plugin file or functional group under `plugin/` unless the
+  configuration is truly shared.
 - Prefer lazy/deferred setup for optional or expensive plugins. Existing
   patterns include `util.ensure_plugin`, `util.packadd`, `util.build_*_on_change`,
   `vim.schedule`, and one-shot autocommands.

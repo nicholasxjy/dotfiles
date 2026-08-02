@@ -1,9 +1,6 @@
-vim.pack.add({
-  "https://github.com/lewis6991/gitsigns.nvim",
-  "https://github.com/barrettruth/diffs.nvim",
-  "https://github.com/esmuellert/codediff.nvim",
-})
+local loader = require("loader")
 
+local setup = function()
 vim.g.diffs = {
   integrations = {
     fugitive = true,
@@ -12,6 +9,9 @@ vim.g.diffs = {
     gitsigns = true,
   },
 }
+
+vim.cmd.packadd("diffs.nvim")
+vim.cmd.packadd("codediff.nvim")
 
 local gs = require("gitsigns")
 
@@ -48,3 +48,6 @@ require("codediff").setup({
     view_mode = "tree",
   },
 })
+end
+
+loader.defer_buffer("git", setup)

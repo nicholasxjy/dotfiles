@@ -1,14 +1,14 @@
-vim.pack.add({
-  "https://github.com/b0o/SchemaStore.nvim",
-})
+-- Syntax, structure, and code navigation plugins.
+local plugin_dir = vim.fn.stdpath("config") .. "/plugin/coding"
 
-vim.pack.add({
-  "https://github.com/mfussenegger/nvim-jdtls",
-})
-
-vim.pack.add({
-  "https://github.com/windwp/nvim-ts-autotag",
-})
-
-local ts_autotag = require("nvim-ts-autotag")
-ts_autotag.setup()
+for _, file in ipairs({
+  "nvim-ts-autotag.lua",
+  "illuminate.lua",
+  "matchup.lua",
+  "origami.lua",
+  "rainbow-tags.lua",
+  "treesitter.lua",
+  "zed-bar.lua",
+}) do
+  dofile(plugin_dir .. "/" .. file)
+end

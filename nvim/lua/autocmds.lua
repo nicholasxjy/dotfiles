@@ -114,12 +114,28 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 -- Check if we need to reload the file when it changed
-vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+local last_checktime = 0
+local function checktime(force)
+  if vim.o.buftype == "nofile" then
+    return
+  end
+
+  local now = vim.uv.now()
+  if not force and now - last_checktime < 1000 then
+    return
+  end
+
+  last_checktime = now
+  -- Let the event finish before checking; autoread can then reload clean buffers.
+  vim.schedule(function()
+    vim.cmd("checktime")
+  end)
+end
+
+vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained", "TermClose", "TermLeave" }, {
   group = augroup("checktime"),
-  callback = function()
-    if vim.o.buftype ~= "nofile" then
-      vim.cmd("checktime")
-    end
+  callback = function(args)
+    checktime(args.event == "BufEnter" or args.event == "FocusGained")
   end,
 })
 

@@ -1,7 +1,6 @@
-vim.pack.add({
-  "https://github.com/jake-stewart/multicursor.nvim",
-})
+local loader = require("loader")
 
+local setup = function()
 local mc = require("multicursor-nvim")
 mc.setup()
 
@@ -67,3 +66,6 @@ end)
 set({ "n", "x" }, "<c-q>", function()
   mc.toggleCursor()
 end)
+end
+
+loader.defer("multicursor", setup)

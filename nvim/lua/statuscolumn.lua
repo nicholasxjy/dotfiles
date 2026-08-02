@@ -8,12 +8,8 @@ local GIT_CACHE_TTL_MS = 200
 local mark_cache = {}
 local git_cache = {}
 
-local function current_winid()
-  return vim.g.statusline_winid or vim.api.nvim_get_current_win()
-end
-
-local function current_bufnr(winid)
-  return vim.api.nvim_win_get_buf(winid)
+local function current_bufnr()
+  return vim.api.nvim_get_current_buf()
 end
 
 local function line_number_text()
@@ -92,25 +88,23 @@ end
 local function git_text(bufnr, lnum)
   local now = vim.uv.now()
   local cached = git_cache[bufnr]
-  if cached and cached.expires_at > now and cached.by_lnum[lnum] ~= nil then
-    return cached.by_lnum[lnum]
+  if cached and cached.expires_at > now then
+    return cached.by_lnum[lnum] or EMPTY
   end
-  if not cached or cached.expires_at <= now then
-    cached = {
-      by_lnum = {},
-      expires_at = now + GIT_CACHE_TTL_MS,
-    }
-    git_cache[bufnr] = cached
-  end
+
+  cached = {
+    by_lnum = {},
+    expires_at = now + GIT_CACHE_TTL_MS,
+  }
+  git_cache[bufnr] = cached
 
   local gitsigns = package.loaded.gitsigns
-  if type(gitsigns) ~= "table" or type(gitsigns.statuscolumn) ~= "function" then
-    return EMPTY
-  end
-
-  local ok, text = pcall(gitsigns.statuscolumn, bufnr, lnum)
-  if not ok or text == nil or text == "" then
-    text = EMPTY
+  local text = EMPTY
+  if type(gitsigns) == "table" and type(gitsigns.statuscolumn) == "function" then
+    local ok, result = pcall(gitsigns.statuscolumn, bufnr, lnum)
+    if ok and result ~= nil and result ~= "" then
+      text = result
+    end
   end
 
   cached.by_lnum[lnum] = text
@@ -118,6 +112,7 @@ local function git_text(bufnr, lnum)
   return text
 end
 
+--'┆' | '┊' | '╎' | '║' | '▏' | '▎' |
 local function fold_text(lnum)
   if vim.fn.foldclosed(lnum) == lnum then
     return "󰡍"
@@ -131,15 +126,14 @@ local function fold_text(lnum)
   local previous_level = lnum > 1 and vim.fn.foldlevel(lnum - 1) or 0
   local next_level = lnum < vim.fn.line("$") and vim.fn.foldlevel(lnum + 1) or 0
   if level > previous_level or level > next_level then
-    return "-"
+    return ""
   end
 
-  return "┊"
+  return "╎"
 end
 
 function M.setup()
-  local winid = current_winid()
-  local bufnr = current_bufnr(winid)
+  local bufnr = current_bufnr()
   local lnum = vim.v.lnum
 
   return table.concat({
@@ -165,6 +159,12 @@ end
 function M.disable(winid)
   winid = winid or vim.api.nvim_get_current_win()
   vim.api.nvim_set_option_value("statuscolumn", "", { win = winid })
+end
+
+function M.enable_all()
+  for _, winid in ipairs(vim.api.nvim_list_wins()) do
+    M.enable(winid)
+  end
 end
 
 function M.toggle(winid)

@@ -1,5 +1,6 @@
-vim.pack.add({ "https://github.com/rachartier/tiny-inline-diagnostic.nvim" })
+local loader = require("loader")
 
+local setup = function()
 local tiny_opts = {
   preset = "modern",
   transparent_bg = false,
@@ -31,3 +32,6 @@ local tiny_opts = {
 }
 
 require("tiny-inline-diagnostic").setup(tiny_opts)
+end
+
+loader.defer("tiny-inline-diagnostic", setup)

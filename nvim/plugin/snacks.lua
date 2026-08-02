@@ -12,16 +12,7 @@ require("snacks").setup({
   input = { enabled = true },
   words = { enabled = false },
   indent = { enabled = false },
-  statuscolumn = {
-    enabled = true,
-    left = { "mark", "sign" }, -- priority of signs on the left (high to low)
-    right = { "fold", "git" }, -- priority of signs on the right (high to low)
-    folds = {
-      open = true, -- show open fold icons
-      git_hl = true, -- use Git Signs hl for fold icons
-    },
-    refresh = 50, -- refresh at most every 50ms
-  },
+  statuscolumn = { enabled = false },
   notifier = { enabled = false },
   toggle = { enabled = true },
   lazygit = { enabled = true },
@@ -30,6 +21,12 @@ require("snacks").setup({
   gitbrowse = { enabled = true },
   picker = {
     enabled = true,
+    sources = {
+      explorer = {
+        hidden = true,
+        ignored = true,
+      },
+    },
     prompt = "> ", -- --
     ui_select = true,
     layout = {
@@ -42,7 +39,7 @@ require("snacks").setup({
         min_width = 80,
         border = "solid",
         box = "vertical",
-        { win = "preview", title = "{preview}", height = 0.5, border = "rounded" },
+        { win = "preview", title = "{preview}", height = 0.5, border = "single" },
         {
           box = "vertical",
           border = "none",

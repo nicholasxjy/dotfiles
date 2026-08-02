@@ -1,7 +1,6 @@
-vim.pack.add({
-  "https://github.com/nicholasxjy/rainbow-tags.nvim",
-})
+local loader = require("loader")
 
+local setup = function()
 local rainbow_tags = require("rainbow-tags")
 
 rainbow_tags.setup({
@@ -21,3 +20,6 @@ rainbow_tags.setup({
     "RainbowDelimiterBlue",
   },
 })
+end
+
+loader.defer_buffer("rainbow-tags", setup)

@@ -1,9 +1,5 @@
-vim.pack.add({
-  "https://github.com/folke/tokyonight.nvim",
-})
-
 require("tokyonight").setup({
-  style = "night", -- The theme comes in three styles, `storm`, a darker variant `night` and `day`
+  style = "storm", -- The theme comes in three styles, `storm`, a darker variant `night` and `day`
   light_style = "day", -- The theme is used when the background is set to light
   transparent = false, -- Enable this to disable setting the background color
   terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
@@ -11,7 +7,7 @@ require("tokyonight").setup({
     -- Style to be applied to different syntax groups
     -- Value is any valid attr-list value for `:help nvim_set_hl`
     comments = { italic = true },
-    keywords = { italic = true },
+    keywords = { italic = true, bold = false },
     functions = {},
     variables = {},
     -- Background styles. Can be "dark", "transparent" or "normal"
@@ -24,27 +20,62 @@ require("tokyonight").setup({
 
   --- You can override specific color groups to use other groups or a hex color
   --- function will be called with a ColorScheme table
-  ---@param colors ColorScheme
+  ---@param colors table<string, any>
   on_colors = function(colors)
-    colors.fg = "#abb1a9"
+    colors.red = "#ef5849"
+    colors.green = "#6cce47"
+    colors.yellow = "#e8c300"
+    colors.orange = "#e88b2d"
+    colors.magenta = "#8576FF"
+    colors.cyan = "#6FE6FC"
+    colors.teal = "#769826"
+    -- colors.blue1 = "#00E0BA" --"#4379F2" --"#006BFF"
+    colors.blue = "#00CAFF"
+    colors.green1 = "#26CCC2"
+    colors.purple = "#fca7ea"
+
+    -- These fields are derived before on_colors runs, so update them as well.
+    colors.rainbow = {
+      colors.blue,
+      colors.yellow,
+      colors.green,
+      colors.teal,
+      colors.magenta,
+      colors.purple,
+      colors.orange,
+      colors.red,
+    }
   end,
 
   --- You can override specific highlights to use other groups or a hex color
   --- function will be called with a Highlights and ColorScheme table
-  ---@param highlights tokyonight.Highlights
-  ---@param colors ColorScheme
+  ---@param highlights table<string, any>
+  ---@param colors table<string, any>
   on_highlights = function(highlights, colors)
-    highlights["Include"] = { fg = "#FE5D26", italic = true }
-    highlights["@keyword.import"] = { link = "Include" }
-    highlights["@keyword.export"] = { link = "Include" }
+    highlights["@keyword.import"] = { fg = "#9FA1FF", italic = true }
+    highlights["@keyword.export"] = { link = "@keyword.import" }
     highlights["@tag"] = { bold = true }
-    highlights["@tag.attribute"] = { fg = "#735557", italic = true }
+    highlights["@tag.attribute"] = { fg = colors.blue5, italic = true }
+    highlights["@lsp.type.interface"] = { fg = colors.yellow }
+    highlights["@type.builtin"] = { fg = colors.red1 }
 
-    highlights["SnacksPickerDir"] = { fg = colors.comment, bg = colors.bg_dark1, italic = true }
-    highlights["SnacksPickerMatch"] = { fg = colors.red1, bold = true }
+    highlights["SnacksPickerDir"] = { fg = colors.comment, bg = colors.bg_dark1, italic = false }
+    highlights["SnacksPickerMatch"] = { fg = colors.red, bold = true }
 
-    highlights["BlinkCmpLabelDescription"] = { fg = colors.comment, bg = colors.bg_dark1, italic = true }
-    highlights["BlinkCmpLabelDetail"] = { fg = colors.comment, bg = colors.bg_dark1, italic = true }
+    highlights["SnacksPickerPreviewBorder"] = { fg = colors.blue }
+    highlights["SnacksPickerListBorder"] = { fg = colors.green }
+
+    highlights["FzfLuaDirPart"] = { link = "SnacksPickerDir" }
+    highlights["FzfLuaBorder"] = { link = "FloatBorder" }
+    highlights["FzfLuaPreviewBorder"] = { link = "SnacksPickerPreviewBorder" }
+
+    highlights["BlinkCmpLabelDescription"] = { fg = colors.comment, bg = colors.bg_dark1, italic = false }
+    highlights["BlinkCmpLabelDetail"] = { fg = colors.comment, bg = colors.bg_dark1, italic = false }
+
+    highlights["BlinkCmpMenuBorder"] = { link = "FloatBorder" }
+    highlights["BlinkCmpDocBorder"] = { fg = colors.blue }
+    highlights["BlinkCmpSignatureHelpBorder"] = { fg = colors.yellow }
+
     highlights["BlinkPairsBlue"] = { link = "RainbowDelimiterBlue" }
     highlights["BlinkPairsCyan"] = { link = "RainbowDelimiterCyan" }
     highlights["BlinkPairsGreen"] = { link = "RainbowDelimiterGreen" }
@@ -68,7 +99,7 @@ require("tokyonight").setup({
   plugins = {
     -- enable all plugins when not using lazy.nvim
     -- set to false to manually enable/disable plugins
-    all = package.loaded.lazy == nil,
+    all = true,
     -- uses your plugin manager to automatically enable needed plugins
     -- currently only lazy.nvim is supported
     auto = true,

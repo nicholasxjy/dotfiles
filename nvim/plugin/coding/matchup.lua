@@ -1,6 +1,7 @@
-vim.pack.add({
-  "https://github.com/andymass/vim-matchup",
-})
+local loader = require("loader")
+
+local setup = function()
+vim.cmd.packadd("vim-matchup")
 
 local matchup = require("match-up")
 
@@ -29,3 +30,6 @@ matchup.setup({
     disable_virtual_text = true,
   },
 })
+end
+
+loader.defer_buffer("matchup", setup)

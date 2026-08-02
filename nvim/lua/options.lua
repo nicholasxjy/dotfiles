@@ -9,13 +9,14 @@ opt.ignorecase = true
 opt.cursorline = true
 opt.clipboard = "unnamedplus"
 opt.confirm = true
+opt.autoread = true
 opt.mouse = "a"
 opt.undofile = true
 opt.swapfile = false
 opt.conceallevel = 1
 opt.linebreak = true
 
-opt.winborder = "single"
+opt.winborder = "solid"
 
 opt.tabstop = 2
 opt.shiftwidth = 2

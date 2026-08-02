@@ -1,6 +1,7 @@
-vim.pack.add({
-  "https://github.com/MagicDuck/grug-far.nvim",
-})
+local loader = require("loader")
+
+local setup = function()
+vim.cmd.packadd("grug-far.nvim")
 
 local gr = require("grug-far")
 
@@ -18,3 +19,6 @@ vim.keymap.set({ "n", "v" }, "<leader>sr", function()
     },
   })
 end, { desc = "Find and replace" })
+end
+
+loader.defer("grug-far", setup)

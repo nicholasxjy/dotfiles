@@ -1,16 +1,10 @@
-vim.pack.add({
-  "http://github.com/2KAbhishek/nerdy.nvim",
-  "https://github.com/arnamak/stay-centered.nvim",
-  "https://github.com/NStefan002/screenkey.nvim",
-  "https://github.com/brenoprata10/nvim-highlight-colors",
-  "https://github.com/folke/todo-comments.nvim",
-  "https://github.com/folke/ts-comments.nvim",
-  "https://github.com/nemanjamalesija/smart-paste.nvim",
-  "https://github.com/nicholasxjy/jishiben.nvim",
-  "https://github.com/nicholasxjy/translator.nvim",
-  "https://github.com/Wansmer/treesj",
-  "https://github.com/nicholasxjy/modes.nvim",
-})
+local loader = require("loader")
+
+local setup = function()
+vim.cmd.packadd("screenkey.nvim")
+vim.cmd.packadd("todo-comments.nvim")
+vim.cmd.packadd("jishiben.nvim")
+vim.cmd.packadd("translator.nvim")
 
 local function hl_color(group, attr, fallback)
   local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group, link = false })
@@ -139,3 +133,6 @@ end, { desc = "Translate Selection" })
 vim.keymap.set("n", "<leader>bc", function()
   require("translator").transCurWord()
 end, { desc = "Translate Word" })
+end
+
+loader.defer("editor", setup)

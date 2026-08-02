@@ -2,7 +2,43 @@ require("vim._core.ui2").enable({
   enable = true,
   msg = { target = "msg" },
 })
--- pack install
+
+local util = require("util")
+
+-- Build native extensions before the first `vim.pack.add()` call so the hooks
+-- also run for plugins installed from the lockfile.
+util.build_fn_on_change("blink.pairs", { "install", "update" }, function()
+  ---@diagnostic disable-next-line: undefined-field
+  require("blink.pairs").build():pwait(60000)
+end)
+
+util.build_fn_on_change("blink.cmp", { "install", "update" }, function()
+  ---@diagnostic disable-next-line: undefined-field
+  require("blink.cmp").build():pwait(60000)
+end)
+
+util.build_cmd_on_change("LuaSnip", { "install", "update" }, { "make", "install_jsregexp" })
+
+util.build_fn_on_change("markdown-preview.nvim", { "install", "update" }, function()
+  vim.cmd.packadd("markdown-preview.nvim")
+  vim.fn["mkdp#util#install"]()
+end)
+
+util.build_fn_on_change("nvim-treesitter", "update", function(ev)
+  if not ev.data.active then
+    vim.cmd.packadd("nvim-treesitter")
+  end
+  require("nvim-treesitter").update()
+end)
+
+-- Keep plugin installation in one place. Make Lua modules available without
+-- adding every plugin's `plugin/` directory to the startup runtime path.
+local function add_lua_path(plugin)
+  local lua_path = plugin.path .. "/lua"
+  package.path = package.path .. ";" .. lua_path .. "/?.lua;" .. lua_path .. "/?/init.lua"
+  package.cpath = package.cpath .. ";" .. lua_path .. "/?.so;" .. lua_path .. "/?/init.so"
+end
+
 vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/folke/snacks.nvim",
@@ -10,6 +46,62 @@ vim.pack.add({
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/stevearc/oil.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
+  "https://github.com/lmilojevicc/herdr-splits.nvim",
   "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/nicholasxjy/minibuffer.nvim",
-})
+  "https://github.com/saghen/blink.lib",
+  "https://github.com/saghen/blink.cmp",
+  "https://github.com/rafamadriz/friendly-snippets",
+  "https://github.com/L3MON4D3/LuaSnip",
+  "https://github.com/saghen/blink.pairs",
+  "https://github.com/saghen/blink.indent",
+  "http://github.com/2KAbhishek/nerdy.nvim",
+  "https://github.com/arnamak/stay-centered.nvim",
+  "https://github.com/NStefan002/screenkey.nvim",
+  "https://github.com/brenoprata10/nvim-highlight-colors",
+  "https://github.com/folke/todo-comments.nvim",
+  "https://github.com/folke/ts-comments.nvim",
+  "https://github.com/nemanjamalesija/smart-paste.nvim",
+  "https://github.com/nicholasxjy/jishiben.nvim",
+  "https://github.com/nicholasxjy/translator.nvim",
+  "https://github.com/Wansmer/treesj",
+  "https://github.com/nicholasxjy/modes.nvim",
+  "https://github.com/b0o/SchemaStore.nvim",
+  "https://github.com/mfussenegger/nvim-jdtls",
+  "https://github.com/windwp/nvim-ts-autotag",
+  "https://github.com/stevearc/conform.nvim",
+  "https://github.com/folke/flash.nvim",
+  "https://github.com/ibhagwan/fzf-lua",
+  "https://github.com/lewis6991/gitsigns.nvim",
+  "https://github.com/barrettruth/diffs.nvim",
+  "https://github.com/esmuellert/codediff.nvim",
+  "https://github.com/MagicDuck/grug-far.nvim",
+  "https://github.com/rrethy/vim-illuminate",
+  "https://github.com/mfussenegger/nvim-lint",
+  "https://github.com/nvim-lualine/lualine.nvim",
+  "https://github.com/MeanderingProgrammer/render-markdown.nvim",
+  "https://github.com/iamcco/markdown-preview.nvim",
+  "https://github.com/andymass/vim-matchup",
+  "https://github.com/nvim-mini/mini.icons",
+  "https://github.com/nvim-mini/mini.files",
+  "https://github.com/nvim-mini/mini.tabline",
+  "https://github.com/nvim-mini/mini.surround",
+  "https://github.com/nvim-mini/mini.trailspace",
+  "https://github.com/nvim-mini/mini.ai",
+  "https://github.com/nvim-mini/mini.notify",
+  "https://github.com/nvim-mini/mini.clue",
+  "https://github.com/jake-stewart/multicursor.nvim",
+  "https://github.com/nicholasxjy/rainbow-tags.nvim",
+  "https://github.com/Saecki/crates.nvim",
+  { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
+  "https://github.com/nicholasxjy/sidekick.nvim",
+  "https://github.com/rachartier/tiny-inline-diagnostic.nvim",
+  "https://github.com/folke/tokyonight.nvim",
+  {
+    src = "https://github.com/nvim-treesitter/nvim-treesitter",
+    version = "main",
+  },
+  "https://github.com/chrisgrieser/nvim-origami",
+  "https://github.com/nicholasxjy/yazi.nvim",
+  { src = "https://github.com/nicholasxjy/zed-bar.nvim", version = "feature/optional-nvim-treesitter" },
+}, { load = add_lua_path })

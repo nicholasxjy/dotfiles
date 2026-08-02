@@ -1,8 +1,11 @@
+local loader = require("loader")
+
+local setup = function()
+vim.cmd.packadd("conform.nvim")
+
 local function has_config(ctx, files)
   return not vim.tbl_isempty(vim.fs.find(files, { path = ctx.dirname, upward = true }))
 end
-
-vim.pack.add({ "https://github.com/stevearc/conform.nvim" })
 
 local conform = require("conform")
 
@@ -71,3 +74,6 @@ end)
 vim.keymap.set({ "n", "v", "x" }, "<leader>cf", function()
   conform.format()
 end, { desc = "Format code using Conform" })
+end
+
+loader.defer_buffer("conform", setup)
