@@ -41,6 +41,12 @@ local ensure_installed = {
   "zls",
 }
 
+local loader = require("loader")
+
+-- Eager: `setup()` is what puts mason's bin directory on $PATH, and LSP servers
+-- are spawned as soon as the first buffer gets its filetype.
+loader.packadd("mason.nvim")
+
 require("mason").setup({
   pip = {
     upgrade_pip = true,
@@ -52,17 +58,20 @@ require("mason").setup({
   },
 })
 
-local registry = require("mason-registry")
-registry:on("package:install:success", function()
-  vim.defer_fn(function()
-    vim.api.nvim_exec_autocmds("FileType", {
-      buffer = vim.api.nvim_get_current_buf(),
-      modeline = false,
-    })
-  end, 100)
+-- The registry index is only needed to react to installs, never to start one.
+loader.on_very_lazy("mason-registry", function()
+  require("mason-registry"):on("package:install:success", function()
+    vim.defer_fn(function()
+      vim.api.nvim_exec_autocmds("FileType", {
+        buffer = vim.api.nvim_get_current_buf(),
+        modeline = false,
+      })
+    end, 100)
+  end)
 end)
 
 local function install_missing_tools()
+  local registry = require("mason-registry")
   local missing = {}
   registry.refresh(function()
     for _, tool in ipairs(ensure_installed) do

@@ -1,8 +1,23 @@
-local ui = require("ui")
+local loader = require("loader")
 
-vim.cmd.packadd("blink.cmp")
-vim.cmd.packadd("friendly-snippets")
-vim.cmd.packadd("LuaSnip")
+-- blink.cmp must be up before `lua/lsp.lua` asks it for LSP capabilities.
+-- The snippet engine and the pairs/indent decorations are not needed to draw
+-- the first frame, so they are set up on VeryLazy instead.
+loader.packadd("blink.lib", "mini.icons", "LuaSnip", "friendly-snippets", "blink.cmp")
+
+local function get_mini_icon(ctx)
+  if ctx.source_name == "Path" then
+    local is_unknown_type =
+      vim.tbl_contains({ "link", "socket", "fifo", "char", "block", "unknown" }, ctx.item.data.type)
+    local mini_icon, mini_hl, _ =
+      require("mini.icons").get(is_unknown_type and "os" or ctx.item.data.type, is_unknown_type and "" or ctx.label)
+    if mini_icon then
+      return mini_icon, mini_hl
+    end
+  end
+  local mini_icon, mini_hl, _ = require("mini.icons").get("lsp", ctx.kind)
+  return mini_icon, mini_hl
+end
 
 local blink_opts = {
   fuzzy = { implementation = "prefer_rust_with_warning", sorts = { "exact", "score", "sort_text" } },
@@ -16,11 +31,6 @@ local blink_opts = {
     window = {
       show_documentation = false,
     },
-  },
-  appearance = {
-    -- Icons in ui.icons.default_kind_icons include trailing spaces (non-mono nerd font).
-    nerd_font_variant = "normal",
-    kind_icons = ui.icons.default_kind_icons,
   },
   completion = {
     ghost_text = { enabled = true },
@@ -36,7 +46,28 @@ local blink_opts = {
       draw = {
         treesitter = { "lsp" },
         -- Keep kind_icon in its own column so appearance.kind_icons always renders.
-        columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
+        -- columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
+        columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
+        components = {
+          label = { width = { max = 29 } },
+          label_description = { width = { max = 15 } },
+          kind_icon = {
+            text = function(ctx)
+              local kind_icon, _ = get_mini_icon(ctx)
+              return kind_icon
+            end,
+            highlight = function(ctx)
+              local _, hl = get_mini_icon(ctx)
+              return hl
+            end,
+          },
+          kind = {
+            highlight = function(ctx)
+              local _, hl = get_mini_icon(ctx)
+              return hl
+            end,
+          },
+        },
       },
     },
   },
@@ -119,19 +150,7 @@ local blink_pairs_opts = {
   debug = false,
 }
 
-local ls = require("luasnip")
-ls.config.set_config({
-  enable_autosnippets = true,
-  history = true,
-  updateevents = "TextChanged,TextChangedI",
-})
-ls.filetype_extend("typescript", { "javascript" })
-ls.filetype_extend("javascriptreact", { "javascript" })
-ls.filetype_extend("typescriptreact", { "javascript" })
-require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip.loaders.from_lua").lazy_load({ paths = { "./snippets" } })
-
-require("blink.indent").setup({
+local blink_indent_opts = {
   blocked = {
     buftypes = { include_defaults = true },
     filetypes = { include_defaults = true },
@@ -191,15 +210,7 @@ require("blink.indent").setup({
       },
     },
   },
-})
-
-local pairs = require("blink.pairs")
-if not pairs.library_available() then
-  ---@diagnostic disable-next-line: undefined-field
-  pairs.build():pwait(60000)
-end
-pairs.setup(blink_pairs_opts)
-vim.cmd.packadd("blink.pairs")
+}
 
 local cmp = require("blink.cmp")
 if not cmp.library_available() then
@@ -207,4 +218,28 @@ if not cmp.library_available() then
   cmp.build():pwait(60000)
 end
 cmp.setup(blink_opts)
-vim.cmd.packadd("blink.indent")
+
+loader.on_very_lazy("blink-extras", function()
+  local ls = require("luasnip")
+  ls.config.set_config({
+    enable_autosnippets = true,
+    history = true,
+    updateevents = "TextChanged,TextChangedI",
+  })
+  ls.filetype_extend("typescript", { "javascript" })
+  ls.filetype_extend("javascriptreact", { "javascript" })
+  ls.filetype_extend("typescriptreact", { "javascript" })
+  require("luasnip.loaders.from_vscode").lazy_load()
+  require("luasnip.loaders.from_lua").lazy_load({ paths = { "./snippets" } })
+
+  loader.packadd("blink.pairs")
+  local blink_pairs = require("blink.pairs")
+  if not blink_pairs.library_available() then
+    ---@diagnostic disable-next-line: undefined-field
+    blink_pairs.build():pwait(60000)
+  end
+  blink_pairs.setup(blink_pairs_opts)
+
+  loader.packadd("blink.indent")
+  require("blink.indent").setup(blink_indent_opts)
+end)

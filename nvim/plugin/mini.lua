@@ -1,4 +1,8 @@
-vim.cmd.packadd("minibuffer.nvim")
+local loader = require("loader")
+
+-- Eager: icons feed the completion menu and pickers, tabline and notify are
+-- visible chrome. Everything else moves to VeryLazy further down.
+loader.packadd("mini.icons", "mini.tabline", "mini.notify")
 
 require("mini.icons").setup({
   file = {
@@ -32,8 +36,6 @@ end)
 require("mini.tabline").setup({
   show_icons = true,
 })
-
-require("mini.ai").setup()
 
 require("mini.notify").setup({
   lsp_progress = {
@@ -75,33 +77,47 @@ local function open_buf_in_split(buf_id, key_map, direction)
   vim.keymap.set("n", key_map, rhs, { buffer = buf_id, desc = "Open in " .. string.sub(direction, 12) })
 end
 
-require("mini.surround").setup({
-  mappings = {
-    add = "gsa",
-    delete = "gsd",
-    replace = "gsr",
-    find = "gsf",
-  },
-})
+-- Assigned at the bottom of this file, next to the rest of the clue config.
+-- The VeryLazy callback below only reads it once the whole file has been run.
+local setup_clue
 
-require("mini.trailspace").setup({
-  only_in_normal_buffers = true,
-})
+-- Text objects, surround, trailspace, the file explorer and the clue window are
+-- all driven by user input, so none of them need to exist before the first
+-- frame is on screen.
+loader.on_very_lazy("mini-extras", function()
+  loader.packadd("mini.ai", "mini.surround", "mini.trailspace", "mini.files", "minibuffer.nvim", "mini.clue")
 
-local MiniFiles = require("mini.files")
-MiniFiles.setup({
-  mappings = {
-    show_help = "?",
-    go_in_plus = "<cr>",
-    go_out_plus = "-",
-  },
-  content = {
-    filter = function(entry)
-      return entry.name ~= ".DS_Store"
-    end,
-  },
-  options = { permanent_delete = false },
-})
+  require("mini.ai").setup()
+
+  require("mini.surround").setup({
+    mappings = {
+      add = "gsa",
+      delete = "gsd",
+      replace = "gsr",
+      find = "gsf",
+    },
+  })
+
+  require("mini.trailspace").setup({
+    only_in_normal_buffers = true,
+  })
+
+  require("mini.files").setup({
+    mappings = {
+      show_help = "?",
+      go_in_plus = "<cr>",
+      go_out_plus = "-",
+    },
+    content = {
+      filter = function(entry)
+        return entry.name ~= ".DS_Store"
+      end,
+    },
+    options = { permanent_delete = false },
+  })
+
+  setup_clue()
+end)
 
 -- Window width based on the offset from the center, i.e. center window
 -- is 60, then next over is 20, then the rest are 10.
@@ -109,7 +125,7 @@ MiniFiles.setup({
 local widths = { 60, 20, 10 }
 
 local ensure_center_layout = function(ev)
-  local state = MiniFiles.get_explorer_state()
+  local state = require("mini.files").get_explorer_state()
   if state == nil then
     return
   end
@@ -200,66 +216,68 @@ vim.api.nvim_create_autocmd("User", {
 })
 
 -- mini clue
-local miniclue = require("mini.clue")
-require("minibuffer.integrations.mini-clue").setup()
-miniclue.setup({
-  window = {
-    delay = 100,
-    config = {
-      width = "auto",
-      col = "auto",
-      anchor = "NW",
+setup_clue = function()
+  local miniclue = require("mini.clue")
+  require("minibuffer.integrations.mini-clue").setup()
+  miniclue.setup({
+    window = {
+      delay = 100,
+      config = {
+        width = "auto",
+        col = "auto",
+        anchor = "NW",
+      },
     },
-  },
-  triggers = {
-    -- Leader triggers
-    { mode = { "n", "x" }, keys = "<Leader>" },
+    triggers = {
+      -- Leader triggers
+      { mode = { "n", "x" }, keys = "<Leader>" },
 
-    -- `[` and `]` keys
-    { mode = "n", keys = "[" },
-    { mode = "n", keys = "]" },
+      -- `[` and `]` keys
+      { mode = "n", keys = "[" },
+      { mode = "n", keys = "]" },
 
-    -- Built-in completion
-    { mode = "i", keys = "<C-x>" },
+      -- Built-in completion
+      { mode = "i", keys = "<C-x>" },
 
-    -- `g` key
-    { mode = { "n", "x" }, keys = "g" },
+      -- `g` key
+      { mode = { "n", "x" }, keys = "g" },
 
-    -- Marks
-    { mode = { "n", "x" }, keys = "'" },
-    { mode = { "n", "x" }, keys = "`" },
+      -- Marks
+      { mode = { "n", "x" }, keys = "'" },
+      { mode = { "n", "x" }, keys = "`" },
 
-    -- Registers
-    { mode = { "n", "x" }, keys = '"' },
-    { mode = { "i", "c" }, keys = "<C-r>" },
+      -- Registers
+      { mode = { "n", "x" }, keys = '"' },
+      { mode = { "i", "c" }, keys = "<C-r>" },
 
-    -- Window commands
-    { mode = "n", keys = "<C-w>" },
+      -- Window commands
+      { mode = "n", keys = "<C-w>" },
 
-    -- `z` key
-    { mode = { "n", "x" }, keys = "z" },
-  },
+      -- `z` key
+      { mode = { "n", "x" }, keys = "z" },
+    },
 
-  clues = {
-    { mode = "n", keys = "<leader>a", desc = "+AI" },
-    { mode = "n", keys = "<leader>b", desc = "+Buffer" },
-    { mode = "n", keys = "<leader>c", desc = "+Code" },
-    { mode = "n", keys = "<leader>d", desc = "+Debug" },
-    { mode = "n", keys = "<leader>f", desc = "+Files" },
-    { mode = "n", keys = "<leader>s", desc = "+Search" },
-    { mode = "n", keys = "<leader>g", desc = "+Git" },
-    { mode = "n", keys = "<leader>x", desc = "+Diagnostic" },
-    { mode = "n", keys = "<leader>u", desc = "+UI" },
-    -- Enhance this by adding descriptions for <Leader> mapping groups
-    miniclue.gen_clues.square_brackets(),
-    miniclue.gen_clues.builtin_completion(),
-    miniclue.gen_clues.g(),
-    miniclue.gen_clues.marks(),
-    miniclue.gen_clues.registers(),
-    miniclue.gen_clues.windows(),
-    miniclue.gen_clues.z(),
-  },
-})
+    clues = {
+      { mode = "n", keys = "<leader>a", desc = "+AI" },
+      { mode = "n", keys = "<leader>b", desc = "+Buffer" },
+      { mode = "n", keys = "<leader>c", desc = "+Code" },
+      { mode = "n", keys = "<leader>d", desc = "+Debug" },
+      { mode = "n", keys = "<leader>f", desc = "+Files" },
+      { mode = "n", keys = "<leader>s", desc = "+Search" },
+      { mode = "n", keys = "<leader>g", desc = "+Git" },
+      { mode = "n", keys = "<leader>x", desc = "+Diagnostic" },
+      { mode = "n", keys = "<leader>u", desc = "+UI" },
+      -- Enhance this by adding descriptions for <Leader> mapping groups
+      miniclue.gen_clues.square_brackets(),
+      miniclue.gen_clues.builtin_completion(),
+      miniclue.gen_clues.g(),
+      miniclue.gen_clues.marks(),
+      miniclue.gen_clues.registers(),
+      miniclue.gen_clues.windows(),
+      miniclue.gen_clues.z(),
+    },
+  })
+end
 
 vim.keymap.set("n", "<leader>ut", function()
   require("mini.trailspace").trim()

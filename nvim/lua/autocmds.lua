@@ -132,7 +132,10 @@ local function checktime(force)
   end)
 end
 
-vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained", "TermClose", "TermLeave" }, {
+-- CursorHold is deliberately not listened to: it fires every 'updatetime' while
+-- idle and would stat every loaded buffer. Nvim's own autoread file watcher
+-- covers the idle case already.
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "TermClose", "TermLeave" }, {
   group = augroup("checktime"),
   callback = function(args)
     checktime(args.event == "BufEnter" or args.event == "FocusGained")

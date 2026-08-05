@@ -1,6 +1,7 @@
 local loader = require("loader")
 
 local function setup()
+  loader.packadd("nvim-origami")
   require("origami").setup({
     useLspFoldsWithTreesitterFallback = {
       enabled = true,

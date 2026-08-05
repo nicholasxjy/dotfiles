@@ -5,11 +5,11 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "9f98b46e1dd61aeb666989c344d76517df63af55",
+      "rev": "885ecf4fa0ffcd20d052b14701540a451898fb34",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "blink.cmp": {
-      "rev": "005f8c859997f40f65bfbec5f4b400c45fecc06a",
+      "rev": "cba53eff1948109ec0f47cbead4f07494d1e25c9",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.indent": {
@@ -149,7 +149,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-origami": {
-      "rev": "02312301df125908031b27dc556adb4cd81893d6",
+      "rev": "a137d35eaabb7cd7be89228229c1aa5b057f5ed7",
       "src": "https://github.com/chrisgrieser/nvim-origami"
     },
     "nvim-treesitter": {
@@ -165,10 +165,6 @@
       "rev": "b73018b75affd13fa38e2fc94ef753b465f770d7",
       "src": "https://github.com/stevearc/oil.nvim"
     },
-    "plenary.nvim": {
-      "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
-      "src": "https://github.com/nvim-lua/plenary.nvim"
-    },
     "rainbow-tags.nvim": {
       "rev": "0ed83299906ecfa44f6fddbf5f81139061758b1e",
       "src": "https://github.com/nicholasxjy/rainbow-tags.nvim"
@@ -178,7 +174,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "rustaceanvim": {
-      "rev": "5a3a4158857ee1f7ec839b6ddd87cc0083a19c5f",
+      "rev": "f4051fb4662c43a568ce809a37e47c0f4e3d7a31",
       "src": "https://github.com/mrcjkb/rustaceanvim",
       "version": "9.0.0 - 10.0.0"
     },
@@ -195,7 +191,7 @@
       "src": "https://github.com/nemanjamalesija/smart-paste.nvim"
     },
     "smart-splits.nvim": {
-      "rev": "89ab35b282783efc1c49deadd72c22afd5eac356",
+      "rev": "8c16dc71bf75221793f3f6d83061fee031790c3c",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "snacks.nvim": {
@@ -243,9 +239,8 @@
       "src": "https://github.com/nicholasxjy/yazi.nvim"
     },
     "zed-bar.nvim": {
-      "rev": "e2b4ebe5bfd34b397c90058daf3063c65ef4705d",
-      "src": "https://github.com/nicholasxjy/zed-bar.nvim",
-      "version": "'feature/optional-nvim-treesitter'"
+      "rev": "319a72b0e28c632f7cfc96ca6c6ba45da1d5c4d2",
+      "src": "https://github.com/nicholasxjy/zed-bar.nvim"
     }
   }
 }

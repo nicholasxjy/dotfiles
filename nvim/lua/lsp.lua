@@ -1,6 +1,9 @@
+local loader = require("loader")
 local ui = require("ui")
 
-vim.cmd.packadd("nvim-lspconfig")
+-- Only what is needed to resolve server configs and completion capabilities.
+-- fzf-lua and snacks are pulled in by the handlers that actually use them.
+loader.packadd("nvim-lspconfig", "blink.lib", "blink.cmp")
 
 vim.diagnostic.config({
   underline = true,
@@ -89,7 +92,8 @@ vim.lsp.config("*", {
   capabilities = capabilities,
 })
 
-local function lsp_keymaps(opts)
+local function lsp_keymaps()
+  loader.packadd("fzf-lua")
   local fzflua = require("fzf-lua")
 
   vim.keymap.set("n", "gd", fzflua.lsp_definitions, { desc = "Goto Definition" })
@@ -189,6 +193,10 @@ end
 -- enable lsp servers
 vim.lsp.enable(enabled_servers)
 
+-- These keymaps are global, so they only need to be installed for the first
+-- client that attaches. Re-running them per attach also re-required fzf-lua.
+local keymaps_installed = false
+
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
   callback = function(args)
@@ -202,8 +210,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
       return
     end
 
-    keymap_setup()
-    lsp_keymaps({ buffer = args.buf, nowait = true })
+    if not keymaps_installed then
+      keymaps_installed = true
+      keymap_setup()
+      lsp_keymaps()
+    end
+
     methods_setup(client, args.buf)
   end,
 })

@@ -3,16 +3,19 @@ require("vim._core.ui2").enable({
   msg = { target = "msg" },
 })
 
+local loader = require("loader")
 local util = require("util")
 
 -- Build native extensions before the first `vim.pack.add()` call so the hooks
 -- also run for plugins installed from the lockfile.
 util.build_fn_on_change("blink.pairs", { "install", "update" }, function()
+  loader.packadd("blink.lib", "blink.pairs")
   ---@diagnostic disable-next-line: undefined-field
   require("blink.pairs").build():pwait(60000)
 end)
 
 util.build_fn_on_change("blink.cmp", { "install", "update" }, function()
+  loader.packadd("blink.lib", "blink.cmp")
   ---@diagnostic disable-next-line: undefined-field
   require("blink.cmp").build():pwait(60000)
 end)
@@ -20,24 +23,20 @@ end)
 util.build_cmd_on_change("LuaSnip", { "install", "update" }, { "make", "install_jsregexp" })
 
 util.build_fn_on_change("markdown-preview.nvim", { "install", "update" }, function()
-  vim.cmd.packadd("markdown-preview.nvim")
+  loader.packadd("markdown-preview.nvim")
   vim.fn["mkdp#util#install"]()
 end)
 
-util.build_fn_on_change("nvim-treesitter", "update", function(ev)
-  if not ev.data.active then
-    vim.cmd.packadd("nvim-treesitter")
-  end
+util.build_fn_on_change("nvim-treesitter", "update", function()
+  loader.packadd("nvim-treesitter")
   require("nvim-treesitter").update()
 end)
 
--- Keep plugin installation in one place. Make Lua modules available without
--- adding every plugin's `plugin/` directory to the startup runtime path.
-local function add_lua_path(plugin)
-  local lua_path = plugin.path .. "/lua"
-  package.path = package.path .. ";" .. lua_path .. "/?.lua;" .. lua_path .. "/?/init.lua"
-  package.cpath = package.cpath .. ";" .. lua_path .. "/?.so;" .. lua_path .. "/?/init.so"
-end
+-- `vim.pack` only installs and registers here; nothing is put on 'runtimepath'.
+-- Each plugin is `:packadd`ed by its own config under `plugin/`, at the moment
+-- it is actually needed. Adding a plugin below therefore also requires a
+-- `loader.packadd(...)` call in the config that owns it.
+local function noop() end
 
 vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
@@ -46,8 +45,6 @@ vim.pack.add({
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/stevearc/oil.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
-  "https://github.com/lmilojevicc/herdr-splits.nvim",
-  "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/nicholasxjy/minibuffer.nvim",
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
@@ -103,5 +100,5 @@ vim.pack.add({
   },
   "https://github.com/chrisgrieser/nvim-origami",
   "https://github.com/nicholasxjy/yazi.nvim",
-  { src = "https://github.com/nicholasxjy/zed-bar.nvim", version = "feature/optional-nvim-treesitter" },
-}, { load = add_lua_path })
+  "https://github.com/nicholasxjy/zed-bar.nvim",
+}, { load = noop })

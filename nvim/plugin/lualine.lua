@@ -1,26 +1,70 @@
 local loader = require("loader")
 
 local function setup()
+  loader.packadd("lualine.nvim")
+  loader.packadd("sidekick.nvim")
+
+  -- `conform.list_formatters()` walks the filesystem looking for config files,
+  -- which is far too expensive to redo on every statusline redraw. Cache per
+  -- buffer and drop the entry whenever something could have changed it.
+  local lsp_cache = {}
+
   local function lsp_component()
-    local buf_clients = vim.lsp.get_clients({ bufnr = 0 })
-    local conform_installed, conform = pcall(require, "conform")
-    local buf_client_names = {}
+    local bufnr = vim.api.nvim_get_current_buf()
+    local cached = lsp_cache[bufnr]
+    if cached then
+      return cached
+    end
 
-    for _, client in pairs(buf_clients) do
+    local names = {}
+
+    for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
       if client.name ~= "null-ls" then
-        table.insert(buf_client_names, client.name)
+        names[#names + 1] = client.name
       end
     end
 
+    local conform_installed, conform = pcall(require, "conform")
     if conform_installed then
-      local formatters = conform.list_formatters(0)
-      for _, source in ipairs(formatters) do
-        table.insert(buf_client_names, source.name)
+      for _, source in ipairs(conform.list_formatters(bufnr)) do
+        names[#names + 1] = source.name
       end
     end
 
-    return table.concat(buf_client_names, ",")
+    local text = table.concat(names, ",")
+    lsp_cache[bufnr] = text
+    return text
   end
+
+  vim.api.nvim_create_autocmd({ "LspAttach", "LspDetach", "FileType", "BufWritePost" }, {
+    group = vim.api.nvim_create_augroup("sjvim_lualine_lsp_cache", { clear = true }),
+    callback = function(args)
+      lsp_cache[args.buf] = nil
+    end,
+  })
+  vim.api.nvim_create_autocmd("BufDelete", {
+    group = "sjvim_lualine_lsp_cache",
+    callback = function(args)
+      lsp_cache[args.buf] = nil
+    end,
+  })
+
+  -- Highlight lookups are only invalidated by a colorscheme change.
+  local hl_cache = {}
+  local function hl_fg(name)
+    if hl_cache[name] == nil then
+      local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
+      hl_cache[name] = hl.fg and ("#%06x"):format(hl.fg) or false
+    end
+    return hl_cache[name] or nil
+  end
+
+  vim.api.nvim_create_autocmd("ColorScheme", {
+    group = vim.api.nvim_create_augroup("sjvim_lualine_hl_cache", { clear = true }),
+    callback = function()
+      hl_cache = {}
+    end,
+  })
 
   local opts = {
     options = {
@@ -28,8 +72,10 @@ local function setup()
       section_separators = { left = "", right = "" },
       -- component_separators = { left = "│", right = "│" },
       globalstatus = true,
+      -- lualine already redraws on the relevant autocommands; the timer is only
+      -- a backstop, so it does not need to run ten times a second.
       refresh = {
-        statusline = 100,
+        statusline = 1000,
       },
     },
     extensions = { "neo-tree", "lazy", "fzf" },
@@ -56,7 +102,7 @@ local function setup()
             return package.loaded["dap"] and require("dap").status() ~= ""
           end,
           color = function()
-            return { fg = ("#%06x"):format(vim.api.nvim_get_hl(0, { name = "Debug", link = false }).fg) }
+            return { fg = hl_fg("Debug") }
           end,
         },
         {
@@ -64,7 +110,7 @@ local function setup()
             return "[" .. lsp_component() .. "]"
           end,
           color = function()
-            return { fg = ("#%06x"):format(vim.api.nvim_get_hl(0, { name = "Keyword", link = false }).fg) }
+            return { fg = hl_fg("Keyword") }
           end,
         },
       },
@@ -95,4 +141,4 @@ local function setup()
   require("lualine").setup(opts)
 end
 
-loader.defer_buffer("lualine", setup)
+loader.defer_buffer("lualine", setup, { schedule = true })

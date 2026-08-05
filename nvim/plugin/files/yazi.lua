@@ -3,7 +3,7 @@ local loader = require("loader")
 local setup = function()
   -- Disable netrw before activating yazi.
   vim.g.loaded_netrwPlugin = 1
-  vim.cmd.packadd("yazi.nvim")
+  loader.packadd("yazi.nvim")
 
   require("yazi").setup({})
 
@@ -14,4 +14,4 @@ local setup = function()
   end, { desc = "Yazi" })
 end
 
-loader.defer("yazi", setup)
+loader.on_very_lazy("yazi", setup)

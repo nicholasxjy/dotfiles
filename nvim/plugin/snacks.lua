@@ -1,3 +1,5 @@
+require("loader").packadd("snacks.nvim")
+
 local ui = require("ui")
 
 require("snacks").setup({
@@ -12,7 +14,7 @@ require("snacks").setup({
   input = { enabled = true },
   words = { enabled = false },
   indent = { enabled = false },
-  statuscolumn = { enabled = false },
+  statuscolumn = { enabled = true },
   notifier = { enabled = false },
   toggle = { enabled = true },
   lazygit = { enabled = true },

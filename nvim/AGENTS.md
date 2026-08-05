@@ -12,10 +12,15 @@ Neovim with the built-in `vim.pack` plugin manager.
 - `lua/options.lua` owns global editor options.
 - `lua/keymaps.lua` owns global keymaps and the local keymap helper.
 - `lua/autocmds.lua` owns user commands and general autocommands.
-- `lua/pack.lua` owns plugin source declarations and eager/lazy pack loading.
+- `lua/pack.lua` owns plugin source declarations. `vim.pack.add()` runs with a
+  no-op `load` hook: it installs and registers plugins but puts nothing on
+  'runtimepath'. Every plugin is therefore loaded by the config that owns it.
+- `lua/loader.lua` owns the loading primitives: `packadd` (idempotent
+  `:packadd`), `on_very_lazy`, `defer`, `defer_buffer`, and the `User VeryLazy`
+  event that fires one tick after `VimEnter`.
 - `lua/lsp.lua` owns diagnostics, LSP enablement, and LSP keymaps.
-- `lua/util.lua` owns shared helpers such as deferred plugin setup and pack
-  build hooks.
+- `lua/util.lua` owns pack build hooks (`build_cmd_on_change`,
+  `build_fn_on_change`).
 - `lua/ui.lua` owns shared icons and visual constants.
 - `plugin/*.lua` contains plugin-specific setup or a functional entrypoint.
   Related smaller configurations live under the matching
@@ -33,9 +38,19 @@ Neovim with the built-in `vim.pack` plugin manager.
 - Keep modules focused. Add a new plugin to `lua/pack.lua`, then configure it
   in a matching plugin file or functional group under `plugin/` unless the
   configuration is truly shared.
-- Prefer lazy/deferred setup for optional or expensive plugins. Existing
-  patterns include `util.ensure_plugin`, `util.packadd`, `util.build_*_on_change`,
-  `vim.schedule`, and one-shot autocommands.
+- Every plugin added to `lua/pack.lua` needs a matching `loader.packadd(...)`
+  somewhere, or it will never reach 'runtimepath'. Never call `vim.cmd.packadd`
+  directly: a repeated `:packadd` re-sources the plugin's `plugin/` files.
+- Pick the latest loading point that still works, in this order:
+  - `loader.defer_buffer(name, setup, { schedule = true })` — needs a real file
+    buffer but nothing on the first frame.
+  - `loader.on_very_lazy(name, setup)` — user-driven features (keymaps,
+    commands, pickers).
+  - `loader.defer_buffer(name, setup)` — must decorate the first render
+    (Tree-sitter highlights, winbar, folds).
+  - eager, at the top level of the `plugin/` file — only for things `lua/lsp.lua`
+    or the first drawn frame depend on (colorscheme, blink.cmp capabilities,
+    oil's netrw takeover, mason's `$PATH`).
 - Avoid introducing new plugin managers or dependency frameworks. This config
   uses `vim.pack`, not lazy.nvim.
 - Keep keymap descriptions accurate and concise. Preserve the space leader.

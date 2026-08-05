@@ -1,3 +1,5 @@
+require("loader").packadd("nvim-jdtls")
+
 -- How to find the project name for a given root dir.
 
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")

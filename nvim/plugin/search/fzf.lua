@@ -1,7 +1,7 @@
 local loader = require("loader")
 
 local setup = function()
-  vim.cmd.packadd("fzf-lua")
+  loader.packadd("fzf-lua")
   local fzflua = require("fzf-lua")
 
   fzflua.setup({
@@ -80,4 +80,4 @@ local setup = function()
   -- vim.keymap.set("n", "<leader>sg", fzflua.live_grep, { desc = "Live Grep" })
 end
 
-loader.defer("fzf", setup)
+loader.on_very_lazy("fzf", setup)

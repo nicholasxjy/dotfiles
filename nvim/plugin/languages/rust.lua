@@ -1,6 +1,7 @@
 local loader = require("loader")
 
 local function setup_crates()
+  loader.packadd("crates.nvim")
   require("crates").setup({
     completion = {
       crates = {
@@ -26,7 +27,8 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 local setup = function()
-  vim.cmd.packadd("rustaceanvim")
+  loader.packadd("rustaceanvim")
+  loader.packadd("snacks.nvim")
 
   local function rustaceanvim_opts()
     return {
@@ -94,18 +96,30 @@ local setup = function()
 
   vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, rustaceanvim_opts())
 
-  if vim.fn.executable("rust-analyzer") == 0 then
-    require("snacks").notify.error(
-      "**rust-analyzer** not found in PATH, please install it.\nhttps://rust-analyzer.github.io/",
-      { title = "rustaceanvim" }
-    )
-  end
+  -- Resolving the debug adapter shells out to `exepath`/`glob` and the toolchain
+  -- check is only meaningful once Rust is in play. `vim.g.rustaceanvim.dap` is
+  -- read when a debug session starts, long after this has run.
+  vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("sjvim_rustaceanvim_dap", { clear = true }),
+    pattern = "rust",
+    once = true,
+    callback = function()
+      if vim.fn.executable("rust-analyzer") == 0 then
+        require("snacks").notify.error(
+          "**rust-analyzer** not found in PATH, please install it.\nhttps://rust-analyzer.github.io/",
+          { title = "rustaceanvim" }
+        )
+      end
 
-  vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, {
-    dap = {
-      adapter = rustaceanvim_dap_adapter(),
-    },
+      vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, {
+        dap = {
+          adapter = rustaceanvim_dap_adapter(),
+        },
+      })
+    end,
   })
 end
 
+-- rustaceanvim registers its own `FileType rust` handler when it is added to
+-- 'runtimepath', so it has to be in place before the first buffer is read.
 setup()

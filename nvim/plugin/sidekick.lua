@@ -1,6 +1,8 @@
 local loader = require("loader")
 
 local setup = function()
+  loader.packadd("sidekick.nvim")
+
   local ui = require("ui")
 
   local cli = require("sidekick.cli")
@@ -100,4 +102,4 @@ local setup = function()
   end, { desc = "Select Prompt" })
 end
 
-loader.defer("sidekick", setup)
+loader.on_very_lazy("sidekick", setup)
