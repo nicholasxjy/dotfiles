@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "885ecf4fa0ffcd20d052b14701540a451898fb34",
+      "rev": "427b0ff24377a6cdd18aa822a984a5adf156c3fa",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "blink.cmp": {
@@ -24,10 +24,6 @@
       "rev": "dd57684daf1297e854e46c85511e7875efb4de75",
       "src": "https://github.com/saghen/blink.pairs"
     },
-    "codediff.nvim": {
-      "rev": "31510a9b34c032b6fe98fc158d4066702f68cff2",
-      "src": "https://github.com/esmuellert/codediff.nvim"
-    },
     "conform.nvim": {
       "rev": "619363c30309d29ffa631e67c8183f2a72caa373",
       "src": "https://github.com/stevearc/conform.nvim"
@@ -36,9 +32,9 @@
       "rev": "694357861ec9ebf12475ddcdd04ea45a0923c32d",
       "src": "https://github.com/Saecki/crates.nvim"
     },
-    "diffs.nvim": {
-      "rev": "70882fe6364dfe7f46463b712c6e0e0c0712b408",
-      "src": "https://github.com/barrettruth/diffs.nvim"
+    "differ.nvim": {
+      "rev": "9dd5175d1b74fdcfda97dd0064650941b1e051f9",
+      "src": "https://github.com/undont/differ.nvim"
     },
     "flash.nvim": {
       "rev": "b6346946d10d07998efee029fb0f7a593806d0cd",
@@ -49,7 +45,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "28440c741e927592877514fba3db21eb188caec8",
+      "rev": "8671012a7b2a1648595952c655039d51fb301c14",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -60,10 +56,6 @@
       "rev": "6e05398cf6cad05b3fb46569db96b1ccfcbbd402",
       "src": "https://github.com/MagicDuck/grug-far.nvim"
     },
-    "herdr-splits.nvim": {
-      "rev": "c58bfdf01520845583e0033c11c56fc9d21a5424",
-      "src": "https://github.com/lmilojevicc/herdr-splits.nvim"
-    },
     "jishiben.nvim": {
       "rev": "9fccfd92c16a8d02172130ca0785b5d23a0d03a0",
       "src": "https://github.com/nicholasxjy/jishiben.nvim"
@@ -71,6 +63,10 @@
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
+    },
+    "lspkind.nvim": {
+      "rev": "c7274c48137396526b59d86232eabcdc7fed8a32",
+      "src": "https://github.com/onsails/lspkind.nvim"
     },
     "lualine.nvim": {
       "rev": "221ce6b2d999187044529f49da6554a92f740a96",
@@ -93,7 +89,7 @@
       "src": "https://github.com/nvim-mini/mini.clue"
     },
     "mini.files": {
-      "rev": "f6d1367483b6c0695b5084c04f7cd83bf2353a3e",
+      "rev": "a249438d15fa6f64085ba83a9d1794d726aaf5ad",
       "src": "https://github.com/nvim-mini/mini.files"
     },
     "mini.icons": {
@@ -116,10 +112,6 @@
       "rev": "82c4fb7d4336f8824ca6c97068932886b56326d0",
       "src": "https://github.com/nvim-mini/mini.trailspace"
     },
-    "minibuffer.nvim": {
-      "rev": "ad1b18951324b38701d50455c2ef12c433b0ef96",
-      "src": "https://github.com/nicholasxjy/minibuffer.nvim"
-    },
     "modes.nvim": {
       "rev": "c3f2b208ebc7a768b30c08f30aa561d48c7cd101",
       "src": "https://github.com/nicholasxjy/modes.nvim"
@@ -129,7 +121,7 @@
       "src": "https://github.com/jake-stewart/multicursor.nvim"
     },
     "nerdy.nvim": {
-      "rev": "8fd18f0075c480b4e0865464dcd4fb7a42c6889e",
+      "rev": "5d2d37f828a6df2f85e6df6b0a2b375f45bd5125",
       "src": "http://github.com/2KAbhishek/nerdy.nvim"
     },
     "nvim-highlight-colors": {
@@ -144,16 +136,12 @@
       "rev": "a219b2c9e5b4765e5c845aba119dad55806fcaf1",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
-    "nvim-lspconfig": {
-      "rev": "1c0d8f70dbc8827263eedc3cf7021ceba0f68689",
-      "src": "https://github.com/neovim/nvim-lspconfig"
-    },
     "nvim-origami": {
       "rev": "a137d35eaabb7cd7be89228229c1aa5b057f5ed7",
       "src": "https://github.com/chrisgrieser/nvim-origami"
     },
     "nvim-treesitter": {
-      "rev": "7b6cc8949f9999c5ed91436cbe24aa5f99c42025",
+      "rev": "3d3321b560a63ff92a8692401f303a5123336b86",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -191,7 +179,7 @@
       "src": "https://github.com/nemanjamalesija/smart-paste.nvim"
     },
     "smart-splits.nvim": {
-      "rev": "8c16dc71bf75221793f3f6d83061fee031790c3c",
+      "rev": "0fe3bbd99d48458ad188c4c262c31049fa9b018c",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "snacks.nvim": {

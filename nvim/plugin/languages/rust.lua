@@ -121,5 +121,5 @@ local setup = function()
 end
 
 -- rustaceanvim registers its own `FileType rust` handler when it is added to
--- 'runtimepath', so it has to be in place before the first buffer is read.
-setup()
+-- 'runtimepath', so load it on BufReadPre rather than waiting for FileType.
+loader.defer("rust", setup, { "BufReadPre", "BufNewFile" }, { pattern = "*.rs" })

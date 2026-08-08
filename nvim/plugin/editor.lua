@@ -1,16 +1,11 @@
 local loader = require("loader")
 
-local setup = function()
+local setup_automatic = function()
   loader.packadd(
-    "screenkey.nvim",
     "todo-comments.nvim",
-    "jishiben.nvim",
-    "translator.nvim",
     "smart-paste.nvim",
     "modes.nvim",
-    "nerdy.nvim",
     "stay-centered.nvim",
-    "treesj",
     "nvim-highlight-colors",
     "ts-comments.nvim"
   )
@@ -69,12 +64,6 @@ local setup = function()
     ignore = { "NvimTree", "TelescopePrompt", "!minifiles" },
   })
 
-  require("nerdy").setup({
-    max_recents = 30, -- Configure recent icons limit
-    copy_to_clipboard = false, -- Copy glyph to clipboard instead of inserting
-    copy_register = "+", -- Register to use for copying (if `copy_to_clipboard` is true)
-  })
-
   require("stay-centered").setup({
     -- The filetype is determined by the vim filetype, not the file extension. In order to get the filetype, open a file and run the command:
     -- :lua print(vim.bo.filetype)
@@ -86,6 +75,20 @@ local setup = function()
     -- temporarily disables plugin on left-mouse down, allows natural mouse selection
     -- try disabling if plugin causes lag, function uses vim.on_key
     disable_on_mouse = true,
+  })
+
+  require("todo-comments").setup()
+
+  require("nvim-highlight-colors").setup({})
+end
+
+local setup_tools = function()
+  loader.packadd("screenkey.nvim", "jishiben.nvim", "translator.nvim", "nerdy.nvim", "treesj")
+
+  require("nerdy").setup({
+    max_recents = 30, -- Configure recent icons limit
+    copy_to_clipboard = false, -- Copy glyph to clipboard instead of inserting
+    copy_register = "+", -- Register to use for copying (if `copy_to_clipboard` is true)
   })
 
   require("screenkey").setup({
@@ -122,10 +125,6 @@ local setup = function()
     },
   })
 
-  require("todo-comments").setup()
-
-  require("nvim-highlight-colors").setup({})
-
   require("translator").setup({
     default_target_lang = "zh",
     default_source_lang = nil,
@@ -147,4 +146,5 @@ local setup = function()
   end, { desc = "Translate Word" })
 end
 
-loader.on_very_lazy("editor", setup)
+loader.on_very_lazy("editor-automatic", setup_automatic)
+loader.on_very_lazy("editor-tools", setup_tools)

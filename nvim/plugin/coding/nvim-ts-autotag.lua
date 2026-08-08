@@ -6,4 +6,4 @@ local setup = function()
   ts_autotag.setup()
 end
 
-loader.defer_buffer("coding", setup)
+loader.defer_buffer("coding", setup, { schedule = true })

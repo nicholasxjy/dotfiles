@@ -15,4 +15,4 @@ local setup = function()
   })
 end
 
-loader.defer_buffer("markdown", setup)
+loader.defer("markdown", setup, { "BufReadPre", "BufNewFile" }, { pattern = { "*.md", "*.mdx" } })

@@ -90,7 +90,7 @@ local setup = function()
     vim.o.formatexpr = "v:lua.__conform_formatexpr()"
   end)
 
-  vim.keymap.set({ "n", "v", "x" }, "<leader>cf", function()
+  vim.keymap.set({ "n", "x" }, "<leader>cf", function()
     conform.format()
   end, { desc = "Format code using Conform" })
 end

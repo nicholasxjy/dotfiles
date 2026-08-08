@@ -16,6 +16,8 @@ local ensure_installed = {
   "prettier",
   "biome",
   "vtsls",
+  "oxlint",
+  "oxfmt",
   "vue-language-server",
   "js-debug-adapter",
   "json-lsp",

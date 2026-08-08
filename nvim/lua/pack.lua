@@ -41,17 +41,18 @@ local function noop() end
 vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/folke/snacks.nvim",
-  "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/stevearc/oil.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
-  "https://github.com/nicholasxjy/minibuffer.nvim",
+
+  "https://github.com/onsails/lspkind.nvim",
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
   "https://github.com/rafamadriz/friendly-snippets",
   "https://github.com/L3MON4D3/LuaSnip",
   "https://github.com/saghen/blink.pairs",
   "https://github.com/saghen/blink.indent",
+
   "http://github.com/2KAbhishek/nerdy.nvim",
   "https://github.com/arnamak/stay-centered.nvim",
   "https://github.com/NStefan002/screenkey.nvim",
@@ -69,9 +70,10 @@ vim.pack.add({
   "https://github.com/stevearc/conform.nvim",
   "https://github.com/folke/flash.nvim",
   "https://github.com/ibhagwan/fzf-lua",
+
   "https://github.com/lewis6991/gitsigns.nvim",
-  "https://github.com/barrettruth/diffs.nvim",
-  "https://github.com/esmuellert/codediff.nvim",
+  "https://github.com/undont/differ.nvim",
+
   "https://github.com/MagicDuck/grug-far.nvim",
   "https://github.com/rrethy/vim-illuminate",
   "https://github.com/mfussenegger/nvim-lint",

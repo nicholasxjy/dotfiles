@@ -1,9 +1,9 @@
 local loader = require("loader")
 local ui = require("ui")
 
--- Only what is needed to resolve server configs and completion capabilities.
--- fzf-lua and snacks are pulled in by the handlers that actually use them.
-loader.packadd("nvim-lspconfig", "blink.lib", "blink.cmp")
+-- Only completion capabilities are needed eagerly. Server configs are resolved
+-- from this config's lsp/ directory by vim.lsp.enable().
+loader.packadd("blink.lib", "blink.cmp")
 
 vim.diagnostic.config({
   underline = true,
@@ -92,63 +92,87 @@ vim.lsp.config("*", {
   capabilities = capabilities,
 })
 
-local function lsp_keymaps()
+local function lsp_keymaps(bufnr)
   loader.packadd("fzf-lua")
   local fzflua = require("fzf-lua")
+  local opts = function(desc)
+    return { buffer = bufnr, desc = desc }
+  end
 
-  vim.keymap.set("n", "gd", fzflua.lsp_definitions, { desc = "Goto Definition" })
-  vim.keymap.set("n", "gD", fzflua.lsp_declarations, { desc = "Goto Declaration" })
-  vim.keymap.set("n", "gr", fzflua.lsp_references, { desc = "Goto References" })
-  vim.keymap.set("n", "gi", fzflua.lsp_implementations, { desc = "Goto Implementation" })
-  vim.keymap.set("n", "gy", fzflua.lsp_typedefs, { desc = "Goto TypeDefs" })
-  vim.keymap.set("n", "gI", fzflua.lsp_incoming_calls, { desc = "Incoming Calls" })
-  vim.keymap.set("n", "gO", fzflua.lsp_outgoing_calls, { desc = "Outgoing Calls" })
+  vim.keymap.set("n", "gd", fzflua.lsp_definitions, opts("Goto Definition"))
+  vim.keymap.set("n", "gD", fzflua.lsp_declarations, opts("Goto Declaration"))
+  vim.keymap.set("n", "gr", fzflua.lsp_references, opts("Goto References"))
+  vim.keymap.set("n", "gi", fzflua.lsp_implementations, opts("Goto Implementation"))
+  vim.keymap.set("n", "gy", fzflua.lsp_typedefs, opts("Goto TypeDefs"))
+  vim.keymap.set("n", "gI", fzflua.lsp_incoming_calls, opts("Incoming Calls"))
+  vim.keymap.set("n", "gO", fzflua.lsp_outgoing_calls, opts("Outgoing Calls"))
 
-  vim.keymap.set("n", "<leader>ss", fzflua.lsp_document_symbols, { desc = "Lsp symbols" })
-  vim.keymap.set("n", "<leader>sS", fzflua.lsp_workspace_symbols, { desc = "Workspace lsp symbols" })
+  vim.keymap.set("n", "<leader>ss", fzflua.lsp_document_symbols, opts("Lsp symbols"))
+  vim.keymap.set("n", "<leader>sS", fzflua.lsp_workspace_symbols, opts("Workspace lsp symbols"))
 
   vim.keymap.set("n", "<leader>xx", function()
     fzflua.diagnostics_document({ sort = true })
-  end, { desc = "Diagnostics" })
+  end, opts("Diagnostics"))
   vim.keymap.set("n", "<leader>xX", function()
     fzflua.diagnostics_workspace({ sort = true })
-  end, { desc = "Workspace Diagnostics" })
+  end, opts("Workspace Diagnostics"))
   vim.keymap.set("n", "<leader>xw", function()
     fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.WARN, sort = true })
-  end, { desc = "Workspace Diagnostics(Warns)" })
+  end, opts("Workspace Diagnostics(Warns)"))
   vim.keymap.set("n", "<leader>xe", function()
     fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.ERROR, sort = true })
-  end, { desc = "Workspace Diagnostics(Errors)" })
+  end, opts("Workspace Diagnostics(Errors)"))
 end
 
-local keymap_setup = function()
-  vim.keymap.set("n", "<leader>cl", ":checkhealth vim.lsp<cr>", { desc = "LspInfo" })
+local hover = vim.lsp.buf.hover
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.buf.hover = function()
+  return hover({
+    max_height = math.floor(vim.o.lines * 0.5),
+    max_width = math.floor(vim.o.columns * 0.4),
+  })
+end
 
-  vim.keymap.set("n", "K", function()
-    vim.lsp.buf.hover()
-  end, { desc = "Hover", silent = true })
+local signature_help = vim.lsp.buf.signature_help
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.buf.signature_help = function()
+  return signature_help({
+    max_height = math.floor(vim.o.lines * 0.5),
+    max_width = math.floor(vim.o.columns * 0.4),
+  })
+end
+
+local keymap_setup = function(bufnr)
+  local opts = function(desc)
+    return { buffer = bufnr, desc = desc }
+  end
+
+  vim.keymap.set("n", "<leader>cl", ":checkhealth vim.lsp<cr>", opts("LspInfo"))
+
+  -- Nvim installs buffer-local `K` for hover-capable clients. Its callback
+  -- resolves the patched `vim.lsp.buf.hover` above when invoked.
   vim.keymap.set("n", "gk", function()
     vim.lsp.buf.signature_help()
-  end, { desc = "Signature Help" })
+  end, opts("Signature Help"))
 
-  vim.keymap.set({ "n", "v", "x" }, "<leader>ca", function()
+  vim.keymap.set({ "n", "x" }, "<leader>ca", function()
     vim.lsp.buf.code_action()
-  end, { desc = "Code Action" })
+  end, opts("Code Action"))
   --
   vim.keymap.set({ "n", "v" }, "<leader>cc", function()
     vim.lsp.codelens.run()
-  end, { desc = "Codelens" })
+  end, opts("Codelens"))
 
   vim.keymap.set("n", "<leader>cr", function()
     vim.lsp.buf.rename()
-  end, { desc = "Rename" })
+  end, opts("Rename"))
   vim.keymap.set("n", "<leader>cR", function()
     local snacks = require("snacks")
     if snacks and snacks.rename and snacks.rename.rename_file then
       return snacks.rename.rename_file()
     end
     vim.notify("Snacks rename is unavailable", vim.log.levels.WARN)
-  end, { desc = "Snacks Rename" })
+  end, opts("Snacks Rename"))
 
   -- Diagnostic keymaps
   local function diagnostic_goto(count, severity)
@@ -158,12 +182,12 @@ local keymap_setup = function()
     end
   end
 
-  vim.keymap.set("n", "]d", diagnostic_goto(1), { desc = "Next diagnostic" })
-  vim.keymap.set("n", "[d", diagnostic_goto(-1), { desc = "Prev diagnostic" })
-  vim.keymap.set("n", "]e", diagnostic_goto(1, "ERROR"), { desc = "Next error" })
-  vim.keymap.set("n", "[e", diagnostic_goto(-1, "ERROR"), { desc = "Prev error" })
-  vim.keymap.set("n", "]w", diagnostic_goto(1, "WARN"), { desc = "Next warning" })
-  vim.keymap.set("n", "[w", diagnostic_goto(-1, "WARN"), { desc = "Prev warning" })
+  vim.keymap.set("n", "]d", diagnostic_goto(1), opts("Next diagnostic"))
+  vim.keymap.set("n", "[d", diagnostic_goto(-1), opts("Prev diagnostic"))
+  vim.keymap.set("n", "]e", diagnostic_goto(1, "ERROR"), opts("Next error"))
+  vim.keymap.set("n", "[e", diagnostic_goto(-1, "ERROR"), opts("Prev error"))
+  vim.keymap.set("n", "]w", diagnostic_goto(1, "WARN"), opts("Next warning"))
+  vim.keymap.set("n", "[w", diagnostic_goto(-1, "WARN"), opts("Prev warning"))
 end
 
 local methods_setup = function(client, bufnr)
@@ -193,10 +217,6 @@ end
 -- enable lsp servers
 vim.lsp.enable(enabled_servers)
 
--- These keymaps are global, so they only need to be installed for the first
--- client that attaches. Re-running them per attach also re-required fzf-lua.
-local keymaps_installed = false
-
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
   callback = function(args)
@@ -210,10 +230,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
       return
     end
 
-    if not keymaps_installed then
-      keymaps_installed = true
-      keymap_setup()
-      lsp_keymaps()
+    if not vim.b[args.buf].sjvim_lsp_keymaps then
+      vim.b[args.buf].sjvim_lsp_keymaps = true
+      keymap_setup(args.buf)
+      lsp_keymaps(args.buf)
     end
 
     methods_setup(client, args.buf)

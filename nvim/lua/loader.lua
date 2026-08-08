@@ -4,6 +4,9 @@ local loaded = {}
 local groups = {}
 local packadded = {}
 local very_lazy_fired = false
+local pending = {}
+local pending_head = 1
+local pending_scheduled = false
 
 local function group(name)
   groups[name] = groups[name] or vim.api.nvim_create_augroup("sjvim_loader_" .. name, { clear = true })
@@ -49,6 +52,33 @@ function M.load(name, setup)
   return true
 end
 
+local function run_pending()
+  local item = pending[pending_head]
+  if not item then
+    pending = {}
+    pending_head = 1
+    pending_scheduled = false
+    return
+  end
+
+  pending_head = pending_head + 1
+  M.load(item.name, item.setup)
+
+  -- Give Nvim a chance to redraw and process input between unrelated plugin
+  -- setups instead of turning every deferred load into one long pause.
+  vim.defer_fn(run_pending, 1)
+end
+
+local function enqueue(name, setup)
+  pending[#pending + 1] = { name = name, setup = setup }
+  if pending_scheduled then
+    return
+  end
+
+  pending_scheduled = true
+  vim.defer_fn(run_pending, 1)
+end
+
 function M.defer(name, setup, events, opts)
   opts = vim.tbl_extend("force", {
     group = group(name),
@@ -66,22 +96,26 @@ end
 --- Preferred over `defer` for anything not needed to display the first buffer.
 function M.on_very_lazy(name, setup)
   if very_lazy_fired then
-    vim.schedule(function()
-      M.load(name, setup)
-    end)
+    enqueue(name, setup)
     return
   end
 
-  M.defer(name, setup, "User", { pattern = "VeryLazy" })
+  vim.api.nvim_create_autocmd("User", {
+    group = group(name),
+    pattern = "VeryLazy",
+    once = true,
+    callback = function()
+      clear_group(name)
+      enqueue(name, setup)
+    end,
+  })
 end
 
 --- Run `setup` when a real file buffer is first read.
 ---
---- With `opts.schedule`, the setup is pushed to the next tick while Nvim is
---- still starting up. That keeps it out of the `BufReadPre` that runs before the
---- first frame when a file is passed on the command line. Only use it for
---- plugins that either react to later events or attach to open buffers
---- themselves — anything that has to decorate the very first render must stay
+--- With `opts.schedule`, the setup is queued outside `BufReadPre`. Only use it
+--- for plugins that either react to later events or attach to open buffers
+--- themselves — anything that has to decorate the first render must stay
 --- synchronous.
 function M.defer_buffer(name, setup, opts)
   local schedule = opts and opts.schedule
@@ -96,10 +130,8 @@ function M.defer_buffer(name, setup, opts)
 
       clear_group(name)
 
-      if schedule and vim.v.vim_did_enter == 0 then
-        vim.schedule(function()
-          M.load(name, setup)
-        end)
+      if schedule then
+        enqueue(name, setup)
       else
         M.load(name, setup)
       end

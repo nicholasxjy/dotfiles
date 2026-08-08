@@ -23,4 +23,4 @@ local setup = function()
   })
 end
 
-loader.defer_buffer("rainbow-tags", setup)
+loader.defer("rainbow-tags", setup, { "BufReadPre", "BufNewFile" }, { pattern = { "*.jsx", "*.tsx" } })

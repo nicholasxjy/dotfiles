@@ -137,7 +137,7 @@ local function grep_buffer_word()
   })
 end
 
-vim.keymap.set("n", "<leader>e", function()
+vim.keymap.set("n", "<leader>E", function()
   Snacks.explorer({
     layout = ui.snacks_layout.sidebar,
   })
@@ -204,7 +204,7 @@ vim.keymap.set(
 
 -- search
 vim.keymap.set(
-  { "n", "x", "v" },
+  { "n", "x" },
   "<leader>sw",
   pick("grep_word", {
     filter = { cwd = true },
