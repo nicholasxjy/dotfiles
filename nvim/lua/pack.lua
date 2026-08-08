@@ -93,7 +93,7 @@ vim.pack.add({
   "https://github.com/nicholasxjy/rainbow-tags.nvim",
   "https://github.com/Saecki/crates.nvim",
   { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
-  "https://github.com/nicholasxjy/sidekick.nvim",
+  { src = "https://github.com/nicholasxjy/sidekick.nvim", version = "feat/herdr" },
   "https://github.com/rachartier/tiny-inline-diagnostic.nvim",
   "https://github.com/folke/tokyonight.nvim",
   {

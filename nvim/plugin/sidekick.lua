@@ -23,7 +23,7 @@ local setup = function()
       },
       watch = true,
       win = {
-        layout = "float",
+        layout = "left",
         float = {
           row = 0,
           width = 1,
@@ -34,29 +34,27 @@ local setup = function()
         },
       },
       mux = {
-        enabled = true,
+        enabled = false,
         backend = "tmux",
         create = "split",
         split = {
           vertical = true,
-          size = 0.4,
+          size = 0.5,
         },
       },
-      prompts = {
-        optimize = "optimize {this}",
-      },
+      prompts = {},
     },
   })
 
-  vim.keymap.set("n", "<tab>", function()
-    if sidekick.nes_jump_or_apply() then
-      return ""
-    end
-    return "<Tab>"
-  end, {
-    expr = true,
-    desc = "Next Suggestion",
-  })
+  -- vim.keymap.set("n", "<tab>", function()
+  --   if sidekick.nes_jump_or_apply() then
+  --     return ""
+  --   end
+  --   return "<Tab>"
+  -- end, {
+  --   expr = true,
+  --   desc = "Next Suggestion",
+  -- })
 
   vim.keymap.set({ "n", "t", "i", "x" }, "<M-.>", function()
     cli.toggle({
@@ -86,15 +84,15 @@ local setup = function()
   end, { desc = "Close CLI" })
 
   vim.keymap.set({ "x", "n" }, "<leader>at", function()
-    cli.send({ msg = "{this}" })
+    cli.send({ msg = "{this}", focus = true })
   end, { desc = "Send Current" })
 
   vim.keymap.set("n", "<leader>af", function()
-    cli.send({ msg = "{file}" })
+    cli.send({ msg = "{file}", focus = true })
   end, { desc = "Send File" })
 
   vim.keymap.set("x", "<leader>av", function()
-    cli.send({ msg = "{selection}" })
+    cli.send({ msg = "{selection}", focus = true })
   end, { desc = "Send Selection" })
 
   vim.keymap.set({ "n", "x" }, "<leader>ap", function()

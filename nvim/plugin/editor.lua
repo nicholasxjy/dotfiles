@@ -31,7 +31,7 @@ local setup_automatic = function()
 
   require("modes").setup({
     colors = {
-      bg = "#362706", --"#0D1164", --hl_color("Normal", "bg", "#0D1164"),
+      bg = "#0D1164", --hl_color("Normal", "bg", "#0D1164"),
       copy = hl_color("WarningMsg", "fg", "#f5c359"),
       delete = hl_color("ErrorMsg", "fg", "#c75c6a"),
       change = hl_color("ErrorMsg", "fg", "#c75c6a"),

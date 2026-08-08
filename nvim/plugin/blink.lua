@@ -64,8 +64,8 @@ local blink_opts = {
         -- columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
         columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
         components = {
-          label = { width = { max = 25 } },
-          label_description = { width = { max = 15 } },
+          label = { width = { max = 20 } },
+          label_description = { width = { max = 16 } },
           kind_icon = {
             text = function(ctx)
               if ctx.source_name ~= "Path" then

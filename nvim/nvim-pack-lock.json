@@ -17,7 +17,7 @@
       "src": "https://github.com/saghen/blink.indent"
     },
     "blink.lib": {
-      "rev": "8b04d0e0acc8565cfa4dd291a89a9212b7262633",
+      "rev": "c8fdc12c8a2fab6cf786dd7141a283f8079f902b",
       "src": "https://github.com/saghen/blink.lib"
     },
     "blink.pairs": {
@@ -141,7 +141,7 @@
       "src": "https://github.com/chrisgrieser/nvim-origami"
     },
     "nvim-treesitter": {
-      "rev": "3d3321b560a63ff92a8692401f303a5123336b86",
+      "rev": "c9f9ed6c1892f629ea399f4ee7905f2686fa13f2",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -171,8 +171,9 @@
       "src": "https://github.com/NStefan002/screenkey.nvim"
     },
     "sidekick.nvim": {
-      "rev": "66a2f5d9d8faf38b7082ca1e451e9e7a13686097",
-      "src": "https://github.com/nicholasxjy/sidekick.nvim"
+      "rev": "bb91063776f01050424af7b475f976c830e2a290",
+      "src": "https://github.com/nicholasxjy/sidekick.nvim",
+      "version": "'feat/herdr'"
     },
     "smart-paste.nvim": {
       "rev": "bb46e9a06a728d65f004ad709ff7ee0249717e5e",

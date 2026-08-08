@@ -11,7 +11,7 @@ oil.setup({
     show_hidden = true,
   },
   confirmation = {
-    border = "solid",
+    border = vim.o.winborder,
   },
   preview_win = {
     update_on_cursor_moved = true,
@@ -22,11 +22,14 @@ oil.setup({
   },
 })
 
+-- Automatically open preview window
 vim.api.nvim_create_autocmd("User", {
   pattern = "OilEnter",
-  callback = function()
-    oil.open_preview({ vertical = true, split = "belowright" })
-  end,
+  callback = vim.schedule_wrap(function(args)
+    if vim.api.nvim_get_current_buf() == args.data.buf and oil.get_cursor_entry() then
+      oil.open_preview()
+    end
+  end),
 })
 
 vim.keymap.set("n", "<leader>o", function()
