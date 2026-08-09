@@ -164,7 +164,7 @@ M.snacks_layout = {
         border = "none",
         title = "{title} {live} {flags}",
         title_pos = "center",
-        { win = "input", height = 1, border = "top_bottom" },
+        { win = "input", height = 1, border = "bottom" },
         { win = "list", border = "none" },
       },
     },

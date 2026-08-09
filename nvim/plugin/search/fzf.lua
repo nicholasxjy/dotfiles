@@ -1,4 +1,5 @@
 local loader = require("loader")
+local ui = require("ui")
 
 local setup = function()
   loader.packadd("fzf-lua")
@@ -18,11 +19,16 @@ local setup = function()
       border = "none",
       backdrop = 50,
       preview = {
-        border = "rounded",
+        border = "single",
         wrap = true,
         hidden = false,
         layout = "vertical",
         vertical = "up:50%",
+      },
+    },
+    lsp = {
+      symbols = {
+        symbols_icons = ui.icons.lspkind_kind_icons,
       },
     },
   })

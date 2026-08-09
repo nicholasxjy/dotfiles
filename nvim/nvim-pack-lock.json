@@ -9,7 +9,7 @@
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "blink.cmp": {
-      "rev": "cba53eff1948109ec0f47cbead4f07494d1e25c9",
+      "rev": "8ca29c2eb34f5ce4770bffc0d62e6f636a4e8526",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.indent": {
@@ -35,6 +35,10 @@
     "differ.nvim": {
       "rev": "9dd5175d1b74fdcfda97dd0064650941b1e051f9",
       "src": "https://github.com/undont/differ.nvim"
+    },
+    "el-preview.nvim": {
+      "rev": "dd9afa530c0c84f4403412e532c997facbf0b4ba",
+      "src": "https://github.com/nicholasxjy/el-preview.nvim"
     },
     "flash.nvim": {
       "rev": "b6346946d10d07998efee029fb0f7a593806d0cd",
@@ -171,9 +175,8 @@
       "src": "https://github.com/NStefan002/screenkey.nvim"
     },
     "sidekick.nvim": {
-      "rev": "bb91063776f01050424af7b475f976c830e2a290",
-      "src": "https://github.com/nicholasxjy/sidekick.nvim",
-      "version": "'feat/herdr'"
+      "rev": "3136ec79d6808a0ea7b24fcfb2ab7fa17ec460b3",
+      "src": "https://github.com/nicholasxjy/sidekick.nvim"
     },
     "smart-paste.nvim": {
       "rev": "bb46e9a06a728d65f004ad709ff7ee0249717e5e",

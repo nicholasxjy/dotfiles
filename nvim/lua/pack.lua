@@ -45,6 +45,10 @@ vim.pack.add({
   "https://github.com/stevearc/oil.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
 
+  "https://github.com/nicholasxjy/sidekick.nvim",
+
+  "https://github.com/nicholasxjy/el-preview.nvim",
+
   "https://github.com/onsails/lspkind.nvim",
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
@@ -93,7 +97,6 @@ vim.pack.add({
   "https://github.com/nicholasxjy/rainbow-tags.nvim",
   "https://github.com/Saecki/crates.nvim",
   { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
-  { src = "https://github.com/nicholasxjy/sidekick.nvim", version = "feat/herdr" },
   "https://github.com/rachartier/tiny-inline-diagnostic.nvim",
   "https://github.com/folke/tokyonight.nvim",
   {

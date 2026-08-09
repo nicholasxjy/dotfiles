@@ -34,8 +34,8 @@ local setup = function()
         },
       },
       mux = {
-        enabled = false,
-        backend = "tmux",
+        enabled = true,
+        backend = "herdr",
         create = "split",
         split = {
           vertical = true,

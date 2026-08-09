@@ -21,7 +21,7 @@ local function finalize_palette(colors)
   util.fg = colors.fg
 end
 
-local palette = "gruvbox" -- "gruvbox" or "tokyonight"
+local palette = "catppuccin" -- "gruvbox" or "tokyonight"
 local palette_path = ("%s/plugin/tokyonight/%s.lua"):format(vim.fn.stdpath("config"), palette)
 local build_palette = assert(loadfile(palette_path))()
 
