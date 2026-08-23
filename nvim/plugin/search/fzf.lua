@@ -17,7 +17,7 @@ local setup = function()
       row = 1, -- window row position (0=top, 1=bottom)
       -- col = 0.2,
       border = "none",
-      backdrop = 50,
+      backdrop = 90,
       preview = {
         border = "single",
         wrap = true,
@@ -35,16 +35,16 @@ local setup = function()
 
   -- fzflua.register_ui_select()
 
-  -- local vscode = {
-  --   winopts = {
-  --     height = 0.4, -- window height
-  --     width = 0.7, -- window width
-  --     row = 1, -- window row position (0=top, 1=bottom)
-  --     -- col = 0.2,
-  --     border = "none",
-  --     backdrop = 50,
-  --   },
-  -- }
+  local vscode = {
+    winopts = {
+      height = 0.4, -- window height
+      width = 1, -- window width
+      row = 1, -- window row position (0=top, 1=bottom)
+      -- col = 0.2,
+      border = "none",
+      backdrop = 50,
+    },
+  }
   --
   -- vim.keymap.set("n", "<leader><space>", function()
   --   fzflua.files({ winopts = vscode.winopts, previewer = false, git_icons = true, hidden = true, cwd_only = true })
@@ -64,7 +64,10 @@ local setup = function()
   vim.keymap.set("n", "<leader>m", fzflua.marks, { desc = "Marks" })
 
   vim.keymap.set("n", "<leader>fa", fzflua.autocmds, { desc = "Autocmds" })
-  vim.keymap.set("n", "<leader>fc", fzflua.colorschemes, { desc = "Colorschemes" })
+  vim.keymap.set("n", "<leader>fC", fzflua.colorschemes, { desc = "Colorschemes" })
+  vim.keymap.set("n", "<leader>fc", function()
+    fzflua.command_history({ winopts = vscode.winopts })
+  end, { desc = "Command History" })
   vim.keymap.set("n", "<leader>fi", fzflua.filetypes, { desc = "Filetypes" })
   vim.keymap.set("n", "<leader>fl", fzflua.loclist, { desc = "Location" })
   vim.keymap.set("n", "<leader>fk", fzflua.keymaps, { desc = "Keymaps" })
@@ -72,6 +75,9 @@ local setup = function()
   vim.keymap.set("n", "<leader>fr", fzflua.registers, { desc = "Registers" })
   vim.keymap.set("n", "<leader>fu", fzflua.undotree, { desc = "Undos" })
   vim.keymap.set("n", "<leader>fq", fzflua.quickfix, { desc = "Quickfix" })
+  vim.keymap.set("n", "<leader>fs", function()
+    fzflua.search_history({ winopts = vscode.winopts })
+  end, { desc = "Search History" })
   -- git
   vim.keymap.set("n", "<leader>gb", fzflua.git_branches, { desc = "Git Branches" })
   vim.keymap.set("n", "<leader>gl", fzflua.git_commits, { desc = "Git Log" })

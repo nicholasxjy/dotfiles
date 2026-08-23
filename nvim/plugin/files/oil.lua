@@ -16,6 +16,9 @@ oil.setup({
   preview_win = {
     update_on_cursor_moved = true,
   },
+  float = {
+    border = vim.o.winborder,
+  },
   keymaps = {
     ["q"] = "actions.close",
     ["<Esc>"] = "actions.parent",
@@ -33,7 +36,7 @@ vim.api.nvim_create_autocmd("User", {
 })
 
 vim.keymap.set("n", "<leader>o", function()
-  oil.open()
+  oil.open_float()
 end, { desc = "Oil", silent = true })
 
 vim.api.nvim_create_autocmd("User", {

@@ -1,0 +1,80 @@
+local function build_hardhat(colors)
+  colors.bg = "#222629"
+  colors.bg_dark = "#181C21"
+  colors.bg_dark1 = "#121416"
+  colors.bg_highlight = "#2B3135"
+  colors.blue = "#4AB0D6"
+  -- Match by visual value; derive only the extra shades missing from Hardhat.
+  colors.blue0 = "#297C9A"
+  colors.blue1 = "#70B2CF"
+  colors.blue2 = "#2C9DAA"
+  colors.blue5 = "#A1D3E9"
+  colors.blue6 = "#CDE6F1"
+  colors.blue7 = "#245466"
+  colors.comment = "#70787B"
+  colors.dark3 = "#646F73"
+  colors.dark5 = "#838587"
+  colors.fg = "#B6C2CC"
+  colors.fg_dark = "#A3A6A8"
+  colors.fg_gutter = "#4F5258"
+  colors.green = "#BCC313"
+  colors.green1 = "#2A9C89"
+  colors.green2 = "#7566C7"
+  colors.magenta = "#9B93DF"
+  colors.magenta2 = "#C7528C"
+  colors.purple = "#DEA4BB"
+  colors.red1 = "#CE415C"
+  colors.terminal_black = "#4F5258"
+  colors.red = "#DC483B"
+  colors.yellow = "#D7AE00"
+  colors.orange = "#D68D20"
+  colors.cyan = "#96D0D7"
+  colors.teal = "#6B9940"
+  colors.black = colors.bg
+  colors.border = colors.fg_gutter
+  colors.border_highlight = colors.blue
+  colors.bg_popup = colors.bg_dark
+  colors.bg_statusline = colors.bg_dark
+  colors.bg_sidebar = colors.bg_dark
+  colors.bg_float = colors.bg
+  colors.bg_visual = "#3F3C60"
+  colors.bg_search = colors.blue0
+  colors.fg_sidebar = colors.fg_dark
+  colors.fg_float = colors.fg
+  colors.error = colors.red
+  colors.warning = colors.yellow
+  colors.info = colors.blue
+  colors.hint = colors.teal
+  colors.diff = {
+    add = "#2A424C",
+    change = colors.bg_highlight,
+    delete = "#432F3D",
+    text = colors.blue7,
+  }
+  colors.git = {
+    add = "#ADD78B",
+    change = colors.blue1,
+    delete = "#D46157",
+    ignore = colors.comment,
+  }
+  colors.terminal = {
+    black = colors.black,
+    black_bright = colors.comment,
+    red = colors.red,
+    red_bright = "#D46157",
+    green = colors.green,
+    green_bright = "#ADD78B",
+    yellow = colors.yellow,
+    yellow_bright = "#D4A257",
+    blue = colors.blue,
+    blue_bright = colors.blue1,
+    magenta = colors.magenta,
+    magenta_bright = "#B7B2F2",
+    cyan = colors.cyan,
+    cyan_bright = "#B6E1E6",
+    white = colors.fg_dark,
+    white_bright = colors.fg,
+  }
+end
+
+return build_hardhat

@@ -59,10 +59,10 @@ local blink_opts = {
     menu = {
       scrollbar = true,
       draw = {
-        treesitter = { "lsp" },
+        -- treesitter = { "lsp" },
         -- Keep kind_icon in its own column so appearance.kind_icons always renders.
         -- columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
-        columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
+        columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 }, { "kind", gap = 1 } },
         components = {
           label = { width = { max = 20 } },
           label_description = { width = { max = 16 } },
@@ -95,7 +95,7 @@ local blink_opts = {
     },
   },
   cmdline = {
-    enabled = true,
+    enabled = false,
     keymap = {
       preset = "cmdline",
       ["<C-j>"] = { "select_next", "fallback" },
@@ -149,7 +149,7 @@ local blink_pairs_opts = {
     pairs = {},
   },
   highlights = {
-    enabled = true,
+    enabled = false,
     cmdline = true,
     groups = {
       "BlinkPairsRed",
@@ -163,7 +163,7 @@ local blink_pairs_opts = {
     unmatched_group = "BlinkPairsUnmatched",
     -- highlights matching pairs under the cursor
     matchparen = {
-      enabled = true,
+      enabled = false,
       cmdline = true,
       include_surrounding = false,
       group = "BlinkPairsMatchParen",
@@ -191,7 +191,12 @@ local blink_indent_opts = {
   },
   static = {
     enabled = false,
-    char = "▎",
+    -- char = "▎",
+    char = "┆",
+    -- U+2024 ONE DOT LEADER: baseline dot on the vertical-center axis of a 3-dot
+    -- leader, so whitespace reads as a continuous horizontal midline (each
+    -- virtual cell renders "·", the 3rd dot of the leader). Requires a font
+    -- with the U+2024 glyph (fallback is a bottom-aligned dot, per `:h fillchars`).
     whitespace_char = nil, -- inherits from `vim.opt.listchars:get().space` when `nil` (see `:h listchars`)
     priority = 1,
     -- specify multiple highlights here for rainbow-style indent guides

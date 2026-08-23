@@ -14,7 +14,15 @@ require("snacks").setup({
   input = { enabled = true },
   words = { enabled = false },
   indent = { enabled = false },
-  statuscolumn = { enabled = true },
+  statuscolumn = {
+    enabled = true,
+    left = { "mark", "sign" }, -- priority of signs on the left (high to low)
+    right = { "fold", "git" }, -- priority of signs on the right (high to low)
+    folds = {
+      open = true, -- show open fold icons
+      git_hl = false, -- use Git Signs hl for fold icons
+    },
+  },
   notifier = { enabled = false },
   toggle = { enabled = true },
   lazygit = { enabled = true },
@@ -143,47 +151,47 @@ vim.keymap.set("n", "<leader>E", function()
   })
 end, { desc = "Explorer" })
 
-vim.keymap.set("n", "<leader>r", pick("resume"), { desc = "Resume Search" })
+-- vim.keymap.set("n", "<leader><cr>", pick("resume"), { desc = "Resume Search" })
 -- vim.keymap.set("n", "<leader>:", pick("commands"), { desc = "Commands" })
 -- vim.keymap.set("n", "<leader>/", pick("lines"), { desc = "Blines" })
 -- vim.keymap.set("n", "<leader>m", pick("marks"), { desc = "Marks" })
 
 vim.keymap.set("n", "<leader>ff", pick("files", { hidden = true }), { desc = "Find Files", silent = true })
 
-vim.keymap.set(
-  "n",
-  "<leader><space>",
-  pick("smart", function()
-    local root = current_root()
-    return {
-      cwd = root,
-      prompt = root_prompt(root),
-      hidden = true,
-      filter = cwd.filter,
-      layout = ui.snacks_layout.vscode,
-    }
-  end),
-  {
-    desc = "Find Files",
-    silent = true,
-    nowait = true,
-  }
-)
-
-vim.keymap.set(
-  "n",
-  "<leader>h",
-  pick("buffers", {
-    sort_lastused = true,
-    current = true,
-    layout = ui.snacks_layout.vscode,
-    win = {
-      input = { keys = { ["<c-x>"] = { "bufdelete", mode = { "n", "i" } } } },
-      list = { keys = { ["dd"] = "bufdelete" } },
-    },
-  }),
-  { desc = "Find Buffers", silent = true, nowait = true }
-)
+-- vim.keymap.set(
+--   "n",
+--   "<leader><space>",
+--   pick("smart", function()
+--     local root = current_root()
+--     return {
+--       cwd = root,
+--       prompt = root_prompt(root),
+--       hidden = true,
+--       filter = cwd.filter,
+--       layout = ui.snacks_layout.ivy,
+--     }
+--   end),
+--   {
+--     desc = "Find Files",
+--     silent = true,
+--     nowait = true,
+--   }
+-- )
+--
+-- vim.keymap.set(
+--   "n",
+--   "<leader>h",
+--   pick("buffers", {
+--     sort_lastused = true,
+--     current = true,
+--     layout = ui.snacks_layout.vscode,
+--     win = {
+--       input = { keys = { ["<c-x>"] = { "bufdelete", mode = { "n", "i" } } } },
+--       list = { keys = { ["dd"] = "bufdelete" } },
+--     },
+--   }),
+--   { desc = "Find Buffers", silent = true, nowait = true }
+-- )
 -- vim.keymap.set("n", "<leader>fa", pick("autocmds"), { desc = "Autocmds" })
 -- vim.keymap.set("n", "<leader>fc", pick("colorschemes"), { desc = "Colorschemes" })
 -- vim.keymap.set("n", "<leader>fi", pick("icons"), { desc = "Icons" })
@@ -203,25 +211,25 @@ vim.keymap.set(
 -- vim.keymap.set("n", "<leader>gf", pick("git_log_file"), { desc = "Git Log File" })
 
 -- search
-vim.keymap.set(
-  { "n", "x" },
-  "<leader>sw",
-  pick("grep_word", {
-    filter = { cwd = true },
-  }),
-  { desc = "Grep Word" }
-)
-vim.keymap.set("n", "<leader>sW", grep_buffer_word, { desc = "Grep Buffer Word" })
-
-vim.keymap.set(
-  "n",
-  "<leader>sg",
-  pick("grep", {
-    filter = { cwd = true },
-  }),
-  { desc = "Live Grep" }
-)
-vim.keymap.set("n", "<leader>sG", pick("grep", {}), { desc = "Global Grep" })
+-- vim.keymap.set(
+--   { "n", "x" },
+--   "<leader>sw",
+--   pick("grep_word", {
+--     filter = { cwd = true },
+--   }),
+--   { desc = "Grep Word" }
+-- )
+-- vim.keymap.set("n", "<leader>sW", grep_buffer_word, { desc = "Grep Buffer Word" })
+--
+-- vim.keymap.set(
+--   "n",
+--   "<leader>sg",
+--   pick("grep", {
+--     filter = { cwd = true },
+--   }),
+--   { desc = "Live Grep" }
+-- )
+-- vim.keymap.set("n", "<leader>sG", pick("grep", {}), { desc = "Global Grep" })
 
 vim.keymap.set("n", "<leader>xt", function()
   ---@diagnostic disable-next-line: undefined-field

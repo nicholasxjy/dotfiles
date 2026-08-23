@@ -29,17 +29,19 @@ local setup_automatic = function()
 
   require("smart-paste").setup()
 
+  local visual = hl_color("@keyword", "fg", "#9b88ce")
+
   require("modes").setup({
     colors = {
-      bg = "#0D1164", --hl_color("Normal", "bg", "#0D1164"),
-      copy = hl_color("WarningMsg", "fg", "#f5c359"),
-      delete = hl_color("ErrorMsg", "fg", "#c75c6a"),
-      change = hl_color("ErrorMsg", "fg", "#c75c6a"),
-      format = hl_color("Operator", "fg", "#c79585"),
-      insert = hl_color("DiagnosticInfo", "fg", "#78ccc5"),
-      replace = hl_color("Substitute", "bg", "#245361"),
-      select = hl_color("Search", "bg", "#9745be"),
-      visual = hl_color("Visual", "bg", "#9745be"),
+      bg = hl_color("Normal", "bg", "#2d293a"),
+      copy = hl_color("WarningMsg", "fg", "#f4b258"),
+      delete = hl_color("ErrorMsg", "fg", "#f08a75"),
+      change = hl_color("DiagnosticInfo", "fg", "#91cee7"),
+      format = hl_color("Operator", "fg", "#f8cb94"),
+      insert = hl_color("DiagnosticHint", "fg", "#79c5b7"),
+      replace = hl_color("Substitute", "bg", "#f08a75"),
+      select = visual,
+      visual = visual,
     },
 
     -- Set opacity for cursorline and number background

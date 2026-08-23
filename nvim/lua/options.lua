@@ -33,8 +33,8 @@ opt.undofile = true
 opt.swapfile = false
 opt.conceallevel = 1
 opt.linebreak = true
-
-opt.winborder = "rounded"
+opt.termguicolors = true
+opt.winborder = "single"
 
 opt.tabstop = 2
 opt.shiftwidth = 2

@@ -110,35 +110,35 @@ local function lsp_keymaps(bufnr)
   vim.keymap.set("n", "<leader>ss", fzflua.lsp_document_symbols, opts("Lsp symbols"))
   vim.keymap.set("n", "<leader>sS", fzflua.lsp_workspace_symbols, opts("Workspace lsp symbols"))
 
-  vim.keymap.set("n", "<leader>xx", function()
-    fzflua.diagnostics_document({ sort = true })
-  end, opts("Diagnostics"))
-  vim.keymap.set("n", "<leader>xX", function()
-    fzflua.diagnostics_workspace({ sort = true })
-  end, opts("Workspace Diagnostics"))
-  vim.keymap.set("n", "<leader>xw", function()
-    fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.WARN, sort = true })
-  end, opts("Workspace Diagnostics(Warns)"))
-  vim.keymap.set("n", "<leader>xe", function()
-    fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.ERROR, sort = true })
-  end, opts("Workspace Diagnostics(Errors)"))
+  -- vim.keymap.set("n", "<leader>xx", function()
+  --   fzflua.diagnostics_document({ sort = true })
+  -- end, opts("Diagnostics"))
+  -- vim.keymap.set("n", "<leader>xX", function()
+  --   fzflua.diagnostics_workspace({ sort = true })
+  -- end, opts("Workspace Diagnostics"))
+  -- vim.keymap.set("n", "<leader>xw", function()
+  --   fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.WARN, sort = true })
+  -- end, opts("Workspace Diagnostics(Warns)"))
+  -- vim.keymap.set("n", "<leader>xe", function()
+  --   fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.ERROR, sort = true })
+  -- end, opts("Workspace Diagnostics(Errors)"))
 end
 
--- local hover = vim.lsp.buf.hover
--- ---@diagnostic disable-next-line: duplicate-set-field
--- vim.lsp.buf.hover = function()
---   return hover({
---     max_height = math.floor(vim.o.lines * 0.5),
---     max_width = math.floor(vim.o.columns * 0.4),
---   })
--- end
+local hover = vim.lsp.buf.hover
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.buf.hover = function()
+  return hover({
+    max_height = math.floor(vim.o.lines * 0.5),
+    max_width = math.floor(vim.o.columns * 0.6),
+  })
+end
 
 local signature_help = vim.lsp.buf.signature_help
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.lsp.buf.signature_help = function()
   return signature_help({
     max_height = math.floor(vim.o.lines * 0.5),
-    max_width = math.floor(vim.o.columns * 0.4),
+    max_width = math.floor(vim.o.columns * 0.6),
   })
 end
 
