@@ -25,6 +25,7 @@ local ensure_installed = {
   "goimports",
   "golines",
   "golangci-lint-langserver",
+  "golangci-lint",
   "delve",
   "gomodifytags",
   "gotests",
@@ -40,6 +41,7 @@ local ensure_installed = {
   "lemminx",
   "ruff",
   "yaml-language-server",
+  "sqruff",
   "zls",
 }
 

@@ -1,10 +1,8 @@
 local loader = require("loader")
 
 local setup = function()
-  loader.packadd("markdown-preview.nvim")
-  loader.packadd("render-markdown.nvim")
-
   vim.g.mkdp_filetypes = { "markdown" }
+  loader.packadd("markdown-preview.nvim", "render-markdown.nvim")
 
   require("render-markdown").setup({
     file_types = { "markdown" },

@@ -47,14 +47,14 @@ local function setup()
       separator = " ",
     },
     win = {
-      use_minibuffer = true,
-      relative = "minibuffer",
-      -- width = { min = 20, max = 0.6 },
-      -- height = { min = 0.1, max = 0.2 },
-      -- col = 0,
-      -- border = "none",
-      -- title = false,
-      --   title_pos = "center",
+      -- use_minibuffer = true,
+      -- relative = "minibuffer",
+      width = { min = 0.2, max = 0.3 },
+      height = { min = 0.2, max = 0.6 },
+      col = 0,
+      border = vim.o.winborder,
+      title = false,
+      title_pos = "center",
     },
     plugins = {
       registers = false, -- shows your registers on " in NORMAL or <C-r> in INSERT mode

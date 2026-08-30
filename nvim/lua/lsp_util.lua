@@ -21,6 +21,7 @@ function M.add_schemastore(kind)
 end
 
 function M.insert_package_json(root_files, field, filename)
+  local files = vim.list_extend({}, root_files)
   local package_files = vim.fs.find({ "package.json", "package.json5" }, {
     path = vim.fs.dirname(filename),
     upward = true,
@@ -31,14 +32,14 @@ function M.insert_package_json(root_files, field, filename)
     local file = assert(io.open(path, "r"))
     for line in file:lines() do
       if line:find(field, 1, true) then
-        root_files[#root_files + 1] = vim.fs.basename(path)
+        files[#files + 1] = vim.fs.basename(path)
         break
       end
     end
     file:close()
   end
 
-  return root_files
+  return files
 end
 
 return M

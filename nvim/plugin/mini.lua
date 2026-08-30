@@ -77,8 +77,61 @@ end
 -- all driven by user input, so none of them need to exist before the first
 -- frame is on screen.
 loader.on_very_lazy("mini-extras", function()
-  loader.packadd("mini.ai", "mini.surround", "mini.trailspace", "mini.files")
+  loader.packadd("mini.ai", "mini.surround", "mini.trailspace", "mini.files", "mini.statuscolumn", "mini.tabline")
 
+  require("mini.tabline").setup()
+
+  local statuscolumn = require("mini.statuscolumn")
+  local default_content = statuscolumn.gen_content.main({
+    { fold = "%C", lnum = "%l ", sign = "%s" }, -- `%s` includes gitsigns' Git status
+    { format = "=lfs", sep = "┊ " }, --"▏"
+    { ltype = "virt", lnum = "•" },
+    { ltype = "wrap", lnum = "↳" },
+    { win = "inactive", sep = " " },
+  })
+
+  local marks_by_buffer = {}
+  local function mark_at_line(buf_id, lnum)
+    if vim.v.virtnum ~= 0 then
+      return " "
+    end
+
+    local marks = marks_by_buffer[buf_id]
+    if marks == nil then
+      marks = {}
+      local mark_list = vim.fn.getmarklist(buf_id)
+      vim.list_extend(mark_list, vim.fn.getmarklist())
+      for _, mark in ipairs(mark_list) do
+        if mark.pos[1] == buf_id and mark.mark:match("[a-zA-Z]") then
+          marks[mark.pos[2]] = mark.mark:sub(2)
+        end
+      end
+      marks_by_buffer[buf_id] = marks
+    end
+
+    return marks[lnum] or " "
+  end
+
+  vim.api.nvim_create_autocmd("MarkSet", {
+    callback = function()
+      marks_by_buffer = {}
+    end,
+    desc = "Refresh statuscolumn marks",
+  })
+
+  local with_marks = function(content)
+    return function(data)
+      return mark_at_line(data.buf_id, vim.v.lnum) .. content(data)
+    end
+  end
+
+  statuscolumn.setup({
+    content = {
+      active = with_marks(default_content.active),
+      inactive = with_marks(default_content.inactive),
+    },
+    dim_inactive = true,
+  })
   require("mini.ai").setup()
 
   require("mini.surround").setup({
@@ -107,7 +160,7 @@ loader.on_very_lazy("mini-extras", function()
         return entry.name ~= ".DS_Store"
       end,
     },
-    options = { permanent_delete = false },
+    options = { permanent_delete = false, use_as_default_explorer = false },
   })
 end)
 

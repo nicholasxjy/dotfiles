@@ -1,131 +1,66 @@
-# theme = gyokuro
-theme = moon
+# vim: set ft=conf :
 # theme = hojicha
+# theme = moon
+# theme = gyokuro
+# theme = github dark
+# theme = tokyonight night
+# theme = gruvbox material dark
+# theme = everforest dark med
+theme = catppuccin mocha
 
-shell-integration-features = ssh-env,cursor,sudo,title
+
+# shell-integration-features =ssh-env,no-cursor,sudo,title
 
 
+font-size = 20.5
+font-family = Operator Mono SSm Lig
+font-family = Maple Mono NF CN
+font-feature = ss11
+font-feature = ss12
 
-font-size = 18
-font-family = FiraCode Nerd Font
-font-feature = calt
-font-feature = liga
-font-feature = ss02
-font-feature = ss03
-font-feature = ss05
-font-feature = ss06
-font-feature = ss08
-font-feature = ss09
-font-feature = ss10
-font-feature = cv25
-font-feature = cv26
-font-feature = cv28
-font-feature = cv29
-font-feature = cv30
-font-feature = cv31
+# font-codepoint-map=U+2E80-U+2EFF,U+2F00-U+2FDF,U+3000-U+303F,U+31C0-U+31EF,U+3400-U+4DBF,U+4E00-U+9FFF,U+F900-U+FAFF,U+FE30-U+FE4F,U+FF00-U+FFEF,U+20000-U+2A6DF,U+2A700-U+2B73F,U+2B740-U+2B81F,U+2B820-U+2CEAF,U+2CEB0-U+2EBEF,U+2EBF0-U+2EE5F,U+30000-U+3134F,U+31350-U+323AF=Maple Mono NF CN
 
-# font-size = 20.4
-# font-family = TX-02-Variable
-# font-style = Condensed
-# font-style-bold = Bold Condensed
-# font-style-italic = Condensed Oblique
-# font-style-bold-italic = Bold Condensed Oblique
-# font-feature = ss03
-# font-feature = ss04
-# font-feature = ss05
-# font-feature = ss06
-# font-feature = ss07
-
-# font-size = 20.6
-# font-family = PragmataPro Liga
-# font-family = Maple Mono NF CN
-# font-feature = calt
-# font-feature = cv03
-# font-feature = cv04
-# font-feature = ss11
-# font-feature = ss13
-# font-feature = ss14
-# font-feature = ss15
-# font-feature = ss17
-# font-feature = ss18
-# font-feature = ss20
-#
 # font-size = 21
-# font-family = Iosevka Nerd Font
-# font-family = Maple Mono NF CN
+# font-family = JetbrainsMono Nerd Font
 # font-feature = calt
+# font-feature = liga
 # font-feature = dlig
-# font-feature = cv07'2
-# font-feature = cv10'6
-# font-feature = cv11'5
-# font-feature = cv14'4
-# font-feature = cv20'5
-# font-feature = cv31'4
-# font-feature = cv35'14
-# font-feature = cv36
-# font-feature = cv41'11
-# font-feature = cv42
-# font-feature = cv44'3
-# font-feature = cv45'5
-# font-feature = cv47'4
-# font-feature = cv52'13
-# font-feature = cv54'8
-# font-feature = cv56'4
-# font-feature = cv59'8
-# font-feature = VSAG'2
-# font-feature = VSAH'3
-# font-feature = VSAL'5
-# font-feature = VSAQ'3
-# font-feature = VLAF'2
-# font-feature = VLAA
-# font-feature = VLAG'2
-#
-#
-#
+
 font-thicken = false
-# adjust-cell-width = 6%
-# adjust-cell-height = -8%
-# adjust-cell-height = 2%
-# adjust-cursor-height = -10%
 
-window-padding-x = 0,0
-window-padding-y = 0,0
-window-padding-balance = true
+adjust-box-thickness = -50%
+adjust-cursor-height = -10%
+adjust-cell-height = 4%
+# adjust-cell-width = 1%
 
-cursor-color=#E9B3FB
+# window-padding-x = 8
+# window-padding-y = 8
+
+macos-window-shadow = true
+macos-titlebar-style = hidden
+macos-option-as-alt = true
+
+cursor-color=#00E0BA
 # cursor-style = bar
-cursor-opacity = 0.8
 cursor-style-blink = true
+# cursor-opacity = 0.8
 
-
-background-blur-radius = 30
 # background-opacity = 0.96
+# background-blur-radius = 40
 # background-blur=macos-glass-regular
 
 link-url = true
-copy-on-select = clipboard
-
-macos-option-as-alt = true
-macos-titlebar-style = hidden
-macos-window-shadow = true
+copy-on-select = true
 
 auto-update = check
 auto-update-channel = tip
 
-bold-is-bright = true
-# minimum-contrast = 1.05
 mouse-hide-while-typing = true
 
 keybind = super+i=inspector:toggle
 keybind = super+r=reload_config
-keybind = ctrl+.=csi:46;5u
 
-# custom-shader = ./shaders/cursor_smear_fade.glsl
-# custom-shader = ./shaders/cursor_sweep.glsl
-custom-shader = ./shaders/cursor_synesthaxia.glsl
-# custom-shader = ./shaders/cursor_follow_eye.glsl
+# custom-shader = ./shaders/blaze_sparks.glsl
+custom-shader = ./shaders/ripple_cursor.glsl
 # custom-shader = ./shaders/cursor_warp.glsl
-# custom-shader = ./shaders/ripple_cursor.glsl
-custom-shader = ./shaders/sonic_boom_cursor.glsl
-
-keybind = shift+enter=text:\n
+custom-shader = ./shaders/cursor_synesthaxia.glsl

@@ -60,7 +60,7 @@ local setup = function()
     formatters = {
       prettier = {
         condition = function(self, ctx)
-          return prettier_root(self, ctx) ~= nil
+          return prettier_root ~= nil and prettier_root(self, ctx) ~= nil
         end,
         cwd = prettier_root,
       },

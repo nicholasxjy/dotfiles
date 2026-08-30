@@ -1,67 +1,104 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Nvim probes for these interpreters on demand; none of the plugins here use
--- them, so skip the probe entirely.
-vim.g.loaded_node_provider = 0
-vim.g.loaded_perl_provider = 0
-vim.g.loaded_python3_provider = 0
-vim.g.loaded_ruby_provider = 0
+-- General ====================================================================
+vim.o.mouse = "a" -- Enable mouse
+vim.o.mousescroll = "ver:25,hor:6" -- Customize mouse scroll
+vim.o.switchbuf = "usetab" -- Use already opened buffers when switching
+vim.o.undofile = true -- Enable persistent undo
+vim.o.clipboard = "unnamedplus" -- Use the system clipboard
 
--- Built-in plugins that are either unused or superseded.
--- `matchparen`/`matchit` in particular re-scan for the pair under the cursor on
--- every move; vim-matchup and blink.pairs already do that work.
-vim.g.loaded_gzip = 1
-vim.g.loaded_matchit = 1
-vim.g.loaded_matchparen = 1
-vim.g.loaded_netrwPlugin = 1
-vim.g.loaded_tarPlugin = 1
-vim.g.loaded_tutor_mode_plugin = 1
-vim.g.loaded_zipPlugin = 1
+vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit ShaDa file (for startup)
 
-local opt = vim.opt
+-- UI =========================================================================
+vim.o.breakindent = true -- Indent wrapped lines to match line start
+vim.o.breakindentopt = "list:-1" -- Add padding for lists (if 'wrap' is set)
+vim.o.colorcolumn = "+1" -- Draw column on the right of maximum width
+vim.o.cursorline = true -- Enable current line highlighting
+vim.o.linebreak = true -- Wrap lines at 'breakat' (if 'wrap' is set)
+vim.o.list = true -- Show helpful text indicators
+vim.o.number = true -- Show line numbers
+vim.o.pumheight = 10 -- Make popup menu smaller
+vim.o.ruler = false -- Don't show cursor coordinates
+vim.o.shortmess = "CFOSWaco" -- Disable some built-in completion messages
+vim.o.showmode = false -- Don't show mode in command line
+vim.o.signcolumn = "yes" -- Always show signcolumn (less flicker)
+vim.o.splitbelow = true -- Horizontal splits will be below
+vim.o.splitkeep = "screen" -- Reduce scroll during window split
+vim.o.splitright = true -- Vertical splits will be to the right
+vim.o.wrap = false -- Don't visually wrap lines (toggle with \w)
 
-opt.number = true
-opt.relativenumber = true
-opt.ignorecase = true
-opt.cursorline = true
-opt.clipboard = "unnamedplus"
-opt.confirm = true
-opt.autoread = true
-opt.mouse = "a"
-opt.undofile = true
-opt.swapfile = false
-opt.conceallevel = 1
-opt.linebreak = true
-opt.termguicolors = true
-opt.winborder = "single"
+vim.o.cursorlineopt = "screenline,number" -- Show cursor line per screen line
 
-opt.tabstop = 2
-opt.shiftwidth = 2
-opt.expandtab = true
+-- Special UI symbols
+vim.o.fillchars = "eob: ,fold:╌"
+vim.o.listchars = "extends:…,nbsp:␣,precedes:…,tab:> "
+vim.opt.foldenable = true
+-- Treesitter 负责计算 fold
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- 打开文件时默认全部展开
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+-- 最大嵌套层级
+vim.opt.foldnestmax = 10
+-- fold 至少包含几行
+vim.opt.foldminlines = 1
+-- 折叠列
+vim.opt.foldcolumn = "0"
 
-opt.updatetime = 200
-opt.laststatus = 3
+vim.o.termguicolors = true
 
-opt.redrawtime = 1500 -- Give up on syntax redraw instead of blocking on huge lines
-opt.synmaxcol = 300 -- Only relevant for the regex-syntax fallback, Tree-sitter ignores it
+if vim.fn.has("nvim-0.10") == 1 then
+  vim.o.foldtext = "" -- Show text under fold with its highlighting
+end
 
-opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
-opt.shiftround = true -- Round indent
-opt.pumblend = 10 -- Popup blend
-opt.pumheight = 10 -- Maximum number of entries in a popup
-opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
-opt.smartcase = true -- Don't ignore case with capitals
-opt.splitbelow = true -- Put new windows below current
-opt.splitkeep = "screen"
-opt.splitright = true -- Put new windows right of current
-opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-opt.wildmode = "longest:full,full" -- Command-line completion mode
-opt.winminwidth = 5 -- Minimum window width
-opt.wrap = true
-opt.undolevels = 10000
+vim.o.winborder = "solid" -- Use border in floating windows
 
-opt.foldcolumn = "1"
-opt.foldlevel = 99
-opt.foldlevelstart = 99
-opt.foldenable = true
+vim.o.pummaxwidth = 100 -- Limit maximum width of popup menu
+vim.o.completetimeout = 100
+
+vim.o.pumborder = "single" -- Use border in built-in completion menu
+
+require("vim._core.ui2").enable({ enable = true })
+
+if vim.fn.has("nvim-0.13") == 1 then
+  -- Try it out. Probably not a good idea since the "put" action has visible
+  -- side effects so the temporary highlight is more distracting than useful.
+  vim.cmd("autocmd TextPutPost * silent! lua vim.hl.hl_op()")
+
+  vim.o.shortmess = "CFOSWacou" -- Add `u` flag to disable undo/redo messages
+
+  vim.o.updatetime = 200 -- Ensure fast `current_line` diagnostic renders
+end
+
+-- Editing ====================================================================
+vim.o.autoindent = true -- Use auto indent
+vim.o.expandtab = true -- Convert tabs to spaces
+vim.o.formatoptions = "rqnl1j" -- Improve comment editing
+vim.o.ignorecase = true -- Ignore case during search
+vim.o.incsearch = true -- Show search matches while typing
+vim.o.infercase = true -- Infer case in built-in completion
+vim.o.shiftwidth = 2 -- Use this number of spaces for indentation
+vim.o.smartcase = true -- Respect case if search pattern has upper case
+vim.o.smartindent = true -- Make indenting smart
+vim.o.spelllang = "en,uk,ru" -- Define spelling dictionaries
+vim.o.spelloptions = "camel" -- Treat camelCase word parts as separate words
+vim.o.tabstop = 2 -- Show tab as this number of spaces
+vim.o.virtualedit = "block" -- Allow going past end of line in blockwise mode
+
+vim.o.iskeyword = "@,48-57,_,192-255,-" -- Treat dash as `word` textobject part
+vim.o.dictionary = vim.fn.stdpath("config") .. "/misc/dict/english.txt" -- Use specific dictionaries
+
+-- Pattern for a start of 'numbered' list (used in `gw`). This reads as
+-- "Start of list item is: at least one special character (digit, -, +, *)
+-- possibly followed by punctuation (. or `)`) followed by at least one space".
+vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
+
+-- Built-in completion
+vim.o.complete = ".,w,b,kspell" -- Use less sources
+vim.o.completeopt = "menuone,noselect" -- Use custom behavior
+
+if vim.fn.has("nvim-0.11") == 1 then
+  vim.o.completeopt = "menuone,noselect,fuzzy,nosort"
+end

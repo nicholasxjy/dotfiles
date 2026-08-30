@@ -10,7 +10,6 @@ local setup_automatic = function()
     "ts-comments.nvim"
   )
 
-  -- Tree-sitter aware `commentstring`; the plugin is inert without this call.
   require("ts-comments").setup()
 
   local function hl_color(group, attr, fallback)
@@ -33,7 +32,7 @@ local setup_automatic = function()
 
   require("modes").setup({
     colors = {
-      bg = hl_color("Normal", "bg", "#2d293a"),
+      bg = "#2E2910", --hl_color("Normal", "bg", "#2d293a"),
       copy = hl_color("WarningMsg", "fg", "#f4b258"),
       delete = hl_color("ErrorMsg", "fg", "#f08a75"),
       change = hl_color("DiagnosticInfo", "fg", "#91cee7"),
@@ -114,28 +113,31 @@ local setup_tools = function()
     },
   })
 
-  require("treesj").setup({ use_default_keymaps = false })
-
-  -- local width = math.max(1, vim.o.columns)
-  -- local height = math.max(1, math.floor(vim.o.lines * 0.4) - 2)
-  require("jishiben").setup({
-    win = {
-      -- width = width,
-      -- height = height,
-      -- row = vim.o.lines - height - 2,
-      -- col = 0,
-    },
+  require("treesj").setup({
+    use_default_keymaps = false,
+    check_syntax_error = true,
+    ---If line after join will be longer than max value,
+    ---@type number If line after join will be longer than max value, node will not be formatted
+    max_join_length = 120,
+    ---Cursor behavior:
+    ---hold - cursor follows the node/place on which it was called
+    ---start - cursor jumps to the first symbol of the node being formatted
+    ---end - cursor jumps to the last symbol of the node being formatted
+    ---@type 'hold'|'start'|'end'
+    cursor_behavior = "hold",
   })
+
+  require("jishiben").setup()
 
   require("translator").setup({
     default_target_lang = "zh",
-    default_source_lang = nil,
     window = {
       width = 60,
     },
   })
 
   vim.keymap.set("n", "<leader>uJ", function()
+    loader.packadd("nvim-treesitter")
     require("treesj").toggle()
   end, { desc = "Toggle Split" })
 

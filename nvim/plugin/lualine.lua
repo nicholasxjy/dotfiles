@@ -78,7 +78,7 @@ local function setup()
         statusline = 1000,
       },
     },
-    extensions = { "neo-tree", "lazy", "fzf" },
+    extensions = { "fzf" },
     sections = {
       lualine_a = {
         { "mode" },

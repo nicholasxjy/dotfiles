@@ -18,32 +18,13 @@ local setup = function()
   end
 
   local function javascript_linters(bufnr)
-    local linters = {}
-
-    if
-      has_config(bufnr, {
-        "eslint.config.js",
-        "eslint.config.mjs",
-        "eslint.config.cjs",
-        "eslint.config.ts",
-        "eslint.config.mts",
-        "eslint.config.cts",
-        ".eslintrc",
-        ".eslintrc.js",
-        ".eslintrc.cjs",
-        ".eslintrc.json",
-        ".eslintrc.yaml",
-        ".eslintrc.yml",
-      })
-    then
-      table.insert(linters, "eslint")
-    end
-
+    -- ESLint diagnostics are provided by the ESLint LSP; keep oxlint as the
+    -- complementary project linter to avoid duplicate reports.
     if has_config(bufnr, { ".oxlintrc.json", ".oxlintrc.jsonc", "oxlint.config.ts", "oxlint.config.mts" }) then
-      table.insert(linters, "oxlint")
+      return { "oxlint" }
     end
 
-    return linters
+    return {}
   end
 
   lint.linters_by_ft = {

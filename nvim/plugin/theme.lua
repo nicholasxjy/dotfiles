@@ -40,6 +40,8 @@ require("tokyonight").setup({
     highlights.FloatBorder = { fg = colors.border_highlight, bg = colors.bg_float }
     highlights.LspInlayHint = { fg = colors.dark3, bg = blend_with_bg(colors.blue7, 0.1) }
 
+    highlights.ZedBarFile = { fg = colors.fg_gutter, bold = true }
+
     highlights["@keyword.import"] = { fg = colors.teal, italic = true }
     highlights["@keyword.export"] = { link = "@keyword.import" }
     highlights["@tag.tsx"] = { fg = colors.red, bold = true }
@@ -47,7 +49,7 @@ require("tokyonight").setup({
 
     -- Interfaces and builtin types keep TokyoNight's semantic type colors. Do
     -- not reuse the warning/error ramps for ordinary language constructs.
-
+    -- highlights.WhichKeyNormal = { link = "Normal" }
     highlights.SnacksPickerDir = { fg = colors.fg_dark, bg = blend_with_bg(colors.bg_dark1, 0.9) }
     highlights.SnacksPickerMatch = { fg = "#FB6C00", bg = nil, bold = true }
     highlights.SnacksPickerInput = { fg = colors.fg, bg = colors.bg_float }
