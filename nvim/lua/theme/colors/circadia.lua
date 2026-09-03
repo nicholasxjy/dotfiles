@@ -16,20 +16,20 @@ local function build_circadia(colors)
   -- colors.bg_dark1 = "#191B29"
   -- colors.bg_highlight = "#2f334d"
 
-  -- colors.bg = "#24283b"
-  -- colors.bg_dark = "#1f2335"
-  -- colors.bg_dark1 = "#1b1e2d"
-  -- colors.bg_highlight = "#292e42"
+  colors.bg = "#24283b"
+  colors.bg_dark = "#1f2335"
+  colors.bg_dark1 = "#1b1e2d"
+  colors.bg_highlight = "#292e42"
 
   -- colors.bg = "#1e1e2e"
   -- colors.bg_dark = "#181825"
   -- colors.bg_dark1 = "#11111b"
   -- colors.bg_highlight = "#313244"
 
-  colors.bg = "#1e1e2e"
-  colors.bg_dark = "#181825"
-  colors.bg_dark1 = "#11111b"
-  colors.bg_highlight = "#313244"
+  -- colors.bg = "#1e1e2e"
+  -- colors.bg_dark = "#181825"
+  -- colors.bg_dark1 = "#11111b"
+  -- colors.bg_highlight = "#313244"
 
   -- colors.bg = "#24273a"
   -- colors.bg_dark = "#1e2030"

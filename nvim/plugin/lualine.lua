@@ -138,7 +138,12 @@ local function setup()
     end,
   })
 
-  require("lualine").setup(opts)
+  local ok, mb_lualine = pcall(require, "minibuffer.integrations.lualine")
+  if ok then
+    mb_lualine(opts)
+  else
+    require("lualine").setup(opts)
+  end
 end
 
 loader.defer_buffer("lualine", setup, { schedule = true })

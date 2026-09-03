@@ -33,7 +33,6 @@ vim.o.cursorlineopt = "screenline,number" -- Show cursor line per screen line
 -- Special UI symbols
 vim.o.fillchars = "eob: ,fold:╌"
 vim.o.listchars = "extends:…,nbsp:␣,precedes:…,tab:> "
-vim.opt.foldenable = true
 -- Treesitter 负责计算 fold
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
@@ -42,10 +41,6 @@ vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 -- 最大嵌套层级
 vim.opt.foldnestmax = 10
--- fold 至少包含几行
-vim.opt.foldminlines = 1
--- 折叠列
-vim.opt.foldcolumn = "0"
 
 vim.o.termguicolors = true
 
@@ -60,12 +55,21 @@ vim.o.completetimeout = 100
 
 vim.o.pumborder = "single" -- Use border in built-in completion menu
 
-require("vim._core.ui2").enable({ enable = true })
+-- UI2 is experimental and may be absent on older supported versions.
+local ok, ui2 = pcall(require, "vim._core.ui2")
+if ok then
+  ui2.enable({ enable = true })
+end
 
 if vim.fn.has("nvim-0.13") == 1 then
   -- Try it out. Probably not a good idea since the "put" action has visible
   -- side effects so the temporary highlight is more distracting than useful.
-  vim.cmd("autocmd TextPutPost * silent! lua vim.hl.hl_op()")
+  vim.api.nvim_create_autocmd("TextPutPost", {
+    pattern = "*",
+    callback = function()
+      pcall(vim.hl.hl_op)
+    end,
+  })
 
   vim.o.shortmess = "CFOSWacou" -- Add `u` flag to disable undo/redo messages
 
@@ -73,11 +77,9 @@ if vim.fn.has("nvim-0.13") == 1 then
 end
 
 -- Editing ====================================================================
-vim.o.autoindent = true -- Use auto indent
 vim.o.expandtab = true -- Convert tabs to spaces
 vim.o.formatoptions = "rqnl1j" -- Improve comment editing
 vim.o.ignorecase = true -- Ignore case during search
-vim.o.incsearch = true -- Show search matches while typing
 vim.o.infercase = true -- Infer case in built-in completion
 vim.o.shiftwidth = 2 -- Use this number of spaces for indentation
 vim.o.smartcase = true -- Respect case if search pattern has upper case
@@ -88,7 +90,11 @@ vim.o.tabstop = 2 -- Show tab as this number of spaces
 vim.o.virtualedit = "block" -- Allow going past end of line in blockwise mode
 
 vim.o.iskeyword = "@,48-57,_,192-255,-" -- Treat dash as `word` textobject part
-vim.o.dictionary = vim.fn.stdpath("config") .. "/misc/dict/english.txt" -- Use specific dictionaries
+-- Keep Ctrl-X Ctrl-K usable when the optional local dictionary is present.
+local dictionary = vim.fn.stdpath("config") .. "/misc/dict/english.txt"
+if vim.fn.filereadable(dictionary) == 1 then
+  vim.o.dictionary = dictionary
+end
 
 -- Pattern for a start of 'numbered' list (used in `gw`). This reads as
 -- "Start of list item is: at least one special character (digit, -, +, *)

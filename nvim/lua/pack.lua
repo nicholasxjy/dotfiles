@@ -27,8 +27,8 @@ local function noop() end
 
 vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
-  "https://github.com/nicholasxjy/snacks.nvim",
-  { src = "https://github.com/nicholasxjy/minibuffer.nvim", version = "fzf" },
+  "https://github.com/folke/snacks.nvim",
+  { src = "https://github.com/nicholasxjy/minibuffer.nvim", version = "feat/snacks-picker-integration" },
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
 
@@ -67,8 +67,13 @@ vim.pack.add({
   "https://github.com/rrethy/vim-illuminate",
   "https://github.com/mfussenegger/nvim-lint",
   "https://github.com/nvim-lualine/lualine.nvim",
-  "https://github.com/MeanderingProgrammer/render-markdown.nvim",
+
+  -- "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   "https://github.com/iamcco/markdown-preview.nvim",
+  "https://github.com/delphinus/md-render.nvim",
+  "https://github.com/nvim-tree/nvim-web-devicons",
+  "https://github.com/delphinus/budoux.lua",
+
   "https://github.com/andymass/vim-matchup",
 
   "https://github.com/brenoprata10/nvim-highlight-colors",
@@ -95,5 +100,7 @@ vim.pack.add({
   },
   "https://github.com/nicholasxjy/zed-bar.nvim",
 
+  "https://github.com/nicholasxjy/mini.hues",
   "https://github.com/folke/tokyonight.nvim",
+  { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 }, { load = noop })

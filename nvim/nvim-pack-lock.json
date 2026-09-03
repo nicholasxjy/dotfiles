@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "76c1a2357d4a9da49a90f922e251e5c32d74c99b",
+      "rev": "6a1a2daf151dd742d5ff2f64eb2cc049d7e5ab4a",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "SmoothCursor.nvim": {
@@ -13,27 +13,35 @@
       "src": "https://github.com/gen740/SmoothCursor.nvim"
     },
     "blink.cmp": {
-      "rev": "101d71861f6a012f2be80e4100720874330d86aa",
+      "rev": "2befba190e0ffa3692ab364f75604c9c2d248adf",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.lib": {
       "rev": "c8fdc12c8a2fab6cf786dd7141a283f8079f902b",
       "src": "https://github.com/saghen/blink.lib"
     },
+    "budoux.lua": {
+      "rev": "7f23658b127b9a74aae5b388fefcd997be30cbfc",
+      "src": "https://github.com/delphinus/budoux.lua"
+    },
     "bufferline.nvim": {
       "rev": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3",
       "src": "https://github.com/akinsho/bufferline.nvim"
+    },
+    "catppuccin": {
+      "rev": "edefef779ab08ce1a4a404713e3012b0d202bd35",
+      "src": "https://github.com/catppuccin/nvim"
     },
     "conform.nvim": {
       "rev": "016802de402556da54c36bd7359b441266b01cdd",
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "crates.nvim": {
-      "rev": "694357861ec9ebf12475ddcdd04ea45a0923c32d",
+      "rev": "b8281be336498035f9288d6542b2881a7140a9ec",
       "src": "https://github.com/Saecki/crates.nvim"
     },
     "differ.nvim": {
-      "rev": "a0eb716a05fb99df4ec3ce49298cb4998658e03b",
+      "rev": "21638236a0f74e8c9f8b5da76acdcbc677153118",
       "src": "https://github.com/undont/differ.nvim"
     },
     "flash.nvim": {
@@ -80,6 +88,10 @@
       "rev": "2a6940af80375532e5e9e7c1f2fc6319a1b7a69d",
       "src": "https://github.com/mason-org/mason.nvim"
     },
+    "md-render.nvim": {
+      "rev": "bafbb493792f7121f411135da579a427c4fd3e3e",
+      "src": "https://github.com/delphinus/md-render.nvim"
+    },
     "mini.ai": {
       "rev": "25248c6aa002391936a6200f12d1466015987133",
       "src": "https://github.com/nvim-mini/mini.ai"
@@ -87,6 +99,10 @@
     "mini.files": {
       "rev": "a249438d15fa6f64085ba83a9d1794d726aaf5ad",
       "src": "https://github.com/nvim-mini/mini.files"
+    },
+    "mini.hues": {
+      "rev": "060118f16031efb85a69d5172fed2dfb0d359784",
+      "src": "https://github.com/nicholasxjy/mini.hues"
     },
     "mini.icons": {
       "rev": "98faae31e9be1cc054ae63485e58ceb185efcad0",
@@ -97,7 +113,7 @@
       "src": "https://github.com/nvim-mini/mini.notify"
     },
     "mini.statuscolumn": {
-      "rev": "a7e533119f2cb5e4dcbaa584c308089d94c51f99",
+      "rev": "8d3560f5d0e4dd75490acf14fd60ea82e676b86c",
       "src": "https://github.com/nvim-mini/mini.statuscolumn"
     },
     "mini.surround": {
@@ -113,9 +129,9 @@
       "src": "https://github.com/nvim-mini/mini.trailspace"
     },
     "minibuffer.nvim": {
-      "rev": "0675ee7268b9dfbce96592a352a3248e33573167",
+      "rev": "0d63ae997d826d3b97d31fa97c598c8145631941",
       "src": "https://github.com/nicholasxjy/minibuffer.nvim",
-      "version": "'fzf'"
+      "version": "'feat/snacks-picker-integration'"
     },
     "modes.nvim": {
       "rev": "c3f2b208ebc7a768b30c08f30aa561d48c7cd101",
@@ -146,13 +162,17 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-treesitter": {
-      "rev": "857651fce37eba032ebe28f3a206283cdc65c45a",
+      "rev": "427e9222363d07c32d6db6169e4049c28d58d141",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
     "nvim-ts-autotag": {
       "rev": "88c1453db4ba7dd24131086fe51fdf74e587d275",
       "src": "https://github.com/windwp/nvim-ts-autotag"
+    },
+    "nvim-web-devicons": {
+      "rev": "5f032a85be210cd1c6ac98861eb3b187ff3bd5eb",
+      "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "rainbow-tags.nvim": {
       "rev": "4db4a2bb909a9ac4723cf197f756359810138455",
@@ -184,8 +204,8 @@
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "snacks.nvim": {
-      "rev": "5d07ab696c126bf7129f8fcfc56ef834b164a168",
-      "src": "https://github.com/nicholasxjy/snacks.nvim"
+      "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",
+      "src": "https://github.com/folke/snacks.nvim"
     },
     "stay-centered.nvim": {
       "rev": "e1a63ccaf2584e97c0ef8e64f9654c9a80d983f6",

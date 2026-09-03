@@ -209,7 +209,7 @@ local ensure_center_layout = function(ev)
   vim.api.nvim_win_set_config(ev.data.win_id, win_config)
 end
 
-vim.api.nvim_create_autocmd("User", { pattern = "MiniFilesWindowUpdate", callback = ensure_center_layout })
+-- vim.api.nvim_create_autocmd("User", { pattern = "MiniFilesWindowUpdate", callback = ensure_center_layout })
 
 vim.api.nvim_create_autocmd("User", {
   pattern = "MiniFilesWindowOpen",

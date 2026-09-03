@@ -1,5 +1,5 @@
 vim.g.minibuffer = {
-  dynamic_window_resize = true, -- Shrink other windows when the minibuffer is expanded
+  dynamic_window_resize = false, -- Shrink other windows when the minibuffer is expanded
   cmd = {
     -- NOTE: minibuffer cmd is not compatible with command line plugins that force `wildtrigger()` each `wildchar` such as mini.cmdline
     enabled = false, -- Enable command line wildmenu replacement through the minibuffer
@@ -28,9 +28,4 @@ local loader = require("loader")
 loader.on_very_lazy("minibuffer", function()
   loader.packadd("minibuffer.nvim")
   vim.lsp.buf.hover = require("minibuffer.builtin.hover")
-  local hover = vim.lsp.buf.hover
-  ---@diagnostic disable-next-line: duplicate-set-field
-  vim.lsp.buf.hover = function()
-    return hover({ border = "none" })
-  end
 end)

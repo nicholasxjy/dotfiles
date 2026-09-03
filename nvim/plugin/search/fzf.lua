@@ -71,37 +71,38 @@ local setup = function()
 
   local fzf_mb = require("minibuffer.integrations.fzf_lua")
 
-  vim.keymap.set("n", "<leader><space>", function()
-    fzf_mb.files({
-      smart = {
-        filename_bonus = true,
-        cwd_bonus = true,
-        frecency = true,
-        history_bonus = true,
-        query_delay = 30,
-      },
-      winopts = vim.tbl_extend("force", minibuffer_win_opts(), { row = 0 }),
-      previewer = "hidden",
-      git_icons = true,
-      hidden = true,
-      cwd_only = true,
-    })
-  end, {
-    desc = "Find Files",
-    silent = true,
-    nowait = true,
-  })
+  -- vim.keymap.set("n", "<leader><space>", function()
+  --   fzf_mb.files({
+  --     smart = {
+  --       filename_bonus = true,
+  --       cwd_bonus = true,
+  --       frecency = true,
+  --       history_bonus = true,
+  --       query_delay = 30,
+  --     },
+  --     winopts = vim.tbl_extend("force", minibuffer_win_opts(), { row = 0 }),
+  --     previewer = "hidden",
+  --     git_icons = true,
+  --     hidden = true,
+  --     cwd_only = true,
+  --   })
+  -- end, {
+  --   desc = "Find Files",
+  --   silent = true,
+  --   nowait = true,
+  -- })
+  --
+  -- vim.keymap.set("n", "<leader>h", function()
+  --   fzflua.buffers({
+  --     winopts = minibuffer_win_opts(),
+  --     previewer = false,
+  --     sort_lastused = true,
+  --     ignore_current_buffer = false,
+  --   })
+  -- end, { desc = "Find Buffers", silent = true, nowait = true })
+  --
+  -- vim.keymap.set("n", "<leader><cr>", fzflua.resume, { desc = "Resume Search" })
 
-  vim.keymap.set("n", "<leader>h", function()
-    fzflua.buffers({
-      winopts = minibuffer_win_opts(),
-      previewer = false,
-      sort_lastused = true,
-      ignore_current_buffer = false,
-    })
-  end, { desc = "Find Buffers", silent = true, nowait = true })
-
-  vim.keymap.set("n", "<leader><cr>", fzflua.resume, { desc = "Resume Search" })
   vim.keymap.set("n", "<leader>:", fzflua.commands, { desc = "Commands" })
   vim.keymap.set("n", "<leader>/", fzflua.grep_curbuf, { desc = "Grep Curbuf" })
   vim.keymap.set("n", "<leader>m", function()
@@ -132,15 +133,15 @@ local setup = function()
   vim.keymap.set("n", "<leader>gd", fzflua.git_hunks, { desc = "Git Diff (Hunks)" })
   vim.keymap.set("n", "<leader>gf", fzflua.git_bcommits, { desc = "Git Log File" })
 
-  vim.keymap.set("n", "<leader>sw", function()
-    fzflua.grep_cword({ winopts = minibuffer_win_opts() })
-  end, { desc = "Grep word" })
-  vim.keymap.set({ "x", "v" }, "<leader>sv", function()
-    fzflua.grep_visual({ winopts = minibuffer_win_opts() })
-  end, { desc = "Grep Visual" })
-  vim.keymap.set("n", "<leader>sg", function()
-    fzflua.live_grep({ winopts = minibuffer_win_opts() })
-  end, { desc = "Live Grep" })
+  -- vim.keymap.set("n", "<leader>sw", function()
+  --   fzflua.grep_cword({ winopts = minibuffer_win_opts() })
+  -- end, { desc = "Grep word" })
+  -- vim.keymap.set({ "x", "v" }, "<leader>sv", function()
+  --   fzflua.grep_visual({ winopts = minibuffer_win_opts() })
+  -- end, { desc = "Grep Visual" })
+  -- vim.keymap.set("n", "<leader>sg", function()
+  --   fzflua.live_grep({ winopts = minibuffer_win_opts() })
+  -- end, { desc = "Live Grep" })
 end
 
 loader.on_very_lazy("fzf", setup)
