@@ -92,74 +92,49 @@ vim.lsp.config("*", {
   capabilities = capabilities,
 })
 
-local minibuffer_win_opts = function()
-  return {
-    height = 0.3,
-    width = 1,
-    row = 0,
-    col = 0.50,
-    border = "none",
-    backdrop = 100,
-    relative = "minibuffer",
-    use_minibuffer = true,
-    winhl = true,
-  }
-end
-
 local function lsp_keymaps(bufnr)
   loader.packadd("fzf-lua")
   local fzflua = require("fzf-lua")
-  local with_minibuffer = function(fn, fzf_opts)
-    return function()
-      fn(vim.tbl_extend("force", fzf_opts or {}, { winopts = minibuffer_win_opts(), previewer = "hidden" }))
-    end
-  end
 
   local opts = function(desc)
     return { buffer = bufnr, desc = desc }
   end
 
-  vim.keymap.set("n", "gd", with_minibuffer(fzflua.lsp_definitions), opts("Goto Definition"))
-  vim.keymap.set("n", "gD", with_minibuffer(fzflua.lsp_declarations), opts("Goto Declaration"))
-  vim.keymap.set("n", "gr", with_minibuffer(fzflua.lsp_references), opts("Goto References"))
-  vim.keymap.set("n", "gi", with_minibuffer(fzflua.lsp_implementations), opts("Goto Implementation"))
-  vim.keymap.set("n", "gy", with_minibuffer(fzflua.lsp_typedefs), opts("Goto TypeDefs"))
-  vim.keymap.set("n", "gI", with_minibuffer(fzflua.lsp_incoming_calls), opts("Incoming Calls"))
-  vim.keymap.set("n", "gO", with_minibuffer(fzflua.lsp_outgoing_calls), opts("Outgoing Calls"))
+  vim.keymap.set("n", "gd", fzflua.lsp_definitions, opts("Goto Definition"))
+  vim.keymap.set("n", "gD", fzflua.lsp_declarations, opts("Goto Declaration"))
+  vim.keymap.set("n", "gr", fzflua.lsp_references, opts("Goto References"))
+  vim.keymap.set("n", "gi", fzflua.lsp_implementations, opts("Goto Implementation"))
+  vim.keymap.set("n", "gy", fzflua.lsp_typedefs, opts("Goto TypeDefs"))
+  vim.keymap.set("n", "gI", fzflua.lsp_incoming_calls, opts("Incoming Calls"))
+  vim.keymap.set("n", "gO", fzflua.lsp_outgoing_calls, opts("Outgoing Calls"))
 
-  vim.keymap.set("n", "<leader>ca", with_minibuffer(fzflua.lsp_code_actions, opts("Code Actions")))
+  vim.keymap.set("n", "<leader>ca", fzflua.lsp_code_actions, opts("Code Actions"))
 
-  vim.keymap.set("n", "<leader>ss", with_minibuffer(fzflua.lsp_document_symbols), opts("Lsp symbols"))
-  vim.keymap.set("n", "<leader>sS", with_minibuffer(fzflua.lsp_workspace_symbols), opts("Workspace lsp symbols"))
+  vim.keymap.set("n", "<leader>ss", fzflua.lsp_document_symbols, opts("Lsp symbols"))
+  vim.keymap.set("n", "<leader>sS", fzflua.lsp_workspace_symbols, opts("Workspace lsp symbols"))
 
-  vim.keymap.set("n", "<leader>xx", with_minibuffer(fzflua.diagnostics_document, { sort = true }), opts("Diagnostics"))
-  vim.keymap.set(
-    "n",
-    "<leader>xX",
-    with_minibuffer(fzflua.diagnostics_workspace, { sort = true }),
-    opts("Workspace Diagnostics")
-  )
-  vim.keymap.set(
-    "n",
-    "<leader>xw",
-    with_minibuffer(fzflua.diagnostics_workspace, { severity_limit = vim.diagnostic.severity.WARN, sort = true }),
-    opts("Workspace Diagnostics(Warns)")
-  )
-  vim.keymap.set(
-    "n",
-    "<leader>xe",
-    with_minibuffer(fzflua.diagnostics_workspace, { severity_limit = vim.diagnostic.severity.ERROR, sort = true }),
-    opts("Workspace Diagnostics(Errors)")
-  )
+  vim.keymap.set("n", "<leader>xx", function()
+    fzflua.diagnostics_document({ sort = true })
+  end, opts("Diagnostics"))
+  vim.keymap.set("n", "<leader>xX", function()
+    fzflua.diagnostics_workspace({ sort = true })
+  end, opts("Workspace Diagnostics"))
+  vim.keymap.set("n", "<leader>xw", function()
+    fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.WARN, sort = true })
+  end, opts("Workspace Diagnostics(Warns)"))
+  vim.keymap.set("n", "<leader>xe", function()
+    fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.ERROR, sort = true })
+  end, opts("Workspace Diagnostics(Errors)"))
 end
 
--- local hover = vim.lsp.buf.hover
--- ---@diagnostic disable-next-line: duplicate-set-field
--- vim.lsp.buf.hover = function()
---   return hover({
---     border = "none",
---   })
--- end
+local hover = vim.lsp.buf.hover
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.buf.hover = function()
+  return hover({
+    max_height = math.floor(vim.o.lines * 0.5),
+    max_width = math.floor(vim.o.columns * 0.6),
+  })
+end
 
 local signature_help = vim.lsp.buf.signature_help
 ---@diagnostic disable-next-line: duplicate-set-field

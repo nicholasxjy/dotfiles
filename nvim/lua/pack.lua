@@ -19,6 +19,10 @@ util.build_fn_on_change("nvim-treesitter", "update", function()
   require("nvim-treesitter").update()
 end)
 
+util.build_fn_on_change("fff", { "install", "update" }, function()
+  loader.packadd("fff")
+  require("fff.download").download_or_build_binary()
+end)
 -- `vim.pack` only installs and registers here; nothing is put on 'runtimepath'.
 -- Each plugin is `:packadd`ed by its own config under `plugin/`, at the moment
 -- it is actually needed. Adding a plugin below therefore also requires a
@@ -28,7 +32,7 @@ local function noop() end
 vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/folke/snacks.nvim",
-  { src = "https://github.com/nicholasxjy/minibuffer.nvim", version = "feat/snacks-picker-integration" },
+  { src = "https://github.com/nicholasxjy/minibuffer.nvim", version = "xue-2" },
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
 
@@ -38,8 +42,10 @@ vim.pack.add({
   "https://github.com/windwp/nvim-autopairs",
 
   "https://github.com/folke/which-key.nvim",
-  "https://github.com/nicholasxjy/sidekick.nvim",
 
+  "https://github.com/dmtrKovalenko/fff",
+
+  "https://github.com/onsails/lspkind.nvim",
   "https://github.com/rafamadriz/friendly-snippets",
   "https://github.com/L3MON4D3/LuaSnip",
   "https://github.com/saghen/blink.lib",
@@ -50,9 +56,10 @@ vim.pack.add({
   "https://github.com/folke/ts-comments.nvim",
   "https://github.com/nemanjamalesija/smart-paste.nvim",
   "https://github.com/nicholasxjy/jishiben.nvim",
-  "https://github.com/nicholasxjy/translator.nvim",
+
+  "https://github.com/celeste3z/kd-translator.nvim",
   "https://github.com/Wansmer/treesj",
-  "https://github.com/nicholasxjy/modes.nvim",
+  "https://github.com/mawkler/modicator.nvim",
   "https://github.com/b0o/SchemaStore.nvim",
   "https://github.com/mfussenegger/nvim-jdtls",
   "https://github.com/windwp/nvim-ts-autotag",
@@ -66,7 +73,7 @@ vim.pack.add({
   "https://github.com/MagicDuck/grug-far.nvim",
   "https://github.com/rrethy/vim-illuminate",
   "https://github.com/mfussenegger/nvim-lint",
-  "https://github.com/nvim-lualine/lualine.nvim",
+  "https://github.com/rachartier/tiny-cmdline.nvim",
 
   -- "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   "https://github.com/iamcco/markdown-preview.nvim",
@@ -88,6 +95,7 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.ai",
   "https://github.com/nvim-mini/mini.notify",
   "https://github.com/nvim-mini/mini.statuscolumn",
+  "https://github.com/nvim-mini/mini.statusline",
 
   "https://github.com/jake-stewart/multicursor.nvim",
   "https://github.com/nicholasxjy/rainbow-tags.nvim",
@@ -100,7 +108,7 @@ vim.pack.add({
   },
   "https://github.com/nicholasxjy/zed-bar.nvim",
 
-  "https://github.com/nicholasxjy/mini.hues",
+  "https://github.com/nvim-mini/mini.hues",
   "https://github.com/folke/tokyonight.nvim",
   { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 }, { load = noop })

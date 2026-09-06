@@ -4,18 +4,21 @@ local M = {
 
 local themes = {
   tokyonight = {
+    pack = "tokyonight.nvim",
     setup = function()
       require("theme.tokyonight").setup()
     end,
     colorscheme = "tokyonight",
   },
   catppuccin = {
+    pack = "catppuccin",
     setup = function()
       require("theme.catppuccin").setup()
     end,
     colorscheme = "catppuccin",
   },
   hues = {
+    pack = "mini.hues",
     setup = function()
       require("theme.hues").setup()
     end,
@@ -60,6 +63,9 @@ function M.set(name)
     return false
   end
 
+  if target.pack then
+    require("loader").packadd(target.pack)
+  end
   target.setup()
   vim.cmd.colorscheme(target.colorscheme)
   M.current = name
@@ -84,7 +90,6 @@ end
 --- Initialize theme with the default or given theme name.
 ---@param name? string
 function M.setup(name)
-  require("loader").packadd("tokyonight.nvim", "catppuccin", "mini.hues")
   init_autocmds()
   M.set(name or "tokyonight")
 end

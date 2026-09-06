@@ -8,6 +8,8 @@ local setup = function()
   matchup.setup({
     matchparen = {
       enabled = 1,
+      deferred = 1,
+      timeout = 50,
       nomode = "i",
       insert_timeout = 20,
       hi_background = 1,

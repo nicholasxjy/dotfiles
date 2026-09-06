@@ -4,7 +4,7 @@ local setup_automatic = function()
   loader.packadd(
     "todo-comments.nvim",
     "smart-paste.nvim",
-    "modes.nvim",
+    "modicator.nvim",
     "stay-centered.nvim",
     "nvim-highlight-colors",
     "ts-comments.nvim"
@@ -12,58 +12,9 @@ local setup_automatic = function()
 
   require("ts-comments").setup()
 
-  local function hl_color(group, attr, fallback)
-    local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group, link = false })
-    if not ok then
-      return fallback
-    end
-
-    local color = hl[attr]
-    if color == nil then
-      return fallback
-    end
-
-    return string.format("#%06x", color)
-  end
+  require("modicator").setup()
 
   require("smart-paste").setup()
-
-  local visual = hl_color("@keyword", "fg", "#9b88ce")
-
-  require("modes").setup({
-    colors = {
-      bg = "#2E2910", --hl_color("Normal", "bg", "#2d293a"),
-      copy = hl_color("WarningMsg", "fg", "#f4b258"),
-      delete = hl_color("ErrorMsg", "fg", "#f08a75"),
-      change = hl_color("DiagnosticInfo", "fg", "#91cee7"),
-      format = hl_color("Operator", "fg", "#f8cb94"),
-      insert = hl_color("DiagnosticHint", "fg", "#79c5b7"),
-      replace = hl_color("Substitute", "bg", "#f08a75"),
-      select = visual,
-      visual = visual,
-    },
-
-    -- Set opacity for cursorline and number background
-    line_opacity = 0.15,
-
-    -- Enable cursor highlights
-    set_cursor = false,
-
-    -- Enable cursorline initially, and disable cursorline for inactive windows
-    -- or ignored filetypes
-    set_cursorline = true,
-
-    -- Enable line number highlights to match cursorline
-    set_number = true,
-
-    -- Enable sign column highlights to match cursorline
-    set_signcolumn = true,
-
-    -- Disable modes highlights for specified filetypes
-    -- or enable with prefix "!" if otherwise disabled (please PR common patterns)
-    -- Can also be a function fun():boolean that disables modes highlights when true
-    ignore = { "NvimTree", "TelescopePrompt", "!minifiles" },
-  })
 
   require("stay-centered").setup({
     -- The filetype is determined by the vim filetype, not the file extension. In order to get the filetype, open a file and run the command:
@@ -84,7 +35,7 @@ local setup_automatic = function()
 end
 
 local setup_tools = function()
-  loader.packadd("screenkey.nvim", "jishiben.nvim", "translator.nvim", "nerdy.nvim", "treesj")
+  loader.packadd("screenkey.nvim", "jishiben.nvim", "kd-translator.nvim", "nerdy.nvim", "treesj")
 
   require("nerdy").setup({
     max_recents = 30, -- Configure recent icons limit
@@ -129,12 +80,10 @@ local setup_tools = function()
 
   require("jishiben").setup()
 
-  require("translator").setup({
-    default_target_lang = "zh",
-    window = {
-      width = 60,
-    },
-  })
+  require("kd-translator").setup()
+
+  -- vim.keymap.set("n", "gt", "<Plug>(kd-translator-operator)", { desc = "Kd Translate Operator" })
+  vim.keymap.set("x", "gt", "<Plug>(kd-translator-visual)", { desc = "Kd Translate Visual" })
 
   vim.keymap.set("n", "<leader>uJ", function()
     loader.packadd("nvim-treesitter")

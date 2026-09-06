@@ -34,6 +34,19 @@ local setup = function()
   }
 
   require("tiny-inline-diagnostic").setup(tiny_opts)
+
+  -- setup() registers the plugin's LspAttach handler after this event has
+  -- started, so replay it for buffers that already have a client.
+  for _, client in ipairs(vim.lsp.get_clients()) do
+    for bufnr in pairs(client.attached_buffers) do
+      vim.api.nvim_exec_autocmds("LspAttach", {
+        group = "TinyInlineDiagnosticAutocmds",
+        buffer = bufnr,
+        data = { client_id = client.id },
+        modeline = false,
+      })
+    end
+  end
 end
 
-loader.on_very_lazy("tiny-inline-diagnostic", setup)
+loader.defer("tiny-inline-diagnostic", setup, "LspAttach")

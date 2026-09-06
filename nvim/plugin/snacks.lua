@@ -96,13 +96,6 @@ local function setup()
     },
   })
 
-  require("minibuffer.integrations.snacks-picker").setup({
-    smart = { git_status = true },
-    pickers = {
-      explorer = false,
-    },
-  })
-
   Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
   Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
   Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
@@ -122,38 +115,12 @@ local function setup()
     })
   end, { desc = "Explorer" })
 
-  vim.keymap.set("n", "<leader>ff", function()
-    Snacks.picker.files()
-  end, { desc = "Find Files", silent = true })
-
-  vim.keymap.set("n", "<leader><space>", function()
-    Snacks.picker.smart()
-  end, { desc = "Smart", silent = true })
-
-  vim.keymap.set("n", "<leader>h", function()
-    Snacks.picker.buffers({
-      sort_lastused = true,
-      filter = { cwd = true },
-      current = true,
-    })
-  end, { desc = "Buffers", silent = true })
-
-  vim.keymap.set("n", "<leader><cr>", function()
-    Snacks.picker.resume()
-  end, { desc = "Resume", silent = true })
-
-  vim.keymap.set("n", "<leader>sg", function()
-    Snacks.picker.grep()
-  end, { desc = "Grep", silent = true })
-
-  vim.keymap.set("n", "<leader>sw", function()
-    Snacks.picker.grep_word()
-  end, { desc = "Grep word", silent = true })
-
   vim.keymap.set("n", "<leader>xt", function()
     ---@diagnostic disable-next-line: undefined-field
     Snacks.picker.todo_comments()
   end, { desc = "TODO/FIXME/NOTE etc" })
 end
 
-loader.on_very_lazy("snacks", setup)
+-- Eager setup ensures bigfile detection hooks BufReadPre before any buffer is loaded.
+-- snacks.setup() only registers autocmds and defers actual modules until their events.
+setup()

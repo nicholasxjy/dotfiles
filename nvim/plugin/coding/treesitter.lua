@@ -71,11 +71,16 @@ local setup = function()
   })
 
   loader.packadd("nvim-treesitter")
-  -- Never let the parser check sit between the user and their first buffer.
-  vim.schedule(install_configured)
 end
 
 loader.defer_buffer("treesitter", setup)
+
+-- Defer missing parser audit to VeryLazy so opening the first buffer stays instant
+loader.on_very_lazy("treesitter-parsers", function()
+  if loader.load("treesitter", setup) then
+    install_configured()
+  end
+end)
 
 vim.api.nvim_create_user_command("TSInstallConfigured", function()
   if loader.load("treesitter", setup) then

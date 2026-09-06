@@ -6,17 +6,18 @@ function M.setup()
 
   require("mini.hues").setup({
     -- REQUIRED base colors as '#rrggbb' hex strings
-    background = "#24283b",
+    background = "#303446",
     foreground = "#eee7dc",
 
-    -- Number of hues used for non-base colors (0 to 8)
+    -- Number of hues used for non-base colors
     n_hues = 8,
 
     -- Saturation. One of 'low', 'lowmedium', 'medium', 'mediumhigh', 'high'.
-    saturation = "medium",
+    saturation = "mediumhigh",
 
-    -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'green',
-    -- 'cyan', 'azure', 'blue', 'purple'
+    -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'lime',
+    -- 'green', 'teal', 'cyan', 'azure', 'blue', 'indigo', 'purple', 'pink',
+    -- or a '#rrggbb' hex string.
     accent = "bg",
 
     -- Plugin integrations. Use `default = false` to disable all integrations.

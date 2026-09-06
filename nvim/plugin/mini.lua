@@ -77,9 +77,30 @@ end
 -- all driven by user input, so none of them need to exist before the first
 -- frame is on screen.
 loader.on_very_lazy("mini-extras", function()
-  loader.packadd("mini.ai", "mini.surround", "mini.trailspace", "mini.files", "mini.statuscolumn", "mini.tabline")
+  loader.packadd(
+    "mini.ai",
+    "mini.surround",
+    "mini.trailspace",
+    "mini.files",
+    "mini.statuscolumn",
+    "mini.tabline",
+    "mini.statusline"
+  )
 
   require("mini.tabline").setup()
+
+  local function win_is_active()
+    local ok, mb = pcall(require, "minibuffer")
+    local winid = vim.api.nvim_get_current_win()
+    local curwin = (ok and mb.get_active_window()) or tonumber(vim.g.actual_curwin)
+    return winid == curwin
+  end
+
+  _G.minibuffer_win_is_active = win_is_active
+
+  require("mini.statusline").setup()
+  vim.go.statusline =
+    "%{%(v:lua.minibuffer_win_is_active() || &laststatus==3) ? v:lua.MiniStatusline.active() : v:lua.MiniStatusline.inactive()%}"
 
   local statuscolumn = require("mini.statuscolumn")
   local default_content = statuscolumn.gen_content.main({
@@ -217,7 +238,7 @@ vim.api.nvim_create_autocmd("User", {
     local win_id = args.data.win_id
     vim.wo[win_id].winblend = 0
     local config = vim.api.nvim_win_get_config(win_id)
-    config.border = "single"
+    config.border = vim.o.winborder
     vim.api.nvim_win_set_config(win_id, config)
   end,
 })

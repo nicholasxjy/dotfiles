@@ -3,8 +3,13 @@ local loader = require("loader")
 -- blink.cmp must be up before `lua/lsp.lua` asks it for LSP capabilities.
 -- The snippet engine and the pairs/indent decorations are not needed to draw
 -- the first frame, so they are set up on VeryLazy instead.
-loader.packadd("blink.lib", "mini.icons", "LuaSnip", "friendly-snippets", "blink.cmp")
+loader.packadd("lspkind.nvim", "nvim-web-devicons", "blink.lib", "mini.icons", "blink.cmp")
 
+require("lspkind").init({
+  mode = "symbol_text",
+  preset = "codicons",
+  symbol_map = {},
+})
 local blink_opts = {
   fuzzy = { implementation = "prefer_rust_with_warning", sorts = { "exact", "score", "sort_text" } },
   keymap = {
@@ -30,24 +35,32 @@ local blink_opts = {
     menu = {
       scrollbar = false,
       draw = {
-        -- treesitter = { "lsp" },
-        columns = { { "label", "label_description" }, { "kind_icon", "kind", gap = 2 } },
+        treesitter = { "lsp" },
+        columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 }, { "kind" } },
         components = {
-          label = { width = { max = 26 } },
+          label = { width = { max = 32 } },
           label_description = { width = { max = 16 } },
           kind_icon = {
             text = function(ctx)
-              local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-              return kind_icon
+              local icon = ctx.kind_icon
+              if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+                if dev_icon then
+                  icon = dev_icon
+                end
+              else
+                icon = require("lspkind").symbol_map[ctx.kind] or ""
+              end
+              return icon .. ctx.icon_gap
             end,
             highlight = function(ctx)
-              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
-              return hl
-            end,
-          },
-          kind = {
-            highlight = function(ctx)
-              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+              local hl = ctx.kind_hl
+              if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+                if dev_icon then
+                  hl = dev_hl
+                end
+              end
               return hl
             end,
           },
@@ -88,14 +101,10 @@ local blink_opts = {
   },
 }
 
-local cmp = require("blink.cmp")
-if not cmp.library_available() then
-  ---@diagnostic disable-next-line: undefined-field
-  cmp.build():pwait(60000)
-end
-cmp.setup(blink_opts)
+require("blink.cmp").setup(blink_opts)
 
-loader.on_very_lazy("luasnip", function()
+local function setup_snippets()
+  loader.packadd("LuaSnip", "friendly-snippets")
   local ls = require("luasnip")
   ls.config.set_config({
     enable_autosnippets = true,
@@ -106,5 +115,11 @@ loader.on_very_lazy("luasnip", function()
   ls.filetype_extend("javascriptreact", { "javascript" })
   ls.filetype_extend("typescriptreact", { "javascript" })
   require("luasnip.loaders.from_vscode").lazy_load()
-  require("luasnip.loaders.from_lua").lazy_load({ paths = { "./snippets" } })
-end)
+  local snippets_dir = vim.fn.stdpath("config") .. "/snippets"
+  if vim.uv.fs_stat(snippets_dir) then
+    require("luasnip.loaders.from_lua").lazy_load({ paths = { snippets_dir } })
+  end
+end
+
+loader.defer("luasnip", setup_snippets, "InsertEnter")
+loader.on_very_lazy("luasnip", setup_snippets)
