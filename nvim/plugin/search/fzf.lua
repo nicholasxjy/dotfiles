@@ -36,12 +36,7 @@ local setup = function()
       fzf = { ["alt-k"] = "toggle-preview" },
     },
   }
-  local ok, mb_fzf = pcall(require, "minibuffer.integrations.fzf")
-  if ok then
-    mb_fzf(opts)
-  else
-    require("fzf-lua").setup(opts)
-  end
+  require("fzf-lua").setup(opts)
 
   -- vim.keymap.set("n", "<leader><space>", function()
   --   mb_fzf.files({
@@ -55,14 +50,14 @@ local setup = function()
   --     },
   --   })
   -- end, { desc = "Smart files" })
-
-  vim.keymap.set("n", "<leader>h", function()
-    fzflua.buffers({
-      previewer = false,
-      sort_lastused = true,
-      ignore_current_buffer = false,
-    })
-  end, { desc = "Find Buffers", silent = true, nowait = true })
+  --
+  -- vim.keymap.set("n", "<leader>h", function()
+  --   fzflua.buffers({
+  --     previewer = false,
+  --     sort_lastused = true,
+  --     ignore_current_buffer = false,
+  --   })
+  -- end, { desc = "Find Buffers", silent = true, nowait = true })
 
   -- vim.keymap.set("n", "<leader><cr>", fzflua.resume, { desc = "Resume Search" })
 

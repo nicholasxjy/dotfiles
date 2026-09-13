@@ -1,7 +1,6 @@
 local theme = require("theme")
 
--- Currently set to tokyonight
-theme.setup("hues")
+theme.setup("tokyonight")
 
 vim.api.nvim_create_user_command("Theme", function(opts)
   local name = vim.trim(opts.args)

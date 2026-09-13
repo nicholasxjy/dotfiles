@@ -30,6 +30,8 @@ local languages = {
   "tsx",
   "typescript",
   "yaml",
+  "rust",
+  "toml",
 }
 
 local parsers_checked = false

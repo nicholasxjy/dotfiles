@@ -8,7 +8,7 @@ local setup = function()
     cursor = "", -- Cursor shape (requires Nerd Font). Disabled in fancy mode.
     texthl = "SmoothCursor", -- Highlight group. Default is { bg = nil, fg = "#FFD400" }. Disabled in fancy mode.
     linehl = nil, -- Highlights the line under the cursor, similar to 'cursorline'. "CursorLine" is recommended. Disabled in fancy mode.
-    disabled_filetypes = { "minifiles" },
+    disabled_filetypes = { "minifiles", "xue-picker-input", "xue-picker-list" },
     always_redraw = false,
   })
 end

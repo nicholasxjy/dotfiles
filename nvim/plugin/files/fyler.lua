@@ -13,11 +13,16 @@ fyler.setup({
   -- Follow current file
   follow_current_file = true,
   -- Table of extensions to enable (e.g., 'git', 'trash', 'watcher')
-  extensions = {},
+  extensions = {
+    git = { enabled = true },
+    watcher = { enabled = true },
+  },
   -- Event hooks for custom behavior (on_highlight, on_delete, on_rename)
   hooks = {},
   -- External integrations (e.g., icon provider)
-  integrations = {},
+  integrations = {
+    icon = "mini_icons",
+  },
   -- Window-local options applied to the finder window
   -- (see: nvim_set_option_value)
   win_opts = {},
@@ -141,7 +146,7 @@ fyler.setup({
   ui = {
     hidden_items = {
       -- Toggleable pre-defined switches (e.g. 'dotfiles' to hide files).
-      switches = { "dotfiles" },
+      switches = {},
       -- Toggleable patterns (Lua patterns matched against the full path).
       patterns = {},
       -- Always visible items matching these patterns, even if they would
@@ -157,7 +162,7 @@ fyler.setup({
   -- Follow the finder root as the tab-local working directory.
   follow_root_dir = true,
   -- Keep directory editing with netrw; explorers are opened explicitly below.
-  use_as_default_explorer = false,
+  use_as_default_explorer = true,
 })
 
 vim.keymap.set("n", "<leader>o", function()

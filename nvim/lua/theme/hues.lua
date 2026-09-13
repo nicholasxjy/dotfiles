@@ -5,9 +5,9 @@ function M.setup()
   loader.packadd("mini.hues")
 
   require("mini.hues").setup({
-    -- REQUIRED base colors as '#rrggbb' hex strings
-    background = "#303446",
-    foreground = "#eee7dc",
+    -- Pair TokyoNight Storm's background with a muted cyan foreground.
+    background = "#24283b",
+    foreground = "#cee6ec",
 
     -- Number of hues used for non-base colors
     n_hues = 8,
@@ -27,6 +27,11 @@ function M.setup()
     -- Whether to auto adjust highlight groups based on certain events
     autoadjust = true,
   })
+  local p = require("mini.hues").get_palette()
+
+  vim.api.nvim_set_hl(0, "PmenuMatch", { fg = p.accent, bold = true })
+  vim.api.nvim_set_hl(0, "SnacksPickerDir", { link = "Comment" })
+  vim.api.nvim_set_hl(0, "SnacksPickerMatch", { fg = p.red, bold = true })
 
   vim.g.colors_name = "hues"
 end

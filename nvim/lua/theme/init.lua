@@ -47,7 +47,11 @@ end
 --- Return list of supported theme names.
 ---@return string[]
 function M.available()
-  return { "tokyonight", "catppuccin", "hues" }
+  return {
+    "tokyonight",
+    "catppuccin",
+    "hues",
+  }
 end
 
 --- Switch to the specified theme.

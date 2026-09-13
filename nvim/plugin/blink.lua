@@ -7,7 +7,7 @@ loader.packadd("lspkind.nvim", "nvim-web-devicons", "blink.lib", "mini.icons", "
 
 require("lspkind").init({
   mode = "symbol_text",
-  preset = "codicons",
+  -- preset = "codicons",
   symbol_map = {},
 })
 local blink_opts = {
@@ -35,7 +35,7 @@ local blink_opts = {
     menu = {
       scrollbar = false,
       draw = {
-        treesitter = { "lsp" },
+        -- treesitter = { "lsp" },
         columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 }, { "kind" } },
         components = {
           label = { width = { max = 32 } },

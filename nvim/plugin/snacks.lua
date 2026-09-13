@@ -78,10 +78,6 @@ local function setup()
         input = {
           keys = {
             ["<Esc>"] = { "close", mode = { "n", "i" } },
-            ["<a-a>"] = {
-              "sidekick_send",
-              mode = { "n", "i" },
-            },
           },
         },
         list = {

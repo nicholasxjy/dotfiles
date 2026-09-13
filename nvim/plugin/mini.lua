@@ -89,18 +89,40 @@ loader.on_very_lazy("mini-extras", function()
 
   require("mini.tabline").setup()
 
-  local function win_is_active()
-    local ok, mb = pcall(require, "minibuffer")
-    local winid = vim.api.nvim_get_current_win()
-    local curwin = (ok and mb.get_active_window()) or tonumber(vim.g.actual_curwin)
-    return winid == curwin
+  local statusline = require("mini.statusline")
+  statusline.setup()
+
+  local function picker_statusline()
+    local mode, mode_hl = statusline.section_mode({ trunc_width = 120 })
+    return statusline.combine_groups({
+      { hl = mode_hl, strings = { mode } },
+      "%<",
+      -- %{} keeps picker names containing '%' from becoming statusline codes.
+      { hl = "MiniStatuslineFilename", strings = { '%{v:lua.require("xue-picker").statusline()}' } },
+      "%=",
+    })
   end
 
-  _G.minibuffer_win_is_active = win_is_active
+  local function update_picker_statusline()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      if vim.bo[buf].filetype == "xue-picker-input" and vim.wo[win].statusline:find("xue-picker", 1, true) then
+        vim.b[buf].ministatusline_config = {
+          content = { active = picker_statusline, inactive = picker_statusline },
+        }
+        -- XuePicker still owns temporary laststatus changes and restores them on close.
+        vim.wo[win].statusline = "%{%v:lua.MiniStatusline.active()%}"
+      end
+    end
+  end
 
-  require("mini.statusline").setup()
-  vim.go.statusline =
-    "%{%(v:lua.minibuffer_win_is_active() || &laststatus==3) ? v:lua.MiniStatusline.active() : v:lua.MiniStatusline.inactive()%}"
+  vim.api.nvim_create_autocmd("User", {
+    group = vim.api.nvim_create_augroup("sjvim_mini_statusline", { clear = true }),
+    pattern = "XuePickerUpdate",
+    callback = update_picker_statusline,
+    desc = "Use mini.statusline in XuePicker",
+  })
+  update_picker_statusline()
 
   local statuscolumn = require("mini.statuscolumn")
   local default_content = statuscolumn.gen_content.main({
@@ -153,6 +175,7 @@ loader.on_very_lazy("mini-extras", function()
     },
     dim_inactive = true,
   })
+
   require("mini.ai").setup()
 
   require("mini.surround").setup({

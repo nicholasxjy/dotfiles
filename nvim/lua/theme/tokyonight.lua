@@ -10,11 +10,11 @@ function M.setup()
   local loader = require("loader")
   loader.packadd("tokyonight.nvim")
 
-  local color_builders = require("theme.colors")
+  -- local color_builders = require("theme.colors")
   local Util = require("tokyonight.util")
 
   require("tokyonight").setup({
-    style = "moon", -- The theme comes in three styles, `storm`, a darker variant `night` and `day`
+    style = "storm", -- The theme comes in three styles, `storm`, a darker variant `night` and `day`
     light_style = "day", -- The theme is used when the background is set to light
     transparent = false, -- Enable this to disable setting the background color
     terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
@@ -22,7 +22,7 @@ function M.setup()
       -- Style to be applied to different syntax groups
       -- Value is any valid attr-list value for `:help nvim_set_hl`
       comments = { italic = true },
-      keywords = { italic = false, bold = false },
+      keywords = { italic = false, bold = true },
       functions = {},
       variables = {},
       -- Background styles. Can be "dark", "transparent" or "normal"
@@ -33,7 +33,7 @@ function M.setup()
     dim_inactive = false, -- dims inactive windows
     lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
 
-    on_colors = color_builders.build_circadia,
+    -- on_colors = color_builders.build_circadia,
     --- You can override specific highlights to use other groups or a hex color
     --- function will be called with a Highlights and ColorScheme table
     ---@param highlights table<string, any>
@@ -50,6 +50,7 @@ function M.setup()
       highlights.LspInlayHint = { fg = colors.dark3, bg = blend_with_bg(colors.blue7, 0.1) }
 
       highlights.ZedBarFile = { fg = colors.fg_gutter, bold = true }
+      highlights.XuePickerGrepPath = { link = "Comment" }
 
       highlights["@keyword.import"] = { fg = colors.teal, italic = true }
       highlights["@keyword.export"] = { link = "@keyword.import" }
@@ -58,7 +59,7 @@ function M.setup()
 
       -- Interfaces and builtin types keep TokyoNight's semantic type colors. Do
       -- not reuse the warning/error ramps for ordinary language constructs.
-      highlights.SnacksPickerDir = { fg = colors.fg_dark, bg = colors.bg }
+      highlights.SnacksPickerDir = { fg = colors.fg_dark, bg = colors.bg_dark }
       highlights.SnacksPickerInput = { fg = colors.fg, bg = colors.bg_float }
       highlights.SnacksPickerPrompt = { fg = colors.orange, bold = true }
       highlights.SnacksPickerInputSearch = { fg = colors.blue1, bold = true }
@@ -69,22 +70,6 @@ function M.setup()
       highlights.FzfLuaDirPart = { link = "SnacksPickerDir" }
       highlights.FzfLuaBorder = { link = "FloatBorder" }
       highlights.FzfLuaPreviewBorder = { link = "FloatBorder" }
-
-      highlights.BlinkCmpLabelDescription = { link = "NonText" }
-      highlights.BlinkCmpLabelDetail = { link = "NonText" }
-      highlights.BlinkCmpMenuBorder = { link = "FloatBorder" }
-      highlights.BlinkCmpDocBorder = { link = "FloatBorder" }
-      highlights.BlinkCmpSignatureHelpBorder = { link = "FloatBorder" }
-      highlights.BlinkPairsUnmatched = { link = "DiagnosticError" }
-      highlights.BlinkPairsMatchParen = { link = "MatchParen" }
-      highlights.BlinkIndent = { link = "Whitespace" }
-      highlights.BlinkIndentScope = { link = "Delimiter" }
-
-      for _, name in ipairs({ "Blue", "Cyan", "Green", "Orange", "Red", "Violet", "Yellow" }) do
-        local rainbow_group = "RainbowDelimiter" .. name
-        highlights["BlinkPairs" .. name] = { link = rainbow_group }
-        highlights["BlinkIndent" .. name] = { link = rainbow_group }
-      end
     end,
 
     cache = true, -- When set to true, the theme will be cached for better performance
