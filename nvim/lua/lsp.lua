@@ -113,18 +113,18 @@ local function lsp_keymaps(bufnr)
   vim.keymap.set("n", "<leader>ss", fzflua.lsp_document_symbols, opts("Lsp symbols"))
   vim.keymap.set("n", "<leader>sS", fzflua.lsp_workspace_symbols, opts("Workspace lsp symbols"))
 
-  -- vim.keymap.set("n", "<leader>xx", function()
-  --   fzflua.diagnostics_document({ sort = true })
-  -- end, opts("Diagnostics"))
-  -- vim.keymap.set("n", "<leader>xX", function()
-  --   fzflua.diagnostics_workspace({ sort = true })
-  -- end, opts("Workspace Diagnostics"))
-  -- vim.keymap.set("n", "<leader>xw", function()
-  --   fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.WARN, sort = true })
-  -- end, opts("Workspace Diagnostics(Warns)"))
-  -- vim.keymap.set("n", "<leader>xe", function()
-  --   fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.ERROR, sort = true })
-  -- end, opts("Workspace Diagnostics(Errors)"))
+  vim.keymap.set("n", "<leader>xx", function()
+    fzflua.diagnostics_document({ sort = true })
+  end, opts("Diagnostics"))
+  vim.keymap.set("n", "<leader>xX", function()
+    fzflua.diagnostics_workspace({ sort = true })
+  end, opts("Workspace Diagnostics"))
+  vim.keymap.set("n", "<leader>xw", function()
+    fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.WARN, sort = true })
+  end, opts("Workspace Diagnostics(Warns)"))
+  vim.keymap.set("n", "<leader>xe", function()
+    fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.ERROR, sort = true })
+  end, opts("Workspace Diagnostics(Errors)"))
 end
 
 local hover = vim.lsp.buf.hover
@@ -179,9 +179,9 @@ local keymap_setup = function(bufnr)
 
   -- Diagnostic keymaps
   local function diagnostic_goto(count, severity)
-    local opts = { count = count, severity = severity and vim.diagnostic.severity[severity] }
+    local opts1 = { count = count, severity = severity and vim.diagnostic.severity[severity] }
     return function()
-      vim.diagnostic.jump(opts)
+      vim.diagnostic.jump(opts1)
     end
   end
 

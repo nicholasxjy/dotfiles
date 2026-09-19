@@ -19,10 +19,6 @@ util.build_fn_on_change("nvim-treesitter", "update", function()
   require("nvim-treesitter").update()
 end)
 
-util.build_fn_on_change("fff", { "install", "update" }, function()
-  loader.packadd("fff")
-  require("fff.download").download_or_build_binary()
-end)
 -- `vim.pack` only installs and registers here; nothing is put on 'runtimepath'.
 -- Each plugin is `:packadd`ed by its own config under `plugin/`, at the moment
 -- it is actually needed. Adding a plugin below therefore also requires a
@@ -33,8 +29,6 @@ vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/folke/snacks.nvim",
   "https://github.com/nvim-tree/nvim-web-devicons",
-  "https://github.com/dmtrKovalenko/fff",
-  "https://github.com/nicholasxjy/xue-picker.nvim",
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
 
@@ -65,7 +59,9 @@ vim.pack.add({
   "https://github.com/windwp/nvim-ts-autotag",
   "https://github.com/stevearc/conform.nvim",
   "https://github.com/folke/flash.nvim",
+
   "https://github.com/ibhagwan/fzf-lua",
+  "https://github.com/nicholasxjy/fzf-lua-smart",
 
   "https://github.com/lewis6991/gitsigns.nvim",
   "https://github.com/undont/differ.nvim",
@@ -104,7 +100,7 @@ vim.pack.add({
   },
   "https://github.com/nicholasxjy/zed-bar.nvim",
 
-  "https://github.com/nvim-mini/mini.hues",
+  { src = "https://github.com/nicholasxjy/mini.hues", version = "feat/transparent" },
   "https://github.com/folke/tokyonight.nvim",
   { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 }, { load = noop })

@@ -2,8 +2,10 @@ local loader = require("loader")
 local ui = require("ui")
 
 local setup = function()
-  loader.packadd("fzf-lua", "minibuffer.nvim")
+  loader.packadd("fzf-lua", "fzf-lua-smart")
   local fzflua = require("fzf-lua")
+  local fzfluasmart = require("fzf-lua-smart")
+
   local opts = {
     "border-fused",
     fzf_colors = true,
@@ -15,6 +17,9 @@ local setup = function()
     },
     hls = {
       normal = "Normal",
+    },
+    files = {
+      previewer = "hidden",
     },
     buffers = {
       previewer = "hidden",
@@ -38,34 +43,28 @@ local setup = function()
   }
   require("fzf-lua").setup(opts)
 
-  -- vim.keymap.set("n", "<leader><space>", function()
-  --   mb_fzf.files({
-  --     git_icons = true,
-  --     smart = {
-  --       filename_bonus = true,
-  --       cwd_bonus = true,
-  --       frecency = true,
-  --       history_bonus = true,
-  --       query_delay = 30,
-  --     },
-  --   })
-  -- end, { desc = "Smart files" })
-  --
-  -- vim.keymap.set("n", "<leader>h", function()
-  --   fzflua.buffers({
-  --     previewer = false,
-  --     sort_lastused = true,
-  --     ignore_current_buffer = false,
-  --   })
-  -- end, { desc = "Find Buffers", silent = true, nowait = true })
+  vim.keymap.set("n", "<leader><space>", function()
+    fzfluasmart.smart({
+      git_icons = true,
+      hidden = true,
+      filter = { cwd = true },
+      matcher = { filename_bonus = true, cwd_bonus = true, frecency = true, history_bonus = true },
+    })
+  end, { desc = "Smart files" })
 
-  -- vim.keymap.set("n", "<leader><cr>", fzflua.resume, { desc = "Resume Search" })
+  vim.keymap.set("n", "<leader>h", function()
+    fzflua.buffers({
+      previewer = false,
+      sort_lastused = true,
+      ignore_current_buffer = false,
+    })
+  end, { desc = "Find Buffers", silent = true, nowait = true })
+
+  vim.keymap.set("n", "<leader><cr>", fzflua.resume, { desc = "Resume Search" })
 
   vim.keymap.set("n", "<leader>:", fzflua.commands, { desc = "Commands" })
   vim.keymap.set("n", "<leader>/", fzflua.grep_curbuf, { desc = "Grep Curbuf" })
-  vim.keymap.set("n", "<leader>m", function()
-    fzflua.marks()
-  end, { desc = "Marks" })
+  vim.keymap.set("n", "<leader>m", fzflua.marks, { desc = "Marks" })
 
   vim.keymap.set("n", "<leader>fa", fzflua.autocmds, { desc = "Autocmds" })
   vim.keymap.set("n", "<leader>fC", fzflua.colorschemes, { desc = "Colorschemes" })
@@ -91,9 +90,9 @@ local setup = function()
   vim.keymap.set("n", "<leader>gd", fzflua.git_hunks, { desc = "Git Diff (Hunks)" })
   vim.keymap.set("n", "<leader>gf", fzflua.git_bcommits, { desc = "Git Log File" })
 
-  -- vim.keymap.set("n", "<leader>sw", fzflua.grep_cword, { desc = "Grep word" })
-  -- vim.keymap.set({ "x", "v" }, "<leader>sv", fzflua.grep_visual, { desc = "Grep Visual" })
-  -- vim.keymap.set("n", "<leader>sg", fzflua.live_grep, { desc = "Live Grep" })
+  vim.keymap.set("n", "<leader>sw", fzflua.grep_cword, { desc = "Grep word" })
+  vim.keymap.set({ "x", "v" }, "<leader>sv", fzflua.grep_visual, { desc = "Grep Visual" })
+  vim.keymap.set("n", "<leader>sg", fzflua.live_grep, { desc = "Live Grep" })
 end
 
 loader.on_very_lazy("fzf", setup)

@@ -9,6 +9,8 @@ function M.setup()
     background = "#24283b",
     foreground = "#cee6ec",
 
+    transparent = true,
+
     -- Number of hues used for non-base colors
     n_hues = 8,
 
@@ -18,7 +20,7 @@ function M.setup()
     -- Accent color. One of: 'bg', 'fg', 'red', 'orange', 'yellow', 'lime',
     -- 'green', 'teal', 'cyan', 'azure', 'blue', 'indigo', 'purple', 'pink',
     -- or a '#rrggbb' hex string.
-    accent = "bg",
+    accent = "blue",
 
     -- Plugin integrations. Use `default = false` to disable all integrations.
     -- Also can be set per plugin (see |MiniHues.config|).
@@ -29,9 +31,8 @@ function M.setup()
   })
   local p = require("mini.hues").get_palette()
 
+  vim.api.nvim_set_hl(0, "FloatBorder", { fg = p.accent, bg = "NONE" })
   vim.api.nvim_set_hl(0, "PmenuMatch", { fg = p.accent, bold = true })
-  vim.api.nvim_set_hl(0, "SnacksPickerDir", { link = "Comment" })
-  vim.api.nvim_set_hl(0, "SnacksPickerMatch", { fg = p.red, bold = true })
 
   vim.g.colors_name = "hues"
 end
