@@ -27,13 +27,13 @@ local function noop() end
 
 vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
-  "https://github.com/folke/snacks.nvim",
   "https://github.com/nvim-tree/nvim-web-devicons",
+  "https://github.com/akinsho/bufferline.nvim",
+  "https://github.com/nvim-lualine/lualine.nvim",
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
 
   "https://github.com/FylerOrg/fyler.nvim",
-  "https://github.com/gen740/SmoothCursor.nvim",
 
   "https://github.com/windwp/nvim-autopairs",
 
@@ -45,11 +45,10 @@ vim.pack.add({
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
 
-  "http://github.com/2KAbhishek/nerdy.nvim",
+  "https://github.com/hiphish/rainbow-delimiters.nvim",
   "https://github.com/arnamak/stay-centered.nvim",
   "https://github.com/folke/ts-comments.nvim",
   "https://github.com/nemanjamalesija/smart-paste.nvim",
-  "https://github.com/nicholasxjy/jishiben.nvim",
 
   "https://github.com/celeste3z/kd-translator.nvim",
   "https://github.com/Wansmer/treesj",
@@ -79,7 +78,6 @@ vim.pack.add({
   "https://github.com/NStefan002/screenkey.nvim",
   "https://github.com/folke/todo-comments.nvim",
 
-  "https://github.com/nvim-mini/mini.tabline",
   "https://github.com/nvim-mini/mini.icons",
   "https://github.com/nvim-mini/mini.files",
   "https://github.com/nvim-mini/mini.surround",
@@ -87,10 +85,8 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.ai",
   "https://github.com/nvim-mini/mini.notify",
   "https://github.com/nvim-mini/mini.statuscolumn",
-  "https://github.com/nvim-mini/mini.statusline",
 
   "https://github.com/jake-stewart/multicursor.nvim",
-  "https://github.com/nicholasxjy/rainbow-tags.nvim",
   "https://github.com/Saecki/crates.nvim",
   { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
   "https://github.com/rachartier/tiny-inline-diagnostic.nvim",
@@ -100,7 +96,5 @@ vim.pack.add({
   },
   "https://github.com/nicholasxjy/zed-bar.nvim",
 
-  { src = "https://github.com/nicholasxjy/mini.hues", version = "feat/transparent" },
   "https://github.com/folke/tokyonight.nvim",
-  { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 }, { load = noop })

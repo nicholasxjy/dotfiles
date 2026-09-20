@@ -7,8 +7,33 @@ local setup_automatic = function()
     "modicator.nvim",
     "stay-centered.nvim",
     "nvim-highlight-colors",
-    "ts-comments.nvim"
+    "ts-comments.nvim",
+    "rainbow-delimiters.nvim"
   )
+
+  vim.g.rainbow_delimiters = {
+    strategy = {
+      [""] = "rainbow-delimiters.strategy.global",
+      vim = "rainbow-delimiters.strategy.local",
+    },
+    query = {
+      [""] = "rainbow-delimiters",
+      lua = "rainbow-blocks",
+    },
+    priority = {
+      [""] = 110,
+      lua = 210,
+    },
+    highlight = {
+      "RainbowDelimiterRed",
+      "RainbowDelimiterYellow",
+      "RainbowDelimiterBlue",
+      "RainbowDelimiterOrange",
+      "RainbowDelimiterGreen",
+      "RainbowDelimiterViolet",
+      "RainbowDelimiterCyan",
+    },
+  }
 
   require("ts-comments").setup()
 
@@ -35,13 +60,7 @@ local setup_automatic = function()
 end
 
 local setup_tools = function()
-  loader.packadd("screenkey.nvim", "jishiben.nvim", "kd-translator.nvim", "nerdy.nvim", "treesj")
-
-  require("nerdy").setup({
-    max_recents = 30, -- Configure recent icons limit
-    copy_to_clipboard = false, -- Copy glyph to clipboard instead of inserting
-    copy_register = "+", -- Register to use for copying (if `copy_to_clipboard` is true)
-  })
+  loader.packadd("screenkey.nvim", "kd-translator.nvim", "treesj")
 
   require("screenkey").setup({
     win_opts = {
@@ -77,8 +96,6 @@ local setup_tools = function()
     ---@type 'hold'|'start'|'end'
     cursor_behavior = "hold",
   })
-
-  require("jishiben").setup()
 
   require("kd-translator").setup()
 

@@ -1,7 +1,7 @@
-function proxy --description "Set HTTP/HTTPS proxy" --argument-names host port
+function socks_proxy --description "Set SOCKS5 proxy" --argument-names host port
     set -q host[1]; or set host 127.0.0.1
     set -q port[1]; or set port 7890
-    set -l url http://$host:$port
+    set -l url socks5://$host:$port
 
     set -Ux HTTP_PROXY $url
     set -Ux HTTPS_PROXY $url
@@ -10,20 +10,10 @@ function proxy --description "Set HTTP/HTTPS proxy" --argument-names host port
     set -Ux https_proxy $url
     set -Ux all_proxy $url
 
-    if command -q npm
-        npm config set proxy $url
-        npm config set https-proxy $url
-    end
-
-    if command -q yarn
-        yarn config set proxy $url
-        yarn config set https-proxy $url
-    end
-
     if command -q git
         git config --global http.proxy $url
         git config --global https.proxy $url
     end
 
-    echo "HTTP proxy set to $url"
+    echo "SOCKS5 proxy set to $url"
 end

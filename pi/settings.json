@@ -1,0 +1,31 @@
+{
+  "lastChangelogVersion": "0.86.1",
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-6-astra",
+  "defaultThinkingLevel": "xhigh",
+  "editorPaddingX": 1,
+  "theme": "cc-dark",
+  "packages": [
+    "npm:pi-web-access",
+    "npm:pi-mcp-adapter",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@narumitw/pi-plan-mode",
+    "npm:pi-cc-extensions",
+    "npm:pi-btw",
+    "npm:pi-footer",
+    "npm:@router-for-me/pi-cliproxyapi-provider",
+    "npm:pi-worktree",
+    "npm:pi-background-tasks",
+    "npm:@injaneity/pi-computer-use",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:@narumitw/pi-goal",
+    "npm:@narumitw/pi-btw"
+  ],
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "collapseChangelog": true,
+  "treeFilterMode": "default",
+  "showHardwareCursor": true,
+  "tuiMode": "fullscreen"
+}

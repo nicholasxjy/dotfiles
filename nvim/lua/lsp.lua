@@ -169,13 +169,6 @@ local keymap_setup = function(bufnr)
   vim.keymap.set("n", "<leader>cr", function()
     vim.lsp.buf.rename()
   end, opts("Rename"))
-  vim.keymap.set("n", "<leader>cR", function()
-    local snacks = require("snacks")
-    if snacks and snacks.rename and snacks.rename.rename_file then
-      return snacks.rename.rename_file()
-    end
-    vim.notify("Snacks rename is unavailable", vim.log.levels.WARN)
-  end, opts("Snacks Rename"))
 
   -- Diagnostic keymaps
   local function diagnostic_goto(count, severity)

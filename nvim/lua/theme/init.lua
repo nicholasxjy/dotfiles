@@ -10,20 +10,6 @@ local themes = {
     end,
     colorscheme = "tokyonight",
   },
-  catppuccin = {
-    pack = "catppuccin",
-    setup = function()
-      require("theme.catppuccin").setup()
-    end,
-    colorscheme = "catppuccin",
-  },
-  hues = {
-    pack = "mini.hues",
-    setup = function()
-      require("theme.hues").setup()
-    end,
-    colorscheme = "hues",
-  },
 }
 
 local function init_autocmds()
@@ -33,12 +19,6 @@ local function init_autocmds()
       if vim.startswith(args.match, "tokyonight") then
         themes.tokyonight.setup()
         M.current = "tokyonight"
-      elseif vim.startswith(args.match, "catppuccin") then
-        themes.catppuccin.setup()
-        M.current = "catppuccin"
-      elseif vim.startswith(args.match, "hues") then
-        themes.hues.setup()
-        M.current = "hues"
       end
     end,
   })
@@ -47,11 +27,7 @@ end
 --- Return list of supported theme names.
 ---@return string[]
 function M.available()
-  return {
-    "tokyonight",
-    "catppuccin",
-    "hues",
-  }
+  return { "tokyonight" }
 end
 
 --- Switch to the specified theme.

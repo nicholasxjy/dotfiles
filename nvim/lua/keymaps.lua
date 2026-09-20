@@ -40,14 +40,18 @@ map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
 map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
 map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+
 -- Buffers
-map("n", "<leader>j", function()
-  Snacks.bufdelete()
-end, { desc = "Delete Buffer" })
+map("n", "<leader>j", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
 map({ "n", "x", "s" }, "<leader>k", "<cmd>w<cr><esc>", { desc = "Save" })
 map("n", "<leader>bo", function()
-  Snacks.bufdelete.other()
-end, { desc = "Delete Other Buffers" })
+  local cur = vim.api.nvim_get_current_buf()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if buf ~= cur and vim.bo[buf].buflisted then
+      pcall(vim.api.nvim_buf_delete, buf, {})
+    end
+  end
+end, { desc = "Close Other Buffers" })
 
 map("n", "<leader>q", ":q<cr>", { desc = "Quit" })
 map("n", "<leader>M", ":Mason<cr>", { desc = "Mason" })
@@ -70,22 +74,6 @@ map("n", "H", ":bprevious<cr>", { desc = "Prev Buffer" })
 -- windows
 map("n", "<leader>-", "<C-W>s", { desc = "Split Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Right", remap = true })
-
--- Terminal/Run...
-map("n", "<c-/>", function()
-  Snacks.terminal()
-end, { desc = "Terminal" })
-map("n", "<c-_>", function()
-  Snacks.terminal()
-end, { desc = "which_key_ignore" })
-
--- Terminal Mappings
-map("t", "<C-/>", "<cmd>close<cr>", { desc = "Close Terminal" })
-map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
-
-map("n", "<leader>gg", function()
-  Snacks.lazygit()
-end, { desc = "Lazygit" })
 
 -- better indenting
 map("v", "<", "<gv", {})

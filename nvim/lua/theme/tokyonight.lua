@@ -28,13 +28,14 @@ function M.setup()
     },
     day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
     dim_inactive = false, -- dims inactive windows
-    lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
+    lualine_bold = true, -- When `true`, section headers in the lualine theme will be bold
 
     --- You can override specific highlights to use other groups or a hex color
     --- function will be called with a Highlights and ColorScheme table
     ---@param highlights table<string, any>
     ---@param colors table<string, any>
     on_highlights = function(highlights, colors)
+      highlights.WinBar = { fg = colors.fg, bg = "NONE" }
       highlights.ZedBarFile = { fg = colors.fg_gutter, bold = true }
       highlights.XuePickerGrepPath = { link = "Comment" }
 

@@ -1,7 +1,7 @@
 local loader = require("loader")
 
--- Eager: icons feed the completion menu and pickers, tabline and notify are
--- visible chrome. Everything else moves to VeryLazy further down.
+-- Eager: icons feed the completion menu and pickers; notify is visible chrome.
+-- Everything else moves to VeryLazy further down.
 loader.packadd("mini.icons", "mini.notify")
 
 require("mini.icons").setup({
@@ -73,56 +73,9 @@ local function open_buf_in_split(buf_id, key_map, direction)
   vim.keymap.set("n", key_map, rhs, { buffer = buf_id, desc = "Open in " .. string.sub(direction, 12) })
 end
 
--- Text objects, surround, trailspace, the file explorer and the clue window are
--- all driven by user input, so none of them need to exist before the first
--- frame is on screen.
+-- These features can wait until after the first frame is on screen.
 loader.on_very_lazy("mini-extras", function()
-  loader.packadd(
-    "mini.ai",
-    "mini.surround",
-    "mini.trailspace",
-    "mini.files",
-    "mini.statuscolumn",
-    "mini.tabline",
-    "mini.statusline"
-  )
-
-  require("mini.tabline").setup()
-
-  local statusline = require("mini.statusline")
-  statusline.setup()
-
-  local function picker_statusline()
-    local mode, mode_hl = statusline.section_mode({ trunc_width = 120 })
-    return statusline.combine_groups({
-      { hl = mode_hl, strings = { mode } },
-      "%<",
-      -- %{} keeps picker names containing '%' from becoming statusline codes.
-      { hl = "MiniStatuslineFilename", strings = { '%{v:lua.require("xue-picker").statusline()}' } },
-      "%=",
-    })
-  end
-
-  local function update_picker_statusline()
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-      local buf = vim.api.nvim_win_get_buf(win)
-      if vim.bo[buf].filetype == "xue-picker-input" and vim.wo[win].statusline:find("xue-picker", 1, true) then
-        vim.b[buf].ministatusline_config = {
-          content = { active = picker_statusline, inactive = picker_statusline },
-        }
-        -- XuePicker still owns temporary laststatus changes and restores them on close.
-        vim.wo[win].statusline = "%{%v:lua.MiniStatusline.active()%}"
-      end
-    end
-  end
-
-  vim.api.nvim_create_autocmd("User", {
-    group = vim.api.nvim_create_augroup("sjvim_mini_statusline", { clear = true }),
-    pattern = "XuePickerUpdate",
-    callback = update_picker_statusline,
-    desc = "Use mini.statusline in XuePicker",
-  })
-  update_picker_statusline()
+  loader.packadd("mini.ai", "mini.surround", "mini.trailspace", "mini.files", "mini.statuscolumn")
 
   local statuscolumn = require("mini.statuscolumn")
   local default_content = statuscolumn.gen_content.main({
@@ -293,14 +246,6 @@ vim.api.nvim_create_autocmd("User", {
     open_buf_in_split(buf_id, "<C-k>", "topleft horizontal")
     open_buf_in_split(buf_id, "<C-l>", "belowright vertical")
     open_buf_in_split(buf_id, "<C-t>", "tab")
-  end,
-})
-
-vim.api.nvim_create_autocmd("User", {
-  desc = "Notify LSPs that a file was renamed",
-  pattern = "MiniFilesActionRename",
-  callback = function(event)
-    Snacks.rename.on_rename_file(event.data.from, event.data.to)
   end,
 })
 

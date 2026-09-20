@@ -28,7 +28,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 
 local setup = function()
   loader.packadd("rustaceanvim")
-  loader.packadd("snacks.nvim")
 
   local function rustaceanvim_opts()
     return {
@@ -105,8 +104,9 @@ local setup = function()
     once = true,
     callback = function()
       if vim.fn.executable("rust-analyzer") == 0 then
-        require("snacks").notify.error(
-          "**rust-analyzer** not found in PATH, please install it.\nhttps://rust-analyzer.github.io/",
+        vim.notify(
+          "rust-analyzer not found in PATH, please install it.\nhttps://rust-analyzer.github.io/",
+          vim.log.levels.ERROR,
           { title = "rustaceanvim" }
         )
       end

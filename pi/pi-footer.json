@@ -1,0 +1,257 @@
+{
+  "version": 1,
+  "enabled": true,
+  "preset": "default",
+  "lines": [
+    [
+      {
+        "id": "cwd-custom",
+        "type": "cwd",
+        "enabled": true,
+        "options": {
+          "fg": "ansi256:110",
+          "cwdDisplayStyle": "full-home"
+        }
+      },
+      {
+        "id": "worktree-status-custom",
+        "type": "external-status",
+        "enabled": true,
+        "options": {
+          "raw": true,
+          "hideWhenEmpty": true,
+          "fg": "ansi256:115",
+          "externalStatusKey": "worktree",
+          "trimValue": 0,
+          "preserveTrimStyles": true
+        }
+      },
+      {
+        "id": "text-verbosity-mu9sl949-q2c3mb",
+        "type": "text-verbosity",
+        "enabled": true,
+        "options": {
+          "hideWhenEmpty": true,
+          "fg": "ansi256:152"
+        }
+      },
+      {
+        "id": "context-length-mu9sl949-aa6t34",
+        "type": "context-length",
+        "enabled": true,
+        "options": {
+          "fg": "brightBlack",
+          "tokenFormatStyle": "default"
+        }
+      },
+      {
+        "id": "git-branch-mu9sl949-rcl05l",
+        "type": "git-branch",
+        "enabled": true,
+        "options": {
+          "hideWhenEmpty": true,
+          "fg": "ansi256:139",
+          "gitBranchDisplayStyle": "default"
+        }
+      },
+      {
+        "id": "git-diff-mu9sl949-tvz9tn",
+        "type": "git-diff",
+        "enabled": true,
+        "options": {
+          "hideWhenEmpty": true,
+          "fg": "ansi256:222",
+          "gitDiffMode": "compact"
+        }
+      },
+      {
+        "id": "cost-mu9sl949-0uyrgc",
+        "type": "cost",
+        "enabled": true,
+        "options": {
+          "raw": true,
+          "fg": "ansi256:154",
+          "costFormatStyle": "compact",
+          "showSubscription": false
+        }
+      },
+      {
+        "id": "total-time-mu9sl949-qid6in",
+        "type": "total-time",
+        "enabled": true,
+        "options": {
+          "icon": "Time: ",
+          "fg": "ansi256:212"
+        }
+      },
+      {
+        "id": "elapsed-custom",
+        "type": "elapsed",
+        "enabled": true,
+        "options": {
+          "icon": "Span: ",
+          "fg": "ansi256:222"
+        }
+      },
+      {
+        "id": "model-align-custom",
+        "type": "flex-separator",
+        "enabled": true,
+        "options": {}
+      },
+      {
+        "id": "model-custom",
+        "type": "model",
+        "enabled": true,
+        "options": {
+          "showProvider": false,
+          "fg": "ansi256:220",
+          "bold": true
+        }
+      },
+      {
+        "id": "thinking-level-mu9sl949-a0gijd",
+        "type": "thinking-level",
+        "enabled": true,
+        "options": {
+          "hideWhenEmpty": true,
+          "fg": "ansi256:139"
+        }
+      }
+    ],
+    [
+      {
+        "id": "context-bar-custom",
+        "type": "context-bar",
+        "enabled": true,
+        "options": {
+          "fg": "ansi256:110",
+          "tokenFormatStyle": "default",
+          "contextBarMode": "medium",
+          "contextConditionalColors": true,
+          "contextWarningPercent": 70,
+          "contextDangerPercent": 90,
+          "warningFg": "yellow",
+          "warningBg": "default",
+          "dangerFg": "red",
+          "dangerBg": "default"
+        }
+      },
+      {
+        "id": "cache-hit-rate-custom",
+        "type": "cache-hit-rate",
+        "enabled": true,
+        "options": {
+          "fg": "ansi256:80",
+          "cacheHitSource": "turn",
+          "style": "default",
+          "hideWhenZero": false
+        }
+      },
+      {
+        "id": "status-align-custom",
+        "type": "flex-separator",
+        "enabled": true,
+        "options": {}
+      },
+      {
+        "id": "background-tasks-status-custom",
+        "type": "external-status",
+        "enabled": true,
+        "options": {
+          "raw": true,
+          "hideWhenEmpty": true,
+          "fg": "brightBlack",
+          "externalStatusKey": "background-tasks",
+          "trimValue": 0,
+          "preserveTrimStyles": true
+        }
+      }
+    ],
+    [
+      {
+        "id": "tokens-custom",
+        "type": "tokens",
+        "enabled": true,
+        "options": {
+          "fg": "ansi256:220",
+          "tokenFormatStyle": "default"
+        }
+      },
+      {
+        "id": "cache-read-custom",
+        "type": "cache-read",
+        "enabled": true,
+        "options": {
+          "icon": "R",
+          "fg": "ansi256:220",
+          "tokenFormatStyle": "default",
+          "hideWhenZero": false
+        }
+      },
+      {
+        "id": "total-tokens-custom",
+        "type": "total-tokens",
+        "enabled": true,
+        "options": {
+          "icon": "Total: ",
+          "fg": "ansi256:149",
+          "tokenFormatStyle": "default",
+          "hideWhenZero": false
+        }
+      },
+      {
+        "id": "input-speed-custom",
+        "type": "input-speed",
+        "enabled": true,
+        "options": {
+          "fg": "ansi256:139",
+          "bold": true,
+          "tokenFormatStyle": "default",
+          "hideWhenZero": false
+        }
+      },
+      {
+        "id": "output-speed-custom",
+        "type": "output-speed",
+        "enabled": true,
+        "options": {
+          "fg": "ansi256:115",
+          "bold": true,
+          "tokenFormatStyle": "default",
+          "hideWhenZero": false
+        }
+      },
+      {
+        "id": "total-speed-custom",
+        "type": "total-speed",
+        "enabled": true,
+        "options": {
+          "fg": "ansi256:149",
+          "bold": true,
+          "tokenFormatStyle": "default",
+          "hideWhenZero": false
+        }
+      }
+    ]
+  ],
+  "separator": "dot",
+  "separatorFg": "brightBlack",
+  "separatorBg": "default",
+  "iconMode": "nerd",
+  "minimalist": false,
+  "terminal": {
+    "widthMode": "full",
+    "colorLevel": "ansi256"
+  },
+  "extensionStatusRow": {
+    "hiddenKeys": [
+      "background-tasks",
+      "worktree"
+    ],
+    "knownKeys": [
+      "background-tasks",
+      "worktree"
+    ]
+  }
+}

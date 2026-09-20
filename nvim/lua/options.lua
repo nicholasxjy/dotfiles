@@ -49,12 +49,12 @@ if vim.fn.has("nvim-0.10") == 1 then
   vim.o.foldtext = "" -- Show text under fold with its highlighting
 end
 
-vim.o.winborder = "rounded" -- Use border in floating windows
+vim.o.winborder = "single" -- Use border in floating windows
 
 vim.o.pummaxwidth = 100 -- Limit maximum width of popup menu
 vim.o.completetimeout = 100
 
-vim.o.pumborder = "rounded" -- Use border in built-in completion menu
+vim.o.pumborder = "single" -- Use border in built-in completion menu
 
 -- UI2 is experimental and may be absent on older supported versions.
 local ok, ui2 = pcall(require, "vim._core.ui2")
