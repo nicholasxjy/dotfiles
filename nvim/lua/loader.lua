@@ -28,7 +28,11 @@ function M.packadd(...)
   for _, name in ipairs({ ... }) do
     if not packadded[name] then
       packadded[name] = true
-      vim.cmd.packadd(name)
+      local ok, err = pcall(vim.cmd.packadd, name)
+      if not ok then
+        packadded[name] = nil
+        error(err)
+      end
     end
   end
 end

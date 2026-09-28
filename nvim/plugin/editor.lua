@@ -1,120 +1,157 @@
 local loader = require("loader")
 
-local setup_automatic = function()
+-- Which-key provides hints for key combinations; defer until first buffer
+local function setup_which_key()
+  loader.packadd("which-key.nvim")
+  require("which-key").setup({
+    spec = {
+      {
+        mode = { "n", "x" },
+        { "<leader>c", group = "code" },
+        { "<leader>f", group = "file/find" },
+        { "<leader>g", group = "git" },
+        { "<leader>q", group = "quit/session" },
+        { "<leader>s", group = "search" },
+        { "<leader>u", group = "ui" },
+        { "<leader>x", group = "diagnostics/quickfix" },
+        { "[", group = "prev" },
+        { "]", group = "next" },
+        { "g", group = "goto" },
+        { "gs", group = "surround" },
+        { "z", group = "fold" },
+        {
+          "<leader>b",
+          group = "buffer",
+          expand = function()
+            return require("which-key.extras").expand.buf()
+          end,
+        },
+        {
+          "<leader>w",
+          group = "windows",
+          proxy = "<c-w>",
+          expand = function()
+            return require("which-key.extras").expand.win()
+          end,
+        },
+        { "gx", desc = "Open Externally" },
+      },
+    },
+    preset = "classic",
+    delay = 200,
+    icons = {
+      separator = " ",
+    },
+    win = {
+      width = { min = 0.2, max = 0.3 },
+      height = { min = 0.2, max = 0.6 },
+      col = 0,
+      border = vim.o.winborder,
+      title = false,
+      title_pos = "center",
+    },
+    plugins = {
+      registers = false,
+      marks = false,
+      spelling = {
+        enabled = true,
+        suggestions = 20,
+      },
+      presets = {
+        operators = true,
+        motions = true,
+        text_objects = true,
+        windows = true,
+        nav = true,
+        z = true,
+        g = true,
+      },
+    },
+  })
+
+  vim.keymap.set("n", "<leader>?", function()
+    require("which-key").show({ global = false })
+  end, { desc = "Keymaps hint" })
+end
+
+loader.defer_buffer("wk", setup_which_key, { schedule = true })
+
+-- Editor features and text manipulation
+loader.on_very_lazy("editor", function()
   loader.packadd(
-    "todo-comments.nvim",
-    "smart-paste.nvim",
-    "modicator.nvim",
+    "plenary.nvim",
     "stay-centered.nvim",
-    "nvim-highlight-colors",
-    "ts-comments.nvim",
-    "rainbow-delimiters.nvim"
+    "smart-paste.nvim",
+    "mini.trailspace",
+    "mini.surround",
+    "mini.ai",
+    "treesj",
+    "kd-translator.nvim",
+    "todo-comments.nvim"
   )
 
-  vim.g.rainbow_delimiters = {
-    strategy = {
-      [""] = "rainbow-delimiters.strategy.global",
-      vim = "rainbow-delimiters.strategy.local",
-    },
-    query = {
-      [""] = "rainbow-delimiters",
-      lua = "rainbow-blocks",
-    },
-    priority = {
-      [""] = 110,
-      lua = 210,
-    },
-    highlight = {
-      "RainbowDelimiterRed",
-      "RainbowDelimiterYellow",
-      "RainbowDelimiterBlue",
-      "RainbowDelimiterOrange",
-      "RainbowDelimiterGreen",
-      "RainbowDelimiterViolet",
-      "RainbowDelimiterCyan",
-    },
-  }
-
-  require("ts-comments").setup()
-
-  require("modicator").setup()
-
-  require("smart-paste").setup()
-
+  -- Stay centered
   require("stay-centered").setup({
-    -- The filetype is determined by the vim filetype, not the file extension. In order to get the filetype, open a file and run the command:
-    -- :lua print(vim.bo.filetype)
     skip_filetypes = {},
-    -- Set to false to disable by default
     enabled = true,
-    -- allows scrolling to move the cursor without centering, default recommended
     allow_scroll_move = true,
-    -- temporarily disables plugin on left-mouse down, allows natural mouse selection
-    -- try disabling if plugin causes lag, function uses vim.on_key
     disable_on_mouse = true,
   })
 
-  require("todo-comments").setup()
+  -- Smart paste
+  require("smart-paste").setup()
 
-  require("nvim-highlight-colors").setup({})
-end
+  -- Mini trailspace
+  require("mini.trailspace").setup({
+    only_in_normal_buffers = true,
+  })
 
-local setup_tools = function()
-  loader.packadd("screenkey.nvim", "kd-translator.nvim", "treesj")
+  vim.keymap.set("n", "<leader>ut", function()
+    require("mini.trailspace").trim()
+  end, { desc = "Trim Trailing Space" })
 
-  require("screenkey").setup({
-    win_opts = {
-      row = vim.o.lines - vim.o.cmdheight - 1,
-      col = vim.o.columns - 1,
-      relative = "editor",
-      anchor = "SE",
-      width = 20,
-      height = 2,
-      title = "Screenkey",
-      title_pos = "center",
-      style = "minimal",
-      focusable = false,
-      noautocmd = true,
-    },
-    hl_groups = {
-      ["screenkey.hl.key"] = { link = "Type" },
-      ["screenkey.hl.map"] = { link = "Keyword" },
-      ["screenkey.hl.sep"] = { link = "Normal" },
+  -- Mini surround
+  require("mini.surround").setup({
+    mappings = {
+      add = "gsa",
+      delete = "gsd",
+      replace = "gsr",
+      find = "gsf",
+      find_left = "gsF",
+      highlight = "gsh",
     },
   })
 
+  -- Mini text-objects
+  require("mini.ai").setup()
+
+  -- Treesj (split/join syntax blocks)
   require("treesj").setup({
     use_default_keymaps = false,
     check_syntax_error = true,
-    ---If line after join will be longer than max value,
-    ---@type number If line after join will be longer than max value, node will not be formatted
     max_join_length = 120,
-    ---Cursor behavior:
-    ---hold - cursor follows the node/place on which it was called
-    ---start - cursor jumps to the first symbol of the node being formatted
-    ---end - cursor jumps to the last symbol of the node being formatted
-    ---@type 'hold'|'start'|'end'
     cursor_behavior = "hold",
   })
 
-  require("kd-translator").setup()
-
-  -- vim.keymap.set("n", "gt", "<Plug>(kd-translator-operator)", { desc = "Kd Translate Operator" })
-  vim.keymap.set("x", "gt", "<Plug>(kd-translator-visual)", { desc = "Kd Translate Visual" })
+  vim.keymap.set("n", "<leader>cj", function()
+    require("treesj").toggle()
+  end, { desc = "Toggle Split/Join" })
 
   vim.keymap.set("n", "<leader>uJ", function()
-    loader.packadd("nvim-treesitter")
     require("treesj").toggle()
-  end, { desc = "Toggle Split" })
+  end, { desc = "Toggle Split/Join" })
 
-  vim.keymap.set("v", "<leader>bv", function()
-    require("translator").transVisualSel()
+  -- Translator
+  require("kd-translator").setup()
+
+  vim.keymap.set("x", "gt", "<Plug>(kd-translator-visual)", { desc = "Translate Visual" })
+  vim.keymap.set("x", "<leader>ct", function()
+    require("kd-translator").operator("visual")
   end, { desc = "Translate Selection" })
-
-  vim.keymap.set("n", "<leader>bc", function()
-    require("translator").transCurWord()
+  vim.keymap.set("n", "<leader>cw", function()
+    require("kd-translator").translate_preview(vim.fn.expand("<cword>"))
   end, { desc = "Translate Word" })
-end
 
-loader.on_very_lazy("editor-automatic", setup_automatic)
-loader.on_very_lazy("editor-tools", setup_tools)
+  -- Todo comments
+  require("todo-comments").setup()
+end)

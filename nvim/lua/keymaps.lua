@@ -3,12 +3,7 @@ local map = function(modes, lhs, rhs, opts)
   if opts then
     options = vim.tbl_extend("force", options, opts)
   end
-  if type(modes) == "string" then
-    modes = { modes }
-  end
-  for _, mode in ipairs(modes) do
-    vim.keymap.set(mode, lhs, rhs, options)
-  end
+  vim.keymap.set(modes, lhs, rhs, options)
 end
 
 local unmap = vim.keymap.del
@@ -43,7 +38,7 @@ map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", {
 
 -- Buffers
 map("n", "<leader>j", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
-map({ "n", "x", "s" }, "<leader>k", "<cmd>w<cr><esc>", { desc = "Save" })
+map({ "n", "v" }, "<leader>k", "<cmd>w<cr><esc>", { desc = "Save" })
 map("n", "<leader>bo", function()
   local cur = vim.api.nvim_get_current_buf()
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -66,7 +61,7 @@ map({ "n", "i", "s" }, "<esc>", function()
 end, { expr = true, desc = "Clear Search" })
 
 -- save file
-map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save" })
+map({ "i", "v", "n" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save" })
 
 map("n", "L", ":bnext<cr>", { desc = "Next Buffer" })
 map("n", "H", ":bprevious<cr>", { desc = "Prev Buffer" })
@@ -83,7 +78,6 @@ map("v", ">", ">gv", {})
 map({ "n", "v" }, "gh", "^", { desc = "Line Start", nowait = true })
 map({ "n", "v" }, "gl", "$", { desc = "Line End", nowait = true })
 map({ "n", "v" }, "g<space>", "%", { desc = "Match Pair", nowait = true })
-map({ "n", "v" }, "gm", "%", { desc = "Match Pair", nowait = true })
 
 -- Duplicate and comment first instance
 map("n", "ycc", "yygccp", { remap = true, desc = "Duplicate and Comment" })

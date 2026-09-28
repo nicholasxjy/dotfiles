@@ -64,8 +64,9 @@ vim.api.nvim_create_user_command("PackCheck", function()
   end
 end, { desc = "List non active plugins and select to delete" })
 -- not autoformat for some filetypes
-vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = { "shell", "bash", "sh", "java" },
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup("disable_autoformat"),
+  pattern = { "bash", "sh", "java" },
   callback = function()
     vim.b.autoformat = false
   end,

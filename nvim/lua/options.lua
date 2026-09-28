@@ -21,13 +21,13 @@ vim.o.relativenumber = true
 vim.o.number = true -- Show line numbers
 vim.o.pumheight = 10 -- Make popup menu smaller
 vim.o.ruler = false -- Don't show cursor coordinates
-vim.o.shortmess = "CFOSWaco" -- Disable some built-in completion messages
+vim.o.shortmess = vim.fn.has("nvim-0.13") == 1 and "CFOSWacou" or "CFOSWaco" -- Disable some built-in completion messages
 vim.o.showmode = false -- Don't show mode in command line
 vim.o.signcolumn = "yes" -- Always show signcolumn (less flicker)
 vim.o.splitbelow = true -- Horizontal splits will be below
 vim.o.splitkeep = "screen" -- Reduce scroll during window split
 vim.o.splitright = true -- Vertical splits will be to the right
-vim.o.wrap = true -- Don't visually wrap lines (toggle with \w)
+vim.o.wrap = true -- Visually wrap lines
 
 vim.o.cursorlineopt = "screenline,number" -- Show cursor line per screen line
 
@@ -35,13 +35,13 @@ vim.o.cursorlineopt = "screenline,number" -- Show cursor line per screen line
 vim.o.fillchars = "eob: ,fold:╌"
 vim.o.listchars = "extends:…,nbsp:␣,precedes:…,tab:> "
 -- Treesitter 负责计算 fold
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 -- 打开文件时默认全部展开
-vim.opt.foldlevel = 99
-vim.opt.foldlevelstart = 99
+vim.o.foldlevel = 99
+vim.o.foldlevelstart = 99
 -- 最大嵌套层级
-vim.opt.foldnestmax = 10
+vim.o.foldnestmax = 10
 
 vim.o.termguicolors = true
 
@@ -49,12 +49,12 @@ if vim.fn.has("nvim-0.10") == 1 then
   vim.o.foldtext = "" -- Show text under fold with its highlighting
 end
 
-vim.o.winborder = "single" -- Use border in floating windows
+vim.o.winborder = "rounded" -- Use border in floating windows
 
 vim.o.pummaxwidth = 100 -- Limit maximum width of popup menu
 vim.o.completetimeout = 100
 
-vim.o.pumborder = "single" -- Use border in built-in completion menu
+vim.o.pumborder = "rounded" -- Use border in built-in completion menu
 
 -- UI2 is experimental and may be absent on older supported versions.
 local ok, ui2 = pcall(require, "vim._core.ui2")
@@ -63,17 +63,6 @@ if ok then
 end
 
 if vim.fn.has("nvim-0.13") == 1 then
-  -- Try it out. Probably not a good idea since the "put" action has visible
-  -- side effects so the temporary highlight is more distracting than useful.
-  vim.api.nvim_create_autocmd("TextPutPost", {
-    pattern = "*",
-    callback = function()
-      pcall(vim.hl.hl_op)
-    end,
-  })
-
-  vim.o.shortmess = "CFOSWacou" -- Add `u` flag to disable undo/redo messages
-
   vim.o.updatetime = 200 -- Ensure fast `current_line` diagnostic renders
 end
 
@@ -91,11 +80,6 @@ vim.o.tabstop = 2 -- Show tab as this number of spaces
 vim.o.virtualedit = "block" -- Allow going past end of line in blockwise mode
 
 vim.o.iskeyword = "@,48-57,_,192-255,-" -- Treat dash as `word` textobject part
--- Keep Ctrl-X Ctrl-K usable when the optional local dictionary is present.
-local dictionary = vim.fn.stdpath("config") .. "/misc/dict/english.txt"
-if vim.fn.filereadable(dictionary) == 1 then
-  vim.o.dictionary = dictionary
-end
 
 -- Pattern for a start of 'numbered' list (used in `gw`). This reads as
 -- "Start of list item is: at least one special character (digit, -, +, *)
@@ -104,8 +88,4 @@ vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 
 -- Built-in completion
 vim.o.complete = ".,w,b,kspell" -- Use less sources
-vim.o.completeopt = "menuone,noselect" -- Use custom behavior
-
-if vim.fn.has("nvim-0.11") == 1 then
-  vim.o.completeopt = "menuone,noselect,fuzzy,nosort"
-end
+vim.o.completeopt = vim.fn.has("nvim-0.11") == 1 and "menuone,noselect,fuzzy,nosort" or "menuone,noselect"

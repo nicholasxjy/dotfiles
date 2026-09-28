@@ -1,7 +1,50 @@
 local loader = require("loader")
 
-local setup = function()
-  loader.packadd("multicursor.nvim")
+loader.on_very_lazy("navigation", function()
+  loader.packadd("smart-splits.nvim", "flash.nvim", "multicursor.nvim")
+
+  -- Smart-splits (seamless window navigation)
+  local ss = require("smart-splits")
+  ss.setup({
+    ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" },
+    ignored_buftypes = { "nofile" },
+  })
+
+  vim.keymap.set("n", "<C-h>", function()
+    ss.move_cursor_left()
+  end, { desc = "Focus Left" })
+  vim.keymap.set("n", "<C-j>", function()
+    ss.move_cursor_down()
+  end, { desc = "Focus Down" })
+  vim.keymap.set("n", "<C-k>", function()
+    ss.move_cursor_up()
+  end, { desc = "Focus Up" })
+  vim.keymap.set("n", "<C-l>", function()
+    ss.move_cursor_right()
+  end, { desc = "Focus Right" })
+
+  -- Flash (jump navigation)
+  local flash = require("flash")
+  flash.setup({
+    label = {
+      rainbow = {
+        enabled = true,
+        shade = 5,
+      },
+    },
+  })
+
+  vim.keymap.set({ "n", "x", "o" }, "s", function()
+    flash.jump()
+  end, { desc = "Flash Jump" })
+
+  vim.keymap.set({ "n", "x", "o" }, "S", function()
+    if vim.treesitter.get_parser(nil, nil, { error = false }) then
+      flash.treesitter()
+    end
+  end, { desc = "Flash Treesitter" })
+
+  -- Multicursor
   local mc = require("multicursor-nvim")
   mc.setup()
 
@@ -41,10 +84,10 @@ local setup = function()
 
   set({ "n", "x" }, "<leader><up>", function()
     mc.lineSkipCursor(-1)
-  end)
+  end, { desc = "Skip Cursor Above" })
   set({ "n", "x" }, "<leader><down>", function()
     mc.lineSkipCursor(1)
-  end)
+  end, { desc = "Skip Cursor Below" })
 
   set({ "n", "x" }, "<C-d>", function()
     mc.matchAddCursor(1)
@@ -66,7 +109,5 @@ local setup = function()
 
   set({ "n", "x" }, "<c-q>", function()
     mc.toggleCursor()
-  end)
-end
-
-loader.on_very_lazy("multicursor", setup)
+  end, { desc = "Toggle Cursors" })
+end)

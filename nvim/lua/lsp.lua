@@ -5,6 +5,9 @@ local ui = require("ui")
 -- from this config's lsp/ directory by vim.lsp.enable().
 loader.packadd("blink.lib", "blink.cmp")
 
+-- nvim-highlight-colors owns color swatches, including buffers without an LSP.
+vim.lsp.document_color.enable(false)
+
 vim.diagnostic.config({
   underline = true,
   update_in_insert = false,
@@ -23,12 +26,6 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.HINT] = ui.icons.diagnostics.Hint,
       [vim.diagnostic.severity.INFO] = ui.icons.diagnostics.Info,
     },
-    texthl = {
-      [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
-      [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
-      [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
-      [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
-    },
     numhl = {
       [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
       [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
@@ -40,8 +37,6 @@ vim.diagnostic.config({
 
 local enabled_servers = {
   "lua_ls",
-  -- "emmylua_ls",
-  -- "copilot",
   "bashls",
 
   "dockerls",
@@ -71,7 +66,7 @@ local enabled_servers = {
   "zls",
 }
 
-local capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), {
+local capabilities = require("blink.cmp").get_lsp_capabilities({
   workspace = {
     fileOperations = {
       didRename = true,
@@ -84,65 +79,58 @@ local capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_c
       lineFoldingOnly = true,
     },
   },
-})
-
-capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities())
+}, true)
 
 vim.lsp.config("*", {
   capabilities = capabilities,
 })
 
 local function lsp_keymaps(bufnr)
-  loader.packadd("fzf-lua")
-  local fzflua = require("fzf-lua")
+  local function picker(method, options)
+    return function()
+      loader.packadd("fzf-lua")
+      require("fzf-lua")[method](options)
+    end
+  end
 
   local opts = function(desc)
     return { buffer = bufnr, desc = desc }
   end
 
-  vim.keymap.set("n", "gd", fzflua.lsp_definitions, opts("Goto Definition"))
-  vim.keymap.set("n", "gD", fzflua.lsp_declarations, opts("Goto Declaration"))
-  vim.keymap.set("n", "gr", fzflua.lsp_references, opts("Goto References"))
-  vim.keymap.set("n", "gi", fzflua.lsp_implementations, opts("Goto Implementation"))
-  vim.keymap.set("n", "gy", fzflua.lsp_typedefs, opts("Goto TypeDefs"))
-  vim.keymap.set("n", "gI", fzflua.lsp_incoming_calls, opts("Incoming Calls"))
-  vim.keymap.set("n", "gO", fzflua.lsp_outgoing_calls, opts("Outgoing Calls"))
+  vim.keymap.set("n", "gd", picker("lsp_definitions"), opts("Goto Definition"))
+  vim.keymap.set("n", "gD", picker("lsp_declarations"), opts("Goto Declaration"))
+  vim.keymap.set("n", "gr", picker("lsp_references"), opts("Goto References"))
+  vim.keymap.set("n", "gi", picker("lsp_implementations"), opts("Goto Implementation"))
+  vim.keymap.set("n", "gy", picker("lsp_typedefs"), opts("Goto TypeDefs"))
+  vim.keymap.set("n", "gI", picker("lsp_incoming_calls"), opts("Incoming Calls"))
+  vim.keymap.set("n", "gO", picker("lsp_outgoing_calls"), opts("Outgoing Calls"))
 
-  vim.keymap.set("n", "<leader>ca", fzflua.lsp_code_actions, opts("Code Actions"))
+  vim.keymap.set("n", "<leader>ca", picker("lsp_code_actions"), opts("Code Actions"))
 
-  vim.keymap.set("n", "<leader>ss", fzflua.lsp_document_symbols, opts("Lsp symbols"))
-  vim.keymap.set("n", "<leader>sS", fzflua.lsp_workspace_symbols, opts("Workspace lsp symbols"))
+  vim.keymap.set("n", "<leader>ss", picker("lsp_document_symbols"), opts("Lsp symbols"))
+  vim.keymap.set("n", "<leader>sS", picker("lsp_workspace_symbols"), opts("Workspace lsp symbols"))
 
-  vim.keymap.set("n", "<leader>xx", function()
-    fzflua.diagnostics_document({ sort = true })
-  end, opts("Diagnostics"))
-  vim.keymap.set("n", "<leader>xX", function()
-    fzflua.diagnostics_workspace({ sort = true })
-  end, opts("Workspace Diagnostics"))
-  vim.keymap.set("n", "<leader>xw", function()
-    fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.WARN, sort = true })
-  end, opts("Workspace Diagnostics(Warns)"))
-  vim.keymap.set("n", "<leader>xe", function()
-    fzflua.diagnostics_workspace({ severity_limit = vim.diagnostic.severity.ERROR, sort = true })
-  end, opts("Workspace Diagnostics(Errors)"))
+  vim.keymap.set("n", "<leader>xx", picker("diagnostics_document", { sort = true }), opts("Diagnostics"))
+  vim.keymap.set("n", "<leader>xX", picker("diagnostics_workspace", { sort = true }), opts("Workspace Diagnostics"))
+  vim.keymap.set(
+    "n",
+    "<leader>xw",
+    picker("diagnostics_workspace", { severity_limit = vim.diagnostic.severity.WARN, sort = true }),
+    opts("Workspace Diagnostics(Warns)")
+  )
+  vim.keymap.set(
+    "n",
+    "<leader>xe",
+    picker("diagnostics_workspace", { severity_limit = vim.diagnostic.severity.ERROR, sort = true }),
+    opts("Workspace Diagnostics(Errors)")
+  )
 end
 
-local hover = vim.lsp.buf.hover
----@diagnostic disable-next-line: duplicate-set-field
-vim.lsp.buf.hover = function()
-  return hover({
+local function float_options()
+  return {
     max_height = math.floor(vim.o.lines * 0.5),
     max_width = math.floor(vim.o.columns * 0.6),
-  })
-end
-
-local signature_help = vim.lsp.buf.signature_help
----@diagnostic disable-next-line: duplicate-set-field
-vim.lsp.buf.signature_help = function()
-  return signature_help({
-    max_height = math.floor(vim.o.lines * 0.5),
-    max_width = math.floor(vim.o.columns * 0.6),
-  })
+  }
 end
 
 local keymap_setup = function(bufnr)
@@ -152,15 +140,13 @@ local keymap_setup = function(bufnr)
 
   vim.keymap.set("n", "<leader>cl", ":checkhealth vim.lsp<cr>", opts("LspInfo"))
 
-  -- Nvim installs buffer-local `K` for hover-capable clients. Its callback
-  -- resolves the patched `vim.lsp.buf.hover` above when invoked.
-  vim.keymap.set("n", "gk", function()
-    vim.lsp.buf.signature_help()
-  end, opts("Signature Help"))
+  vim.keymap.set("n", "K", function()
+    vim.lsp.buf.hover(float_options())
+  end, opts("Hover"))
 
-  -- vim.keymap.set({ "n", "x" }, "<leader>ca", function()
-  --   vim.lsp.buf.code_action()
-  -- end, opts("Code Action"))
+  vim.keymap.set("n", "gk", function()
+    vim.lsp.buf.signature_help(float_options())
+  end, opts("Signature Help"))
 
   vim.keymap.set({ "n", "v" }, "<leader>cc", function()
     vim.lsp.codelens.run()
@@ -186,9 +172,8 @@ local keymap_setup = function(bufnr)
   vim.keymap.set("n", "[w", diagnostic_goto(-1, "WARN"), opts("Prev warning"))
 end
 
--- Keep formatting/tag edits single-owner: Conform and nvim-ts-autotag handle them.
 local methods_setup = function(client, bufnr)
-  if vim.lsp.inlay_hint and client:supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
+  if client:supports_method("textDocument/inlayHint", bufnr) then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
 end
@@ -197,7 +182,7 @@ end
 vim.lsp.enable(enabled_servers)
 
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+  group = vim.api.nvim_create_augroup("sjvim_lsp_attach", { clear = true }),
   callback = function(args)
     local client_id = args.data and args.data.client_id
     if not client_id then

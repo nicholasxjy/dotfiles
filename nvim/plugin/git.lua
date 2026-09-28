@@ -1,10 +1,9 @@
 local loader = require("loader")
 
-local setup = function()
-  loader.packadd("differ.nvim", "gitsigns.nvim")
+loader.defer_buffer("git", function()
+  loader.packadd("differ.nvim", "gitsigns.nvim", "lazygit.nvim", "fzf-lua")
 
   local gs = require("gitsigns")
-
   gs.setup({
     signs = {
       add = { text = "+" },
@@ -31,24 +30,37 @@ local setup = function()
   })
 
   require("differ").setup({
-    layout = "split", -- "stacked" | "split", toggleable per-view
-    context = math.huge, -- fold threshold; math.huge = whole file, no folds
-    wrap = true, -- soft-wrap long lines in the diff view
-    diff_counter = true, -- "hunk K/N" counter in the diff window's winbar
-    cursorline_tint = true, -- tint the cursor line by add/remove so the change
+    layout = "split",
+    context = math.huge,
+    wrap = true,
+    diff_counter = true,
+    cursorline_tint = true,
     deep_diff = {
       enabled = true,
-      granularity = "word", -- "word" | "char"
-      similarity_threshold = 0.5, -- line-pairing cutoff for word-level diffing
+      granularity = "word",
+      similarity_threshold = 0.5,
     },
-    merge = { -- merge tool pane layout; no per-invocation override
-      layout = "default", -- "default" (ours | theirs) | "diff4" (adds base)
+    merge = {
+      layout = "default",
     },
-    relative_dates = false, -- "3 days ago" instead of YYYY-MM-DD wherever a date shows
-    base = nil, -- base branch for `base`/`log base`; nil auto-detects origin/HEAD
-    sidecar_bin = nil, -- override the go sidecar path
-    command_alias = nil, -- extra :command(s) routing to :Differ, e.g. "D" or { "D", "Df" }
+    relative_dates = false,
+    base = nil,
+    sidecar_bin = nil,
+    command_alias = nil,
   })
-end
 
-loader.defer_buffer("git", setup, { schedule = true })
+  -- LazyGit
+  vim.g.lazygit_floating_window_winblend = 0
+  vim.g.lazygit_floating_window_scaling_factor = 0.95
+  vim.g.lazygit_floating_window_border_chars = { "", "", "", "", "", "", "", "" }
+  vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "Open LazyGit" })
+
+  -- Git pickers
+  local fzflua = require("fzf-lua")
+  vim.keymap.set("n", "<leader>gb", fzflua.git_branches, { desc = "Git Branches" })
+  vim.keymap.set("n", "<leader>gl", fzflua.git_commits, { desc = "Git Log" })
+  vim.keymap.set("n", "<leader>gs", fzflua.git_status, { desc = "Git Status" })
+  vim.keymap.set("n", "<leader>gS", fzflua.git_stash, { desc = "Git Stash" })
+  vim.keymap.set("n", "<leader>gd", fzflua.git_hunks, { desc = "Git Diff (Hunks)" })
+  vim.keymap.set("n", "<leader>gf", fzflua.git_bcommits, { desc = "Git Log File" })
+end, { schedule = true })

@@ -1,12 +1,30 @@
 local loader = require("loader")
 
+-- ============================================================================
+-- Markdown (render-markdown & markdown-preview)
+-- ============================================================================
+local function setup_markdown()
+  vim.g.mkdp_filetypes = { "markdown" }
+  loader.packadd("markdown-preview.nvim", "render-markdown.nvim")
+
+  require("render-markdown").setup({
+    enabled = true,
+    file_types = { "markdown" },
+    completions = { blink = { enabled = true }, lsp = { enabled = false } },
+    code = {},
+  })
+end
+
+loader.defer("markdown", setup_markdown, { "BufReadPre", "BufNewFile" }, { pattern = { "*.md", "*.mdx" } })
+
+-- ============================================================================
+-- Rust (rustaceanvim & crates.nvim)
+-- ============================================================================
 local function setup_crates()
   loader.packadd("crates.nvim")
   require("crates").setup({
     completion = {
-      crates = {
-        enabled = true,
-      },
+      crates = { enabled = true },
     },
     lsp = {
       enabled = true,
@@ -26,7 +44,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
-local setup = function()
+local function setup_rust()
   loader.packadd("rustaceanvim")
 
   local function rustaceanvim_opts()
@@ -37,7 +55,7 @@ local setup = function()
         },
       },
       server = {
-        on_attach = function(_, bufnr) end,
+        on_attach = function(_, _) end,
         default_settings = {
           ["rust-analyzer"] = {
             cargo = {
@@ -95,9 +113,6 @@ local setup = function()
 
   vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, rustaceanvim_opts())
 
-  -- Resolving the debug adapter shells out to `exepath`/`glob` and the toolchain
-  -- check is only meaningful once Rust is in play. `vim.g.rustaceanvim.dap` is
-  -- read when a debug session starts, long after this has run.
   vim.api.nvim_create_autocmd("FileType", {
     group = vim.api.nvim_create_augroup("sjvim_rustaceanvim_dap", { clear = true }),
     pattern = "rust",
@@ -120,6 +135,4 @@ local setup = function()
   })
 end
 
--- rustaceanvim registers its own `FileType rust` handler when it is added to
--- 'runtimepath', so load it on BufReadPre rather than waiting for FileType.
-loader.defer("rust", setup, { "BufReadPre", "BufNewFile" }, { pattern = "*.rs" })
+loader.defer("rust", setup_rust, { "BufReadPre", "BufNewFile" }, { pattern = "*.rs" })
