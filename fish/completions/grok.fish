@@ -493,20 +493,27 @@ complete -c grok -n "__fish_grok_using_subcommand completions" -l leader-socket 
 complete -c grok -n "__fish_grok_using_subcommand completions" -l debug-file -d 'Write debug logs to FILE' -r -F
 complete -c grok -n "__fish_grok_using_subcommand completions" -l debug -d 'Enable debug logging'
 complete -c grok -n "__fish_grok_using_subcommand completions" -s h -l help -d 'Print help'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -l debug-file -d 'Write debug logs to FILE' -r -F
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -l debug -d 'Enable debug logging'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -s h -l help -d 'Print help'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "list" -d 'List tracked worktrees'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "ls" -d 'List tracked worktrees'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "show" -d 'Show details for a specific worktree'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "rm" -d 'Remove worktrees'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "gc" -d 'Remove expired worktrees, keeping any whose work would not survive'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "detach" -d 'Convert a Grove-projected worktree into a plain git worktree'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "salvage" -d 'Recover hydrated and dirty files when the source repo is gone'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "clean-artifacts" -d 'Purge escape-dir artifact contents (`git clean` does not)'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "db" -d 'Database maintenance'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc detach salvage clean-artifacts db help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -l debug-file -d 'Write debug logs to FILE' -r -F
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -l debug -d 'Enable debug logging'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -s h -l help -d 'Print help'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "create" -d 'Create a worktree the way `grok -w` does, without starting a session'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "list" -d 'List tracked worktrees'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "ls" -d 'List tracked worktrees'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "show" -d 'Show details for a specific worktree'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "rm" -d 'Remove worktrees'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "gc" -d 'Remove expired worktrees, keeping any whose work would not survive'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "detach" -d 'Convert a Grove-projected worktree into a plain git worktree'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "salvage" -d 'Recover hydrated and dirty files when the source repo is gone'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "clean-artifacts" -d 'Purge escape-dir artifact contents (`git clean` does not)'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "redirect" -d 'Inspect and repair artifact-directory redirections'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "db" -d 'Database maintenance'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from create list ls show rm gc detach salvage clean-artifacts redirect db help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from create" -l ref -d 'Branch, tag, or commit to base the worktree on; without it, HEAD plus uncommitted changes' -r
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from create" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from create" -l debug-file -d 'Write debug logs to FILE' -r -F
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from create" -l debug -d 'Enable debug logging'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from create" -s h -l help -d 'Print help'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from list" -l repo -r
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from list" -l type -r
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from list" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
@@ -556,6 +563,16 @@ complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subc
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from clean-artifacts" -l yes -d 'Required to actually delete (irreversible)'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from clean-artifacts" -l debug -d 'Enable debug logging'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from clean-artifacts" -s h -l help -d 'Print help'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -l debug-file -d 'Write debug logs to FILE' -r -F
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -l debug -d 'Enable debug logging'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -s h -l help -d 'Print help'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -f -a "list" -d 'Print the mount\'s effective redirect entries'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -f -a "add" -d 'Declare a user redirect and apply it'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -f -a "del" -d 'Remove a user redirect or exclude an automatic redirect'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -f -a "fixup" -d 'Apply the mount\'s redirect policy and reopen a closed redirect gate'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -f -a "unmount" -d 'Take down one redirect object, or every redirect object on the mount'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from redirect" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from db" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from db" -l debug-file -d 'Write debug logs to FILE' -r -F
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from db" -l debug -d 'Enable debug logging'
@@ -564,6 +581,7 @@ complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subc
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from db" -f -a "stats" -d 'Show DB statistics'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from db" -f -a "path" -d 'Print DB file path'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from db" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "create" -d 'Create a worktree the way `grok -w` does, without starting a session'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "list" -d 'List tracked worktrees'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "show" -d 'Show details for a specific worktree'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "rm" -d 'Remove worktrees'
@@ -571,23 +589,32 @@ complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subc
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "detach" -d 'Convert a Grove-projected worktree into a plain git worktree'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "salvage" -d 'Recover hydrated and dirty files when the source repo is gone'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "clean-artifacts" -d 'Purge escape-dir artifact contents (`git clean` does not)'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "redirect" -d 'Inspect and repair artifact-directory redirections'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "db" -d 'Database maintenance'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c grok -n "__fish_grok_using_subcommand clone" -s b -l branch -d 'Branch or ref to check out' -r
-complete -c grok -n "__fish_grok_using_subcommand clone" -l cone -d 'Sparse-checkout cone path (repeatable)' -r -F
+complete -c grok -n "__fish_grok_using_subcommand clone" -l redirect-dir -d 'Add a redirect allowlist entry (repeatable; inert unless enabled)' -r
 complete -c grok -n "__fish_grok_using_subcommand clone" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
 complete -c grok -n "__fish_grok_using_subcommand clone" -l debug-file -d 'Write debug logs to FILE' -r -F
 complete -c grok -n "__fish_grok_using_subcommand clone" -l full-history -d 'Fetch complete history during clone instead of the fast depth-1 bootstrap. After a depth-1 clone, `git fetch --deepen=N origin` / `--unshallow origin` affect only the selected branch. Another branch needs an explicit depth-limited refspec'
+complete -c grok -n "__fish_grok_using_subcommand clone" -l redirect-ignored -d 'Enable redirects for the safe artifact-directory allowlist'
+complete -c grok -n "__fish_grok_using_subcommand clone" -l no-redirects -d 'Explicitly disable redirects for this clone'
 complete -c grok -n "__fish_grok_using_subcommand clone" -l debug -d 'Enable debug logging'
 complete -c grok -n "__fish_grok_using_subcommand clone" -s h -l help -d 'Print help'
 complete -c grok -n "__fish_grok_using_subcommand du" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
 complete -c grok -n "__fish_grok_using_subcommand du" -l debug-file -d 'Write debug logs to FILE' -r -F
 complete -c grok -n "__fish_grok_using_subcommand du" -l json -d 'Emit machine-readable JSON output'
+complete -c grok -n "__fish_grok_using_subcommand du" -l clean -d 'Purge live redirect contents and ownership-proven orphan jails'
+complete -c grok -n "__fish_grok_using_subcommand du" -l clean-orphaned -d 'Delete only ownership-proven orphan redirect jails'
+complete -c grok -n "__fish_grok_using_subcommand du" -l yes -d 'Confirm an irreversible redirect cleanup'
 complete -c grok -n "__fish_grok_using_subcommand du" -l debug -d 'Enable debug logging'
 complete -c grok -n "__fish_grok_using_subcommand du" -s h -l help -d 'Print help'
 complete -c grok -n "__fish_grok_using_subcommand disk-usage" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
 complete -c grok -n "__fish_grok_using_subcommand disk-usage" -l debug-file -d 'Write debug logs to FILE' -r -F
 complete -c grok -n "__fish_grok_using_subcommand disk-usage" -l json -d 'Emit machine-readable JSON output'
+complete -c grok -n "__fish_grok_using_subcommand disk-usage" -l clean -d 'Purge live redirect contents and ownership-proven orphan jails'
+complete -c grok -n "__fish_grok_using_subcommand disk-usage" -l clean-orphaned -d 'Delete only ownership-proven orphan redirect jails'
+complete -c grok -n "__fish_grok_using_subcommand disk-usage" -l yes -d 'Confirm an irreversible redirect cleanup'
 complete -c grok -n "__fish_grok_using_subcommand disk-usage" -l debug -d 'Enable debug logging'
 complete -c grok -n "__fish_grok_using_subcommand disk-usage" -s h -l help -d 'Print help'
 complete -c grok -n "__fish_grok_using_subcommand workspace; and not __fish_seen_subcommand_from start pause resume stop restart status list help" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`. A local/branch build can thus run an isolated leader without colliding with the default one already running on the machine Name it `~/.grok/leader-*.sock` to keep `grok leader list/kill` able to find it; any other location works but won\'t be auto-discovered' -r -F
@@ -758,6 +785,7 @@ complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcomma
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from sessions" -f -a "list" -d 'List recent sessions (same as search with no query)'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from sessions" -f -a "search" -d 'Search sessions by keyword'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from sessions" -f -a "delete" -d 'Permanently delete a session from history'
+complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "create" -d 'Create a worktree the way `grok -w` does, without starting a session'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "list" -d 'List tracked worktrees'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "show" -d 'Show details for a specific worktree'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "rm" -d 'Remove worktrees'
@@ -765,6 +793,7 @@ complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcomma
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "detach" -d 'Convert a Grove-projected worktree into a plain git worktree'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "salvage" -d 'Recover hydrated and dirty files when the source repo is gone'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "clean-artifacts" -d 'Purge escape-dir artifact contents (`git clean` does not)'
+complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "redirect" -d 'Inspect and repair artifact-directory redirections'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "db" -d 'Database maintenance'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from workspace" -f -a "start" -d 'Start (or update) the workspace-to-hub exposure'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from workspace" -f -a "pause" -d 'Drain and disconnect from the hub, keeping the exposure warm'

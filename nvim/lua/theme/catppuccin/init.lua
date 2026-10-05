@@ -9,7 +9,6 @@ local function shared_highlights(highlights, colors)
   highlights.WinBar = { fg = colors.text, bg = "NONE" }
   highlights.FzfLuaDirPart = { fg = colors.overlay0, bold = true }
   highlights.ZedBarFile = { fg = colors.overlay0, bold = true }
-  highlights.XuePickerGrepPath = { link = "Comment" }
 
   highlights["@keyword.import"] = { fg = colors.teal, italic = true }
   highlights["@keyword.export"] = { link = "@keyword.import" }

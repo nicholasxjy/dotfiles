@@ -1,52 +1,127 @@
 # vim: set ft=conf :
-# theme = hojicha
-# theme = moon
-# theme = gyokuro
 # theme = github dark
+# theme = tokyonight storm
+# theme = tokyonight moon
 # theme = tokyonight night
-# theme = gruvbox material dark
-# theme = everforest dark med
-theme = catppuccin mocha
-
+# theme = catppuccin mocha
+# theme = catppuccin frappe
+# theme = catppuccin macchiato
+# theme = kanagawa wave
+# theme = gruvbox dark
+# theme = everforest dark hard
+theme = kanagawa lotus
 
 # shell-integration-features =ssh-env,no-cursor,sudo,title
 
-
-font-size = 20.5
+font-size = 17
 font-family = Operator Mono SSm Lig
 font-family = Maple Mono NF CN
+font-feature = calt
+font-feature = dlig
 font-feature = ss11
 font-feature = ss12
+#
+#
+# font-size = 17
+# font-family = FiraCode Nerd Font
+# font-family = Operator Mono SSm Lig
+# font-family = Maple Mono NF CN
+# font-feature = calt
+# font-feature = liga
+# font-feature = zero
+# font-feature = ss02
+# font-feature = ss03
+# font-feature = ss05
+# font-feature = ss06
+# font-feature = ss08
+# font-feature = ss09
+# font-feature = ss10
+# font-feature = cv25
+# font-feature = cv26
+# font-feature = cv28
+# font-feature = cv29
+# font-feature = cv30
+# font-feature = cv31
 
-# font-codepoint-map=U+2E80-U+2EFF,U+2F00-U+2FDF,U+3000-U+303F,U+31C0-U+31EF,U+3400-U+4DBF,U+4E00-U+9FFF,U+F900-U+FAFF,U+FE30-U+FE4F,U+FF00-U+FFEF,U+20000-U+2A6DF,U+2A700-U+2B73F,U+2B740-U+2B81F,U+2B820-U+2CEAF,U+2CEB0-U+2EBEF,U+2EBF0-U+2EE5F,U+30000-U+3134F,U+31350-U+323AF=Maple Mono NF CN
+# font-size = 20
+# font-family = PragmataPro Liga
+# font-family = Maple Mono NF CN
+# font-feature = calt
+# font-feature = cv03
+# font-feature = cv04
+# font-feature = ss11
+# font-feature = ss13
+# font-feature = ss14
+# font-feature = ss15
+# font-feature = ss17
+# font-feature = ss18
+# font-feature = ss20
+#
 
-# font-size = 21
+# font-size = 17
 # font-family = JetbrainsMono Nerd Font
+# font-family = Maple Mono NF CN
 # font-feature = calt
 # font-feature = liga
 # font-feature = dlig
 
+# font-size = 17
+# font-family = TX-02-Variable
+# font-family-bold = TX-02-Variable
+# font-family-italic = Operator Mono SSm Lig
+# font-family-bold-italic = Operator Mono SSm Lig
+# font-style = Regular
+# font-style-bold = Black
+# font-style-italic = Book Italic
+# font-style-bold-italic = Black Italic
+# font-family = Maple Mono NF CN
+# font-feature = calt
+# font-feature = dlig
+# font-feature = ss02
+# font-feature = ss04
+# font-feature = ss05
+# font-feature = ss06
+# font-feature = ss07
+# font-feature = ss09
+#
+#
+#
+# 不生成假的 Bold / Italic。
+# 优先使用字体自身提供的真实字重和斜体。
+font-synthetic-style = false
+# 关闭额外增粗，避免斜体细笔画的边缘显得发糊。
 font-thicken = false
+# font-thicken-strength = 55
+# Ghostty macOS 默认是 native。
+#
+# linear-corrected：
+# - 保留接近 native 的字体重量
+# - 避免某些前景/背景颜色组合下 glyph 边缘发黑
+# - 特别适合 Neovim syntax highlighting
+alpha-blending = native
 
-adjust-box-thickness = -50%
+# 光标覆盖 ligature 时重新拆分 shaping，
+# 编辑代码时能看到真实字符。
+font-shaping-break = cursor
+
+adjust-underline-thickness = -50%
+adjust-box-thickness = -51%
 adjust-cursor-height = -10%
-adjust-cell-height = 4%
-# adjust-cell-width = 1%
+# adjust-cell-height = 2%
+# adjust-cell-width = 2%
 
 # window-padding-x = 8
 # window-padding-y = 8
 
 macos-window-shadow = true
-macos-titlebar-style = hidden
+macos-titlebar-style = tabs
 macos-option-as-alt = true
 
-cursor-color=#00E0BA
 # cursor-style = bar
 cursor-style-blink = true
-# cursor-opacity = 0.8
 
-# background-opacity = 0.96
-# background-blur-radius = 40
+# background-opacity = 0.9
+# background-blur-radius = 50
 # background-blur=macos-glass-regular
 
 link-url = true
@@ -61,6 +136,9 @@ keybind = super+i=inspector:toggle
 keybind = super+r=reload_config
 
 # custom-shader = ./shaders/blaze_sparks.glsl
-custom-shader = ./shaders/ripple_cursor.glsl
+# custom-shader = ./shaders/ripple_cursor.glsl
+# custom-shader = ./shaders/cursor_tail.glsl
 # custom-shader = ./shaders/cursor_warp.glsl
+# custom-shader = ./shaders/cursor_blaze.glsl
 custom-shader = ./shaders/cursor_synesthaxia.glsl
+# custom-shader = ./shaders/bloom025.glsl

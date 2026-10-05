@@ -1,8 +1,10 @@
 function fish_user_key_bindings
     # fzf-tab completion
-    if functions -q __fzf_complete
-        bind -M insert \t __fzf_complete
-        bind \t __fzf_complete
+    if command -q fzf; and functions -q __fzf_complete
+        set -l tab_key \t
+        set -q fzf_tab_key; and set tab_key $fzf_tab_key
+        bind -M insert $tab_key __fzf_complete
+        bind $tab_key __fzf_complete
     end
 
     # Atuin history search (both normal and insert modes)

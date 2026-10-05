@@ -1,13 +1,16 @@
 local M = {}
 
 --- Load the configured theme
----@param name? string Theme name, e.g. "catppuccin-mocha", "catppuccin-macchiato", "catppuccin-frappe", "tokyonight"
+---@param name? string Theme name, e.g. "kanagawa-wave", "catppuccin-mocha", "tokyonight"
 function M.load(name)
   name = name or "tokyonight"
 
   if name:match("^tokyonight") then
     local style = name:match("^tokyonight%-(.+)$") or "moon"
     require("theme.tokyonight").setup(style)
+  elseif name:match("^kanagawa") then
+    local style = name:match("^kanagawa%-(.+)$") or "wave"
+    require("theme.kanagawa").setup(style)
   elseif name:match("^catppuccin") then
     local ok, catppuccin = pcall(require, "theme.catppuccin")
     local setup_ok = false

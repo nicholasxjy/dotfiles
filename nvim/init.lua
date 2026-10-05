@@ -1,6 +1,4 @@
-if vim.loader then
-  vim.loader.enable()
-end
+vim.loader.enable()
 
 require("options")
 require("keymaps")

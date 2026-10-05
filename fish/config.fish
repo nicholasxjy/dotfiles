@@ -5,7 +5,6 @@
 # ------------------------------------------------------------------------------
 # 1. Essential Environment Variables (Global & Exported)
 # ------------------------------------------------------------------------------
-set -gx HOME /Users/nick
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 set -gx SHELL /opt/homebrew/bin/fish
@@ -15,11 +14,14 @@ set -gx LC_ALL en_US.UTF-8
 set -gx LANG en_US.UTF-8
 set -gx GOPATH $HOME/.go
 
+set -gx OPENAI_BASE_URL http://127.0.0.1:3425/v1
+set -gx OPENAI_API_KEY magpie
+
 # Homebrew environment
 set -gx HOMEBREW_PREFIX /opt/homebrew
 set -gx HOMEBREW_CELLAR /opt/homebrew/Cellar
 set -gx HOMEBREW_REPOSITORY /opt/homebrew
-set -gx HOMEBREW_NO_DOWNLOADS_CONCURRENCY auto
+# Homebrew manages download concurrency automatically.
 
 # Java & Bun environments
 if test -d /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
@@ -57,13 +59,8 @@ set -l candidate_paths \
     (test -n "$JAVA_HOME"; and echo "$JAVA_HOME/bin") \
     $GOPATH/bin
 
-set -l clean_path
-for p in $candidate_paths $PATH
-    if test -d "$p"; and not contains -- "$p" $clean_path
-        set -a clean_path "$p"
-    end
-end
-set -gx PATH $clean_path
+# Add existing tool directories without removing inherited PATH entries.
+fish_add_path --global --path $candidate_paths
 
 # ------------------------------------------------------------------------------
 # 3. Non-Interactive Guard (Bail early for scripts, subshells, & tools)
@@ -81,10 +78,21 @@ set -g fish_greeting ""
 set -l cache_dir $HOME/.cache/fish
 test -d $cache_dir; or mkdir -p $cache_dir
 
-function __load_cached_init -a name cmd bin_path -V cache_dir
+function __load_cached_init -a name bin_path -V cache_dir
     set -l cache_file "$cache_dir/$name.fish"
-    if not test -f "$cache_file" -a -s "$cache_file"; or test "$bin_path" -nt "$cache_file"
-        eval "$cmd" >"$cache_file"
+    if not test -s "$cache_file"; or test "$bin_path" -nt "$cache_file"
+        set -l temporary (command mktemp "$cache_dir/$name.XXXXXX")
+        if test -z "$temporary"
+            printf 'fish: 无法创建 %s 初始化缓存\n' "$name" >&2
+            return 1
+        end
+        if command "$bin_path" $argv[3..] >"$temporary"; and test -s "$temporary"; and status fish-path | read -l fish_bin; and "$fish_bin" --no-config --no-execute "$temporary"
+            command mv -f -- "$temporary" "$cache_file"
+        else
+            command rm -f -- "$temporary"
+            printf 'fish: %s 初始化失败，请运行 ssource 重试\n' "$name" >&2
+            return 1
+        end
     end
     source "$cache_file"
 end
@@ -92,25 +100,31 @@ end
 # Starship prompt (init script cached)
 set -l starship_bin (command -v starship)
 if test -n "$starship_bin"
-    __load_cached_init starship "$starship_bin init fish --print-full-init" "$starship_bin"
+    set -q STARSHIP_CONFIG; or set -gx STARSHIP_CONFIG "$__fish_config_dir/starship.toml"
+    __load_cached_init starship "$starship_bin" init fish --print-full-init
 end
 
 # Zoxide cd replacement (init script cached)
 set -l zoxide_bin (command -v zoxide)
 if test -n "$zoxide_bin"
-    __load_cached_init zoxide "$zoxide_bin init --cmd cd fish" "$zoxide_bin"
+    __load_cached_init zoxide "$zoxide_bin" init --cmd cd fish
 end
 
 # FZF keybindings & fuzzy completion (init script cached)
 set -l fzf_bin (command -v fzf)
 if test -n "$fzf_bin"
-    __load_cached_init fzf "$fzf_bin --fish" "$fzf_bin"
+    __load_cached_init fzf "$fzf_bin" --fish
 end
 
 # Atuin shell history (init script cached)
 set -l atuin_bin (command -v atuin)
 if test -n "$atuin_bin"
-    __load_cached_init atuin "$atuin_bin init fish" "$atuin_bin"
+    __load_cached_init atuin "$atuin_bin" init fish
+end
+
+# Avoid registering mise hooks twice when configuration is reloaded.
+if command -q mise; and not functions -q __mise_env_eval
+    mise activate fish | source
 end
 
 # Clean up helper
@@ -131,8 +145,6 @@ end
 # ------------------------------------------------------------------------------
 # Set vi mode as default key bindings and apply user bindings
 set -g fish_key_bindings fish_vi_key_bindings
-fish_vi_key_bindings
-fish_user_key_bindings
 
 # Quick history expansion: typing `sudo !!` expands inline
 function __history_previous_command
@@ -165,11 +177,6 @@ set -gx EZA_COLORS "gm=33;1"
 # ------------------------------------------------------------------------------
 # 7. Navigation & Directory Shortcuts
 # ------------------------------------------------------------------------------
-alias .. 'cd ..'
-alias ... 'cd ../..'
-alias .... 'cd ../../..'
-alias ..... 'cd ../../../..'
-alias ...... 'cd ../../../../..'
 abbr -a .. 'cd ..'
 abbr -a ... 'cd ../..'
 abbr -a .... 'cd ../../..'
@@ -185,7 +192,7 @@ abbr -a python python3
 abbr -a pip pip3
 
 # Safe file operations
-alias cp 'cp -Ri'
+alias cp 'cp -i'
 alias mv 'mv -i'
 alias rm 'rm -i'
 
@@ -226,4 +233,9 @@ end
 
 # Utilities
 alias wget 'wget -c'
-alias hostfile 'eval sudo $EDITOR /etc/hosts'
+alias hostfile 'sudo -e /etc/hosts'
+
+# Reapply custom bindings after integrations, including on ssource reload.
+fish_user_key_bindings
+
+longbridge completion fish | source

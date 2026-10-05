@@ -163,7 +163,7 @@ loader.defer_buffer("conform", function()
   vim.keymap.set({ "n", "x" }, "<leader>cf", function()
     conform.format()
   end, { desc = "Format code using Conform" })
-end)
+end, { schedule = true })
 
 -- ============================================================================
 -- Linting (nvim-lint)

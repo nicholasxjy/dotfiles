@@ -2,7 +2,7 @@ local loader = require("loader")
 local theme = require("theme")
 
 -- Eager: Theme, icons, and notifications feed the initial screen and popups
-theme.load("catppuccin-mocha")
+theme.load("kanagawa-lotus")
 
 loader.packadd("mini.icons", "mini.notify")
 
@@ -51,7 +51,8 @@ loader.defer_buffer("zed-bar", function()
   })
 end)
 
--- Inline diagnostics: decorates diagnostics on LSP attach
+-- Inline diagnostics (virtual_text is off). Attach on DiagnosticChanged too, so
+-- non-LSP sources such as nvim-lint are shown.
 loader.defer("tiny-inline-diagnostic", function()
   loader.packadd("tiny-inline-diagnostic.nvim")
 
@@ -82,20 +83,24 @@ loader.defer("tiny-inline-diagnostic", function()
       show_all_diags_on_cursorline = true,
       enable_on_insert = false,
       enable_on_select = false,
+      overwrite_events = { "LspAttach", "DiagnosticChanged" },
     },
   })
 
-  for _, client in ipairs(vim.lsp.get_clients()) do
-    for bufnr in pairs(client.attached_buffers) do
+  -- Replay the attach for buffers whose triggering event already fired.
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    if
+      vim.api.nvim_buf_is_loaded(bufnr)
+      and (#vim.lsp.get_clients({ bufnr = bufnr }) > 0 or #vim.diagnostic.get(bufnr) > 0)
+    then
       vim.api.nvim_exec_autocmds("LspAttach", {
         group = "TinyInlineDiagnosticAutocmds",
         buffer = bufnr,
-        data = { client_id = client.id },
         modeline = false,
       })
     end
   end
-end, "LspAttach")
+end, { "LspAttach", "DiagnosticChanged" })
 
 -- Statusline, bufferline, statuscolumn, and visual indicators
 loader.on_very_lazy("ui-chrome", function()
@@ -236,6 +241,7 @@ loader.on_very_lazy("ui-chrome", function()
   end
 
   vim.api.nvim_create_autocmd("MarkSet", {
+    group = vim.api.nvim_create_augroup("sjvim_statuscolumn_marks", { clear = true }),
     callback = function()
       marks_by_buffer = {}
     end,

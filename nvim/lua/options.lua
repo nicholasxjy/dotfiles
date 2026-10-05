@@ -45,21 +45,19 @@ vim.o.foldnestmax = 10
 
 vim.o.termguicolors = true
 
-if vim.fn.has("nvim-0.10") == 1 then
-  vim.o.foldtext = "" -- Show text under fold with its highlighting
-end
+vim.o.foldtext = "" -- Show text under fold with its highlighting
 
-vim.o.winborder = "rounded" -- Use border in floating windows
+vim.o.winborder = "solid" -- Use border in floating windows
 
 vim.o.pummaxwidth = 100 -- Limit maximum width of popup menu
 vim.o.completetimeout = 100
 
-vim.o.pumborder = "rounded" -- Use border in built-in completion menu
+vim.o.pumborder = "solid" -- Use border in built-in completion menu
 
--- UI2 is experimental and may be absent on older supported versions.
+-- UI2 is experimental; guard the private module path in case it moves.
 local ok, ui2 = pcall(require, "vim._core.ui2")
 if ok then
-  ui2.enable({ enable = true })
+  ui2.enable({})
 end
 
 if vim.fn.has("nvim-0.13") == 1 then
@@ -88,4 +86,4 @@ vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 
 -- Built-in completion
 vim.o.complete = ".,w,b,kspell" -- Use less sources
-vim.o.completeopt = vim.fn.has("nvim-0.11") == 1 and "menuone,noselect,fuzzy,nosort" or "menuone,noselect"
+vim.o.completeopt = "menuone,noselect,fuzzy,nosort"

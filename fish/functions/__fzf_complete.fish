@@ -60,9 +60,9 @@ fish -c "
 
     set -l fzf_tab_completion (string split \t -- "$fzf_tab_selected")[1]
 
-    #FIX:Path completion does not escape spaces
+    # Escape spaces, quotes, wildcards and shell metacharacters together.
     if test -n "$fzf_tab_completion"
-        commandline -t -- (string replace -a ' ' '\ ' -- "$fzf_tab_completion")
+        commandline -t -- (string escape -- "$fzf_tab_completion")
     end
 
     commandline -f repaint

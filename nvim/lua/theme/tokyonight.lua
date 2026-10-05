@@ -11,7 +11,6 @@ M.on_highlights = function(highlights, colors)
   highlights.WinBar = { fg = colors.fg, bg = "NONE" }
   highlights.FzfLuaDirPart = { fg = colors.fg_gutter, bold = true }
   highlights.ZedBarFile = { fg = colors.fg_gutter, bold = true }
-  highlights.XuePickerGrepPath = { link = "Comment" }
 
   highlights["@keyword.import"] = { fg = colors.teal, italic = true }
   highlights["@keyword.export"] = { link = "@keyword.import" }

@@ -1,6 +1,6 @@
 local loader = require("loader")
 
--- Which-key provides hints for key combinations; defer until first buffer
+-- Which-key provides hints for key combinations
 local function setup_which_key()
   loader.packadd("which-key.nvim")
   require("which-key").setup({
@@ -10,7 +10,6 @@ local function setup_which_key()
         { "<leader>c", group = "code" },
         { "<leader>f", group = "file/find" },
         { "<leader>g", group = "git" },
-        { "<leader>q", group = "quit/session" },
         { "<leader>s", group = "search" },
         { "<leader>u", group = "ui" },
         { "<leader>x", group = "diagnostics/quickfix" },
@@ -74,29 +73,28 @@ local function setup_which_key()
   end, { desc = "Keymaps hint" })
 end
 
-loader.defer_buffer("wk", setup_which_key, { schedule = true })
+loader.on_very_lazy("which-key", setup_which_key)
 
 -- Editor features and text manipulation
 loader.on_very_lazy("editor", function()
   loader.packadd(
     "plenary.nvim",
-    "stay-centered.nvim",
+    -- "stay-centered.nvim",
     "smart-paste.nvim",
     "mini.trailspace",
     "mini.surround",
     "mini.ai",
     "treesj",
-    "kd-translator.nvim",
     "todo-comments.nvim"
   )
 
   -- Stay centered
-  require("stay-centered").setup({
-    skip_filetypes = {},
-    enabled = true,
-    allow_scroll_move = true,
-    disable_on_mouse = true,
-  })
+  -- require("stay-centered").setup({
+  --   skip_filetypes = {},
+  --   enabled = true,
+  --   allow_scroll_move = true,
+  --   disable_on_mouse = true,
+  -- })
 
   -- Smart paste
   require("smart-paste").setup()
@@ -137,21 +135,33 @@ loader.on_very_lazy("editor", function()
     require("treesj").toggle()
   end, { desc = "Toggle Split/Join" })
 
-  vim.keymap.set("n", "<leader>uJ", function()
-    require("treesj").toggle()
-  end, { desc = "Toggle Split/Join" })
-
-  -- Translator
-  require("kd-translator").setup()
-
-  vim.keymap.set("x", "gt", "<Plug>(kd-translator-visual)", { desc = "Translate Visual" })
-  vim.keymap.set("x", "<leader>ct", function()
-    require("kd-translator").operator("visual")
-  end, { desc = "Translate Selection" })
-  vim.keymap.set("n", "<leader>cw", function()
-    require("kd-translator").translate_preview(vim.fn.expand("<cword>"))
-  end, { desc = "Translate Word" })
-
   -- Todo comments
   require("todo-comments").setup()
 end)
+
+-- Translator: set up on first use, and only when the `kd` binary exists (the
+-- plugin throws on every call without it).
+local function translator()
+  if vim.fn.executable("kd") == 0 then
+    vim.notify("kd-translator: `kd` executable not found", vim.log.levels.WARN)
+    return nil
+  end
+  loader.load("kd-translator", function()
+    loader.packadd("kd-translator.nvim")
+    require("kd-translator").setup()
+  end)
+  return require("kd-translator")
+end
+
+vim.keymap.set("x", "gt", function()
+  local kd = translator()
+  if kd then
+    kd.operator("visual")
+  end
+end, { desc = "Translate Selection" })
+vim.keymap.set("n", "<leader>cw", function()
+  local kd = translator()
+  if kd then
+    kd.translate_preview(vim.fn.expand("<cword>"))
+  end
+end, { desc = "Translate Word" })

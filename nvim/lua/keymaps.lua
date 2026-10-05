@@ -48,8 +48,8 @@ map("n", "<leader>bo", function()
   end
 end, { desc = "Close Other Buffers" })
 
-map("n", "<leader>q", ":q<cr>", { desc = "Quit" })
-map("n", "<leader>M", ":Mason<cr>", { desc = "Mason" })
+map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
+map("n", "<leader>M", "<cmd>Mason<cr>", { desc = "Mason" })
 
 -- Clear search with <esc>
 map({ "n", "i", "s" }, "<esc>", function()
@@ -63,8 +63,8 @@ end, { expr = true, desc = "Clear Search" })
 -- save file
 map({ "i", "v", "n" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save" })
 
-map("n", "L", ":bnext<cr>", { desc = "Next Buffer" })
-map("n", "H", ":bprevious<cr>", { desc = "Prev Buffer" })
+map("n", "L", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+map("n", "H", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 
 -- windows
 map("n", "<leader>-", "<C-W>s", { desc = "Split Below", remap = true })
@@ -85,7 +85,7 @@ map("n", "ycc", "yygccp", { remap = true, desc = "Duplicate and Comment" })
 -- Search only in visual area when in visual mode
 map("x", "/", "<Esc>/\\%V", { desc = "Search Selection" })
 
-map("n", "<leader>um", ":messages<cr>", { desc = "Show messages" })
+map("n", "<leader>um", "<cmd>messages<cr>", { desc = "Show messages" })
 
 -- incremental selection treesitter/lsp
 vim.keymap.set({ "n", "x", "o" }, "<A-o>", function()

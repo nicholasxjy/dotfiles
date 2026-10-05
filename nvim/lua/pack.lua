@@ -32,8 +32,8 @@ vim.pack.add({
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
 
-  "https://github.com/FylerOrg/fyler.nvim",
-
+  "https://github.com/stevearc/oil.nvim",
+  { src = "https://github.com/mikavilpas/yazi.nvim", version = vim.version.range("*") },
   "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/MunifTanjim/nui.nvim",
   {
@@ -107,6 +107,8 @@ vim.pack.add({
   },
   "https://github.com/nicholasxjy/zed-bar.nvim",
 
+  "https://github.com/scottmckendry/cyberdream.nvim",
+  "https://github.com/rebelot/kanagawa.nvim",
   { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
   "https://github.com/folke/tokyonight.nvim",
 }, { load = noop })

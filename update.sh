@@ -113,18 +113,10 @@ do_codex() {
   sh "$script"
 }
 
-do_ocx() {
-  # The updater manages stopping and restoring its own running proxy.
-  ocx update
-}
-
 do_pi() {
-  pi update
+  pi update --all
 }
 
-do_pi_extensions() {
-  pi update --extensions
-}
 
 do_grok() {
   grok update
@@ -135,9 +127,7 @@ printf '\n%s%s%s\n' "$C_STEP" "Daily update — $(date '+%Y-%m-%d %H:%M:%S')" "$
 step "Homebrew"    do_homebrew
 step "Neovim"      do_neovim
 step "Codex CLI"   do_codex
-step "ocx"         do_ocx
 step "pi"          do_pi
-step "pi extensions" do_pi_extensions
 step "grok"        do_grok
 
 printf '\n%s%s%s\n' "$C_DIM" "$RULE" "$C_RESET"

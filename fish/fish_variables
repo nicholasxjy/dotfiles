@@ -8,5 +8,6 @@ SETUVAR __fish_webconfig_theme_notification:set\x2dtheme\x2dv1\x2d\x231
 SETUVAR _fisher_upgraded_to_4_4:\x1d
 SETUVAR --export all_proxy:http\x3a//127\x2e0\x2e0\x2e1\x3a7890
 SETUVAR --export fifc_editor:nvim
+SETUVAR fish_user_paths:/Users/nick/\x2egrok/bin
 SETUVAR --export http_proxy:http\x3a//127\x2e0\x2e0\x2e1\x3a7890
 SETUVAR --export https_proxy:http\x3a//127\x2e0\x2e0\x2e1\x3a7890

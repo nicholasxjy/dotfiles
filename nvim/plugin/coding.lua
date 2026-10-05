@@ -1,10 +1,8 @@
 local loader = require("loader")
 
 -- ============================================================================
--- Completion & Snippets (Eager for LSP capabilities)
+-- Completion & Snippets (blink.cmp is packadded eagerly by lua/lsp.lua)
 -- ============================================================================
-loader.packadd("blink.lib", "blink.cmp")
-
 -- Configure lazydev for Neovim / Lua development
 loader.defer("lazydev", function()
   loader.packadd("lazydev.nvim")
@@ -100,14 +98,19 @@ local blink_opts = {
   },
 }
 
+-- Blink also checks snippet state during cmdline completion, before InsertEnter.
+-- Make LuaSnip available now; keep snippet configuration and collections deferred.
+loader.packadd("LuaSnip")
 require("blink.cmp").setup(blink_opts)
 
 local function setup_snippets()
-  loader.packadd("LuaSnip", "friendly-snippets")
+  loader.packadd("friendly-snippets")
   local ls = require("luasnip")
   ls.config.set_config({
     enable_autosnippets = true,
-    history = true,
+    keep_roots = true,
+    link_roots = true,
+    exit_roots = false,
     updateevents = "TextChanged,TextChangedI",
   })
   ls.filetype_extend("typescript", { "javascript" })
@@ -175,8 +178,7 @@ local function install_configured()
 end
 
 local function setup_treesitter()
-  loader.packadd("rainbow-delimiters.nvim", "nvim-treesitter")
-
+  -- Set before packadd so rainbow-delimiters reads it on its first attach.
   vim.g.rainbow_delimiters = {
     strategy = {
       [""] = "rainbow-delimiters.strategy.global",
@@ -200,6 +202,7 @@ local function setup_treesitter()
       "RainbowDelimiterCyan",
     },
   }
+  loader.packadd("rainbow-delimiters.nvim", "nvim-treesitter")
 
   local function attach_ts(buf, ft)
     local lang = vim.treesitter.language.get_lang(ft)
@@ -210,6 +213,7 @@ local function setup_treesitter()
   end
 
   vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("sjvim_treesitter", { clear = true }),
     callback = function(args)
       attach_ts(args.buf, args.match)
     end,
@@ -274,8 +278,6 @@ loader.defer_buffer("coding-tools", function()
     "fugitive",
     "markdown",
     "minifiles",
-    "fyler_finder",
-    "minibuffer",
     "neo-tree",
   }
 

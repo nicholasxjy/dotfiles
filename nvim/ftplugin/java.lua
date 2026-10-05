@@ -1,15 +1,22 @@
+local jdtls_bin = vim.fn.exepath("jdtls")
+if jdtls_bin == "" then
+  vim.notify_once("jdtls not found in PATH (install it with :MasonToolsInstall)", vim.log.levels.WARN)
+  return
+end
+
 require("loader").packadd("nvim-jdtls")
 
--- How to find the project name for a given root dir.
+local mason_share = vim.fn.stdpath("data") .. "/mason/share"
+local root_dir = vim.fs.root(0, { "gradlew", ".git", "mvnw", "pom.xml" })
 
-local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
--- where are the config and workspace dirs for a project?
+-- Name the workspace after the project root, not whatever the cwd happens to be.
+local project_name = vim.fn.fnamemodify(root_dir or vim.fn.getcwd(), ":p:h:t")
 local jdtls_config_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. project_name .. "/config"
 local jdtls_workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. project_name .. "/workspace"
-local lombok_jar = vim.fn.expand("$HOME/.local/share/nvim/mason/share/jdtls/lombok.jar")
+local lombok_jar = mason_share .. "/jdtls/lombok.jar"
 
 local cmd = {
-  vim.fn.exepath("jdtls"),
+  jdtls_bin,
   string.format("--jvm-arg=-javaagent:%s", lombok_jar),
   "-configuration",
   jdtls_config_dir,
@@ -17,20 +24,20 @@ local cmd = {
   jdtls_workspace_dir,
 }
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = vim.tbl_extend("force", capabilities, {
+-- jdtls is started directly, not via vim.lsp.enable(), so the shared "*"
+-- config (blink.cmp completion capabilities) has to be applied here.
+local capabilities = vim.tbl_deep_extend("force", vim.lsp.config["*"].capabilities or {}, {
   offsetEncoding = { "utf-16" },
 })
 
 local config = {
   name = "jdtls",
   cmd = cmd,
-  root_dir = vim.fs.root(0, { "gradlew", ".git", "mvnw", "pom.xml" }),
+  root_dir = root_dir,
   init_options = {
     bundles = {
-      vim.fn.expand("$HOME/.local/share/nvim/mason/share/java-debug-adapter/com.microsoft.java.debug.plugin.jar"),
-      -- unpack remaining bundles
-      (table.unpack or unpack)(vim.split(vim.fn.glob("$HOME/.local/share/nvim/mason/share/java-test/*.jar"), "\n", {})),
+      mason_share .. "/java-debug-adapter/com.microsoft.java.debug.plugin.jar",
+      unpack(vim.fn.glob(mason_share .. "/java-test/*.jar", false, true)),
     },
   },
   capabilities = capabilities,

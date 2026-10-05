@@ -9,15 +9,9 @@ loader.on_very_lazy("search", function()
   fzflua.setup({
     "border-fused",
     fzf_colors = true,
-    fzf_opts = {},
     winopts = {
+      -- A split replaces the float, so float geometry/border options don't apply.
       split = "belowright new",
-      height = 0.85,
-      width = 1,
-      row = 0.35,
-      col = 0.50,
-      border = "rounded",
-      backdrop = 100,
       treesitter = {
         enabled = true,
       },
@@ -70,12 +64,8 @@ loader.on_very_lazy("search", function()
 
   -- Fzf-lua keymaps
   vim.keymap.set("n", "<leader><space>", function()
-    fzfluasmart.smart({
-      git_icons = true,
-      hidden = true,
-      filter = { cwd = true },
-      matcher = { filename_bonus = true, cwd_bonus = true, frecency = true, history_bonus = true },
-    })
+    -- Everything else comes from the fzfluasmart.setup() defaults above.
+    fzfluasmart.smart({ git_icons = true })
   end, { desc = "Smart files" })
 
   vim.keymap.set("n", "<leader>h", function()
@@ -104,7 +94,7 @@ loader.on_very_lazy("search", function()
   vim.keymap.set("n", "<leader>fs", fzflua.search_history, { desc = "Search History" })
 
   vim.keymap.set("n", "<leader>sw", fzflua.grep_cword, { desc = "Grep word" })
-  vim.keymap.set({ "x", "v" }, "<leader>sv", fzflua.grep_visual, { desc = "Grep Visual" })
+  vim.keymap.set("x", "<leader>sv", fzflua.grep_visual, { desc = "Grep Visual" })
   vim.keymap.set("n", "<leader>sg", fzflua.live_grep, { desc = "Live Grep" })
   vim.keymap.set("n", "<leader>xt", "<cmd>TodoFzfLua<cr>", { desc = "TODO/FIXME/NOTE etc" })
 end)

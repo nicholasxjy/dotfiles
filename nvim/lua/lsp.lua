@@ -1,8 +1,20 @@
 local loader = require("loader")
 local ui = require("ui")
 
--- Only completion capabilities are needed eagerly. Server configs are resolved
--- from this config's lsp/ directory by vim.lsp.enable().
+-- Server configs are resolved from this config's lsp/ directory by vim.lsp.enable().
+-- blink.cmp's plugin/ file merges its completion capabilities into whatever
+-- vim.lsp.config("*") already holds, so extra capabilities must be set before
+-- it is packadded. Nvim adds its own defaults when each client starts.
+vim.lsp.config("*", {
+  capabilities = {
+    workspace = {
+      fileOperations = {
+        didRename = true,
+        willRename = true,
+      },
+    },
+  },
+})
 loader.packadd("blink.lib", "blink.cmp")
 
 -- nvim-highlight-colors owns color swatches, including buffers without an LSP.
@@ -66,25 +78,6 @@ local enabled_servers = {
   "zls",
 }
 
-local capabilities = require("blink.cmp").get_lsp_capabilities({
-  workspace = {
-    fileOperations = {
-      didRename = true,
-      willRename = true,
-    },
-  },
-  textDocument = {
-    foldingRange = {
-      dynamicRegistration = false,
-      lineFoldingOnly = true,
-    },
-  },
-}, true)
-
-vim.lsp.config("*", {
-  capabilities = capabilities,
-})
-
 local function lsp_keymaps(bufnr)
   local function picker(method, options)
     return function()
@@ -138,7 +131,7 @@ local keymap_setup = function(bufnr)
     return { buffer = bufnr, desc = desc }
   end
 
-  vim.keymap.set("n", "<leader>cl", ":checkhealth vim.lsp<cr>", opts("LspInfo"))
+  vim.keymap.set("n", "<leader>cl", "<cmd>checkhealth vim.lsp<cr>", opts("LspInfo"))
 
   vim.keymap.set("n", "K", function()
     vim.lsp.buf.hover(float_options())
@@ -156,7 +149,7 @@ local keymap_setup = function(bufnr)
     vim.lsp.buf.rename()
   end, opts("Rename"))
 
-  -- Diagnostic keymaps
+  -- ]d / [d are Nvim defaults; these add severity-filtered variants.
   local function diagnostic_goto(count, severity)
     local opts1 = { count = count, severity = severity and vim.diagnostic.severity[severity] }
     return function()
@@ -164,42 +157,25 @@ local keymap_setup = function(bufnr)
     end
   end
 
-  vim.keymap.set("n", "]d", diagnostic_goto(1), opts("Next diagnostic"))
-  vim.keymap.set("n", "[d", diagnostic_goto(-1), opts("Prev diagnostic"))
   vim.keymap.set("n", "]e", diagnostic_goto(1, "ERROR"), opts("Next error"))
   vim.keymap.set("n", "[e", diagnostic_goto(-1, "ERROR"), opts("Prev error"))
   vim.keymap.set("n", "]w", diagnostic_goto(1, "WARN"), opts("Next warning"))
   vim.keymap.set("n", "[w", diagnostic_goto(-1, "WARN"), opts("Prev warning"))
 end
 
-local methods_setup = function(client, bufnr)
-  if client:supports_method("textDocument/inlayHint", bufnr) then
-    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-  end
-end
+-- Both only request from clients that advertise the capability.
+vim.lsp.inlay_hint.enable(true)
+vim.lsp.codelens.enable(true)
 
--- enable lsp servers
 vim.lsp.enable(enabled_servers)
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("sjvim_lsp_attach", { clear = true }),
   callback = function(args)
-    local client_id = args.data and args.data.client_id
-    if not client_id then
-      return
-    end
-
-    local client = vim.lsp.get_client_by_id(client_id)
-    if not client then
-      return
-    end
-
     if not vim.b[args.buf].sjvim_lsp_keymaps then
       vim.b[args.buf].sjvim_lsp_keymaps = true
       keymap_setup(args.buf)
       lsp_keymaps(args.buf)
     end
-
-    methods_setup(client, args.buf)
   end,
 })

@@ -1,6 +1,8 @@
 function noproxy --description "Unset all proxy variables"
-    set -e HTTP_PROXY HTTPS_PROXY ALL_PROXY http_proxy https_proxy all_proxy
-    set -Ue HTTP_PROXY HTTPS_PROXY ALL_PROXY http_proxy https_proxy all_proxy 2>/dev/null
+    for name in HTTP_PROXY HTTPS_PROXY ALL_PROXY http_proxy https_proxy all_proxy
+        set -ge $name
+        set -Ue $name
+    end
 
     if command -q npm
         npm config delete proxy

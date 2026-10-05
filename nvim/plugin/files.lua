@@ -4,36 +4,22 @@ local ui = require("ui")
 -- ============================================================================
 -- Neo-tree (Sidebar Explorer)
 -- ============================================================================
-local neotree_is_setup = false
-
 local function setup_neotree()
-  if neotree_is_setup then
-    return
-  end
-
   loader.packadd("plenary.nvim", "nui.nvim", "nvim-window-picker", "nvim-file-operations", "neo-tree.nvim")
 
-  local has_picker, picker = pcall(require, "window-picker")
-  if has_picker then
-    picker.setup({
-      filter_rules = {
-        include_current_win = false,
-        autoselect_one = true,
-        bo = {
-          filetype = { "neo-tree", "neo-tree-popup", "notify", "quickfix" },
-          buftype = { "terminal", "quickfix" },
-        },
+  require("window-picker").setup({
+    filter_rules = {
+      include_current_win = false,
+      autoselect_one = true,
+      bo = {
+        filetype = { "neo-tree", "neo-tree-popup", "qf" },
+        buftype = { "terminal", "quickfix" },
       },
-    })
-  end
+    },
+  })
 
-  local has_file_ops, file_ops = pcall(require, "nvim-file-operations")
-  if not has_file_ops then
-    has_file_ops, file_ops = pcall(require, "lsp-file-operations")
-  end
-  if has_file_ops then
-    file_ops.setup()
-  end
+  -- LSP willRename/didRename for neo-tree moves (capabilities set in lua/lsp.lua).
+  require("nvim-file-operations").setup()
 
   require("neo-tree").setup({
     close_if_last_window = false,
@@ -150,7 +136,7 @@ local function setup_neotree()
       use_libuv_file_watcher = true,
       hijack_netrw_behavior = "disabled",
       filtered_items = {
-        visible = false,
+        visible = true,
         hide_dotfiles = true,
         hide_gitignored = true,
         hide_hidden = true,
@@ -174,31 +160,24 @@ local function setup_neotree()
       },
     },
   })
-  neotree_is_setup = true
 end
 
 local function toggle_neotree(args)
-  setup_neotree()
-  vim.cmd("Neotree " .. (args or "toggle"))
+  if loader.load("neo-tree", setup_neotree) then
+    vim.cmd("Neotree " .. args)
+  end
 end
 
+-- Stub until first use; neo-tree's own plugin/ file replaces it on packadd.
 vim.api.nvim_create_user_command("Neotree", function(ctx)
-  setup_neotree()
-  local fargs = ctx.fargs or {}
-  require("neo-tree.command")._command(unpack(fargs))
-end, {
-  nargs = "*",
-  complete = function(arglead, cmdline, cursorpos)
-    setup_neotree()
-    return require("neo-tree.command").complete_args(arglead, cmdline, cursorpos)
-  end,
-})
+  toggle_neotree(ctx.args)
+end, { nargs = "*", desc = "Neo-tree" })
 
 vim.keymap.set("n", "<leader>fe", function()
   toggle_neotree("filesystem toggle reveal")
 end, { desc = "Neo-tree (Filesystem)" })
 
-vim.keymap.set("n", "<leader>E", function()
+vim.keymap.set("n", "<leader>e", function()
   toggle_neotree("toggle")
 end, { desc = "Neo-tree Toggle" })
 
@@ -211,117 +190,15 @@ vim.keymap.set("n", "<leader>be", function()
 end, { desc = "Neo-tree (Buffers)" })
 
 -- ============================================================================
--- Fyler (Floating Column Finder)
--- ============================================================================
-local fyler_is_setup = false
-
-local function setup_fyler()
-  if fyler_is_setup then
-    return
-  end
-
-  loader.packadd("fyler.nvim")
-  local fyler = require("fyler")
-
-  fyler.setup({
-    auto_confirm_simple_mutation = false,
-    bound_cursor = true,
-    buf_opts = {},
-    follow_current_file = true,
-    extensions = {
-      git = { enabled = true },
-      watcher = { enabled = true },
-    },
-    hooks = {},
-    integrations = {
-      icon = "mini_icons",
-    },
-    win_opts = {},
-    kind = "floating",
-    kind_presets = {
-      floating = {
-        border = vim.o.winborder,
-        height = "80%",
-        mappings = {
-          n = {
-            ["<CR>"] = {
-              action = "select",
-              args = { close = true, pick = true },
-            },
-          },
-        },
-        width = "60%",
-        col = "center",
-        row = "center",
-      },
-      replace = {
-        mappings = {
-          n = {
-            ["<CR>"] = {
-              action = "select",
-              args = { close = true, pick = true },
-            },
-          },
-        },
-      },
-      split_left_most = {
-        width = "35%",
-        mappings = {
-          n = {
-            ["<CR>"] = {
-              action = "select",
-              args = { close = true, pick = true },
-            },
-          },
-        },
-      },
-    },
-    mappings = {
-      n = {
-        ["-"] = { action = "visit", args = { parent = true }, desc = "Go to parent directory" },
-        ["."] = { action = "visit", args = { cursor = true }, desc = "Enter directory under cursor" },
-        ["<BS>"] = { action = "shrink", args = { parent = true }, desc = "Collapse parent directory" },
-        ["<C-R>"] = { action = "refresh", args = { recursive = true, force = true }, desc = "Force refresh tree" },
-        ["<C-S>"] = { action = "select", args = { split = true }, desc = "Open in horizontal split" },
-        ["<C-T>"] = { action = "select", args = { tabedit = true }, desc = "Open in new tab" },
-        ["<C-V>"] = { action = "select", args = { vsplit = true }, desc = "Open in vertical split" },
-        ["<CR>"] = { action = "select", args = { pick = true }, desc = "Open with window picker" },
-        ["<2-LeftMouse>"] = { action = "select", args = { pick = true }, desc = "Open with window picker" },
-        ["="] = { action = "visit", desc = "Go to root directory" },
-        ["g."] = { action = "toggle_ui", args = { "hidden_items" }, desc = "Toggle hidden files" },
-        ["gi"] = { action = "toggle_ui", args = { "indent_guides" }, desc = "Toggle indent guides" },
-        ["q"] = { action = "close", desc = "Close finder" },
-      },
-    },
-    ui = {
-      hidden_items = {
-        switches = {},
-        patterns = {},
-        always_visible = {},
-        always_hidden = {},
-      },
-      indent_guides = true,
-    },
-    follow_root_dir = true,
-    use_as_default_explorer = false,
-  })
-  fyler_is_setup = true
-end
-
-vim.api.nvim_create_user_command("Fyler", function(ctx)
-  setup_fyler()
-  require("fyler").open(ctx.args ~= "" and { kind = ctx.args } or { kind = "floating" })
-end, { nargs = "?", desc = "Open Fyler file manager" })
-
-vim.keymap.set("n", "<leader>o", function()
-  setup_fyler()
-  require("fyler").open({ kind = "floating" })
-end, { desc = "Fyler" })
-
--- ============================================================================
 -- Mini.files (Modal in-buffer Explorer)
 -- ============================================================================
-local function open_buf_in_split(buf_id, key_map, direction)
+local show_dotfiles = true
+
+local function files_filter(entry)
+  return entry.name ~= ".DS_Store" and (show_dotfiles or entry.name:sub(1, 1) ~= ".")
+end
+
+local function open_buf_in_split(buf_id, key_map, direction, desc)
   local MiniFiles = require("mini.files")
 
   local function rhs()
@@ -339,7 +216,7 @@ local function open_buf_in_split(buf_id, key_map, direction)
     MiniFiles.go_in({ close_on_file = true })
   end
 
-  vim.keymap.set("n", key_map, rhs, { buffer = buf_id, desc = "Open in " .. string.sub(direction, 12) })
+  vim.keymap.set("n", key_map, rhs, { buffer = buf_id, desc = desc })
 end
 
 local function setup_mini_files()
@@ -351,59 +228,144 @@ local function setup_mini_files()
       go_in_plus = "<cr>",
       go_out_plus = "-",
     },
-    content = {
-      filter = function(entry)
-        return entry.name ~= ".DS_Store"
-      end,
-    },
+    content = { filter = files_filter },
     options = { permanent_delete = false, use_as_default_explorer = false },
+  })
+
+  local group = vim.api.nvim_create_augroup("sjvim_mini_files", { clear = true })
+
+  vim.api.nvim_create_autocmd("User", {
+    group = group,
+    pattern = "MiniFilesWindowOpen",
+    callback = function(args)
+      local win_id = args.data.win_id
+      vim.wo[win_id].winblend = 0
+      local config = vim.api.nvim_win_get_config(win_id)
+      config.border = vim.o.winborder
+      vim.api.nvim_win_set_config(win_id, config)
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("User", {
+    group = group,
+    pattern = "MiniFilesBufferCreate",
+    callback = function(args)
+      local buf_id = args.data.buf_id
+      vim.keymap.set("n", "g.", function()
+        show_dotfiles = not show_dotfiles
+        require("mini.files").refresh({ content = { filter = files_filter } })
+      end, { buffer = buf_id, desc = "Toggle Dotfiles" })
+
+      open_buf_in_split(buf_id, "<C-h>", "topleft vertical", "Open in Left Split")
+      open_buf_in_split(buf_id, "<C-j>", "belowright horizontal", "Open in Below Split")
+      open_buf_in_split(buf_id, "<C-k>", "topleft horizontal", "Open in Above Split")
+      open_buf_in_split(buf_id, "<C-l>", "belowright vertical", "Open in Right Split")
+      open_buf_in_split(buf_id, "<C-t>", "tab", "Open in Tab")
+    end,
   })
 end
 
-vim.api.nvim_create_autocmd("User", {
-  pattern = "MiniFilesWindowOpen",
-  callback = function(args)
-    local win_id = args.data.win_id
-    vim.wo[win_id].winblend = 0
-    local config = vim.api.nvim_win_get_config(win_id)
-    config.border = vim.o.winborder
-    vim.api.nvim_win_set_config(win_id, config)
-  end,
-})
-
-vim.api.nvim_create_autocmd("User", {
-  pattern = "MiniFilesBufferCreate",
-  callback = function(args)
-    local buf_id = args.data.buf_id
-    vim.keymap.set("n", "g.", function()
-      vim.g.show_dotfiles = not vim.g.show_dotfiles
-      require("mini.files").refresh({
-        content = {
-          filter = function(entry)
-            return vim.g.show_dotfiles or entry.name:sub(1, 1) ~= "."
-          end,
-        },
-      })
-    end, { buffer = buf_id, desc = "Toggle Dotfiles" })
-
-    open_buf_in_split(buf_id, "<C-h>", "topleft vertical")
-    open_buf_in_split(buf_id, "<C-j>", "belowright horizontal")
-    open_buf_in_split(buf_id, "<C-k>", "topleft horizontal")
-    open_buf_in_split(buf_id, "<C-l>", "belowright vertical")
-    open_buf_in_split(buf_id, "<C-t>", "tab")
-  end,
-})
-
-vim.keymap.set("n", "<leader>e", function()
+vim.keymap.set("n", "<leader>E", function()
   if not loader.load("mini-files", setup_mini_files) then
     return
   end
-  local bufname = vim.api.nvim_buf_get_name(0)
-  local path = vim.fn.fnamemodify(bufname, ":p")
+  local path = vim.api.nvim_buf_get_name(0)
 
-  if path and vim.uv.fs_stat(path) then
-    require("mini.files").open(bufname, false)
+  if path ~= "" and vim.uv.fs_stat(path) then
+    require("mini.files").open(path, false)
   else
     require("mini.files").open()
   end
 end, { desc = "Mini files", silent = true })
+
+-- ============================================================================
+-- Yazi (Terminal File Manager)
+-- ============================================================================
+local function setup_yazi()
+  loader.packadd("plenary.nvim", "yazi.nvim")
+
+  require("yazi").setup({
+    open_for_directories = false,
+    integrations = {
+      grep_in_directory = "fzf-lua",
+      grep_in_selected_files = "fzf-lua",
+    },
+    keymaps = {
+      -- These optional actions need dependencies beyond yazi and plenary.
+      open_and_pick_window = false, -- snacks.nvim
+      copy_relative_path_to_selected_files = vim.fn.executable("grealpath") == 1 and "<C-y>" or false,
+    },
+  })
+end
+
+local function open_yazi(args)
+  for _, executable in ipairs({ "yazi", "ya" }) do
+    if vim.fn.executable(executable) ~= 1 then
+      vim.notify(executable .. " is not installed or not on PATH", vim.log.levels.WARN)
+      return
+    end
+  end
+
+  if loader.load("yazi", setup_yazi) then
+    vim.api.nvim_cmd({ cmd = "Yazi", args = args or {} }, {})
+  end
+end
+
+-- Replaced by yazi.nvim's command when the plugin is first loaded.
+vim.api.nvim_create_user_command("Yazi", function(ctx)
+  open_yazi(ctx.fargs)
+end, {
+  nargs = "*",
+  desc = "Yazi file manager",
+  complete = function(lead)
+    return vim.tbl_filter(function(command)
+      return vim.startswith(command, lead)
+    end, { "cwd", "toggle", "logs" })
+  end,
+})
+
+vim.keymap.set({ "n", "x" }, "<leader>y", "<cmd>Yazi<cr>", { desc = "Yazi (Current File)" })
+
+-- ============================================================================
+-- Oil (Editable File Browser with Preview)
+-- ============================================================================
+local function setup_oil()
+  loader.packadd("oil.nvim")
+
+  require("oil").setup({
+    default_file_explorer = false,
+    view_options = {
+      show_hidden = true,
+    },
+    keymaps = {
+      ["q"] = { "actions.close", mode = "n" },
+    },
+    float = {
+      border = vim.o.winborder,
+      preview_split = "right",
+    },
+    preview_win = {
+      update_on_cursor_moved = true,
+    },
+  })
+end
+
+vim.api.nvim_create_user_command("Oil", function(ctx)
+  if loader.load("oil", setup_oil) then
+    vim.api.nvim_cmd({ cmd = "Oil", args = ctx.fargs, mods = ctx.smods, count = ctx.count }, {})
+  end
+end, { nargs = "*", complete = "dir", count = true, desc = "Oil file browser" })
+
+vim.keymap.set("n", "<leader>o", function()
+  if not loader.load("oil", setup_oil) then
+    return
+  end
+
+  local oil = require("oil")
+  oil.open_float(nil, nil, function()
+    -- Empty directories have no entry to preview.
+    if oil.get_cursor_entry() then
+      oil.open_preview()
+    end
+  end)
+end, { desc = "Oil (File Preview)", silent = true })

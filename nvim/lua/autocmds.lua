@@ -75,25 +75,11 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
   group = augroup("close_with_q"),
   pattern = {
-    "PlenaryTestPopup",
     "checkhealth",
-    "dbout",
     "gitsigns-blame",
     "grug-far",
     "help",
-    "lspinfo",
-    "neotest-output",
-    "neotest-output-panel",
-    "neotest-summary",
-    "notify",
     "qf",
-    "spectre_panel",
-    "startuptime",
-    "tsplayground",
-    "DiffviewFiles",
-    "msgarea",
-    "Msgarea",
-    "Messages",
   },
   callback = function(event)
     local bufnr = event.buf
@@ -147,7 +133,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "TermClose", "TermLeave
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = augroup("highlight_yank"),
   callback = function()
-    vim.hl.hl_op()
+    vim.hl.on_yank()
   end,
 })
 
