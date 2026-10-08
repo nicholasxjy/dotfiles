@@ -102,16 +102,9 @@ loader.defer("tiny-inline-diagnostic", function()
   end
 end, { "LspAttach", "DiagnosticChanged" })
 
--- Statusline, bufferline, statuscolumn, and visual indicators
+-- Statusline, statuscolumn, and visual indicators
 loader.on_very_lazy("ui-chrome", function()
-  loader.packadd(
-    "lualine.nvim",
-    "bufferline.nvim",
-    "modicator.nvim",
-    "nvim-highlight-colors",
-    "screenkey.nvim",
-    "mini.statuscolumn"
-  )
+  loader.packadd("lualine.nvim", "nvim-highlight-colors", "screenkey.nvim", "mini.statuscolumn")
 
   -- Lualine
   local function lsp_component()
@@ -131,7 +124,7 @@ loader.on_very_lazy("ui-chrome", function()
       section_separators = { left = "", right = "" },
       globalstatus = true,
     },
-    extensions = { "neo-tree", "fzf" },
+    extensions = { "fzf" },
     sections = {
       lualine_a = { { "mode" } },
       lualine_b = {
@@ -163,25 +156,6 @@ loader.on_very_lazy("ui-chrome", function()
       lualine_z = { { "encoding" } },
     },
   })
-
-  -- Bufferline
-  require("bufferline").setup({
-    options = {
-      diagnostics = "nvim_lsp",
-      sort_by = "id",
-      offsets = {
-        {
-          filetype = "neo-tree",
-          text = "Neo-tree",
-          highlight = "Directory",
-          text_align = "left",
-        },
-      },
-    },
-  })
-
-  -- Modicator
-  require("modicator").setup()
 
   -- Color highlighter
   require("nvim-highlight-colors").setup({})

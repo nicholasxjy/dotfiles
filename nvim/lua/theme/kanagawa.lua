@@ -8,8 +8,14 @@ function M.setup(style)
   loader.packadd("kanagawa.nvim")
 
   require("kanagawa").setup({
+    compile = true,
+    undercurl = true,
     theme = style,
     transparent = false,
+    functionStyle = {},
+    keywordStyle = { italic = false },
+    statementStyle = { bold = true },
+    typeStyle = {},
     overrides = function(colors)
       local theme = colors.theme
       return {

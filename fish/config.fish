@@ -14,6 +14,8 @@ set -gx LC_ALL en_US.UTF-8
 set -gx LANG en_US.UTF-8
 set -gx GOPATH $HOME/.go
 
+set -gx ZLIB_DOMAIN https://z-lib.gd
+
 set -gx OPENAI_BASE_URL http://127.0.0.1:3425/v1
 set -gx OPENAI_API_KEY magpie
 

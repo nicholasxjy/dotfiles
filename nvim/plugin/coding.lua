@@ -277,8 +277,6 @@ loader.defer_buffer("coding-tools", function()
     "dirvish",
     "fugitive",
     "markdown",
-    "minifiles",
-    "neo-tree",
   }
 
   require("illuminate").configure({

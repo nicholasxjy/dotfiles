@@ -8,40 +8,43 @@
 # theme = catppuccin macchiato
 # theme = kanagawa wave
 # theme = gruvbox dark
+# theme = everforest light soft
 # theme = everforest dark hard
-theme = kanagawa lotus
+# theme = kanagawa lotus
+# theme = gruvbox light
+theme = gruvbox material light
 
 # shell-integration-features =ssh-env,no-cursor,sudo,title
 
-font-size = 17
-font-family = Operator Mono SSm Lig
-font-family = Maple Mono NF CN
-font-feature = calt
-font-feature = dlig
-font-feature = ss11
-font-feature = ss12
-#
-#
 # font-size = 17
-# font-family = FiraCode Nerd Font
 # font-family = Operator Mono SSm Lig
 # font-family = Maple Mono NF CN
 # font-feature = calt
-# font-feature = liga
-# font-feature = zero
-# font-feature = ss02
-# font-feature = ss03
-# font-feature = ss05
-# font-feature = ss06
-# font-feature = ss08
-# font-feature = ss09
-# font-feature = ss10
-# font-feature = cv25
-# font-feature = cv26
-# font-feature = cv28
-# font-feature = cv29
-# font-feature = cv30
-# font-feature = cv31
+# font-feature = dlig
+# font-feature = ss11
+# font-feature = ss12
+#
+#
+font-size = 20
+font-family = FiraCode Nerd Font
+font-family = Operator Mono SSm Lig
+font-family = Maple Mono NF CN
+font-feature = calt
+font-feature = liga
+font-feature = zero
+font-feature = ss02
+font-feature = ss03
+font-feature = ss05
+font-feature = ss06
+font-feature = ss08
+font-feature = ss09
+font-feature = ss10
+font-feature = cv25
+font-feature = cv26
+font-feature = cv28
+font-feature = cv29
+font-feature = cv30
+font-feature = cv31
 
 # font-size = 20
 # font-family = PragmataPro Liga
@@ -65,15 +68,15 @@ font-feature = ss12
 # font-feature = liga
 # font-feature = dlig
 
-# font-size = 17
+# font-size = 20
 # font-family = TX-02-Variable
 # font-family-bold = TX-02-Variable
 # font-family-italic = Operator Mono SSm Lig
 # font-family-bold-italic = Operator Mono SSm Lig
 # font-style = Regular
-# font-style-bold = Black
+# font-style-bold = ExtraBold
 # font-style-italic = Book Italic
-# font-style-bold-italic = Black Italic
+# font-style-bold-italic = Bold Italic
 # font-family = Maple Mono NF CN
 # font-feature = calt
 # font-feature = dlig
@@ -85,13 +88,29 @@ font-feature = ss12
 # font-feature = ss09
 #
 #
+# font-size = 20
+# font-family = Paper Mono
+# font-family-bold = Paper Mono
+# font-family-italic = Operator Mono SSm Lig
+# font-family-bold-italic = Operator Mono SSm Lig
+# font-style = Regular
+# font-style-bold = ExtraBold
+# font-style-italic = Book Italic
+# font-style-bold-italic = Bold Italic
+# font-family = Maple Mono NF CN
+# font-feature = calt
+# font-feature = dlig
+# font-feature = ss01
+# font-feature = ss02
+# font-feature = ss03
+#
 #
 # 不生成假的 Bold / Italic。
 # 优先使用字体自身提供的真实字重和斜体。
 font-synthetic-style = false
 # 关闭额外增粗，避免斜体细笔画的边缘显得发糊。
-font-thicken = false
-# font-thicken-strength = 55
+# font-thicken = true
+# font-thicken-strength = 45
 # Ghostty macOS 默认是 native。
 #
 # linear-corrected：
@@ -105,7 +124,7 @@ alpha-blending = native
 font-shaping-break = cursor
 
 adjust-underline-thickness = -50%
-adjust-box-thickness = -51%
+adjust-box-thickness = -50%
 adjust-cursor-height = -10%
 # adjust-cell-height = 2%
 # adjust-cell-width = 2%

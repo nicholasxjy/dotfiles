@@ -27,70 +27,41 @@ local function noop() end
 
 vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
-  "https://github.com/akinsho/bufferline.nvim",
   "https://github.com/nvim-lualine/lualine.nvim",
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
-
   "https://github.com/stevearc/oil.nvim",
-  { src = "https://github.com/mikavilpas/yazi.nvim", version = vim.version.range("*") },
-  "https://github.com/nvim-lua/plenary.nvim",
-  "https://github.com/MunifTanjim/nui.nvim",
-  {
-    src = "https://github.com/nvim-neo-tree/neo-tree.nvim",
-    version = vim.version.range("3"),
-  },
-  {
-    src = "https://github.com/s1n7ax/nvim-window-picker",
-    version = vim.version.range("2"),
-  },
-  "https://github.com/Crysthamus/nvim-file-operations",
-
   "https://github.com/windwp/nvim-autopairs",
-
   "https://github.com/folke/which-key.nvim",
-
   "https://github.com/rafamadriz/friendly-snippets",
   "https://github.com/L3MON4D3/LuaSnip",
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
-
   "https://github.com/hiphish/rainbow-delimiters.nvim",
-  "https://github.com/arnamak/stay-centered.nvim",
   "https://github.com/folke/ts-comments.nvim",
   "https://github.com/nemanjamalesija/smart-paste.nvim",
-
   "https://github.com/kdheepak/lazygit.nvim",
-  "https://github.com/celeste3z/kd-translator.nvim",
   "https://github.com/Wansmer/treesj",
-  "https://github.com/mawkler/modicator.nvim",
   "https://github.com/b0o/SchemaStore.nvim",
   "https://github.com/mfussenegger/nvim-jdtls",
   "https://github.com/windwp/nvim-ts-autotag",
   "https://github.com/stevearc/conform.nvim",
   "https://github.com/folke/flash.nvim",
-
   "https://github.com/ibhagwan/fzf-lua",
   "https://github.com/nicholasxjy/fzf-lua-smart",
-
   "https://github.com/lewis6991/gitsigns.nvim",
-  "https://github.com/undont/differ.nvim",
-
   "https://github.com/MagicDuck/grug-far.nvim",
   "https://github.com/rrethy/vim-illuminate",
   "https://github.com/mfussenegger/nvim-lint",
-
   "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   "https://github.com/iamcco/markdown-preview.nvim",
-
   "https://github.com/andymass/vim-matchup",
-
+  "https://github.com/nicholasxjy/zed-bar.nvim",
   "https://github.com/brenoprata10/nvim-highlight-colors",
   "https://github.com/NStefan002/screenkey.nvim",
   "https://github.com/folke/todo-comments.nvim",
 
   "https://github.com/nvim-mini/mini.icons",
-  "https://github.com/nvim-mini/mini.files",
   "https://github.com/nvim-mini/mini.surround",
   "https://github.com/nvim-mini/mini.trailspace",
   "https://github.com/nvim-mini/mini.ai",
@@ -105,9 +76,9 @@ vim.pack.add({
     src = "https://github.com/nvim-treesitter/nvim-treesitter",
     version = "main",
   },
-  "https://github.com/nicholasxjy/zed-bar.nvim",
 
-  "https://github.com/scottmckendry/cyberdream.nvim",
+  "https://github.com/sainnhe/everforest",
+  "https://github.com/sainnhe/gruvbox-material",
   "https://github.com/rebelot/kanagawa.nvim",
   { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
   "https://github.com/folke/tokyonight.nvim",

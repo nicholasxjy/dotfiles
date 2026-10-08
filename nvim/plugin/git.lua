@@ -33,25 +33,6 @@ end, { schedule = true })
 
 -- Git tools work without a file buffer (e.g. `nvim` in a repo root).
 loader.on_very_lazy("git-tools", function()
-  loader.packadd("differ.nvim")
-
-  require("differ").setup({
-    layout = "split",
-    context = math.huge,
-    wrap = true,
-    diff_counter = true,
-    cursorline_tint = true,
-    deep_diff = {
-      enabled = true,
-      granularity = "word",
-      similarity_threshold = 0.5,
-    },
-    merge = {
-      layout = "default",
-    },
-    relative_dates = false,
-  })
-
   -- LazyGit reads these when it opens; set them before its plugin/ file defaults them.
   vim.g.lazygit_floating_window_winblend = 0
   vim.g.lazygit_floating_window_scaling_factor = 0.95

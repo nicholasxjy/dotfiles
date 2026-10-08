@@ -112,7 +112,6 @@ function M.setup(flavour)
         fzf = true,
         gitsigns = true,
         mini = { enabled = true },
-        neotree = true,
         rainbow_delimiters = true,
         render_markdown = true,
         treesitter = true,
