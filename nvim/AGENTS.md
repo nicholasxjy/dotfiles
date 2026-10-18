@@ -26,22 +26,21 @@ Neovim with the built-in `vim.pack` plugin manager.
 - `lua/util.lua` owns pack build hooks (`build_cmd_on_change`,
   `build_fn_on_change`).
 - `lua/ui.lua` owns shared icons and visual constants.
-- `lua/theme/` owns colorscheme setup (`theme.load(name)`). Cyberdream is the
-  default; tokyonight is the fallback. Shared highlight overrides live there.
+- `lua/theme/` owns colorscheme setup (`theme.load(name)`). mini.hues is the
+  default and fallback. Shared highlight overrides live there.
 - `plugin/*.lua` groups plugin setup by domain:
   - `coding.lua`: blink.cmp, LuaSnip, lazydev, Tree-sitter, autopairs, matchup,
-    illuminate, autotag, ts-comments.
-  - `editor.lua`: which-key, mini.ai/surround/trailspace, treesj, todo-comments,
-    and the on-demand translator.
-  - `files.lua`: neo-tree (sidebar), mini.files (modal), Yazi, and Oil (with previews).
+    illuminate, autotag, mini.comment, mini.hipatterns.
+  - `editor.lua`: mini.clue, mini.ai/surround/trailspace, treesj, smart-paste.
+  - `files.lua`: Snacks Explorer (sidebar), mini.files (columns), and Oil (with previews).
     Add file managers only when explicitly requested.
   - `git.lua`: gitsigns, differ, lazygit, and git pickers.
   - `languages.lua`: markdown, Rust (rustaceanvim, crates).
   - `navigation.lua`: smart-splits, flash, multicursor.
   - `search.lua`: fzf-lua, fzf-lua-smart, grug-far.
   - `tooling.lua`: mason, conform, nvim-lint.
-  - `ui.lua`: theme, mini.icons, mini.notify, lualine, bufferline, statuscolumn,
-    winbar, inline diagnostics.
+  - `ui.lua`: theme, mini.icons, mini.notify, mini.tabline, mini.statusline,
+    mini.statuscolumn, winbar, inline diagnostics.
 
   If a domain file grows too large, split it into `plugin/<domain>/*.lua` and
   load those files explicitly from the entrypoint. When behavior depends on
@@ -64,8 +63,7 @@ Neovim with the built-in `vim.pack` plugin manager.
 - Pick the latest loading point that still works, in this order:
   - on first use, via a keymap or command stub that calls
     `loader.load(name, setup)`. Use this for rarely used tools and for plugins
-    that need an external binary (examples: kd-translator, neo-tree,
-    mini.files).
+    that need an external binary (examples: Snacks Explorer, Oil).
   - `loader.defer_buffer(name, setup, { schedule = true })`: needs a real file
     buffer but nothing on the first frame (gitsigns, conform, nvim-lint).
   - `loader.on_very_lazy(name, setup)`: user-driven features (keymaps,

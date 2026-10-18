@@ -31,15 +31,36 @@ loader.defer_buffer("gitsigns", function()
   })
 end, { schedule = true })
 
--- Git tools work without a file buffer (e.g. `nvim` in a repo root).
-loader.on_very_lazy("git-tools", function()
-  -- LazyGit reads these when it opens; set them before its plugin/ file defaults them.
+local function setup_lazygit()
   vim.g.lazygit_floating_window_winblend = 0
   vim.g.lazygit_floating_window_scaling_factor = 0.95
   vim.g.lazygit_floating_window_border_chars = { "", "", "", "", "", "", "", "" }
-  loader.packadd("lazygit.nvim")
-  vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "Open LazyGit" })
+  loader.packadd("plenary.nvim", "lazygit.nvim")
+end
 
+for _, command in ipairs({
+  "LazyGit",
+  "LazyGitLog",
+  "LazyGitCurrentFile",
+  "LazyGitFilter",
+  "LazyGitFilterCurrentFile",
+  "LazyGitConfig",
+}) do
+  vim.api.nvim_create_user_command(command, function(ctx)
+    if vim.fn.executable("lazygit") ~= 1 then
+      vim.notify("LazyGit requires the lazygit executable", vim.log.levels.WARN)
+      return
+    end
+    if loader.load("lazygit", setup_lazygit) then
+      vim.api.nvim_cmd({ cmd = command, args = ctx.fargs, mods = ctx.smods }, {})
+    end
+  end, { desc = "Open " .. command })
+end
+
+vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "Open LazyGit" })
+
+-- Git tools work without a file buffer (e.g. `nvim` in a repo root).
+loader.on_very_lazy("git-tools", function()
   -- fzf-lua is configured by plugin/search.lua on VeryLazy.
   local function picker(name)
     return function()

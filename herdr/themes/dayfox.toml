@@ -1,0 +1,32 @@
+[theme]
+# Dayfox：暖白背景 / 深紫前景
+# 官方色板：https://github.com/EdenEast/nightfox.nvim/blob/main/lua/nightfox/palette/dayfox.lua
+name = "terminal"
+
+[theme.custom]
+# === 重点色与背景层级 ===
+accent = "#2848a9"          # 聚焦边框 / 核心高亮 (blue)
+panel_bg = "#f6f2ee"        # 主面板背景 (bg1)
+sidebar_bg = "#e4dcd4"      # 侧边栏背景 (bg0)
+active_row_bg = "#d3c7bb"   # 当前活动行 (bg3)
+selection_bg = "#e7d2be"    # 列表选中项 / 选区 (sel0)
+surface0 = "#e4dcd4"        # 弹窗、卡片背景 (bg0)
+surface1 = "#dbd1dd"        # 输入框、高亮悬浮层 (bg2)
+surface_dim = "#e4dcd4"     # 凹陷区域、底栏背景 (bg0)
+
+# === 边界与分隔线 ===
+overlay0 = "#aab0ad"        # 非活动边框与分隔线 (bg4)
+overlay1 = "#837a72"        # 快捷键提示 / 次级边框 (comment)
+
+# === 文字层级 ===
+text = "#3d2b5a"            # 主文字 (fg1)
+subtext0 = "#643f61"        # 次级文字、状态说明 (fg2)
+
+# === 语义状态色 ===
+green = "#396847"           # 正常运行 / 成功 (green)
+yellow = "#ac5402"          # 思考中 / 警告 (yellow)
+red = "#a5222f"             # 错误 / 阻断 (red)
+blue = "#2848a9"            # 信息 / 链接 (blue)
+teal = "#287980"            # 次级重点 / 徽标 (cyan)
+peach = "#955f61"           # 待办 / 动作提示 (orange)
+mauve = "#6e33ce"           # 特殊 Agent / 高亮 (magenta)

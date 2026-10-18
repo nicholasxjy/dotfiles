@@ -67,6 +67,7 @@ map("n", "L", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "H", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 
 -- windows
+map("n", "<leader>w", "<C-W>", { desc = "Window Commands", remap = true })
 map("n", "<leader>-", "<C-W>s", { desc = "Split Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Right", remap = true })
 

@@ -2,7 +2,7 @@ local loader = require("loader")
 local theme = require("theme")
 
 -- Eager: Theme, icons, and notifications feed the initial screen and popups
-theme.load("kanagawa-lotus")
+theme.load("mini-hues")
 
 loader.packadd("mini.icons", "mini.notify")
 
@@ -102,65 +102,8 @@ loader.defer("tiny-inline-diagnostic", function()
   end
 end, { "LspAttach", "DiagnosticChanged" })
 
--- Statusline, statuscolumn, and visual indicators
-loader.on_very_lazy("ui-chrome", function()
-  loader.packadd("lualine.nvim", "nvim-highlight-colors", "screenkey.nvim", "mini.statuscolumn")
-
-  -- Lualine
-  local function lsp_component()
-    local buf_clients = vim.lsp.get_clients({ bufnr = 0 })
-    local buf_client_names = {}
-
-    for _, client in pairs(buf_clients) do
-      table.insert(buf_client_names, client.name)
-    end
-
-    return table.concat(buf_client_names, ",")
-  end
-
-  require("lualine").setup({
-    options = {
-      theme = "auto",
-      section_separators = { left = "", right = "" },
-      globalstatus = true,
-    },
-    extensions = { "fzf" },
-    sections = {
-      lualine_a = { { "mode" } },
-      lualine_b = {
-        { "branch" },
-        {
-          "diff",
-          source = function()
-            local status = vim.b.gitsigns_status_dict
-            if status then
-              return { added = status.added, modified = status.changed, removed = status.removed }
-            end
-          end,
-        },
-      },
-      lualine_c = {
-        { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-        { "filename", path = 4 },
-        { "diagnostics", sources = { "nvim_workspace_diagnostic" } },
-      },
-      lualine_x = {
-        {
-          function()
-            return "[" .. lsp_component() .. "]"
-          end,
-          color = "Keyword",
-        },
-      },
-      lualine_y = { { "searchcount" }, { "location" } },
-      lualine_z = { { "encoding" } },
-    },
-  })
-
-  -- Color highlighter
-  require("nvim-highlight-colors").setup({})
-
-  -- Screenkey
+local function setup_screenkey()
+  loader.packadd("screenkey.nvim")
   require("screenkey").setup({
     win_opts = {
       row = vim.o.lines - vim.o.cmdheight - 1,
@@ -181,6 +124,74 @@ loader.on_very_lazy("ui-chrome", function()
       ["screenkey.hl.sep"] = { link = "Normal" },
     },
   })
+end
+
+vim.api.nvim_create_user_command("Screenkey", function(ctx)
+  if loader.load("screenkey", setup_screenkey) then
+    vim.api.nvim_cmd({ cmd = "Screenkey", args = ctx.fargs, mods = ctx.smods }, {})
+  end
+end, {
+  nargs = "*",
+  desc = "Toggle Screenkey or invoke Screenkey commands",
+  complete = function(lead)
+    return vim.tbl_filter(function(command)
+      return vim.startswith(command, lead)
+    end, { "toggle", "toggle_statusline_component", "redraw", "log" })
+  end,
+})
+
+-- Tabline, statusline, statuscolumn, and visual indicators
+loader.on_very_lazy("ui-chrome", function()
+  loader.packadd("mini.tabline", "mini.statusline", "mini.statuscolumn")
+
+  require("mini.tabline").setup({
+    show_icons = true,
+    format = function(buf_id, label)
+      local suffix = vim.bo[buf_id].modified and " +" or ""
+      return require("mini.tabline").default_format(buf_id, label .. suffix)
+    end,
+  })
+
+  vim.o.laststatus = 3
+  require("mini.statusline").setup({ use_icons = true })
+
+  -- A default link survives colorscheme resets and allows custom overrides.
+  vim.api.nvim_set_hl(0, "CursorLineIndent", { link = "Visual", default = true })
+
+  local cursorline_indent_ns = vim.api.nvim_create_namespace("sjvim_cursorline_indent")
+  local indent_by_window = {}
+  vim.api.nvim_create_autocmd("WinClosed", {
+    group = vim.api.nvim_create_augroup("sjvim_cursorline_indent", { clear = true }),
+    callback = function(args)
+      indent_by_window[tonumber(args.match)] = nil
+    end,
+  })
+  vim.api.nvim_set_decoration_provider(cursorline_indent_ns, {
+    on_win = function(_, win, buf)
+      if not vim.wo[win].cursorline or vim.bo[buf].buftype ~= "" then
+        return false
+      end
+
+      local row = vim.api.nvim_win_get_cursor(win)[1] - 1
+      local tick = vim.api.nvim_buf_get_changedtick(buf)
+      local cached = indent_by_window[win]
+      if not cached or cached.buf ~= buf or cached.row ~= row or cached.tick ~= tick then
+        local line = vim.api.nvim_buf_get_lines(buf, row, row + 1, false)[1] or ""
+        cached = { buf = buf, row = row, tick = tick, indent = #(line:match("^[ \t]+") or "") }
+        indent_by_window[win] = cached
+      end
+      if cached.indent > 0 then
+        -- Per-redraw marks follow the cursor without leaving highlights on old lines.
+        vim.api.nvim_buf_set_extmark(buf, cursorline_indent_ns, row, 0, {
+          end_col = cached.indent,
+          hl_group = "CursorLineIndent",
+          priority = 200,
+          ephemeral = true,
+        })
+      end
+      return false
+    end,
+  })
 
   -- Statuscolumn
   local statuscolumn = require("mini.statuscolumn")
@@ -198,9 +209,10 @@ loader.on_very_lazy("ui-chrome", function()
       return " "
     end
 
-    local marks = marks_by_buffer[buf_id]
-    if marks == nil then
-      marks = {}
+    local tick = vim.api.nvim_buf_get_changedtick(buf_id)
+    local cached = marks_by_buffer[buf_id]
+    if not cached or cached.tick ~= tick then
+      local marks = {}
       local mark_list = vim.fn.getmarklist(buf_id)
       vim.list_extend(mark_list, vim.fn.getmarklist())
       for _, mark in ipairs(mark_list) do
@@ -208,10 +220,11 @@ loader.on_very_lazy("ui-chrome", function()
           marks[mark.pos[2]] = mark.mark:sub(2)
         end
       end
-      marks_by_buffer[buf_id] = marks
+      cached = { tick = tick, marks = marks }
+      marks_by_buffer[buf_id] = cached
     end
 
-    return marks[lnum] or " "
+    return cached.marks[lnum] or " "
   end
 
   vim.api.nvim_create_autocmd("MarkSet", {

@@ -1,0 +1,34 @@
+[theme]
+# Miniwinter Light：冷灰蓝背景 / 深棕灰文字 / 深蓝重点色
+# 配色来源：~/.config/ghostty/themes/miniwinter light
+# 切换并重载：python3 ~/.config/herdr/switch-theme.py miniwinter-light
+name = "terminal"
+
+[theme.custom]
+# === 重点色与背景层级 ===
+# 侧栏和凹陷区域由原始背景略微加深，活动行混入少量蓝色。
+accent = "#014772"          # 聚焦边框 / 核心高亮 (ANSI blue)
+panel_bg = "#dce4e8"        # 主面板背景 (background)
+sidebar_bg = "#d1d9dd"      # 侧边栏背景 (background 派生)
+active_row_bg = "#c2d1da"   # 当前活动行 (background 与 blue 混合)
+selection_bg = "#9ca4a7"    # 列表选中项 / 选区 (selection-background)
+surface0 = "#eff7fb"        # 弹窗、卡片背景 (ANSI bright white)
+surface1 = "#d1d9dd"        # 输入框、高亮悬浮层 (background 派生)
+surface_dim = "#d1d9dd"     # 凹陷区域、底栏背景 (background 派生)
+
+# === 边界与分隔线 ===
+overlay0 = "#9ca4a7"        # 非活动边框与分隔线 (ANSI white)
+overlay1 = "#6a6661"        # 快捷键提示 / 次级边框 (ANSI bright black)
+
+# === 文字层级 ===
+text = "#312e29"            # 主文字 (foreground)
+subtext0 = "#6a6661"        # 次级文字、状态说明 (ANSI bright black)
+
+# === 语义状态色 ===
+green = "#00562e"           # 正常运行 / 成功 (ANSI green)
+yellow = "#565600"          # 思考中 / 警告 (ANSI yellow)
+red = "#5c0113"             # 错误 / 阻断 (ANSI red)
+blue = "#014772"            # 信息 / 链接 (ANSI blue)
+teal = "#016d71"            # 次级重点 / 徽标 (ANSI cyan)
+peach = "#565600"           # 待办 / 动作提示 (源色板无橙色，沿用 ANSI yellow)
+mauve = "#4f0b46"           # 特殊 Agent / 高亮 (ANSI magenta)

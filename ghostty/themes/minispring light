@@ -1,0 +1,60 @@
+# minispring light — Ghostty port of mini.hues
+# Source: https://github.com/nvim-mini/mini.hues/blob/ea046f08a2759050eaa8004cf9faa5eb599e56c5/colors/minispring.lua
+# Upstream revision: ea046f08a2759050eaa8004cf9faa5eb599e56c5
+# Extracted from the upstream light colorscheme in Neovim.
+
+background = #e0e4de
+foreground = #2c2e33
+cursor-color = #2c2e33
+cursor-text = #e0e4de
+
+# Visual selection: preserve each cell foreground, as in upstream Visual.
+selection-background = #a0a39e
+selection-foreground = cell-foreground
+
+# Search and CurSearch highlights.
+search-foreground = #e0e4de
+search-background = #2e5e00
+search-selected-foreground = #e0e4de
+search-selected-background = #676900
+
+# Exact upstream terminal_color_0 through terminal_color_15.
+# Upstream intentionally shares normal and bright chromatic colors.
+palette = 0=#0b0d11
+palette = 1=#700015
+palette = 2=#006d3f
+palette = 3=#676900
+palette = 4=#005085
+palette = 5=#600051
+palette = 6=#007f86
+palette = 7=#a0a39e
+palette = 8=#64666c
+palette = 9=#700015
+palette = 10=#006d3f
+palette = 11=#676900
+palette = 12=#005085
+palette = 13=#600051
+palette = 14=#007f86
+palette = 15=#f3f7f1
+
+# MIT License
+#
+# Copyright (c) 2021 Evgeni Chasnovski
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.

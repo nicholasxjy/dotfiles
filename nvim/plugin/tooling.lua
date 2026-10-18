@@ -101,7 +101,7 @@ vim.api.nvim_create_user_command("MasonToolsInstall", install_missing_tools, {
 -- ============================================================================
 -- Conform (Code Formatting)
 -- ============================================================================
-loader.defer_buffer("conform", function()
+local function setup_conform()
   loader.packadd("conform.nvim")
 
   -- A Vite config alone does not opt a project into oxfmt.
@@ -159,11 +159,15 @@ loader.defer_buffer("conform", function()
   })
 
   vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+end
 
-  vim.keymap.set({ "n", "x" }, "<leader>cf", function()
-    conform.format()
-  end, { desc = "Format code using Conform" })
-end, { schedule = true })
+loader.defer_buffer("conform", setup_conform, { schedule = true })
+
+vim.keymap.set({ "n", "x" }, "<leader>cf", function()
+  if loader.load("conform", setup_conform) then
+    require("conform").format()
+  end
+end, { desc = "Format code using Conform" })
 
 -- ============================================================================
 -- Linting (nvim-lint)

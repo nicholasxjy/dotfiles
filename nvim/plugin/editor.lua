@@ -1,83 +1,65 @@
 local loader = require("loader")
 
--- Which-key provides hints for key combinations
-local function setup_which_key()
-  loader.packadd("which-key.nvim")
-  require("which-key").setup({
-    spec = {
-      {
-        mode = { "n", "x" },
-        { "<leader>c", group = "code" },
-        { "<leader>f", group = "file/find" },
-        { "<leader>g", group = "git" },
-        { "<leader>s", group = "search" },
-        { "<leader>u", group = "ui" },
-        { "<leader>x", group = "diagnostics/quickfix" },
-        { "[", group = "prev" },
-        { "]", group = "next" },
-        { "g", group = "goto" },
-        { "gs", group = "surround" },
-        { "z", group = "fold" },
-        {
-          "<leader>b",
-          group = "buffer",
-          expand = function()
-            return require("which-key.extras").expand.buf()
-          end,
-        },
-        {
-          "<leader>w",
-          group = "windows",
-          proxy = "<c-w>",
-          expand = function()
-            return require("which-key.extras").expand.win()
-          end,
-        },
-        { "gx", desc = "Open Externally" },
-      },
+-- Key combination hints
+loader.on_very_lazy("mini-clue", function()
+  loader.packadd("mini.clue")
+  local clue = require("mini.clue")
+  clue.setup({
+    triggers = {
+      { mode = "n", keys = "<leader>" },
+      { mode = "x", keys = "<leader>" },
+      { mode = "n", keys = "g" },
+      { mode = "x", keys = "g" },
+      { mode = "n", keys = "z" },
+      { mode = "x", keys = "z" },
+      { mode = "n", keys = "[" },
+      { mode = "x", keys = "[" },
+      { mode = "n", keys = "]" },
+      { mode = "x", keys = "]" },
+      { mode = "n", keys = "<C-w>" },
+      { mode = "i", keys = "<C-x>" },
     },
-    preset = "classic",
-    delay = 200,
-    icons = {
-      separator = " ",
+    clues = {
+      clue.gen_clues.builtin_completion(),
+      clue.gen_clues.g(),
+      clue.gen_clues.square_brackets(),
+      clue.gen_clues.windows(),
+      clue.gen_clues.z(),
+      { mode = { "n", "x" }, keys = "<leader>b", desc = "+buffer" },
+      { mode = { "n", "x" }, keys = "<leader>c", desc = "+code" },
+      { mode = { "n", "x" }, keys = "<leader>f", desc = "+file/find" },
+      { mode = { "n", "x" }, keys = "<leader>g", desc = "+git" },
+      { mode = { "n", "x" }, keys = "<leader>s", desc = "+search" },
+      { mode = { "n", "x" }, keys = "<leader>u", desc = "+ui" },
+      { mode = { "n", "x" }, keys = "<leader>x", desc = "+diagnostics/quickfix" },
+      { mode = { "n", "x" }, keys = "gs", desc = "+surround" },
     },
-    win = {
-      width = { min = 0.2, max = 0.3 },
-      height = { min = 0.2, max = 0.6 },
-      col = 0,
-      border = vim.o.winborder,
-      title = false,
-      title_pos = "center",
-    },
-    plugins = {
-      registers = false,
-      marks = false,
-      spelling = {
-        enabled = true,
-        suggestions = 20,
-      },
-      presets = {
-        operators = true,
-        motions = true,
-        text_objects = true,
-        windows = true,
-        nav = true,
-        z = true,
-        g = true,
+    window = {
+      delay = 200,
+      config = {
+        width = "auto",
+        anchor = "SW",
+        row = "auto",
+        col = "auto",
+        border = vim.o.winborder,
       },
     },
   })
+end)
 
-  vim.keymap.set("n", "<leader>?", function()
-    require("which-key").show({ global = false })
-  end, { desc = "Keymaps hint" })
-end
+vim.keymap.set("n", "<leader>?", function()
+  if vim.fn.executable("fzf") ~= 1 then
+    vim.notify("Keymap picker requires fzf", vim.log.levels.WARN)
+    return
+  end
 
-loader.on_very_lazy("which-key", setup_which_key)
+  loader.packadd("fzf-lua")
+  require("fzf-lua").keymaps()
+end, { desc = "Show Keymaps" })
 
 -- Editor features and text manipulation
 loader.on_very_lazy("editor", function()
-  loader.packadd("smart-paste.nvim", "mini.trailspace", "mini.surround", "mini.ai", "treesj", "todo-comments.nvim")
+  loader.packadd("smart-paste.nvim", "mini.trailspace", "mini.surround", "mini.ai")
 
   -- Smart paste
   require("smart-paste").setup()
@@ -105,19 +87,20 @@ loader.on_very_lazy("editor", function()
 
   -- Mini text-objects
   require("mini.ai").setup()
+end)
 
-  -- Treesj (split/join syntax blocks)
+local function setup_treesj()
+  loader.packadd("treesj")
   require("treesj").setup({
     use_default_keymaps = false,
     check_syntax_error = true,
     max_join_length = 120,
     cursor_behavior = "hold",
   })
+end
 
-  vim.keymap.set("n", "<leader>cj", function()
+vim.keymap.set("n", "<leader>cj", function()
+  if loader.load("treesj", setup_treesj) then
     require("treesj").toggle()
-  end, { desc = "Toggle Split/Join" })
-
-  -- Todo comments
-  require("todo-comments").setup()
-end)
+  end
+end, { desc = "Toggle Split/Join" })

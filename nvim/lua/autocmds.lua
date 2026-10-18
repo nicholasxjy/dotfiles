@@ -1,3 +1,12 @@
+vim.filetype.add({
+  filename = {
+    ["docker-compose.yaml"] = "yaml.docker-compose",
+    ["docker-compose.yml"] = "yaml.docker-compose",
+    ["compose.yaml"] = "yaml.docker-compose",
+    ["compose.yml"] = "yaml.docker-compose",
+  },
+})
+
 local function augroup(name)
   return vim.api.nvim_create_augroup("sjvim_" .. name, { clear = true })
 end
@@ -41,7 +50,6 @@ vim.api.nvim_create_user_command("PackCheck", function()
 
   vim.print("😴 Non-active plugins :")
   print(" ")
-  -- vim.print(non_active)
   for _, name in ipairs(non_active) do
     print(name)
   end
@@ -102,8 +110,8 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 -- Check if we need to reload the file when it changed
 local last_checktime = 0
-local function checktime(force)
-  if vim.o.buftype == "nofile" then
+local function checktime(force, bufnr)
+  if vim.bo[bufnr or 0].buftype ~= "" then
     return
   end
 
@@ -115,7 +123,13 @@ local function checktime(force)
   last_checktime = now
   -- Let the event finish before checking; autoread can then reload clean buffers.
   vim.schedule(function()
-    vim.cmd("checktime")
+    if bufnr then
+      if vim.api.nvim_buf_is_valid(bufnr) then
+        vim.cmd.checktime(tostring(bufnr))
+      end
+    else
+      vim.cmd.checktime()
+    end
   end)
 end
 
@@ -125,7 +139,7 @@ end
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "TermClose", "TermLeave" }, {
   group = augroup("checktime"),
   callback = function(args)
-    checktime(args.event == "BufEnter" or args.event == "FocusGained")
+    checktime(args.event == "BufEnter" or args.event == "FocusGained", args.event == "BufEnter" and args.buf or nil)
   end,
 })
 

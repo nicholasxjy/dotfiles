@@ -17,7 +17,7 @@ vim.lsp.config("*", {
 })
 loader.packadd("blink.lib", "blink.cmp")
 
--- nvim-highlight-colors owns color swatches, including buffers without an LSP.
+-- mini.hipatterns owns hex color swatches, including buffers without an LSP.
 vim.lsp.document_color.enable(false)
 
 vim.diagnostic.config({

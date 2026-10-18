@@ -1,0 +1,63 @@
+# randomhue light azure — Ghostty port of mini.hues
+# Source: https://github.com/nvim-mini/mini.hues/blob/ea046f08a2759050eaa8004cf9faa5eb599e56c5/colors/randomhue.lua
+# Upstream revision: ea046f08a2759050eaa8004cf9faa5eb599e56c5
+# Extracted from the upstream light colorscheme in Neovim.
+# randomhue is dynamic upstream; this is a static OKLch hue 225 snapshot.
+# Generated with gen_random_base_colors(gen_hue=225), saturation=high.
+# Representative hue variant; not sampled from the README screenshot.
+
+background = #dce4e8
+foreground = #292f32
+cursor-color = #292f32
+cursor-text = #dce4e8
+
+# Visual selection: preserve each cell foreground, as in upstream Visual.
+selection-background = #9ca3a7
+selection-foreground = cell-foreground
+
+# Search and CurSearch highlights.
+search-foreground = #dce4e8
+search-background = #00698b
+search-selected-foreground = #dce4e8
+search-selected-background = #805100
+
+# Exact upstream terminal_color_0 through terminal_color_15.
+# Upstream intentionally shares normal and bright chromatic colors.
+palette = 0=#090e11
+palette = 1=#63004c
+palette = 2=#5d6800
+palette = 3=#805100
+palette = 4=#007c88
+palette = 5=#3a0372
+palette = 6=#00724c
+palette = 7=#9ca3a7
+palette = 8=#61686b
+palette = 9=#63004c
+palette = 10=#5d6800
+palette = 11=#805100
+palette = 12=#007c88
+palette = 13=#3a0372
+palette = 14=#00724c
+palette = 15=#eff7fb
+
+# MIT License
+#
+# Copyright (c) 2021 Evgeni Chasnovski
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.

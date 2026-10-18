@@ -1,0 +1,32 @@
+[theme]
+# Dawnfox：奶油背景 / 柔和灰紫前景
+# 官方色板：https://github.com/EdenEast/nightfox.nvim/blob/main/lua/nightfox/palette/dawnfox.lua
+name = "terminal"
+
+[theme.custom]
+# === 重点色与背景层级 ===
+accent = "#286983"          # 聚焦边框 / 核心高亮 (blue)
+panel_bg = "#faf4ed"        # 主面板背景 (bg1)
+sidebar_bg = "#ebe5df"      # 侧边栏背景 (bg0)
+active_row_bg = "#ebdfe4"   # 当前活动行 (bg3)
+selection_bg = "#d0d8d8"    # 列表选中项 / 选区 (sel0)
+surface0 = "#ebe5df"        # 弹窗、卡片背景 (bg0)
+surface1 = "#ebe0df"        # 输入框、高亮悬浮层 (bg2)
+surface_dim = "#ebe5df"     # 凹陷区域、底栏背景 (bg0)
+
+# === 边界与分隔线 ===
+overlay0 = "#bdbfc9"        # 非活动边框与分隔线 (bg4)
+overlay1 = "#9893a5"        # 快捷键提示 / 次级边框 (comment)
+
+# === 文字层级 ===
+text = "#575279"            # 主文字 (fg1)
+subtext0 = "#625c87"        # 次级文字、状态说明 (fg2)
+
+# === 语义状态色 ===
+green = "#618774"           # 正常运行 / 成功 (green)
+yellow = "#ea9d34"          # 思考中 / 警告 (yellow)
+red = "#b4637a"             # 错误 / 阻断 (red)
+blue = "#286983"            # 信息 / 链接 (blue)
+teal = "#56949f"            # 次级重点 / 徽标 (cyan)
+peach = "#d7827e"           # 待办 / 动作提示 (orange)
+mauve = "#907aa9"           # 特殊 Agent / 高亮 (magenta)

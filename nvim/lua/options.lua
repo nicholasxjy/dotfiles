@@ -47,12 +47,12 @@ vim.o.termguicolors = true
 
 vim.o.foldtext = "" -- Show text under fold with its highlighting
 
-vim.o.winborder = "solid" -- Use border in floating windows
+vim.o.winborder = "single" -- Use border in floating windows
 
 vim.o.pummaxwidth = 100 -- Limit maximum width of popup menu
 vim.o.completetimeout = 100
 
-vim.o.pumborder = "solid" -- Use border in built-in completion menu
+vim.o.pumborder = "single" -- Use border in built-in completion menu
 
 -- UI2 is experimental; guard the private module path in case it moves.
 local ok, ui2 = pcall(require, "vim._core.ui2")

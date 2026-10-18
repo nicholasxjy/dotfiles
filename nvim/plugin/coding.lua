@@ -44,18 +44,18 @@ local blink_opts = {
           label_description = { width = { max = 16 } },
           kind_icon = {
             text = function(ctx)
-              if ctx.source_name == "Path" then
-                local icon = require("mini.icons").get("file", ctx.label)
-                return icon .. ctx.icon_gap
-              end
-              return ctx.kind_icon .. ctx.icon_gap
+              local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+              return kind_icon
             end,
             highlight = function(ctx)
-              if ctx.source_name == "Path" then
-                local _, hl = require("mini.icons").get("file", ctx.label)
-                return hl
-              end
-              return ctx.kind_hl
+              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+              return hl
+            end,
+          },
+          kind = {
+            highlight = function(ctx)
+              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+              return hl
             end,
           },
         },
@@ -98,10 +98,13 @@ local blink_opts = {
   },
 }
 
--- Blink also checks snippet state during cmdline completion, before InsertEnter.
--- Make LuaSnip available now; keep snippet configuration and collections deferred.
-loader.packadd("LuaSnip")
-require("blink.cmp").setup(blink_opts)
+-- Keep capabilities eager; initialize completion before its first input event.
+local function setup_completion()
+  loader.packadd("LuaSnip")
+  require("blink.cmp").setup(blink_opts)
+end
+
+loader.defer("completion", setup_completion, { "InsertEnter", "CmdlineEnter" })
 
 local function setup_snippets()
   loader.packadd("friendly-snippets")
@@ -180,6 +183,11 @@ end
 local function setup_treesitter()
   -- Set before packadd so rainbow-delimiters reads it on its first attach.
   vim.g.rainbow_delimiters = {
+    -- Global rainbow queries scan the whole tree synchronously on attach.
+    condition = function(bufnr)
+      local lines = vim.api.nvim_buf_line_count(bufnr)
+      return lines <= 5000 and vim.api.nvim_buf_get_offset(bufnr, lines) <= 512 * 1024
+    end,
     strategy = {
       [""] = "rainbow-delimiters.strategy.global",
       vim = "rainbow-delimiters.strategy.local",
@@ -228,48 +236,66 @@ end
 
 loader.defer_buffer("treesitter", setup_treesitter)
 
+vim.api.nvim_create_user_command("RainbowDelimitersEnable", function()
+  if loader.load("treesitter", setup_treesitter) then
+    require("rainbow-delimiters").enable(0)
+  end
+end, { desc = "Enable rainbow delimiters in this buffer, including large files" })
+
 vim.api.nvim_create_user_command("TSInstallConfigured", function()
   if loader.load("treesitter", setup_treesitter) then
     install_configured()
   end
 end, { desc = "Install configured Treesitter parsers" })
 
--- ============================================================================
--- Syntax Tools (Autotag, Matchup, Illuminate, ts-comments)
--- ============================================================================
-loader.defer_buffer("coding-tools", function()
-  loader.packadd("nvim-ts-autotag", "vim-matchup", "vim-illuminate", "ts-comments.nvim")
+-- Commenting needs mappings even when starting without a file.
+loader.on_very_lazy("mini-comment", function()
+  loader.packadd("mini.comment")
+  require("mini.comment").setup()
+end)
 
-  -- TS Comments
-  require("ts-comments").setup()
+-- Pattern and hex color highlights attach to real file buffers.
+loader.defer_buffer("mini-hipatterns", function()
+  loader.packadd("mini.hipatterns")
+  local hipatterns = require("mini.hipatterns")
+  hipatterns.setup({
+    highlighters = {
+      fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+      hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
+      todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
+      note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
+      hex_color = hipatterns.gen_highlighter.hex_color(),
+    },
+  })
+end, { schedule = true })
+
+-- ============================================================================
+-- Syntax Tools (Autotag, Matchup, Illuminate)
+-- ============================================================================
+-- Matchup must load before FileType to initialize the first buffer and its mappings.
+-- Its Lua setup helper only sets globals, so set them before packadd.
+vim.g.matchup_matchparen_enabled = 1
+vim.g.matchup_matchparen_deferred = 1
+vim.g.matchup_matchparen_timeout = 50
+vim.g.matchup_matchparen_nomode = "i"
+vim.g.matchup_matchparen_insert_timeout = 20
+vim.g.matchup_matchparen_hi_background = 0
+vim.g.matchup_matchparen_hi_surround_always = 0
+vim.g.matchup_matchparen_offscreen = { method = "status" }
+vim.g.matchup_surround_enabled = 1
+vim.g.matchup_text_obj_enabled = 1
+vim.g.matchup_treesitter_enabled = true
+vim.g.matchup_treesitter_stopline = 300
+vim.g.matchup_treesitter_enable_quotes = true
+vim.g.matchup_treesitter_include_match_words = true
+vim.g.matchup_treesitter_disable_virtual_text = true
+loader.packadd("vim-matchup")
+
+local function setup_coding_tools()
+  loader.packadd("nvim-ts-autotag", "vim-illuminate")
 
   -- Autotag
   require("nvim-ts-autotag").setup()
-
-  -- Matchup
-  require("match-up").setup({
-    matchparen = {
-      enabled = 1,
-      deferred = 1,
-      timeout = 50,
-      nomode = "i",
-      insert_timeout = 20,
-      hi_background = 1,
-      hi_surround_always = 0,
-      offscreen = {
-        method = "status",
-      },
-    },
-    surround = { enabled = 1 },
-    text_obj = { enabled = 1 },
-    treesitter = {
-      enabled = true,
-      stopline = 300,
-      enable_quotes = true,
-      include_match_words = true,
-      disable_virtual_text = true,
-    },
-  })
 
   -- Illuminate
   local filetypes_denylist = {
@@ -277,6 +303,11 @@ loader.defer_buffer("coding-tools", function()
     "dirvish",
     "fugitive",
     "markdown",
+    "oil",
+    "minifiles",
+    "snacks_picker_input",
+    "snacks_picker_list",
+    "snacks_picker_preview",
   }
 
   require("illuminate").configure({
@@ -290,15 +321,20 @@ loader.defer_buffer("coding-tools", function()
       under_cursor = false,
     },
   })
+end
 
-  vim.keymap.set("n", "]]", function()
-    require("illuminate").goto_next_reference()
-  end, { desc = "Next reference" })
+loader.defer_buffer("coding-tools", setup_coding_tools, { schedule = true })
 
-  vim.keymap.set("n", "[[", function()
-    require("illuminate").goto_prev_reference()
-  end, { desc = "Prev reference" })
-end, { schedule = true })
+for _, direction in ipairs({
+  { "]]", "goto_next_reference", "Next reference" },
+  { "[[", "goto_prev_reference", "Prev reference" },
+}) do
+  vim.keymap.set("n", direction[1], function()
+    if loader.load("coding-tools", setup_coding_tools) then
+      require("illuminate")[direction[2]]()
+    end
+  end, { desc = direction[3] })
+end
 
 -- ============================================================================
 -- Autopairs

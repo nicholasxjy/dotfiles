@@ -1,0 +1,30 @@
+# Gruvbox Material Original Dark
+# Source: https://github.com/sainnhe/gruvbox-material
+# Background contrast: medium; foreground palette: original.
+
+background = #282828
+foreground = #ebdbb2
+cursor-color = #ebdbb2
+cursor-text = #282828
+selection-background = #45403d
+selection-foreground = #ebdbb2
+
+# ANSI colors follow the upstream terminal palette.
+# Upstream intentionally uses the same colors for normal and bright slots.
+# Black = bg5; white = fg0; cyan = aqua.
+palette = 0=#5a524c
+palette = 1=#fb4934
+palette = 2=#b8bb26
+palette = 3=#fabd2f
+palette = 4=#83a598
+palette = 5=#d3869b
+palette = 6=#8ec07c
+palette = 7=#ebdbb2
+palette = 8=#5a524c
+palette = 9=#fb4934
+palette = 10=#b8bb26
+palette = 11=#fabd2f
+palette = 12=#83a598
+palette = 13=#d3869b
+palette = 14=#8ec07c
+palette = 15=#ebdbb2

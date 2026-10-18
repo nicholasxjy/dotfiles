@@ -1,0 +1,32 @@
+[theme]
+# Gruvbox Material Light：medium 背景 / material 前景
+# 官方调色板：https://github.com/sainnhe/gruvbox-material
+name = "terminal"
+
+[theme.custom]
+# === 整体重点色与背景层级 ===
+accent = "#6c782e"           # 橄榄绿：聚焦边框 / 核心高亮
+panel_bg = "#fbf1c7"         # 暖米色主背景 (bg0)
+# sidebar_bg = "#f4e8be"     # 侧边栏背景 (bg1)
+# active_row_bg = "#eee0b7"  # 当前活动标签 / 选中工作区背景 (bg3)
+# selection_bg = "#dee2b6"   # 列表选中项 / 选区高亮 (bg_visual_green)
+surface0 = "#f4e8be"         # 弹窗、卡片基础背景 (bg1)
+surface1 = "#eee0b7"         # 命令栏输入框、高亮悬浮层 (bg3)
+surface_dim = "#f2e5bc"      # 凹陷区域、底栏背景 (bg_dim)
+
+# === 边界与分隔线 ===
+overlay0 = "#a89984"         # 非活动分屏边框与分隔线 (grey0)
+overlay1 = "#7c6f64"         # 快捷键提示 / 次级边框 / 面包屑 (grey2)
+
+# === 文字排版层级 ===
+text = "#4f3829"             # 主文字：深棕 (fg1)
+subtext0 = "#654735"         # 次级文字：暖棕，保持浅色背景上的可读性 (fg0)
+
+# === 语义状态色 (Agent 状态指示灯、标签与告警) ===
+green = "#6c782e"            # 正常运行 / 成功：橄榄绿
+yellow = "#b47109"           # 思考中 / 警告：赭金黄
+red = "#c14a4a"              # 错误 / 阻断：砖红
+blue = "#45707a"             # 信息 / 链接：灰蓝
+teal = "#4c7a5d"             # 次级重点 / 徽标：灰青绿 (aqua)
+peach = "#c35e0a"            # 待办 / 动作提示：暖橙 (orange)
+mauve = "#945e80"            # 特殊 Agent / 高亮：灰紫 (purple)

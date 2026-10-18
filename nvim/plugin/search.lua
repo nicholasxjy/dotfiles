@@ -1,7 +1,101 @@
 local loader = require("loader")
 
+local function setup_grug_far()
+  loader.packadd("grug-far.nvim")
+  require("grug-far").setup()
+end
+
+local function grug_available(engine)
+  local binary = engine and engine:match("^astgrep") and "ast-grep" or "rg"
+  if vim.fn.executable(binary) == 1 then
+    return true
+  end
+  vim.notify("Find and replace requires " .. binary, vim.log.levels.WARN)
+  return false
+end
+
+for _, command in ipairs({ "GrugFar", "GrugFarWithin" }) do
+  vim.api.nvim_create_user_command(command, function(ctx)
+    if grug_available(ctx.fargs[1]) and loader.load("grug-far", setup_grug_far) then
+      vim.api.nvim_cmd({
+        cmd = command,
+        args = ctx.fargs,
+        mods = ctx.smods,
+        range = ctx.range > 0 and { ctx.line1, ctx.line2 } or nil,
+      }, {})
+    end
+  end, {
+    nargs = "?",
+    range = true,
+    complete = function(lead)
+      if loader.load("grug-far", setup_grug_far) then
+        return vim.fn.getcompletion(command .. " " .. lead, "cmdline")
+      end
+      return {}
+    end,
+    desc = "Project find and replace",
+  })
+end
+
+vim.keymap.set({ "n", "v" }, "<leader>sr", function()
+  if not grug_available() or not loader.load("grug-far", setup_grug_far) then
+    return
+  end
+  local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
+  require("grug-far").open({
+    transient = true,
+    prefills = {
+      filesFilter = ext and ext ~= "" and "*." .. ext or nil,
+    },
+  })
+end, { desc = "Find and replace" })
+
 loader.on_very_lazy("search", function()
-  loader.packadd("fzf-lua", "fzf-lua-smart", "grug-far.nvim")
+  loader.packadd("fzf-lua", "fzf-lua-smart", "snacks.nvim")
+
+  require("snacks").setup({
+    explorer = {
+      enabled = true,
+      -- Leave directory buffers to Oil.
+      replace_netrw = false,
+    },
+    image = {
+      enabled = true,
+      formats = {
+        "png",
+        "jpg",
+        "jpeg",
+        "gif",
+        "bmp",
+        "webp",
+        "tiff",
+        "heic",
+        "avif",
+        "mp4",
+        "mov",
+        "avi",
+        "mkv",
+        "webm",
+        "pdf",
+        "icns",
+      },
+    },
+    picker = {
+      enabled = true,
+      ui_select = false,
+      sources = {
+        explorer = {
+          hidden = true,
+          ignored = true,
+          layout = { layout = { position = "left", width = 32 } },
+        },
+      },
+    },
+  })
+
+  vim.keymap.set("n", "<leader>e", function()
+    Snacks.explorer()
+  end, { desc = "Toggle File Explorer", silent = true })
 
   local fzflua = require("fzf-lua")
   local fzfluasmart = require("fzf-lua-smart")
@@ -47,21 +141,6 @@ loader.on_very_lazy("search", function()
     multiprocess = true,
   })
 
-  -- Grug-far (project find & replace)
-  require("grug-far").setup({
-    headerMaxWidth = 80,
-  })
-
-  vim.keymap.set({ "n", "v" }, "<leader>sr", function()
-    local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
-    require("grug-far").open({
-      transient = true,
-      prefills = {
-        filesFilter = ext and ext ~= "" and "*." .. ext or nil,
-      },
-    })
-  end, { desc = "Find and replace" })
-
   -- Fzf-lua keymaps
   vim.keymap.set("n", "<leader><space>", function()
     -- Everything else comes from the fzfluasmart.setup() defaults above.
@@ -70,7 +149,6 @@ loader.on_very_lazy("search", function()
 
   vim.keymap.set("n", "<leader>h", function()
     fzflua.buffers({
-      previewer = false,
       sort_lastused = true,
       ignore_current_buffer = false,
     })
@@ -81,6 +159,8 @@ loader.on_very_lazy("search", function()
   vim.keymap.set("n", "<leader>/", fzflua.grep_curbuf, { desc = "Grep Curbuf" })
   vim.keymap.set("n", "<leader>m", fzflua.marks, { desc = "Marks" })
 
+  vim.keymap.set("n", "<leader>fg", fzflua.global, { desc = "Global" })
+  vim.keymap.set("n", "<leader>ff", fzflua.files, { desc = "Files" })
   vim.keymap.set("n", "<leader>fa", fzflua.autocmds, { desc = "Autocmds" })
   vim.keymap.set("n", "<leader>fC", fzflua.colorschemes, { desc = "Colorschemes" })
   vim.keymap.set("n", "<leader>fc", fzflua.command_history, { desc = "Command History" })
@@ -96,5 +176,11 @@ loader.on_very_lazy("search", function()
   vim.keymap.set("n", "<leader>sw", fzflua.grep_cword, { desc = "Grep word" })
   vim.keymap.set("x", "<leader>sv", fzflua.grep_visual, { desc = "Grep Visual" })
   vim.keymap.set("n", "<leader>sg", fzflua.live_grep, { desc = "Live Grep" })
-  vim.keymap.set("n", "<leader>xt", "<cmd>TodoFzfLua<cr>", { desc = "TODO/FIXME/NOTE etc" })
+  vim.keymap.set("n", "<leader>xt", function()
+    fzflua.grep({
+      search = [[\b(TODO|FIXME|HACK|NOTE)\b]],
+      no_esc = true,
+      prompt = "TODO❯ ",
+    })
+  end, { desc = "Find TODO/FIXME/HACK/NOTE" })
 end)

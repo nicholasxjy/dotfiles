@@ -51,7 +51,7 @@ local function setup_rust()
     vim.notify("rust-analyzer not found in PATH (install it with :MasonToolsInstall)", vim.log.levels.WARN)
   end
 
-  local liblldb = vim.fn.stdpath("data") .. "/mason/share/lldb/lib/liblldb"
+  local liblldb = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/lldb/lib/liblldb"
   liblldb = liblldb .. (vim.uv.os_uname().sysname == "Linux" and ".so" or ".dylib")
 
   -- rustaceanvim reads vim.g.rustaceanvim lazily from its ftplugin, which runs

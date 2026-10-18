@@ -13,7 +13,7 @@ function M.setup(style)
     theme = style,
     transparent = false,
     functionStyle = {},
-    keywordStyle = { italic = false },
+    keywordStyle = { italic = false, bold = true },
     statementStyle = { bold = true },
     typeStyle = {},
     overrides = function(colors)
