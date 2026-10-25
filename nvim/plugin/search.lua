@@ -51,75 +51,89 @@ vim.keymap.set({ "n", "v" }, "<leader>sr", function()
 end, { desc = "Find and replace" })
 
 loader.on_very_lazy("search", function()
-  loader.packadd("fzf-lua", "fzf-lua-smart", "snacks.nvim")
-
-  require("snacks").setup({
-    explorer = {
-      enabled = true,
-      -- Leave directory buffers to Oil.
-      replace_netrw = false,
-    },
-    image = {
-      enabled = true,
-      formats = {
-        "png",
-        "jpg",
-        "jpeg",
-        "gif",
-        "bmp",
-        "webp",
-        "tiff",
-        "heic",
-        "avif",
-        "mp4",
-        "mov",
-        "avi",
-        "mkv",
-        "webm",
-        "pdf",
-        "icns",
-      },
-    },
-    picker = {
-      enabled = true,
-      ui_select = false,
-      sources = {
-        explorer = {
-          hidden = true,
-          ignored = true,
-          layout = { layout = { position = "left", width = 32 } },
-        },
-      },
-    },
-  })
-
-  vim.keymap.set("n", "<leader>e", function()
-    Snacks.explorer()
-  end, { desc = "Toggle File Explorer", silent = true })
+  loader.packadd("fzf-lua", "fzf-lua-smart", "fzf-lua-image")
 
   local fzflua = require("fzf-lua")
   local fzfluasmart = require("fzf-lua-smart")
+  local minibuffer = require("minibuffer")
+  local layout_group = vim.api.nvim_create_augroup("sjvim_fzf_minibuffer_layout", { clear = true })
 
-  fzflua.setup({
-    "border-fused",
+  require("fzf-lua-image").setup({ enabled = true })
+
+  -- The integration owns window geometry and starts with the preview hidden.
+  require("minibuffer.integrations.fzf")({
     fzf_colors = true,
-    winopts = {
-      -- A split replaces the float, so float geometry/border options don't apply.
-      split = "belowright new",
-      treesitter = {
-        enabled = true,
+    keymap = {
+      builtin = {
+        ["<A-p>"] = "toggle-preview",
       },
-      preview = {
-        border = "border-top",
-        title = true,
-        title_pos = "left",
-        vertical = "down:50%",
-        horizontal = "right:50%",
-        layout = "vertical",
+      fzf = {
+        ["alt-p"] = "toggle-preview",
       },
     },
     defaults = {
-      formatter = "path.filename_first",
+      -- formatter = "path.filename_first",
+      treesitter = {
+        enabled = true,
+        -- fzf_colors = { ["hl"] = "-1:reverse", ["hl+"] = "-1:reverse" },
+      },
+      winopts = {
+        -- Anchor both windows at the bottom of the minibuffer area.
+        row = 1,
+        zindex = 201,
+        on_create = function(event)
+          vim.api.nvim_clear_autocmds({ group = layout_group })
+          local update_height = vim.schedule_wrap(function()
+            local session = minibuffer.get_active_session()
+            if not session or session:type() ~= "scratch" then
+              return
+            end
+            ---@cast session minibuffer.core.ScratchSession
+            if session:get_win() ~= event.winid or not vim.api.nvim_win_is_valid(event.winid) then
+              return
+            end
+
+            local state = require("minibuffer.internal.state")
+            local bottom = vim.o.lines
+            for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+              if vim.w[win].fzf_lua_preview then
+                local preview = vim.api.nvim_win_get_config(win)
+                if not preview.hide then
+                  bottom = math.min(bottom, preview.row)
+                end
+              end
+            end
+            -- ScratchSession anchors the list to the screen bottom; leave room for the preview below it.
+            local config = vim.api.nvim_win_get_config(event.winid)
+            if config.row ~= bottom or config.anchor ~= "SW" then
+              state.default_nvim_win_set_config(
+                event.winid,
+                { relative = "editor", anchor = "SW", row = bottom, col = 0 }
+              )
+            end
+            local height = vim.o.lines - bottom + config.height
+            if height == vim.o.cmdheight then
+              return
+            end
+            -- cmdheight already resizes splits; saved sizes can be stale after a terminal resize.
+            require("minibuffer.internal.util").set_cmdheight(state.win_states, false, height)
+          end)
+          vim.api.nvim_create_autocmd({ "WinResized", "VimResized" }, {
+            group = layout_group,
+            callback = update_height,
+          })
+          update_height()
+        end,
+        on_close = function()
+          vim.api.nvim_clear_autocmds({ group = layout_group })
+        end,
+        preview = {
+          title_pos = "left",
+          layout = "vertical",
+          vertical = "down:50%",
+          border = "single",
+        },
+      },
     },
   })
 

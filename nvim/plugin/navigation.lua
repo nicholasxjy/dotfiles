@@ -3,41 +3,12 @@ local loader = require("loader")
 loader.on_very_lazy("navigation", function()
   loader.packadd("flash.nvim")
 
-  -- Load only one split backend so its mappings and multiplexer hooks agree.
-  local in_herdr = vim.env.HERDR_ENV == "1"
-  local herdr_bin = vim.env.HERDR_BIN_PATH
-  if not herdr_bin or herdr_bin == "" or vim.fn.executable(herdr_bin) ~= 1 then
-    herdr_bin = "herdr"
-  end
-  local use_herdr = in_herdr and vim.fn.executable(herdr_bin) == 1
-  local splits
-
-  if use_herdr then
-    loader.packadd("herdr-splits.nvim")
-    splits = require("herdr-splits")
-    splits.setup({
-      herdr_bin = herdr_bin,
-      neovim_amount = 2,
-      -- Alt+j/k move lines; Alt+h/l switch Herdr tabs. Keep those bindings.
-      resize_keys = {
-        left = "<C-Left>",
-        down = "<C-Down>",
-        up = "<C-Up>",
-        right = "<C-Right>",
-      },
-    })
-    splits.add_ignored_filetype("qf")
-  else
-    if in_herdr then
-      vim.g.smart_splits_multiplexer_integration = false
-    end
-    loader.packadd("smart-splits.nvim")
-    splits = require("smart-splits")
-    splits.setup({
-      ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" },
-      ignored_buftypes = { "nofile" },
-    })
-  end
+  loader.packadd("smart-splits.nvim")
+  local splits = require("smart-splits")
+  splits.setup({
+    ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" },
+    ignored_buftypes = { "nofile" },
+  })
 
   for _, direction in ipairs({
     { "h", "left", "Left" },
@@ -45,18 +16,9 @@ loader.on_very_lazy("navigation", function()
     { "k", "up", "Up" },
     { "l", "right", "Right" },
   }) do
-    vim.keymap.set("n", "<C-" .. direction[1] .. ">", function()
-      if in_herdr and not use_herdr then
-        vim.notify_once("herdr executable not found; using Neovim split navigation", vim.log.levels.WARN)
-      end
-      splits["move_cursor_" .. direction[2]]()
-    end, { desc = "Focus " .. direction[3] })
-
-    if use_herdr then
-      vim.keymap.set("n", "<C-" .. direction[3] .. ">", function()
-        splits["resize_" .. direction[2]]()
-      end, { desc = "Resize " .. direction[3] })
-    end
+    vim.keymap.set("n", "<C-" .. direction[1] .. ">", splits["move_cursor_" .. direction[2]], {
+      desc = "Focus " .. direction[3],
+    })
   end
 
   -- Flash (jump navigation)

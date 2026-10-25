@@ -57,7 +57,7 @@ vim.o.pumborder = "single" -- Use border in built-in completion menu
 -- UI2 is experimental; guard the private module path in case it moves.
 local ok, ui2 = pcall(require, "vim._core.ui2")
 if ok then
-  ui2.enable({})
+  ui2.enable({ enable = true, msg = { targets = "msg" } })
 end
 
 if vim.fn.has("nvim-0.13") == 1 then

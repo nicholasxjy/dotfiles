@@ -29,15 +29,19 @@ vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/mrjones2014/smart-splits.nvim",
-  "https://github.com/lmilojevicc/herdr-splits.nvim",
   "https://github.com/stevearc/oil.nvim",
+
   "https://github.com/nvim-lua/plenary.nvim",
-  "https://github.com/folke/snacks.nvim",
+  "https://github.com/MunifTanjim/nui.nvim",
+  "https://github.com/nvim-neo-tree/neo-tree.nvim",
+
   "https://github.com/windwp/nvim-autopairs",
   "https://github.com/rafamadriz/friendly-snippets",
   "https://github.com/L3MON4D3/LuaSnip",
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
+  "https://github.com/onsails/lspkind.nvim",
+  "https://github.com/mikavilpas/blink-ripgrep.nvim",
   "https://github.com/hiphish/rainbow-delimiters.nvim",
   "https://github.com/nemanjamalesija/smart-paste.nvim",
   "https://github.com/kdheepak/lazygit.nvim",
@@ -50,6 +54,8 @@ vim.pack.add({
 
   "https://github.com/ibhagwan/fzf-lua",
   "https://github.com/nicholasxjy/fzf-lua-smart",
+  "https://github.com/nicholasxjy/fzf-lua-image",
+  "https://github.com/simifalaye/minibuffer.nvim",
 
   "https://github.com/lewis6991/gitsigns.nvim",
   "https://github.com/MagicDuck/grug-far.nvim",
@@ -82,8 +88,8 @@ vim.pack.add({
     src = "https://github.com/nvim-treesitter/nvim-treesitter",
     version = "main",
   },
+  "https://github.com/nvim-treesitter/nvim-treesitter-context",
 
   "https://github.com/nvim-mini/mini.hues",
   "https://github.com/edeneast/nightfox.nvim",
-  "https://github.com/rebelot/kanagawa.nvim",
 }, { load = noop })

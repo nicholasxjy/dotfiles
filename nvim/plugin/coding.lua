@@ -44,18 +44,15 @@ local blink_opts = {
           label_description = { width = { max = 16 } },
           kind_icon = {
             text = function(ctx)
-              local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-              return kind_icon
+              return (require("lspkind").symbol_map[ctx.kind] or "") .. ctx.icon_gap
             end,
             highlight = function(ctx)
-              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
-              return hl
+              return ctx.kind_hl
             end,
           },
           kind = {
             highlight = function(ctx)
-              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
-              return hl
+              return ctx.kind_hl
             end,
           },
         },
@@ -84,11 +81,24 @@ local blink_opts = {
   },
   snippets = { preset = "luasnip" },
   sources = {
-    default = { "lsp", "path", "snippets", "buffer" },
+    default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
     per_filetype = {
-      lua = { "lazydev", "lsp", "path", "snippets", "buffer" },
+      lua = { "lazydev", "lsp", "path", "snippets", "buffer", "ripgrep" },
     },
     providers = {
+      ripgrep = {
+        name = "Ripgrep",
+        module = "blink-ripgrep",
+        enabled = function()
+          if vim.fn.executable("rg") == 1 then
+            return true
+          end
+          vim.notify_once("blink-ripgrep requires ripgrep (rg)", vim.log.levels.WARN)
+          return false
+        end,
+        score_offset = -5,
+        opts = { prefix_min_len = 3 },
+      },
       lazydev = {
         name = "LazyDev",
         module = "lazydev.integrations.blink",
@@ -100,7 +110,7 @@ local blink_opts = {
 
 -- Keep capabilities eager; initialize completion before its first input event.
 local function setup_completion()
-  loader.packadd("LuaSnip")
+  loader.packadd("lspkind.nvim", "LuaSnip", "blink-ripgrep.nvim")
   require("blink.cmp").setup(blink_opts)
 end
 
@@ -236,6 +246,26 @@ end
 
 loader.defer_buffer("treesitter", setup_treesitter)
 
+local function setup_treesitter_context()
+  loader.packadd("nvim-treesitter-context")
+  require("treesitter-context").setup({
+    max_lines = 3,
+    multiline_threshold = 1,
+    min_window_height = 15,
+    on_attach = function(buf)
+      return vim.bo[buf].buftype == ""
+    end,
+  })
+end
+
+loader.on_very_lazy("treesitter-context", setup_treesitter_context)
+
+vim.keymap.set("n", "<leader>uc", function()
+  if loader.load("treesitter-context", setup_treesitter_context) then
+    require("treesitter-context").toggle()
+  end
+end, { desc = "Toggle Treesitter Context" })
+
 vim.api.nvim_create_user_command("RainbowDelimitersEnable", function()
   if loader.load("treesitter", setup_treesitter) then
     require("rainbow-delimiters").enable(0)
@@ -305,9 +335,8 @@ local function setup_coding_tools()
     "markdown",
     "oil",
     "minifiles",
-    "snacks_picker_input",
-    "snacks_picker_list",
-    "snacks_picker_preview",
+    "neo-tree",
+    "neo-tree-popup",
   }
 
   require("illuminate").configure({

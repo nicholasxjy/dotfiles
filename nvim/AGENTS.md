@@ -32,7 +32,7 @@ Neovim with the built-in `vim.pack` plugin manager.
   - `coding.lua`: blink.cmp, LuaSnip, lazydev, Tree-sitter, autopairs, matchup,
     illuminate, autotag, mini.comment, mini.hipatterns.
   - `editor.lua`: mini.clue, mini.ai/surround/trailspace, treesj, smart-paste.
-  - `files.lua`: Snacks Explorer (sidebar), mini.files (columns), and Oil (with previews).
+  - `files.lua`: Neo-tree (sidebar), mini.files (columns), and Oil (with previews).
     Add file managers only when explicitly requested.
   - `git.lua`: gitsigns, differ, lazygit, and git pickers.
   - `languages.lua`: markdown, Rust (rustaceanvim, crates).
@@ -63,7 +63,7 @@ Neovim with the built-in `vim.pack` plugin manager.
 - Pick the latest loading point that still works, in this order:
   - on first use, via a keymap or command stub that calls
     `loader.load(name, setup)`. Use this for rarely used tools and for plugins
-    that need an external binary (examples: Snacks Explorer, Oil).
+    that need an external binary (example: Oil).
   - `loader.defer_buffer(name, setup, { schedule = true })`: needs a real file
     buffer but nothing on the first frame (gitsigns, conform, nvim-lint).
   - `loader.on_very_lazy(name, setup)`: user-driven features (keymaps,
