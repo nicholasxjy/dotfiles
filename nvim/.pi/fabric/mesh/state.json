@@ -1,0 +1,163 @@
+{
+  "format": 1,
+  "revisionFormat": 2,
+  "entries": {
+    "topology/peer-seq/3": {
+      "key": "topology/peer-seq/3",
+      "value": {
+        "format": 1,
+        "next": 4
+      },
+      "version": 7,
+      "updatedAt": 1794107056181,
+      "updatedBy": {
+        "id": "session:01a1b91c-b017-7747-b51a-6cdf92637187",
+        "name": "main",
+        "kind": "main",
+        "sessionId": "01a1b91c-b017-7747-b51a-6cdf92637187"
+      }
+    },
+    "topology/tombstones/64904d4ee8a3747cbed039600dc8b9585f42b3548a7209688a565d07733885b3": {
+      "key": "topology/tombstones/64904d4ee8a3747cbed039600dc8b9585f42b3548a7209688a565d07733885b3",
+      "value": {
+        "format": 1,
+        "id": "session:01a1a166-5775-7046-94af-b4bbfd178948",
+        "kind": "root",
+        "rootId": "session:01a1a166-5775-7046-94af-b4bbfd178948",
+        "ownerHostId": "session:01a1a166-5775-7046-94af-b4bbfd178948",
+        "ownerIdentityId": "session:01a1a166-5775-7046-94af-b4bbfd178948",
+        "ownerIncarnation": "59c7cfde-ff28-46d0-8c3e-7e837d5bb51b",
+        "name": "main",
+        "label": "NVI-1",
+        "cwd": "/Users/nick/.config/nvim",
+        "sessionId": "01a1a166-5775-7046-94af-b4bbfd178948",
+        "status": "stopped",
+        "startedAt": 1793709257936,
+        "lastSeenAt": 1793709483721
+      },
+      "version": 227,
+      "updatedAt": 1793709483722,
+      "updatedBy": {
+        "id": "session:01a1a166-5775-7046-94af-b4bbfd178948",
+        "name": "main",
+        "kind": "main",
+        "sessionId": "01a1a166-5775-7046-94af-b4bbfd178948"
+      }
+    },
+    "topology/tombstones/7b75dd17842ac91972c4f7e68919f8eb55a0242997d790089e87d6fc728ab7d9": {
+      "key": "topology/tombstones/7b75dd17842ac91972c4f7e68919f8eb55a0242997d790089e87d6fc728ab7d9",
+      "value": {
+        "format": 1,
+        "id": "session:01a1b5a1-d6ea-74c2-8314-76c3353ca19d",
+        "kind": "root",
+        "rootId": "session:01a1b5a1-d6ea-74c2-8314-76c3353ca19d",
+        "ownerHostId": "session:01a1b5a1-d6ea-74c2-8314-76c3353ca19d",
+        "ownerIdentityId": "session:01a1b5a1-d6ea-74c2-8314-76c3353ca19d",
+        "ownerIncarnation": "4f5398c3-965d-4bbc-886a-b619e55ab802",
+        "name": "main",
+        "label": "NVI-2",
+        "cwd": "/Users/nick/.config/nvim",
+        "sessionId": "01a1b5a1-d6ea-74c2-8314-76c3353ca19d",
+        "status": "stopped",
+        "startedAt": 1794048817050,
+        "lastSeenAt": 1794052339974
+      },
+      "version": 2679,
+      "updatedAt": 1794052339975,
+      "updatedBy": {
+        "id": "session:01a1b5a1-d6ea-74c2-8314-76c3353ca19d",
+        "name": "main",
+        "kind": "main",
+        "sessionId": "01a1b5a1-d6ea-74c2-8314-76c3353ca19d"
+      }
+    },
+    "topology/tombstones/fb0fe39b8f748bd1c8079368fb049f363caad659c419ce682cd3b2dd69288f61": {
+      "key": "topology/tombstones/fb0fe39b8f748bd1c8079368fb049f363caad659c419ce682cd3b2dd69288f61",
+      "value": {
+        "format": 1,
+        "id": "session:01a1b90d-ddbe-70f2-80f1-aa2201c425e6",
+        "kind": "root",
+        "rootId": "session:01a1b90d-ddbe-70f2-80f1-aa2201c425e6",
+        "ownerHostId": "session:01a1b90d-ddbe-70f2-80f1-aa2201c425e6",
+        "ownerIdentityId": "session:01a1b90d-ddbe-70f2-80f1-aa2201c425e6",
+        "ownerIncarnation": "24d3ca00-8289-4541-ad55-a916ee295b65",
+        "name": "main",
+        "label": "NVI-3",
+        "cwd": "/Users/nick/.config/nvim",
+        "sessionId": "01a1b90d-ddbe-70f2-80f1-aa2201c425e6",
+        "status": "stopped",
+        "startedAt": 1794106117044,
+        "lastSeenAt": 1794106906901
+      },
+      "version": 3271,
+      "updatedAt": 1794106906901,
+      "updatedBy": {
+        "id": "session:01a1b90d-ddbe-70f2-80f1-aa2201c425e6",
+        "name": "main",
+        "kind": "main",
+        "sessionId": "01a1b90d-ddbe-70f2-80f1-aa2201c425e6"
+      }
+    },
+    "topology/tombstones/6b7ecef519bccc0736650d2f6bf5467b0e900076db98f2dea012d5531f29f506": {
+      "key": "topology/tombstones/6b7ecef519bccc0736650d2f6bf5467b0e900076db98f2dea012d5531f29f506",
+      "value": {
+        "format": 1,
+        "id": "session:01a1b91c-b017-7747-b51a-6cdf92637187",
+        "kind": "root",
+        "rootId": "session:01a1b91c-b017-7747-b51a-6cdf92637187",
+        "ownerHostId": "session:01a1b91c-b017-7747-b51a-6cdf92637187",
+        "ownerIdentityId": "session:01a1b91c-b017-7747-b51a-6cdf92637187",
+        "ownerIncarnation": "d1357f90-c9f6-4b04-a072-2e992b851784",
+        "name": "main",
+        "label": "NVI-4",
+        "cwd": "/Users/nick/.config/nvim",
+        "sessionId": "01a1b91c-b017-7747-b51a-6cdf92637187",
+        "status": "stopped",
+        "startedAt": 1794107056139,
+        "lastSeenAt": 1794107431528
+      },
+      "version": 3632,
+      "updatedAt": 1794107431529,
+      "updatedBy": {
+        "id": "session:01a1b91c-b017-7747-b51a-6cdf92637187",
+        "name": "main",
+        "kind": "main",
+        "sessionId": "01a1b91c-b017-7747-b51a-6cdf92637187"
+      }
+    }
+  },
+  "highWater": 3634,
+  "versions": {
+    "sessions/01a1a166-5775-7046-94af-b4bbfd178948": 75,
+    "topology/participants/64904d4ee8a3747cbed039600dc8b9585f42b3548a7209688a565d07733885b3": 77,
+    "topology/hosts/64904d4ee8a3747cbed039600dc8b9585f42b3548a7209688a565d07733885b3": 78,
+    "topology/peer-seq/3": 7,
+    "topology/tombstones/64904d4ee8a3747cbed039600dc8b9585f42b3548a7209688a565d07733885b3": 227,
+    "sessions/01a1b5a1-d6ea-74c2-8314-76c3353ca19d": 1045,
+    "topology/participants/7b75dd17842ac91972c4f7e68919f8eb55a0242997d790089e87d6fc728ab7d9": 1047,
+    "topology/hosts/7b75dd17842ac91972c4f7e68919f8eb55a0242997d790089e87d6fc728ab7d9": 1048,
+    "topology/tombstones/7b75dd17842ac91972c4f7e68919f8eb55a0242997d790089e87d6fc728ab7d9": 2679,
+    "sessions/01a1b90d-ddbe-70f2-80f1-aa2201c425e6": 2877,
+    "topology/participants/fb0fe39b8f748bd1c8079368fb049f363caad659c419ce682cd3b2dd69288f61": 2879,
+    "topology/hosts/fb0fe39b8f748bd1c8079368fb049f363caad659c419ce682cd3b2dd69288f61": 2880,
+    "topology/tombstones/fb0fe39b8f748bd1c8079368fb049f363caad659c419ce682cd3b2dd69288f61": 3271,
+    "sessions/01a1b91c-b017-7747-b51a-6cdf92637187": 3392,
+    "topology/participants/6b7ecef519bccc0736650d2f6bf5467b0e900076db98f2dea012d5531f29f506": 3394,
+    "topology/hosts/6b7ecef519bccc0736650d2f6bf5467b0e900076db98f2dea012d5531f29f506": 3395,
+    "topology/tombstones/6b7ecef519bccc0736650d2f6bf5467b0e900076db98f2dea012d5531f29f506": 3632
+  },
+  "tombstoneOrder": [
+    "sessions/01a1a166-5775-7046-94af-b4bbfd178948",
+    "topology/participants/64904d4ee8a3747cbed039600dc8b9585f42b3548a7209688a565d07733885b3",
+    "topology/hosts/64904d4ee8a3747cbed039600dc8b9585f42b3548a7209688a565d07733885b3",
+    "sessions/01a1b5a1-d6ea-74c2-8314-76c3353ca19d",
+    "topology/participants/7b75dd17842ac91972c4f7e68919f8eb55a0242997d790089e87d6fc728ab7d9",
+    "topology/hosts/7b75dd17842ac91972c4f7e68919f8eb55a0242997d790089e87d6fc728ab7d9",
+    "sessions/01a1b90d-ddbe-70f2-80f1-aa2201c425e6",
+    "topology/participants/fb0fe39b8f748bd1c8079368fb049f363caad659c419ce682cd3b2dd69288f61",
+    "topology/hosts/fb0fe39b8f748bd1c8079368fb049f363caad659c419ce682cd3b2dd69288f61",
+    "sessions/01a1b91c-b017-7747-b51a-6cdf92637187",
+    "topology/participants/6b7ecef519bccc0736650d2f6bf5467b0e900076db98f2dea012d5531f29f506",
+    "topology/hosts/6b7ecef519bccc0736650d2f6bf5467b0e900076db98f2dea012d5531f29f506"
+  ]
+}

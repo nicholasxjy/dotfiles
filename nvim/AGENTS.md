@@ -37,7 +37,7 @@ Neovim with the built-in `vim.pack` plugin manager.
   - `git.lua`: gitsigns, differ, lazygit, and git pickers.
   - `languages.lua`: markdown, Rust (rustaceanvim, crates).
   - `navigation.lua`: smart-splits, flash, multicursor.
-  - `search.lua`: fzf-lua, fzf-lua-smart, grug-far.
+  - `search.lua`: fzf-lua, grug-far.
   - `tooling.lua`: mason, conform, nvim-lint.
   - `ui.lua`: theme, mini.icons, mini.notify, mini.tabline, mini.statusline,
     mini.statuscolumn, winbar, inline diagnostics.

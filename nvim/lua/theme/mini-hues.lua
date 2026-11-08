@@ -4,7 +4,9 @@ local M = {}
 
 local function apply_highlights()
   local p = require("mini.hues").get_palette()
-  vim.api.nvim_set_hl(0, "PmenuSel", { fg = nil, bg = p.bg_mid, reverse = false })
+  vim.api.nvim_set_hl(0, "Comment", { fg = p.fg_mid })
+  vim.api.nvim_set_hl(0, "Visual", { bg = p.accent_bg })
+  vim.api.nvim_set_hl(0, "PmenuSel", { fg = p.fg, bg = p.accent_bg, reverse = false })
 end
 
 function M.setup()
@@ -17,7 +19,7 @@ function M.setup()
     callback = apply_highlights,
   })
 
-  vim.cmd.colorscheme("randomhue")
+  vim.cmd.colorscheme("minischeme")
 end
 
 return M

@@ -1,0 +1,11 @@
+WRN 2026-10-25T10:05:03.860 ?.69255    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/lJkSfx/nvim.69255.0
+WRN 2026-10-25T10:05:04.012 ?.69255    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/lJkSfx/fzf-lua.1792893904.69255.1
+WRN 2026-10-25T10:05:22.923 ?.69305    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/0SwbLF/nvim.69305.0
+WRN 2026-10-25T10:05:23.058 ?.69305    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/0SwbLF/fzf-lua.1792893923.69305.1
+WRN 2026-10-25T10:05:31.040 ?.69331    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/YNsNua/nvim.69331.0
+WRN 2026-10-25T10:05:48.611 ?.69359    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/gyClpx/nvim.69359.0
+WRN 2026-10-25T10:05:48.743 ?.69359    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/gyClpx/fzf-lua.1792893948.69359.1
+WRN 2026-10-25T10:05:57.590 ?.69389    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/wCxlXf/nvim.69389.0
+WRN 2026-10-25T10:05:57.720 ?.69389    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/wCxlXf/fzf-lua.1792893957.69389.1
+WRN 2026-10-25T10:06:31.808 ?.69448    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/0ShxSL/nvim.69448.0
+WRN 2026-10-25T10:06:33.000 ?.69448    server_start:197: Failed to start server: operation not permitted: /var/folders/s4/w15lgx5132v1vbvtqssgb4680000gn/T/nvim.nick/0ShxSL/fzf-lua.1792893992.69448.1

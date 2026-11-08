@@ -51,10 +51,9 @@ vim.keymap.set({ "n", "v" }, "<leader>sr", function()
 end, { desc = "Find and replace" })
 
 loader.on_very_lazy("search", function()
-  loader.packadd("fzf-lua", "fzf-lua-smart", "fzf-lua-image")
+  loader.packadd("fzf-lua", "fzf-lua-image")
 
   local fzflua = require("fzf-lua")
-  local fzfluasmart = require("fzf-lua-smart")
   local minibuffer = require("minibuffer")
   local layout_group = vim.api.nvim_create_augroup("sjvim_fzf_minibuffer_layout", { clear = true })
 
@@ -72,7 +71,7 @@ loader.on_very_lazy("search", function()
       },
     },
     defaults = {
-      -- formatter = "path.filename_first",
+      formatter = "path.filename_first",
       treesitter = {
         enabled = true,
         -- fzf_colors = { ["hl"] = "-1:reverse", ["hl+"] = "-1:reverse" },
@@ -137,29 +136,8 @@ loader.on_very_lazy("search", function()
     },
   })
 
-  fzfluasmart.setup({
-    matcher = {
-      fuzzy = true,
-      smartcase = true,
-      ignorecase = true,
-      sort_empty = true,
-      filename_bonus = true,
-      file_pos = true,
-      cwd_bonus = true,
-      frecency = true,
-      history_bonus = true,
-    },
-    sort = { fields = { "score:desc", "#text", "idx" } },
-    filter = { cwd = true },
-    hidden = true,
-    multiprocess = true,
-  })
-
   -- Fzf-lua keymaps
-  vim.keymap.set("n", "<leader><space>", function()
-    -- Everything else comes from the fzfluasmart.setup() defaults above.
-    fzfluasmart.smart({ git_icons = true })
-  end, { desc = "Smart files" })
+  vim.keymap.set("n", "<leader><space>", fzflua.files, { desc = "Files" })
 
   vim.keymap.set("n", "<leader>h", function()
     fzflua.buffers({

@@ -1,7 +1,7 @@
 local M = {}
 
 --- Load the configured theme
----@param name? string Theme name, e.g. "mini-hues", "nightfox"
+---@param name? string Theme name, e.g. "mini-hues"
 function M.load(name)
   name = name or "mini-hues"
 

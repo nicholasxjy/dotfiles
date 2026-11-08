@@ -59,6 +59,49 @@ end
 
 vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "Open LazyGit" })
 
+local function setup_diffbandit()
+  loader.packadd("diffbandit.nvim")
+  require("diffbandit").setup({
+    navigation = {
+      -- Keep Neovim's diagnostic navigation in editable diff buffers.
+      document_keys = { top = false, bottom = false },
+    },
+  })
+end
+
+-- Register entry commands before loading the plugin, including its standalone launcher.
+for _, spec in ipairs({
+  { "DiffBandit", nargs = "+", complete = "file" },
+  { "DiffBanditBuffers", nargs = "+" },
+  { "DiffBanditFolderDiff", nargs = "+", complete = "dir" },
+  { "DiffBanditGit", nargs = "*", complete = "file", git = true },
+  { "DiffBanditGitCurrent", nargs = "*", complete = "file", git = true },
+  { "DiffBanditCommitPanel", nargs = "*", complete = "file", git = true },
+  { "DiffBanditGitMenu", nargs = "*", complete = "file", git = true },
+  { "DiffBanditGitLog", nargs = "*", complete = "file", git = true },
+  { "DiffBanditGitCommit", nargs = 1, git = true },
+  { "DiffBanditGitCompare", nargs = "*", git = true },
+  { "DiffBanditGitCheckout", nargs = "?", git = true },
+  { "DiffBanditMerge", nargs = "?", complete = "file", git = true },
+  { "DiffBanditClose", nargs = 0 },
+  { "DiffBanditLaunch", nargs = 0 },
+}) do
+  local command = spec[1]
+  vim.api.nvim_create_user_command(command, function(ctx)
+    if spec.git and vim.fn.executable("git") ~= 1 then
+      vim.notify("DiffBandit requires the git executable", vim.log.levels.WARN)
+      return
+    end
+    if loader.load("diffbandit", setup_diffbandit) then
+      vim.api.nvim_cmd({ cmd = command, args = ctx.fargs, mods = ctx.smods }, {})
+    end
+  end, { nargs = spec.nargs, complete = spec.complete, desc = "Open " .. command })
+end
+
+vim.keymap.set("n", "<leader>gD", "<cmd>DiffBanditGit<CR>", { desc = "Git Diff (DiffBandit)" })
+vim.keymap.set("n", "<leader>gF", "<cmd>DiffBanditGitCurrent<CR>", { desc = "Git Diff File (DiffBandit)" })
+vim.keymap.set("n", "<leader>gc", "<cmd>DiffBanditCommitPanel<CR>", { desc = "Git Commit Panel (DiffBandit)" })
+
 -- Git tools work without a file buffer (e.g. `nvim` in a repo root).
 loader.on_very_lazy("git-tools", function()
   -- fzf-lua is configured by plugin/search.lua on VeryLazy.

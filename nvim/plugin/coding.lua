@@ -1,4 +1,5 @@
 local loader = require("loader")
+local ui = require("ui")
 
 -- ============================================================================
 -- Completion & Snippets (blink.cmp is packadded eagerly by lua/lsp.lua)
@@ -111,6 +112,13 @@ local blink_opts = {
 -- Keep capabilities eager; initialize completion before its first input event.
 local function setup_completion()
   loader.packadd("lspkind.nvim", "LuaSnip", "blink-ripgrep.nvim")
+  require("lspkind").init({
+    preset = "codicons",
+    symbol_map = {
+      Ripgrep = ui.icons.lazy_kind_icons.Text,
+      Snippet = ui.icons.lazy_kind_icons.Snippet,
+    },
+  })
   require("blink.cmp").setup(blink_opts)
 end
 

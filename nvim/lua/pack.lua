@@ -53,11 +53,11 @@ vim.pack.add({
   "https://github.com/folke/flash.nvim",
 
   "https://github.com/ibhagwan/fzf-lua",
-  "https://github.com/nicholasxjy/fzf-lua-smart",
   "https://github.com/nicholasxjy/fzf-lua-image",
   "https://github.com/simifalaye/minibuffer.nvim",
 
   "https://github.com/lewis6991/gitsigns.nvim",
+  "https://github.com/CoreyKaylor/diffbandit.nvim",
   "https://github.com/MagicDuck/grug-far.nvim",
   "https://github.com/rrethy/vim-illuminate",
   "https://github.com/mfussenegger/nvim-lint",
@@ -91,5 +91,4 @@ vim.pack.add({
   "https://github.com/nvim-treesitter/nvim-treesitter-context",
 
   "https://github.com/nvim-mini/mini.hues",
-  "https://github.com/edeneast/nightfox.nvim",
 }, { load = noop })

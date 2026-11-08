@@ -98,9 +98,8 @@ local function setup_oil()
     keymaps = {
       ["q"] = { "actions.close", mode = "n" },
     },
-    float = {
-      border = vim.o.winborder,
-      preview_split = "right",
+    confirmation = {
+      border = "single",
     },
     preview_win = {
       update_on_cursor_moved = true,
@@ -120,7 +119,7 @@ vim.keymap.set("n", "<leader>o", function()
   end
 
   local oil = require("oil")
-  oil.open_float(nil, nil, function()
+  oil.open(nil, nil, function()
     -- Empty directories have no entry to preview.
     if oil.get_cursor_entry() then
       oil.open_preview()
