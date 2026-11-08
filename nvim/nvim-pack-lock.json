@@ -45,7 +45,7 @@
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "fzf-lua-image": {
-      "rev": "ba186d96496b67ce6707b365e0b102f9c84a5263",
+      "rev": "6b66799798eff15982bdc902c81ca910f5243484",
       "src": "https://github.com/nicholasxjy/fzf-lua-image"
     },
     "gitsigns.nvim": {

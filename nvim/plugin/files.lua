@@ -8,6 +8,14 @@ local function setup_neo_tree()
   local mini_icons = require("mini.icons")
 
   require("neo-tree").setup({
+    event_handlers = {
+      {
+        event = "file_opened",
+        handler = function()
+          require("neo-tree.command").execute({ action = "close" })
+        end,
+      },
+    },
     default_component_configs = {
       icon = {
         ---@param icon neotree.Render.Node

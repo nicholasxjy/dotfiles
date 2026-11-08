@@ -19,7 +19,7 @@ function M.setup()
     callback = apply_highlights,
   })
 
-  vim.cmd.colorscheme("minischeme")
+  vim.cmd.colorscheme("miniwinter")
 end
 
 return M
