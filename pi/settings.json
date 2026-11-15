@@ -1,0 +1,77 @@
+{
+  "defaultThinkingLevel": "xhigh",
+  "defaultModel": "codex/gpt-6.1-sol",
+  "defaultProvider": "magpie",
+  "defaultTools": [
+    "+codemode",
+    "+grep",
+    "+find",
+    "+ls"
+  ],
+  "lastChangelogVersion": "1.5.2",
+  "packages": [
+    "npm:pi-goal-x",
+    "npm:pi-web-access",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@monotykamary/pi-tps",
+    "npm:pi-next-prompt",
+    "npm:pi-away",
+    "npm:pi-heads-up",
+    "git:github.com/DietrichGebert/ponytail",
+    "git:https://github.com/nicholasxjy/pi-cc-tools.git",
+    "npm:pi-background",
+    "npm:pi-context-view",
+    "npm:pi-powerline-footer",
+    "git:https://github.com/nicholasxjy/pi-emote.git",
+    "npm:pi-fabric"
+  ],
+  "showCacheMissNotices": true,
+  "editorPaddingX": 0,
+  "showHardwareCursor": true,
+  "theme": "system",
+  "compaction": {
+    "enabled": true
+  },
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.47.0",
+    "{\"source\":\"git:https://github.com/nicholasxjy/pi-cc-tools.git\",\"scope\":\"user\"}": "1.0.112",
+    "{\"source\":\"npm:@tintinweb/pi-subagents\",\"scope\":\"user\"}": "0.25.0",
+    "{\"source\":\"npm:pi-memory\",\"scope\":\"user\"}": "0.4.2",
+    "{\"source\":\"npm:pi-better\",\"scope\":\"user\"}": "0.2.0",
+    "{\"source\":\"npm:pi-context-view\",\"scope\":\"user\"}": "0.8.4",
+    "{\"source\":\"npm:pi-powerline-footer\",\"scope\":\"user\"}": "0.22.0",
+    "{\"source\":\"git:https://github.com/nicholasxjy/pi-emote.git\",\"scope\":\"user\"}": "0.3.0"
+  },
+  "outputPad": 0,
+  "showLastPrompt": true,
+  "powerline": {
+    "preset": "default",
+    "placement": "below",
+    "welcome": true,
+    "model": {
+      "display": "qualified"
+    },
+    "cache_read": {
+      "format": "percent"
+    },
+    "path": {
+      "mode": "abbreviated"
+    },
+    "disabledSegments": [
+      "context_pct"
+    ],
+    "customItems": [
+      {
+        "id": "context-bar",
+        "position": "left",
+        "selfColorize": true
+      },
+      {
+        "id": "prompt-time",
+        "position": "left",
+        "selfColorize": true
+      }
+    ]
+  },
+  "terminalThemePrevious": "dark"
+}
