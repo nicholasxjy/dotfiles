@@ -1,5 +1,6 @@
 {
-  "size": 12,
+  "layout": "side",
+  "size": 8,
   "emotes": [
     {
       "model": "*",
