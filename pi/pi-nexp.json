@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "model": "magpie/codex/gpt-6.1-sol",
+  "thinkingLevel": "medium",
+  "maxContextChars": 8000
+}

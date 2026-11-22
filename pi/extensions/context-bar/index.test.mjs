@@ -5,7 +5,7 @@ import contextBarExtension from "./index.ts";
 function setup() {
   const handlers = new Map();
   const statuses = [];
-  let usage = { contextWindow: 1000, percent: 30 };
+  let usage = { contextWindow: 1000, tokens: 300, percent: 30 };
   const ctx = {
     mode: "tui",
     hasUI: true,
@@ -26,18 +26,18 @@ function setup() {
 
 test("renders context usage, thresholds, overflow, and unknown usage", () => {
   const app = setup();
-  for (const [percent, expected] of [
-    [0, "accent:ctx [□□□□□□□□□□] 0%"],
-    [30, "accent:ctx [■■■□□□□□□□] 30%"],
-    [70, "accent:ctx [■■■■■■■□□□] 70%"],
-    [71, "warning:ctx [■■■■■■■□□□] 71%"],
-    [91, "error:ctx [■■■■■■■■■□] 91%"],
-    [100, "error:ctx [■■■■■■■■■■] 100%"],
-    [125, "error:ctx [■■■■■■■■■■] 125%"],
-    [null, "dim:ctx [??????????] ?"],
-    [NaN, "dim:ctx [??????????] ?"],
+  for (const [percent, tokens, expected] of [
+    [0, 0, "accent:ctx [□□□□□□□□□□] 0% (0/100K)"],
+    [30.2, 30200, "accent:ctx [■■■□□□□□□□] 30% (30.2K/100K)"],
+    [70, 70000, "accent:ctx [■■■■■■■□□□] 70% (70K/100K)"],
+    [71, 71000, "warning:ctx [■■■■■■■□□□] 71% (71K/100K)"],
+    [91, 91000, "error:ctx [■■■■■■■■■□] 91% (91K/100K)"],
+    [100, 100000, "error:ctx [■■■■■■■■■■] 100% (100K/100K)"],
+    [125, 125000, "error:ctx [■■■■■■■■■■] 125% (125K/100K)"],
+    [null, null, "dim:ctx [??????????] ?"],
+    [NaN, 0, "dim:ctx [??????????] ?"],
   ]) {
-    app.setUsage({ contextWindow: 1000, percent });
+    app.setUsage({ contextWindow: 100000, tokens, percent });
     app.emit("turn_end");
     assert.deepEqual(app.statuses.at(-1), { key: "context-bar", value: expected });
   }
@@ -57,23 +57,25 @@ test("updates during streaming and session changes, then clears on shutdown", ()
     usage: { input: 200, output: 50, cacheRead: 200, cacheWrite: 50 },
   };
   app.emit("message_update", { message });
-  assert.equal(app.statuses.at(-1).value, "accent:ctx [■■■■■□□□□□] 50%");
+  assert.equal(app.statuses.at(-1).value, "accent:ctx [■■■■■□□□□□] 50% (500/1K)");
+  app.emit("message_update", { message: { ...message, usage: { ...message.usage, output: 51 } } });
+  assert.equal(app.statuses.at(-1).value, "accent:ctx [■■■■■□□□□□] 50% (501/1K)");
   app.emit("message_update", { message: { ...message, stopReason: "error" } });
   app.emit("message_update", { message: { ...message, stopReason: "aborted" } });
-  assert.equal(app.statuses.length, 2);
+  assert.equal(app.statuses.length, 3);
 
-  app.setUsage({ contextWindow: 2000, percent: 25 });
+  app.setUsage({ contextWindow: 2000, tokens: 500, percent: 25 });
   app.emit("model_select");
   app.emit("message_update", { message });
-  assert.equal(app.statuses.at(-1).value, "accent:ctx [■■■□□□□□□□] 25%");
+  assert.equal(app.statuses.at(-1).value, "accent:ctx [■■■□□□□□□□] 25% (500/2K)");
 
-  app.setUsage({ contextWindow: 2000, percent: null });
+  app.setUsage({ contextWindow: 2000, tokens: null, percent: null });
   app.emit("session_compact");
   assert.equal(app.statuses.at(-1).value, "dim:ctx [??????????] ?");
   for (const event of ["session_tree", "turn_end", "agent_end", "session_start"]) {
-    app.setUsage({ contextWindow: 2000, percent: 10 });
+    app.setUsage({ contextWindow: 2000, tokens: 200, percent: 10 });
     app.emit(event);
-    assert.equal(app.statuses.at(-1).value, "accent:ctx [■□□□□□□□□□] 10%");
+    assert.equal(app.statuses.at(-1).value, "accent:ctx [■□□□□□□□□□] 10% (200/2K)");
   }
   app.emit("session_shutdown");
   assert.deepEqual(app.statuses.at(-1), { key: "context-bar", value: undefined });

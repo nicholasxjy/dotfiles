@@ -40,8 +40,6 @@ vim.pack.add({
   "https://github.com/L3MON4D3/LuaSnip",
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
-  "https://github.com/onsails/lspkind.nvim",
-  "https://github.com/mikavilpas/blink-ripgrep.nvim",
   "https://github.com/hiphish/rainbow-delimiters.nvim",
   "https://github.com/nemanjamalesija/smart-paste.nvim",
   "https://github.com/kdheepak/lazygit.nvim",
@@ -90,5 +88,7 @@ vim.pack.add({
   },
   "https://github.com/nvim-treesitter/nvim-treesitter-context",
 
+  "https://github.com/folke/tokyonight.nvim",
+  { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
   "https://github.com/nvim-mini/mini.hues",
 }, { load = noop })

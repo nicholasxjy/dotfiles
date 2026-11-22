@@ -1,5 +1,4 @@
 local loader = require("loader")
-local ui = require("ui")
 
 -- ============================================================================
 -- Completion & Snippets (blink.cmp is packadded eagerly by lua/lsp.lua)
@@ -45,15 +44,18 @@ local blink_opts = {
           label_description = { width = { max = 16 } },
           kind_icon = {
             text = function(ctx)
-              return (require("lspkind").symbol_map[ctx.kind] or "") .. ctx.icon_gap
+              local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+              return kind_icon
             end,
             highlight = function(ctx)
-              return ctx.kind_hl
+              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+              return hl
             end,
           },
           kind = {
             highlight = function(ctx)
-              return ctx.kind_hl
+              local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+              return hl
             end,
           },
         },
@@ -82,24 +84,11 @@ local blink_opts = {
   },
   snippets = { preset = "luasnip" },
   sources = {
-    default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
+    default = { "lsp", "path", "snippets", "buffer" },
     per_filetype = {
-      lua = { "lazydev", "lsp", "path", "snippets", "buffer", "ripgrep" },
+      lua = { "lazydev", "lsp", "path", "snippets", "buffer" },
     },
     providers = {
-      ripgrep = {
-        name = "Ripgrep",
-        module = "blink-ripgrep",
-        enabled = function()
-          if vim.fn.executable("rg") == 1 then
-            return true
-          end
-          vim.notify_once("blink-ripgrep requires ripgrep (rg)", vim.log.levels.WARN)
-          return false
-        end,
-        score_offset = -5,
-        opts = { prefix_min_len = 3 },
-      },
       lazydev = {
         name = "LazyDev",
         module = "lazydev.integrations.blink",
@@ -111,14 +100,7 @@ local blink_opts = {
 
 -- Keep capabilities eager; initialize completion before its first input event.
 local function setup_completion()
-  loader.packadd("lspkind.nvim", "LuaSnip", "blink-ripgrep.nvim")
-  require("lspkind").init({
-    preset = "codicons",
-    symbol_map = {
-      Ripgrep = ui.icons.lazy_kind_icons.Text,
-      Snippet = ui.icons.lazy_kind_icons.Snippet,
-    },
-  })
+  loader.packadd("LuaSnip")
   require("blink.cmp").setup(blink_opts)
 end
 

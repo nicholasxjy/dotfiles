@@ -1,0 +1,6 @@
+{
+  "maxConcurrent": 5,
+  "fallbackSubagent": "none",
+  "showCost": true,
+  "showModel": true
+}

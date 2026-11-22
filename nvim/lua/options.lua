@@ -2,6 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- General ====================================================================
+vim.o.autoread = true -- Automatically reload files changed outside Nvim
 vim.o.mouse = "a" -- Enable mouse
 vim.o.mousescroll = "ver:25,hor:6" -- Customize mouse scroll
 vim.o.switchbuf = "usetab" -- Use already opened buffers when switching
@@ -60,9 +61,7 @@ if ok then
   ui2.enable({ enable = true, msg = { targets = "msg" } })
 end
 
-if vim.fn.has("nvim-0.13") == 1 then
-  vim.o.updatetime = 200 -- Ensure fast `current_line` diagnostic renders
-end
+vim.o.updatetime = 200 -- Ensure fast CursorHold checks and `current_line` diagnostic renders
 
 -- Editing ====================================================================
 vim.o.expandtab = true -- Convert tabs to spaces

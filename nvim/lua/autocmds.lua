@@ -108,38 +108,87 @@ vim.api.nvim_create_autocmd("FileType", {
     end)
   end,
 })
--- Check if we need to reload the file when it changed
-local last_checktime = 0
-local function checktime(force, bufnr)
-  if vim.bo[bufnr or 0].buftype ~= "" then
+-- Check if we need to reload files changed outside Nvim
+local last_hold_check = 0
+local pending_all = false
+local pending_bufs = {}
+
+local function flush_checktime()
+  local check_all = pending_all
+  local bufs = pending_bufs
+  pending_all = false
+  pending_bufs = {}
+
+  if vim.fn.mode() == "c" then
     return
   end
 
-  local now = vim.uv.now()
-  if not force and now - last_checktime < 1000 then
+  if check_all then
+    pcall(vim.cmd.checktime)
     return
   end
 
-  last_checktime = now
-  -- Let the event finish before checking; autoread can then reload clean buffers.
-  vim.schedule(function()
-    if bufnr then
-      if vim.api.nvim_buf_is_valid(bufnr) then
-        vim.cmd.checktime(tostring(bufnr))
-      end
-    else
-      vim.cmd.checktime()
+  for bufnr in pairs(bufs) do
+    if
+      vim.api.nvim_buf_is_valid(bufnr)
+      and vim.api.nvim_buf_is_loaded(bufnr)
+      and vim.bo[bufnr].buftype == ""
+      and vim.api.nvim_buf_get_name(bufnr) ~= ""
+    then
+      pcall(vim.cmd.checktime, tostring(bufnr))
     end
-  end)
+  end
 end
 
--- CursorHold is deliberately not listened to: it fires every 'updatetime' while
--- idle and would stat every loaded buffer. Nvim's own autoread file watcher
--- covers the idle case already.
-vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "TermClose", "TermLeave" }, {
-  group = augroup("checktime"),
+local function schedule_checktime(bufnr)
+  if bufnr ~= nil then
+    if
+      not vim.api.nvim_buf_is_valid(bufnr)
+      or vim.bo[bufnr].buftype ~= ""
+      or vim.api.nvim_buf_get_name(bufnr) == ""
+    then
+      return
+    end
+  end
+
+  local needs_schedule = not pending_all and next(pending_bufs) == nil
+  if bufnr == nil then
+    pending_all = true
+  else
+    pending_bufs[bufnr] = true
+  end
+
+  if needs_schedule then
+    -- Let the triggering event finish before checking so autoread can reload clean buffers.
+    vim.schedule(flush_checktime)
+  end
+end
+
+local checktime_group = augroup("checktime")
+
+-- Focus and terminal transitions check all loaded file buffers regardless of the
+-- current buffer's buftype (e.g. leaving a terminal or returning while in Neo-tree/Oil).
+vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+  group = checktime_group,
+  callback = function()
+    schedule_checktime()
+  end,
+})
+
+-- Buffer-scoped events only stat the current buffer. CursorHold/CursorHoldI act as
+-- a throttled fallback on Neovim < 0.13 (no built-in file watcher) and when Nvim's
+-- watcher is inactive (e.g. deleted-and-recreated files or BufNewFile).
+vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI" }, {
+  group = checktime_group,
   callback = function(args)
-    checktime(args.event == "BufEnter" or args.event == "FocusGained", args.event == "BufEnter" and args.buf or nil)
+    if args.event ~= "BufEnter" then
+      local now = vim.uv.now()
+      if now - last_hold_check < 500 then
+        return
+      end
+      last_hold_check = now
+    end
+    schedule_checktime(args.buf)
   end,
 })
 

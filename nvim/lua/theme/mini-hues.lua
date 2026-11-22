@@ -15,11 +15,9 @@ function M.setup()
   -- Apply overrides after the theme sets its highlights.
   vim.api.nvim_create_autocmd("ColorScheme", {
     group = vim.api.nvim_create_augroup("sjvim_mini_hues_highlights", { clear = true }),
-    pattern = { "randomhue", "minispring", "minisummer", "miniautumn", "miniwinter" },
+    pattern = { "randomhue", "minispring", "minisummer", "miniautumn", "miniwinter", "minischeme" },
     callback = apply_highlights,
   })
-
-  vim.cmd.colorscheme("miniwinter")
 end
 
 return M
