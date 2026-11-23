@@ -60,6 +60,9 @@
     "disabledSegments": [
       "context_pct"
     ],
+    "hiddenExtensionStatusKeys": [
+      "subagents"
+    ],
     "customItems": [
       {
         "id": "context-bar",
